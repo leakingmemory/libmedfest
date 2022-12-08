@@ -10,10 +10,12 @@ static void XMLCALL
 startElement(void *userData, const XML_Char *in_name, const XML_Char **in_atts) {
     auto *stream = (XMLParser *) userData;
     std::string name{in_name};
-    std::vector<std::string> attributes{};
+    std::vector<NameValue> attributes{};
     while (*in_atts != NULL) {
-        std::string &attribute = attributes.emplace_back();
-        attribute.append(*in_atts);
+        auto &attribute = attributes.emplace_back();
+        attribute.name.append(*in_atts);
+        ++in_atts;
+        attribute.value.append(*in_atts);
         ++in_atts;
     }
     stream->StartElement(name, attributes);
@@ -26,7 +28,7 @@ endElement(void *userData, const XML_Char *in_name) {
     stream->EndElement(name);
 }
 
-XMLParser::XMLParser() {
+XMLParser::XMLParser() : handlers(), trail(), stop(false){
     parser = XML_ParserCreate(NULL);
     XML_SetUserData(parser, this);
     XML_SetElementHandler(parser, startElement, endElement);
@@ -36,16 +38,77 @@ XMLParser::~XMLParser() {
     XML_ParserFree(parser);
 }
 
-void XMLParser::StartElement(const std::string &name, const std::vector<std::string> &attributes) {
-    std::cout << "Start: " << name;
-    for (auto attr : attributes) {
-        std::cout << ", " << attr;
+std::shared_ptr<XMLObjectHandlerInterface> XMLParser::GetHandler(const std::string &name) {
+    auto iterator = handlers.find(name);
+    if (iterator == handlers.end()) {
+        std::cerr << "Error: Unhandled item " << name << "\n";
+        auto iter = trail.end();
+        while (iter != trail.begin()) {
+            --iter;
+            std::cerr << " * in: " << (*iter)->GetName() << "\n";
+        }
+        stop = true;
+        return {};
     }
-    std::cout << "\n";
+    return iterator->second;
+}
+
+void XMLParser::StartElement(const std::string &name, const std::vector<NameValue> &attributes) {
+    if (stop) {
+        return;
+    }
+    auto handler = GetHandler(name);
+    if (!handler) {
+        std::cerr << "Attributes:\n";
+        for (auto attr : attributes) {
+            std::cerr << " * " << attr.name << "=" << attr.value << "\n";
+        }
+        return;
+    }
+    std::shared_ptr<XMLObject> parent{};
+    {
+        auto iterator = trail.end();
+        if (iterator != trail.begin()) {
+            --iterator;
+            parent = *iterator;
+        }
+    }
+    auto obj = handler->StartElement(parent, attributes);
+    trail.push_back(obj);
 }
 
 void XMLParser::EndElement(const std::string &name) {
-    std::cout << "End: " << name << "\n";
+    if (stop) {
+        return;
+    }
+    auto handler = GetHandler(name);
+    if (!handler) {
+        std::cerr << "Error: Handler not found for end of " << name << "\n";
+        return;
+    }
+    std::shared_ptr<XMLObject> obj{};
+    {
+        auto iterator = trail.end();
+        if (iterator != trail.begin()) {
+            --iterator;
+            obj = *iterator;
+            trail.pop_back();
+        }
+    }
+    if (!obj) {
+        std::cerr << "Error: Unexpected end of: " << name << "\n";
+        stop = true;
+        return;
+    }
+    if (obj->GetName() != name) {
+        std::cerr << "Error: Expected end of " << obj->GetName() << ", but found end of " << name << "\n";
+        stop = true;
+        return;
+    }
+    handler->EndElement(obj);
+    if (trail.empty()) {
+        roots.push_back(obj);
+    }
 }
 
 bool XMLParser::ParseBuffer(const void *buf, int len, bool lastBuffer) {
@@ -63,6 +126,11 @@ bool XMLParser::ParseBuffer(const void *buf, int len, bool lastBuffer) {
 
     if (XML_ParseBuffer(parser, len, lastBuffer) == XML_Status::XML_STATUS_ERROR) {
         std::cerr << "Expat: Parse error at " << XML_GetCurrentLineNumber(parser) << ": " << XML_ErrorString(XML_GetErrorCode(parser)) << "\n";
+        return false;
+    }
+
+    if (stop) {
+        std::cerr << "Stop!: Errors\n";
         return false;
     }
 

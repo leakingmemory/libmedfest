@@ -5,6 +5,7 @@
 #include "XMLParser.h"
 #include <iostream>
 #include <cstring>
+#include <boost/algorithm/string.hpp>
 
 static void XMLCALL
 startElement(void *userData, const XML_Char *in_name, const XML_Char **in_atts) {
@@ -28,10 +29,20 @@ endElement(void *userData, const XML_Char *in_name) {
     stream->EndElement(name);
 }
 
+static void XMLCALL
+characterData(void *userData,
+              const XML_Char *s, int len) {
+    auto *stream = (XMLParser *) userData;
+    std::string charData{};
+    charData.append(s, len);
+    stream->CharacterData(charData);
+}
+
 XMLParser::XMLParser() : handlers(), trail(), stop(false){
     parser = XML_ParserCreate(NULL);
     XML_SetUserData(parser, this);
     XML_SetElementHandler(parser, startElement, endElement);
+    XML_SetCharacterDataHandler(parser, characterData);
 }
 
 XMLParser::~XMLParser() {
@@ -105,9 +116,35 @@ void XMLParser::EndElement(const std::string &name) {
         stop = true;
         return;
     }
-    handler->EndElement(obj);
+    if (!handler->EndElement(obj)) {
+        std::cerr << "Error: Handler for " << name << " rejected the element at the end\n";
+        stop = true;
+        return;
+    }
     if (trail.empty()) {
         roots.push_back(obj);
+    }
+}
+
+void XMLParser::CharacterData(const std::string &charData) {
+    if (stop) {
+        return;
+    }
+    std::shared_ptr<XMLObject> obj{};
+    {
+        auto iterator = trail.end();
+        if (iterator != trail.begin()) {
+            --iterator;
+            obj = *iterator;
+        }
+    }
+    if (!obj->AppendCharacterData(charData)) {
+        std::string trimstr{charData};
+        boost::trim(trimstr);
+        if (!trimstr.empty()) {
+            std::cerr << "Element " << obj->GetName() << " did not accept character data: " << charData << "\n";
+            stop = true;
+        }
     }
 }
 

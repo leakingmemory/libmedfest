@@ -4,10 +4,13 @@
 
 #include "FestObjectStream.h"
 #include "XMLParser.h"
+#include "Fest/Fest.h"
 #include <iostream>
 
 void FestObjectStream::read() {
     XMLParser parser{};
+    parser.AddHandler("FEST", std::make_shared<FestHandler>());
+    parser.AddHandler("HentetDato", std::make_shared<HentetDatoHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

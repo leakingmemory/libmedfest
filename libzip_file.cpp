@@ -40,3 +40,10 @@ libzip_file &libzip_file::operator=(libzip_file &&mv) {
     libzip_file tmp{std::move(mv)};
     swap(*this, tmp);
 }
+
+int libzip_file::read(void *buf, int nbytes) {
+    if (file == nullptr) {
+        return -1;
+    }
+    return (int) zip_fread(file->native(), buf, nbytes);
+}

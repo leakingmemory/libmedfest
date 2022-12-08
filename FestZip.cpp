@@ -4,6 +4,7 @@
 
 #include "FestZip.h"
 #include "libzip_zip.h"
+#include "FestObjectStream.h"
 #include <iostream>
 
 FestZip::FestZip(const std::string &zipname) {
@@ -40,5 +41,6 @@ void FestZip::Decode() {
     if (!file) {
         std::cerr << "Error: Couldn't find xml file inside the zip archive\n";
     }
-    std::cout << "Not implemented\n";
+    FestObjectStream inputStream{file};
+    inputStream.read();
 }

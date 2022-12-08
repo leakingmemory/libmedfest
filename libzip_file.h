@@ -25,6 +25,7 @@ public:
     libzip_file &operator =(const libzip_file &) = delete;
     libzip_file(libzip_file &&);
     libzip_file &operator =(libzip_file &&);
+    int read(void *buf, int);
 };
 
 

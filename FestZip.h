@@ -8,12 +8,14 @@
 #include <memory>
 
 class libzip_zip;
+class libzip_file;
 
 class FestZip {
 private:
     std::shared_ptr<libzip_zip> z;
 public:
     explicit FestZip(const std::string &zipname);
+    std::shared_ptr<libzip_file> GetXmlFile();
     void Decode();
 };
 

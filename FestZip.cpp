@@ -7,13 +7,38 @@
 #include <iostream>
 
 FestZip::FestZip(const std::string &zipname) {
-    z = std::make_shared<libzip_zip>(zipname);
+    z = libzip_zip::Create(zipname);
+}
+
+std::shared_ptr<libzip_file> FestZip::GetXmlFile() {
+    std::string xmlname{};
+    {
+        auto num = z->NumEntries();
+        for (typeof(num) i = 0; i < num; i++) {
+            std::string filename = z->Filename(i);
+            {
+                std::string filename_lower{filename};
+                std::transform(filename_lower.begin(), filename_lower.end(), filename_lower.begin(),
+                               [](auto ch) { return std::tolower(ch); });
+                if (filename_lower.ends_with(".xml")) {
+                    if (!xmlname.empty()) {
+                        return {};
+                    }
+                    xmlname = filename;
+                }
+            }
+        }
+    }
+    if (xmlname.empty()) {
+        return {};
+    }
+    return z->Open(xmlname);
 }
 
 void FestZip::Decode() {
-    auto num = z->NumEntries();
-    std::cout << "Contents zip:\n";
-    for (typeof(num) i = 0; i < num; i++) {
-        std::cout << z->Filename(i) << "\n";
+    auto file = GetXmlFile();
+    if (!file) {
+        std::cerr << "Error: Couldn't find xml file inside the zip archive\n";
     }
+    std::cout << "Not implemented\n";
 }

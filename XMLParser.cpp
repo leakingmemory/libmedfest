@@ -27,8 +27,8 @@ bool XMLParser::ParseBuffer(const void *buf, int len, bool lastBuffer) {
         return false;
     }
 
-    if (XML_ParseBuffer(parser, len, lastBuffer)) {
-        std::cerr << "Expat: Parse error\n";
+    if (XML_ParseBuffer(parser, len, lastBuffer) == XML_Status::XML_STATUS_ERROR) {
+        std::cerr << "Expat: Parse error at " << XML_GetCurrentLineNumber(parser) << ": " << XML_ErrorString(XML_GetErrorCode(parser)) << "\n";
         return false;
     }
 

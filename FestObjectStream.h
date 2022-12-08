@@ -7,6 +7,7 @@
 
 #include "libzip_file.h"
 #include <memory>
+#include <vector>
 
 template <typename T> concept FestSourceStream = requires (T source) {
     { source.read(std::declval<void *>(), std::declval<int>()) } -> std::convertible_to<int>;

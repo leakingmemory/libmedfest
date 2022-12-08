@@ -6,12 +6,46 @@
 #include <iostream>
 #include <cstring>
 
+static void XMLCALL
+startElement(void *userData, const XML_Char *in_name, const XML_Char **in_atts) {
+    auto *stream = (XMLParser *) userData;
+    std::string name{in_name};
+    std::vector<std::string> attributes{};
+    while (*in_atts != NULL) {
+        std::string &attribute = attributes.emplace_back();
+        attribute.append(*in_atts);
+        ++in_atts;
+    }
+    stream->StartElement(name, attributes);
+}
+
+static void XMLCALL
+endElement(void *userData, const XML_Char *in_name) {
+    auto *stream = (XMLParser *) userData;
+    std::string name{in_name};
+    stream->EndElement(name);
+}
+
 XMLParser::XMLParser() {
     parser = XML_ParserCreate(NULL);
+    XML_SetUserData(parser, this);
+    XML_SetElementHandler(parser, startElement, endElement);
 }
 
 XMLParser::~XMLParser() {
     XML_ParserFree(parser);
+}
+
+void XMLParser::StartElement(const std::string &name, const std::vector<std::string> &attributes) {
+    std::cout << "Start: " << name;
+    for (auto attr : attributes) {
+        std::cout << ", " << attr;
+    }
+    std::cout << "\n";
+}
+
+void XMLParser::EndElement(const std::string &name) {
+    std::cout << "End: " << name << "\n";
 }
 
 bool XMLParser::ParseBuffer(const void *buf, int len, bool lastBuffer) {

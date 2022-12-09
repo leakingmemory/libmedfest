@@ -8,10 +8,11 @@
 #include "XMLObject.h"
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
+#include "StatusObject.h"
 #include <memory>
 
 class Fest;
-class OppfLegemiddelMerkevare;
+class XmlOppfLegemiddelMerkevare;
 
 class KatLegemiddelMerkevare : public XMLObject {
 private:
@@ -19,29 +20,30 @@ private:
 public:
     KatLegemiddelMerkevare(std::shared_ptr<Fest> fest) : fest(fest) {}
     std::string GetName() override;
-    void Merge(const OppfLegemiddelMerkevare &oppf);
+    void Merge(const XmlOppfLegemiddelMerkevare &oppf);
 };
 
 class KatLegemiddelMerkevareHandler {
 public:
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::vector<NameValue> &attributes);
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
 };
 
-class OppfLegemiddelMerkevare : public XMLObject,
-        public FestIdObject,
-        public TidspunktObject {
+class XmlOppfLegemiddelMerkevare : public XMLObject,
+                                   public FestIdObject,
+                                   public TidspunktObject,
+                                   public StatusObject {
 private:
     std::shared_ptr<KatLegemiddelMerkevare> kat;
 public:
-    OppfLegemiddelMerkevare(std::shared_ptr<KatLegemiddelMerkevare> kat) : kat(kat) {}
+    XmlOppfLegemiddelMerkevare(std::shared_ptr<KatLegemiddelMerkevare> kat) : kat(kat) {}
     std::string GetName();
     void Merge();
 };
 
 class OppfLegemiddelMerkevareHandler {
 public:
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::vector<NameValue> &attributes);
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
 };
 

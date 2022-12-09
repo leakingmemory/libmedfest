@@ -8,14 +8,14 @@
 #include "XMLObject.h"
 #include <string>
 #include <memory>
-#include <vector>
+#include <map>
 
 class FestIdObject {
 private:
     std::string id{};
 public:
     virtual ~FestIdObject() = default;
-    std::string GetId();
+    std::string GetId() const;
     void SetId(const std::string &id);
 };
 
@@ -32,7 +32,7 @@ public:
 
 class FestIdHandler {
 public:
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::vector<NameValue> &attributes);
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
 };
 

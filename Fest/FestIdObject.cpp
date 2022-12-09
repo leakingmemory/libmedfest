@@ -5,7 +5,7 @@
 #include "FestIdObject.h"
 #include <iostream>
 
-std::string FestIdObject::GetId() {
+std::string FestIdObject::GetId() const {
     return id;
 }
 
@@ -27,7 +27,7 @@ void XmlIdObject::Merge() {
 }
 
 std::shared_ptr<XMLObject>
-FestIdHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::vector<NameValue> &attributes) {
+FestIdHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
     std::shared_ptr<FestIdObject> idObject = std::dynamic_pointer_cast<FestIdObject>(parent);
     if (!idObject) {
         std::cerr << "Error: Id parent is not an Fest Id-able object\n";

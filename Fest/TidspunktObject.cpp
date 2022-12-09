@@ -5,7 +5,7 @@
 #include "TidspunktObject.h"
 #include <iostream>
 
-std::string TidspunktObject::GetTidspunkt() {
+std::string TidspunktObject::GetTidspunkt() const {
     return tidspunkt;
 }
 
@@ -27,7 +27,7 @@ void XmlTidspunktObject::Merge() {
 }
 
 std::shared_ptr<XMLObject>
-XmlTidspunktObjectHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::vector<NameValue> &attributes) {
+XmlTidspunktObjectHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
     std::shared_ptr<TidspunktObject> tidspunktObject = std::dynamic_pointer_cast<TidspunktObject>(parent);
     if (!tidspunktObject) {
         std::cerr << "Tidspunkt, but parent doesn't accept tidspunkt\n";

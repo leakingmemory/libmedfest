@@ -13,14 +13,14 @@
 #include "Fest/XMLObject.h"
 
 template <typename T> concept XMLObjectHandler = requires (T handler) {
-    { handler.StartElement(std::declval<std::shared_ptr<XMLObject>>(), std::declval<const std::vector<NameValue>>()) } -> std::convertible_to<std::shared_ptr<XMLObject>>;
+    { handler.StartElement(std::declval<std::shared_ptr<XMLObject>>(), std::declval<const std::map<std::string,std::string>>()) } -> std::convertible_to<std::shared_ptr<XMLObject>>;
     { handler.EndElement(std::declval<const std::shared_ptr<XMLObject>>()) } -> std::convertible_to<bool>;
 };
 
 class XMLObjectHandlerInterface {
 public:
     virtual ~XMLObjectHandlerInterface() = default;
-    virtual std::shared_ptr<XMLObject> StartElement(std::shared_ptr<XMLObject> parent, const std::vector<NameValue> &attributes) = 0;
+    virtual std::shared_ptr<XMLObject> StartElement(std::shared_ptr<XMLObject> parent, const std::map<std::string,std::string> &attributes) = 0;
     virtual bool EndElement(const std::shared_ptr<XMLObject> &obj) = 0;
 };
 
@@ -29,7 +29,7 @@ private:
     std::shared_ptr<Handler> handler;
 public:
     XMLObjectHandlerGlue(const std::shared_ptr<Handler> &handler) : handler(handler) {}
-    std::shared_ptr<XMLObject> StartElement(std::shared_ptr<XMLObject> parent, const std::vector<NameValue> &attributes) override {
+    std::shared_ptr<XMLObject> StartElement(std::shared_ptr<XMLObject> parent, const std::map<std::string,std::string> &attributes) override {
         return handler->StartElement(parent, attributes);
     }
     bool EndElement(const std::shared_ptr<XMLObject> &obj) override {
@@ -58,7 +58,7 @@ public:
     }
 
     std::shared_ptr<XMLObjectHandlerInterface> GetHandler(const std::string &name);
-    void StartElement(const std::string &name, const std::vector<NameValue> &attributes);
+    void StartElement(const std::string &name, const std::map<std::string,std::string> &attributes);
     void EndElement(const std::string &name);
     void CharacterData(const std::string &charData);
 

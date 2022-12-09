@@ -3,7 +3,9 @@
 //
 
 #include "Fest.h"
+#include "KatLegemiddelMerkevare.h"
 #include <iostream>
+#include <map>
 
 std::string HentetDato::GetName() {
     return "HentetDato";
@@ -22,7 +24,11 @@ std::string Fest::GetName() {
     return "FEST";
 }
 
-std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::vector<NameValue> &attributes) {
+void Fest::Add(const XmlOppfLegemiddelMerkevare &xmlOppf) {
+    oppfLegemiddelMerkevare.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus());
+}
+
+std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
     return std::make_shared<Fest>();
 }
 
@@ -30,7 +36,7 @@ bool FestHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
     return dynamic_cast<Fest*>(&(*obj)) != nullptr;
 }
 
-std::shared_ptr<XMLObject> HentetDatoHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::vector<NameValue> &attributes) {
+std::shared_ptr<XMLObject> HentetDatoHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
     std::shared_ptr<Fest> fest = std::dynamic_pointer_cast<Fest>(parent);
     if (!fest) {
         std::cerr << "Error: HentetDato parent is not Fest\n";

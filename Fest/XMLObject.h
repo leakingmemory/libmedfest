@@ -7,11 +7,6 @@
 
 #include <string>
 
-struct NameValue {
-    std::string name{};
-    std::string value{};
-};
-
 class XMLObject {
 public:
     virtual ~XMLObject() = default;

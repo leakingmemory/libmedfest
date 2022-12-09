@@ -11,13 +11,13 @@ static void XMLCALL
 startElement(void *userData, const XML_Char *in_name, const XML_Char **in_atts) {
     auto *stream = (XMLParser *) userData;
     std::string name{in_name};
-    std::vector<NameValue> attributes{};
+    std::map<std::string,std::string> attributes{};
     while (*in_atts != NULL) {
-        auto &attribute = attributes.emplace_back();
-        attribute.name.append(*in_atts);
+        std::string name{*in_atts};
         ++in_atts;
-        attribute.value.append(*in_atts);
+        std::string value{*in_atts};
         ++in_atts;
+        attributes.insert_or_assign(name, value);
     }
     stream->StartElement(name, attributes);
 }
@@ -64,15 +64,15 @@ std::shared_ptr<XMLObjectHandlerInterface> XMLParser::GetHandler(const std::stri
     return iterator->second;
 }
 
-void XMLParser::StartElement(const std::string &name, const std::vector<NameValue> &attributes) {
+void XMLParser::StartElement(const std::string &name, const std::map<std::string,std::string> &attributes) {
     if (stop) {
         return;
     }
     auto handler = GetHandler(name);
     if (!handler) {
         std::cerr << "Attributes:\n";
-        for (auto attr : attributes) {
-            std::cerr << " * " << attr.name << "=" << attr.value << "\n";
+        for (const auto &pair : attributes) {
+            std::cerr << " * " << pair.first << "=" << pair.second << "\n";
         }
         return;
     }

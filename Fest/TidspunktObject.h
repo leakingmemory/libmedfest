@@ -7,14 +7,14 @@
 
 #include "XMLObject.h"
 #include <memory>
-#include <vector>
+#include <map>
 
 class TidspunktObject {
 private:
     std::string tidspunkt{};
 public:
     virtual ~TidspunktObject() = default;
-    std::string GetTidspunkt();
+    std::string GetTidspunkt() const;
     void SetTidspunkt(const std::string &tidspunkt);
 };
 
@@ -31,7 +31,7 @@ public:
 
 class XmlTidspunktObjectHandler {
 public:
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::vector<NameValue> &attributes);
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
 };
 

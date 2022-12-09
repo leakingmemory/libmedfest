@@ -85,6 +85,15 @@ void XMLParser::StartElement(const std::string &name, const std::vector<NameValu
         }
     }
     auto obj = handler->StartElement(parent, attributes);
+    if (!obj) {
+        auto iter = trail.end();
+        while (iter != trail.begin()) {
+            --iter;
+            std::cerr << " * in: " << (*iter)->GetName() << "\n";
+        }
+        stop = true;
+        return;
+    }
     trail.push_back(obj);
 }
 

@@ -21,6 +21,14 @@ void XmlLegemiddel::SetNavnFormStyrke(const std::string &navnFormStyrke) {
     this->navnFormStyrke = navnFormStyrke;
 }
 
+Reseptgruppe XmlLegemiddel::GetReseptgruppe() {
+    return reseptgruppe;
+}
+
+void XmlLegemiddel::SetReseptgruppe(const Reseptgruppe &reseptgruppe) {
+    this->reseptgruppe = reseptgruppe;
+}
+
 std::string XmlAtc::GetName() {
     return "Atc";
 }
@@ -77,5 +85,10 @@ bool XmlNavnFormStyrkeHandler::EndElement(const std::shared_ptr<XMLObject> &obj)
         return false;
     }
     nfs->Merge();
+    return true;
+}
+
+bool XmlReseptgruppeHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetReseptgruppe({obj->GetValueWithDistinguishedName()});
     return true;
 }

@@ -6,18 +6,15 @@
 #define LEGEMFEST_ATC_H
 
 #include <string>
+#include "ValueWithDistinguishedName.h"
 
-class Atc {
+class Atc : public ValueWithDistinguishedName {
 private:
-    std::string code;
     std::string codeset;
-    std::string distinguishedName;
 public:
-    Atc() : code(), codeset(), distinguishedName() {}
-    Atc(const std::string &code, const std::string &codeset, const std::string &distinguishedName) : code(code), codeset(codeset), distinguishedName(distinguishedName) {}
-    [[nodiscard]] std::string GetCode() const;
+    Atc() : ValueWithDistinguishedName(), codeset() {}
+    Atc(const std::string &code, const std::string &codeset, const std::string &distinguishedName) : ValueWithDistinguishedName(code, distinguishedName), codeset(codeset) {}
     [[nodiscard]] std::string GetCodeSet() const;
-    [[nodiscard]] std::string GetDistinguishedName() const;
 };
 
 

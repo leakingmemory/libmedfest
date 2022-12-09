@@ -13,7 +13,8 @@ std::string XmlLegemiddelMerkevare::GetName() {
 void XmlLegemiddelMerkevare::Merge() {
     oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
         GetAtc(),
-        GetNavnFormStyrke()
+        GetNavnFormStyrke(),
+        GetReseptgruppe()
     }});
 }
 

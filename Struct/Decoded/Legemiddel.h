@@ -7,14 +7,16 @@
 
 
 #include "Atc.h"
+#include "Reseptgruppe.h"
 
 class Legemiddel {
 private:
     Atc atc;
     std::string navnFormStyrke;
+    Reseptgruppe reseptgruppe;
 public:
     Legemiddel() : atc() {}
-    Legemiddel(const Atc &atc, const std::string &navnFormStyrke) : atc(atc), navnFormStyrke(navnFormStyrke) {}
+    Legemiddel(const Atc &atc, const std::string &navnFormStyrke, const Reseptgruppe &reseptgruppe) : atc(atc), navnFormStyrke(navnFormStyrke), reseptgruppe(reseptgruppe) {}
     [[nodiscard]] Atc GetAtc() const;
     [[nodiscard]] std::string GetNavnFormStyrke() const;
 };

@@ -19,10 +19,10 @@ private:
 public:
     XmlValueWithDistinguishedName(const std::shared_ptr<ParentType> &parent, const std::string &name, const ValueWithDistinguishedName &valueWithDistinguishedName)
             : parent(parent), name(name), valueWithDistinguishedName(valueWithDistinguishedName) {}
-    [[nodiscard]] std::shared_ptr<ParentType> GetParent() {
+    [[nodiscard]] std::shared_ptr<ParentType> GetParent() const {
         return parent;
     }
-    std::string GetName() override {
+    std::string GetName() const override {
         return name;
     }
     [[nodiscard]] ValueWithDistinguishedName GetValueWithDistinguishedName() const {
@@ -37,7 +37,7 @@ private:
     std::string name;
 public:
     XmlValueWithDistinguishedNameHandler(const std::string &name) : name(name) {}
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
+    virtual std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
         std::shared_ptr<ParentType> typedParent = std::dynamic_pointer_cast<ParentType>(parent);
         if (!typedParent) {
             std::cerr << "Error: " << name << " was not expected here.\n";
@@ -59,6 +59,9 @@ public:
             return false;
         }
         return Merge(xmlType);
+    }
+    [[nodiscard]] std::string GetName() const {
+        return name;
     }
 };
 

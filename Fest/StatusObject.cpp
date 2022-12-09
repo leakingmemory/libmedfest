@@ -14,7 +14,7 @@ void StatusObject::SetStatus(const Status &status) {
     this->status = status;
 }
 
-std::string XmlStatusObject::GetName() {
+std::string XmlStatusObject::GetName() const {
     return "Status";
 }
 

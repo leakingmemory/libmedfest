@@ -22,7 +22,7 @@ public:
 
 class XmlStatusObject : public XMLObject {
 public:
-    std::string GetName();
+    std::string GetName() const override;
 };
 
 class XmlStatusObjectHandler {

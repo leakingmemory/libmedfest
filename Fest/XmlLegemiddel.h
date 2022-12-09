@@ -10,6 +10,7 @@
 #include "../Struct/Decoded/Reseptgruppe.h"
 #include "XMLObject.h"
 #include "XmlValueWithDistinguishedName.h"
+#include "XmlValueWithCodeSet.h"
 #include <memory>
 #include <map>
 
@@ -30,7 +31,7 @@ public:
 
 class XmlAtc : public XMLObject {
 public:
-    std::string GetName() override;
+    std::string GetName() const override;
 };
 
 class XmlNavnFormStyrke : public XMLObject {
@@ -39,15 +40,15 @@ private:
     std::string navnFormStyrke{};
 public:
     XmlNavnFormStyrke(std::shared_ptr<XmlLegemiddel> legemiddel) : legemiddel(legemiddel) {}
-    std::string GetName() override;
+    std::string GetName() const override;
     bool AppendCharacterData(const std::string &charData) override;
     void Merge();
 };
 
-class XmlAtcHandler {
+class XmlAtcHandler : public XmlValueWithCodeSetHandler<XmlLegemiddel> {
 public:
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
-    bool EndElement(const std::shared_ptr<XMLObject> &obj);
+    XmlAtcHandler() : XmlValueWithCodeSetHandler<XmlLegemiddel>("Atc") {}
+    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> obj) override;
 };
 
 class XmlNavnFormStyrkeHandler {

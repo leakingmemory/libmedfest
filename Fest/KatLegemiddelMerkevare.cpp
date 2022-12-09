@@ -6,7 +6,7 @@
 #include "Fest.h"
 #include <iostream>
 
-std::string KatLegemiddelMerkevare::GetName() {
+std::string KatLegemiddelMerkevare::GetName() const {
     return "KatLegemiddelMerkevare";
 }
 
@@ -28,7 +28,7 @@ bool KatLegemiddelMerkevareHandler::EndElement(const std::shared_ptr<XMLObject> 
     return dynamic_cast<KatLegemiddelMerkevare*>(&(*obj)) != nullptr;
 }
 
-std::string XmlOppfLegemiddelMerkevare::GetName() {
+std::string XmlOppfLegemiddelMerkevare::GetName() const {
     return "OppfLegemiddelMerkevare";
 }
 

@@ -18,7 +18,7 @@ private:
     std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare;
 public:
     XmlLegemiddelMerkevare(std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare) : oppfLegemiddelMerkevare(oppfLegemiddelMerkevare) {}
-    std::string GetName() override;
+    std::string GetName() const override;
     void Merge();
 };
 

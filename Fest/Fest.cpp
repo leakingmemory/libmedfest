@@ -7,7 +7,7 @@
 #include <iostream>
 #include <map>
 
-std::string HentetDato::GetName() {
+std::string HentetDato::GetName() const {
     return "HentetDato";
 }
 
@@ -20,7 +20,7 @@ void HentetDato::Merge() {
     fest->SetHentetDato(date);
 }
 
-std::string Fest::GetName() {
+std::string Fest::GetName() const {
     return "FEST";
 }
 

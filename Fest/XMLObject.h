@@ -10,7 +10,7 @@
 class XMLObject {
 public:
     virtual ~XMLObject() = default;
-    virtual std::string GetName() = 0;
+    virtual std::string GetName() const = 0;
     virtual bool AppendCharacterData(const std::string &charData) {
         return false;
     }

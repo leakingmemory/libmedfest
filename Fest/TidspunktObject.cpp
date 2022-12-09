@@ -13,7 +13,7 @@ void TidspunktObject::SetTidspunkt(const std::string &tidspunkt) {
     this->tidspunkt = tidspunkt;
 }
 
-std::string XmlTidspunktObject::GetName() {
+std::string XmlTidspunktObject::GetName() const {
     return "Tidspunkt";
 }
 

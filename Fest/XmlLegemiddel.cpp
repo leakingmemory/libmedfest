@@ -29,11 +29,11 @@ void XmlLegemiddel::SetReseptgruppe(const Reseptgruppe &reseptgruppe) {
     this->reseptgruppe = reseptgruppe;
 }
 
-std::string XmlAtc::GetName() {
+std::string XmlAtc::GetName() const {
     return "Atc";
 }
 
-std::string XmlNavnFormStyrke::GetName() {
+std::string XmlNavnFormStyrke::GetName() const {
     return "NavnFormStyrke";
 }
 
@@ -46,25 +46,8 @@ void XmlNavnFormStyrke::Merge() {
     legemiddel->SetNavnFormStyrke(navnFormStyrke);
 }
 
-std::shared_ptr<XMLObject> XmlAtcHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
-                                                       const std::map<std::string, std::string> &attributes) {
-    std::shared_ptr<XmlLegemiddel> legemiddel = std::dynamic_pointer_cast<XmlLegemiddel>(parent);
-    if (!legemiddel) {
-        std::cerr << "Error: Unexpected Atc here\n";
-        return {};
-    }
-    auto i_v = attributes.find("V");
-    auto i_s = attributes.find("S");
-    auto i_dn = attributes.find("DN");
-    if (i_v == attributes.end() || i_s == attributes.end() || i_dn == attributes.end()) {
-        std::cerr << "Error: Atc requires V, S and DN\n";
-        return {};
-    }
-    legemiddel->SetAtc({i_v->second, i_s->second, i_dn->second});
-    return std::make_shared<XmlAtc>();
-}
-
-bool XmlAtcHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
+bool XmlAtcHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> obj) {
+    obj->GetParent()->SetAtc(Atc(obj->GetValueWithCodeSet()));
     return true;
 }
 

@@ -13,7 +13,7 @@ void FestIdObject::SetId(const std::string &id) {
     this->id = id;
 }
 
-std::string XmlIdObject::GetName() {
+std::string XmlIdObject::GetName() const {
     return "Id";
 }
 

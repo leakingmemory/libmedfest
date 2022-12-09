@@ -25,7 +25,7 @@ private:
     std::string id;
 public:
     XmlIdObject(std::shared_ptr<FestIdObject> festIdObject) : festIdObject(festIdObject) {}
-    std::string GetName() override;
+    std::string GetName() const override;
     bool AppendCharacterData(const std::string &charData) override;
     void Merge();
 };

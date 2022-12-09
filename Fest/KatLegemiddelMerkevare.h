@@ -20,7 +20,7 @@ private:
     std::shared_ptr<Fest> fest;
 public:
     KatLegemiddelMerkevare(std::shared_ptr<Fest> fest) : fest(fest) {}
-    std::string GetName() override;
+    std::string GetName() const override;
     void Merge(const XmlOppfLegemiddelMerkevare &oppf);
 };
 
@@ -39,7 +39,7 @@ private:
     LegemiddelMerkevare legemiddelMerkevare;
 public:
     XmlOppfLegemiddelMerkevare(std::shared_ptr<KatLegemiddelMerkevare> kat) : kat(kat) {}
-    std::string GetName();
+    std::string GetName() const override;
     void SetLegemiddelMerkevare(const LegemiddelMerkevare &legemiddelMerkevare);
     [[nodiscard]] LegemiddelMerkevare GetLegemiddelMerkevare() const;
     void Merge();

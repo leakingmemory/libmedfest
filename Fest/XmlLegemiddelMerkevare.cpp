@@ -6,7 +6,7 @@
 #include <iostream>
 
 
-std::string XmlLegemiddelMerkevare::GetName() {
+std::string XmlLegemiddelMerkevare::GetName() const {
     return "LegemiddelMerkevare";
 }
 

@@ -19,7 +19,7 @@ private:
     std::string date;
 public:
     HentetDato(std::shared_ptr<Fest> fest) : fest(fest) {}
-    std::string GetName() override;
+    std::string GetName() const override;
     bool AppendCharacterData(const std::string &charData) override;
     void Merge();
 };
@@ -31,7 +31,7 @@ private:
     std::string hentetDato{};
     std::vector<OppfLegemiddelMerkevare> oppfLegemiddelMerkevare{};
 public:
-    std::string GetName() override;
+    std::string GetName() const override;
     void SetHentetDato(const std::string &hentetDato) {
         this->hentetDato = hentetDato;
     }

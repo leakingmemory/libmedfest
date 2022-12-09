@@ -24,7 +24,7 @@ private:
     std::string tidspunkt{};
 public:
     XmlTidspunktObject(std::shared_ptr<TidspunktObject> tidspunktObject) : tidspunktObject(tidspunktObject) {}
-    std::string GetName();
+    std::string GetName() const override;
     bool AppendCharacterData(const std::string &charData) override;
     void Merge();
 };

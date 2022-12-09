@@ -6,7 +6,12 @@
 #define LEGEMFEST_LEGEMIDDELMERKEVARE_H
 
 
-class LegemiddelMerkevare {
+#include "Legemiddel.h"
+
+class LegemiddelMerkevare : public Legemiddel {
+public:
+    LegemiddelMerkevare() : Legemiddel() {}
+    LegemiddelMerkevare(const Legemiddel &legemiddel) : Legemiddel(legemiddel) {}
 };
 
 

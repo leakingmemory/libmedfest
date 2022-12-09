@@ -11,7 +11,10 @@ std::string XmlLegemiddelMerkevare::GetName() {
 }
 
 void XmlLegemiddelMerkevare::Merge() {
-    oppfLegemiddelMerkevare->SetLegemiddelMerkevare({});
+    oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
+        GetAtc(),
+        GetNavnFormStyrke()
+    }});
 }
 
 std::shared_ptr<XMLObject> XmlLegemiddelMerkevareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,

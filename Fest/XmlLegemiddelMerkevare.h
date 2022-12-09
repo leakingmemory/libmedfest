@@ -8,10 +8,12 @@
 #include "XMLObject.h"
 #include "FestIdObject.h"
 #include "KatLegemiddelMerkevare.h"
+#include "XmlLegemiddel.h"
 
 class XmlLegemiddelMerkevare :
         public XMLObject,
-        public FestIdObject {
+        public FestIdObject,
+        public XmlLegemiddel {
 private:
     std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare;
 public:

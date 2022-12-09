@@ -7,3 +7,15 @@
 Atc Legemiddel::GetAtc() const {
     return atc;
 }
+
+std::string Legemiddel::GetNavnFormStyrke() const {
+    return navnFormStyrke;
+}
+
+Reseptgruppe Legemiddel::GetReseptgruppe() const {
+    return reseptgruppe;
+}
+
+LegemiddelformKort Legemiddel::GetLegemiddelformKort() const {
+    return legemiddelformKort;
+}

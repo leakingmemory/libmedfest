@@ -14,7 +14,8 @@ void XmlLegemiddelMerkevare::Merge() {
     oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
         GetAtc(),
         GetNavnFormStyrke(),
-        GetReseptgruppe()
+        GetReseptgruppe(),
+        GetLegemiddelformKort()
     }});
 }
 

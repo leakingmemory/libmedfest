@@ -11,6 +11,7 @@
 #include "XMLObject.h"
 #include "XmlValueWithDistinguishedName.h"
 #include "XmlValueWithCodeSet.h"
+#include "../Struct/Decoded/LegemiddelformKort.h"
 #include <memory>
 #include <map>
 
@@ -19,6 +20,7 @@ private:
     Atc atc{};
     std::string navnFormStyrke{};
     Reseptgruppe reseptgruppe{};
+    LegemiddelformKort legemiddelformKort{};
 public:
     virtual ~XmlLegemiddel() = default;
     [[nodiscard]] Atc GetAtc() const;
@@ -27,6 +29,8 @@ public:
     void SetNavnFormStyrke(const std::string &navnFormStyrke);
     [[nodiscard]] Reseptgruppe GetReseptgruppe();
     void SetReseptgruppe(const Reseptgruppe &reseptgruppe);
+    [[nodiscard]] LegemiddelformKort GetLegemiddelformKort() const;
+    void SetLegemiddelformKort(const LegemiddelformKort &legemiddelformKort);
 };
 
 class XmlAtc : public XMLObject {
@@ -61,6 +65,12 @@ class XmlReseptgruppeHandler : public XmlValueWithDistinguishedNameHandler<XmlLe
 public:
     XmlReseptgruppeHandler() : XmlValueWithDistinguishedNameHandler<XmlLegemiddel>("Reseptgruppe") {}
     bool Merge(std::shared_ptr<XmlType> obj) override;
+};
+
+class XmlLegemiddelformKortHandler : public XmlValueWithCodeSetHandler<XmlLegemiddel> {
+public:
+    XmlLegemiddelformKortHandler() : XmlValueWithCodeSetHandler<XmlLegemiddel>("LegemiddelformKort") {}
+    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> obj) override;
 };
 
 #endif //LEGEMFEST_XMLLEGEMIDDEL_H

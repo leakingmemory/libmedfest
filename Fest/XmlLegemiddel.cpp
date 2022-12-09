@@ -29,6 +29,14 @@ void XmlLegemiddel::SetReseptgruppe(const Reseptgruppe &reseptgruppe) {
     this->reseptgruppe = reseptgruppe;
 }
 
+LegemiddelformKort XmlLegemiddel::GetLegemiddelformKort() const {
+    return legemiddelformKort;
+}
+
+void XmlLegemiddel::SetLegemiddelformKort(const LegemiddelformKort &legemiddelformKort) {
+    this->legemiddelformKort = legemiddelformKort;
+}
+
 std::string XmlAtc::GetName() const {
     return "Atc";
 }
@@ -73,5 +81,10 @@ bool XmlNavnFormStyrkeHandler::EndElement(const std::shared_ptr<XMLObject> &obj)
 
 bool XmlReseptgruppeHandler::Merge(std::shared_ptr<XmlType> obj) {
     obj->GetParent()->SetReseptgruppe({obj->GetValueWithDistinguishedName()});
+    return true;
+}
+
+bool XmlLegemiddelformKortHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> obj) {
+    obj->GetParent()->SetLegemiddelformKort({obj->GetValueWithCodeSet()});
     return true;
 }

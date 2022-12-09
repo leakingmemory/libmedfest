@@ -23,3 +23,7 @@ LegemiddelformKort Legemiddel::GetLegemiddelformKort() const {
 std::vector<std::string> Legemiddel::GetRefVilkar() const {
     return refVilkar;
 }
+
+TypeSoknadSlv Legemiddel::GetTypeSoknadSlv() const {
+    return typeSoknadSlv;
+}

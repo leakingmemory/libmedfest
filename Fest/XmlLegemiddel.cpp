@@ -45,6 +45,14 @@ void XmlLegemiddel::AddRefVilkar(const std::string &refVilkar) {
     this->refVilkar.push_back(refVilkar);
 }
 
+TypeSoknadSlv XmlLegemiddel::GetTypeSoknadSlv() const {
+    return typeSoknadSlv;
+}
+
+void XmlLegemiddel::SetTypeSoknadSlv(const TypeSoknadSlv &typeSoknadSlv) {
+    this->typeSoknadSlv = typeSoknadSlv;
+}
+
 std::string XmlAtc::GetName() const {
     return "Atc";
 }
@@ -84,5 +92,10 @@ bool XmlLegemiddelformKortHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<Xml
 
 bool XmlRefVilkarHandler::Merge(std::shared_ptr<XmlLegemiddel> parent, const std::string &content) {
     parent->AddRefVilkar(content);
+    return true;
+}
+
+bool XmlTypeSoknadSlvHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetTypeSoknadSlv({obj->GetValueWithDistinguishedName()});
     return true;
 }

@@ -13,6 +13,7 @@
 #include "XmlValueWithCodeSet.h"
 #include "../Struct/Decoded/LegemiddelformKort.h"
 #include "XmlContentElement.h"
+#include "../Struct/Decoded/TypeSoknadSlv.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -24,6 +25,7 @@ private:
     Reseptgruppe reseptgruppe{};
     LegemiddelformKort legemiddelformKort{};
     std::vector<std::string> refVilkar{};
+    TypeSoknadSlv typeSoknadSlv{};
 public:
     virtual ~XmlLegemiddel() = default;
     [[nodiscard]] Atc GetAtc() const;
@@ -36,6 +38,8 @@ public:
     void SetLegemiddelformKort(const LegemiddelformKort &legemiddelformKort);
     [[nodiscard]] std::vector<std::string> GetRefVilkar() const;
     void AddRefVilkar(const std::string &refVilkar);
+    [[nodiscard]] TypeSoknadSlv GetTypeSoknadSlv() const;
+    void SetTypeSoknadSlv(const TypeSoknadSlv &typeSoknadSlv1);
 };
 
 class XmlAtc : public XMLObject {
@@ -82,6 +86,12 @@ class XmlRefVilkarHandler : public XmlContentElementHandler<XmlLegemiddel> {
 public:
     XmlRefVilkarHandler() : XmlContentElementHandler<XmlLegemiddel>("RefVilkar") {}
     bool Merge(std::shared_ptr<XmlLegemiddel> parent, const std::string &content) override;
+};
+
+class XmlTypeSoknadSlvHandler : public XmlValueWithDistinguishedNameHandler<XmlLegemiddel> {
+public:
+    XmlTypeSoknadSlvHandler() : XmlValueWithDistinguishedNameHandler<XmlLegemiddel>("TypeSoknadSlv") {}
+    bool Merge(std::shared_ptr<XmlType> obj) override;
 };
 
 #endif //LEGEMFEST_XMLLEGEMIDDEL_H

@@ -30,6 +30,7 @@ void FestObjectStream::read() {
     parser.AddHandler("LegemiddelformKort", std::make_shared<XmlLegemiddelformKortHandler>());
     parser.AddHandler("RefVilkar", std::make_shared<XmlRefVilkarHandler>());
     parser.AddHandler("Preparattype", std::make_shared<XmlPreparattypeObjectHandler>());
+    parser.AddHandler("TypeSoknadSlv", std::make_shared<XmlTypeSoknadSlvHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

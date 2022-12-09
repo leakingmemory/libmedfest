@@ -17,6 +17,7 @@ void XmlLegemiddelMerkevare::Merge() {
         GetReseptgruppe(),
         GetLegemiddelformKort(),
         GetRefVilkar(),
+        GetTypeSoknadSlv()
     }, GetPreparattype()});
 }
 

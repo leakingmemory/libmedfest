@@ -11,7 +11,7 @@ std::string KatLegemiddelMerkevare::GetName() {
 }
 
 void KatLegemiddelMerkevare::Merge(const XmlOppfLegemiddelMerkevare &oppf) {
-
+    fest->Add(oppf);
 }
 
 std::shared_ptr<XMLObject>
@@ -30,6 +30,14 @@ bool KatLegemiddelMerkevareHandler::EndElement(const std::shared_ptr<XMLObject> 
 
 std::string XmlOppfLegemiddelMerkevare::GetName() {
     return "OppfLegemiddelMerkevare";
+}
+
+void XmlOppfLegemiddelMerkevare::SetLegemiddelMerkevare(const LegemiddelMerkevare &legemiddelMerkevare) {
+    this->legemiddelMerkevare = legemiddelMerkevare;
+}
+
+LegemiddelMerkevare XmlOppfLegemiddelMerkevare::GetLegemiddelMerkevare() const {
+    return legemiddelMerkevare;
 }
 
 void XmlOppfLegemiddelMerkevare::Merge() {

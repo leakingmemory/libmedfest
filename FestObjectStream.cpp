@@ -9,6 +9,7 @@
 #include "Fest/KatLegemiddelMerkevare.h"
 #include "Fest/TidspunktObject.h"
 #include "Fest/StatusObject.h"
+#include "Fest/XmlLegemiddelMerkevare.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -20,6 +21,7 @@ void FestObjectStream::read() {
     parser.AddHandler("OppfLegemiddelMerkevare", std::make_shared<OppfLegemiddelMerkevareHandler>());
     parser.AddHandler("Tidspunkt", std::make_shared<XmlTidspunktObjectHandler>());
     parser.AddHandler("Status", std::make_shared<XmlStatusObjectHandler>());
+    parser.AddHandler("LegemiddelMerkevare", std::make_shared<XmlLegemiddelMerkevareHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

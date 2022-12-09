@@ -5,6 +5,7 @@
 #ifndef LEGEMFEST_KATLEGEMIDDELMERKEVARE_H
 #define LEGEMFEST_KATLEGEMIDDELMERKEVARE_H
 
+#include "../Struct/Decoded/LegemiddelMerkevare.h"
 #include "XMLObject.h"
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
@@ -35,9 +36,12 @@ class XmlOppfLegemiddelMerkevare : public XMLObject,
                                    public StatusObject {
 private:
     std::shared_ptr<KatLegemiddelMerkevare> kat;
+    LegemiddelMerkevare legemiddelMerkevare;
 public:
     XmlOppfLegemiddelMerkevare(std::shared_ptr<KatLegemiddelMerkevare> kat) : kat(kat) {}
     std::string GetName();
+    void SetLegemiddelMerkevare(const LegemiddelMerkevare &legemiddelMerkevare);
+    [[nodiscard]] LegemiddelMerkevare GetLegemiddelMerkevare() const;
     void Merge();
 };
 

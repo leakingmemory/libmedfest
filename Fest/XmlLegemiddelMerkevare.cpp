@@ -15,7 +15,8 @@ void XmlLegemiddelMerkevare::Merge() {
         GetAtc(),
         GetNavnFormStyrke(),
         GetReseptgruppe(),
-        GetLegemiddelformKort()
+        GetLegemiddelformKort(),
+        GetRefVilkar()
     }});
 }
 

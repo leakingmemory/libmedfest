@@ -12,8 +12,10 @@
 #include "XmlValueWithDistinguishedName.h"
 #include "XmlValueWithCodeSet.h"
 #include "../Struct/Decoded/LegemiddelformKort.h"
+#include "XmlContentElement.h"
 #include <memory>
 #include <map>
+#include <vector>
 
 class XmlLegemiddel {
 private:
@@ -21,6 +23,7 @@ private:
     std::string navnFormStyrke{};
     Reseptgruppe reseptgruppe{};
     LegemiddelformKort legemiddelformKort{};
+    std::vector<std::string> refVilkar{};
 public:
     virtual ~XmlLegemiddel() = default;
     [[nodiscard]] Atc GetAtc() const;
@@ -31,6 +34,8 @@ public:
     void SetReseptgruppe(const Reseptgruppe &reseptgruppe);
     [[nodiscard]] LegemiddelformKort GetLegemiddelformKort() const;
     void SetLegemiddelformKort(const LegemiddelformKort &legemiddelformKort);
+    [[nodiscard]] std::vector<std::string> GetRefVilkar() const;
+    void AddRefVilkar(const std::string &refVilkar);
 };
 
 class XmlAtc : public XMLObject {
@@ -55,10 +60,10 @@ public:
     bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> obj) override;
 };
 
-class XmlNavnFormStyrkeHandler {
+class XmlNavnFormStyrkeHandler : public XmlContentElementHandler<XmlLegemiddel> {
 public:
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
-    bool EndElement(const std::shared_ptr<XMLObject> &obj);
+    XmlNavnFormStyrkeHandler() : XmlContentElementHandler<XmlLegemiddel>("NavnFormStyrke") {}
+    bool Merge(std::shared_ptr<XmlLegemiddel> parent, const std::string &content) override;
 };
 
 class XmlReseptgruppeHandler : public XmlValueWithDistinguishedNameHandler<XmlLegemiddel> {
@@ -71,6 +76,12 @@ class XmlLegemiddelformKortHandler : public XmlValueWithCodeSetHandler<XmlLegemi
 public:
     XmlLegemiddelformKortHandler() : XmlValueWithCodeSetHandler<XmlLegemiddel>("LegemiddelformKort") {}
     bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> obj) override;
+};
+
+class XmlRefVilkarHandler : public XmlContentElementHandler<XmlLegemiddel> {
+public:
+    XmlRefVilkarHandler() : XmlContentElementHandler<XmlLegemiddel>("RefVilkar") {}
+    bool Merge(std::shared_ptr<XmlLegemiddel> parent, const std::string &content) override;
 };
 
 #endif //LEGEMFEST_XMLLEGEMIDDEL_H

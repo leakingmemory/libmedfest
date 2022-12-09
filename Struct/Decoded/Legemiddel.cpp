@@ -19,3 +19,7 @@ Reseptgruppe Legemiddel::GetReseptgruppe() const {
 LegemiddelformKort Legemiddel::GetLegemiddelformKort() const {
     return legemiddelformKort;
 }
+
+std::vector<std::string> Legemiddel::GetRefVilkar() const {
+    return refVilkar;
+}

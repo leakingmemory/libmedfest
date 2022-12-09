@@ -37,6 +37,14 @@ void XmlLegemiddel::SetLegemiddelformKort(const LegemiddelformKort &legemiddelfo
     this->legemiddelformKort = legemiddelformKort;
 }
 
+std::vector<std::string> XmlLegemiddel::GetRefVilkar() const {
+    return refVilkar;
+}
+
+void XmlLegemiddel::AddRefVilkar(const std::string &refVilkar) {
+    this->refVilkar.push_back(refVilkar);
+}
+
 std::string XmlAtc::GetName() const {
     return "Atc";
 }
@@ -59,23 +67,8 @@ bool XmlAtcHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> ob
     return true;
 }
 
-std::shared_ptr<XMLObject> XmlNavnFormStyrkeHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
-                                                                  const std::map<std::string, std::string> &attributes) {
-    std::shared_ptr<XmlLegemiddel> legemiddel = std::dynamic_pointer_cast<XmlLegemiddel>(parent);
-    if (!legemiddel) {
-        std::cerr << "Error: NavnFormStyrke not accepted here\n";
-        return {};
-    }
-    return std::make_shared<XmlNavnFormStyrke>(legemiddel);
-}
-
-bool XmlNavnFormStyrkeHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
-    auto *nfs = dynamic_cast<XmlNavnFormStyrke*>(&(*obj));
-    if (nfs == nullptr) {
-        std::cerr << "Error: Ending, but not a NavnFormStyrke\n";
-        return false;
-    }
-    nfs->Merge();
+bool XmlNavnFormStyrkeHandler::Merge(std::shared_ptr<XmlLegemiddel> parent, const std::string &content) {
+    parent->SetNavnFormStyrke(content);
     return true;
 }
 
@@ -86,5 +79,10 @@ bool XmlReseptgruppeHandler::Merge(std::shared_ptr<XmlType> obj) {
 
 bool XmlLegemiddelformKortHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> obj) {
     obj->GetParent()->SetLegemiddelformKort({obj->GetValueWithCodeSet()});
+    return true;
+}
+
+bool XmlRefVilkarHandler::Merge(std::shared_ptr<XmlLegemiddel> parent, const std::string &content) {
+    parent->AddRefVilkar(content);
     return true;
 }

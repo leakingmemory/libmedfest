@@ -27,6 +27,7 @@ void FestObjectStream::read() {
     parser.AddHandler("NavnFormStyrke", std::make_shared<XmlNavnFormStyrkeHandler>());
     parser.AddHandler("Reseptgruppe", std::make_shared<XmlReseptgruppeHandler>());
     parser.AddHandler("LegemiddelformKort", std::make_shared<XmlLegemiddelformKortHandler>());
+    parser.AddHandler("RefVilkar", std::make_shared<XmlRefVilkarHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

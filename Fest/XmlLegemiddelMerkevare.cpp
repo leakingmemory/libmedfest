@@ -16,8 +16,8 @@ void XmlLegemiddelMerkevare::Merge() {
         GetNavnFormStyrke(),
         GetReseptgruppe(),
         GetLegemiddelformKort(),
-        GetRefVilkar()
-    }});
+        GetRefVilkar(),
+    }, GetPreparattype()});
 }
 
 std::shared_ptr<XMLObject> XmlLegemiddelMerkevareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,

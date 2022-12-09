@@ -9,11 +9,13 @@
 #include "FestIdObject.h"
 #include "KatLegemiddelMerkevare.h"
 #include "XmlLegemiddel.h"
+#include "XmlPreparattypeObject.h"
 
 class XmlLegemiddelMerkevare :
         public XMLObject,
         public FestIdObject,
-        public XmlLegemiddel {
+        public XmlLegemiddel,
+        public XmlPreparattypeObject {
 private:
     std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare;
 public:

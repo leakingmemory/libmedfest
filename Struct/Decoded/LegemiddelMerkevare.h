@@ -7,11 +7,15 @@
 
 
 #include "Legemiddel.h"
+#include "Preparattype.h"
 
 class LegemiddelMerkevare : public Legemiddel {
+private:
+    Preparattype preparattype;
 public:
-    LegemiddelMerkevare() : Legemiddel() {}
-    LegemiddelMerkevare(const Legemiddel &legemiddel) : Legemiddel(legemiddel) {}
+    LegemiddelMerkevare() : Legemiddel(), preparattype() {}
+    LegemiddelMerkevare(const Legemiddel &legemiddel, const Preparattype &preparattype) : Legemiddel(legemiddel), preparattype(preparattype) {}
+    [[nodiscard]] Preparattype GetPreparattype() const;
 };
 
 

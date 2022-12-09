@@ -11,6 +11,7 @@
 #include "Fest/StatusObject.h"
 #include "Fest/XmlLegemiddelMerkevare.h"
 #include "Fest/XmlLegemiddel.h"
+#include "Fest/XmlPreparattypeObject.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -28,6 +29,7 @@ void FestObjectStream::read() {
     parser.AddHandler("Reseptgruppe", std::make_shared<XmlReseptgruppeHandler>());
     parser.AddHandler("LegemiddelformKort", std::make_shared<XmlLegemiddelformKortHandler>());
     parser.AddHandler("RefVilkar", std::make_shared<XmlRefVilkarHandler>());
+    parser.AddHandler("Preparattype", std::make_shared<XmlPreparattypeObjectHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

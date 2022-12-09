@@ -3,3 +3,7 @@
 //
 
 #include "LegemiddelMerkevare.h"
+
+Preparattype LegemiddelMerkevare::GetPreparattype() const {
+    return preparattype;
+}

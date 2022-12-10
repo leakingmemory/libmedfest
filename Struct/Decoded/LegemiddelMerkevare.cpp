@@ -15,3 +15,7 @@ std::string LegemiddelMerkevare::GetVarenavn() const {
 std::string LegemiddelMerkevare::GetLegemiddelformLang() const {
     return legemiddelformLang;
 }
+
+std::string LegemiddelMerkevare::GetProdusent() const {
+    return produsent;
+}

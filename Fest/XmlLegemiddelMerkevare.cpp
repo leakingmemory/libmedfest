@@ -18,6 +18,10 @@ void XmlLegemiddelMerkevare::SetLegemiddelformLang(const std::string &legemiddel
     this->legemiddelformLang = legemiddelformLang;
 }
 
+void XmlLegemiddelMerkevare::SetProdusent(const std::string &produsent) {
+    this->produsent = produsent;
+}
+
 void XmlLegemiddelMerkevare::Merge() {
     oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
         GetAtc(),
@@ -28,7 +32,7 @@ void XmlLegemiddelMerkevare::Merge() {
         GetTypeSoknadSlv(),
         GetAdministreringLegemiddel(),
         GetSortertVirkestoffMedStyrke()
-    }, GetPreparattype(), varenavn, legemiddelformLang});
+    }, GetPreparattype(), varenavn, legemiddelformLang, produsent});
 }
 
 std::shared_ptr<XMLObject> XmlLegemiddelMerkevareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,

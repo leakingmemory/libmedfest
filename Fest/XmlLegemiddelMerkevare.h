@@ -20,11 +20,13 @@ private:
     std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare;
     std::string varenavn;
     std::string legemiddelformLang;
+    std::string produsent;
 public:
     XmlLegemiddelMerkevare(std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare) : oppfLegemiddelMerkevare(oppfLegemiddelMerkevare) {}
     std::string GetName() const override;
     void SetVarenavn(const std::string &varenavn);
     void SetLegemiddelformLang(const std::string &legemiddelformLang);
+    void SetProdusent(const std::string &produsent);
     void Merge();
 };
 

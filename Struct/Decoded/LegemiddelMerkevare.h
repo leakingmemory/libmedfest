@@ -14,17 +14,19 @@ private:
     Preparattype preparattype;
     std::string varenavn;
     std::string legemiddelformLang;
+    std::string produsent;
 public:
-    LegemiddelMerkevare() : Legemiddel(), preparattype(), varenavn(), legemiddelformLang() {}
+    LegemiddelMerkevare() : Legemiddel(), preparattype(), varenavn(), legemiddelformLang(), produsent() {}
     LegemiddelMerkevare(
             const Legemiddel &legemiddel, const Preparattype &preparattype, const std::string &varenavn,
-            const std::string &legemiddelformLang
+            const std::string &legemiddelformLang, const std::string &produsent
         ) :
             Legemiddel(legemiddel), preparattype(preparattype), varenavn(varenavn),
-            legemiddelformLang(legemiddelformLang) {}
-    Preparattype GetPreparattype() const;
-    std::string GetVarenavn() const;
-    std::string GetLegemiddelformLang() const;
+            legemiddelformLang(legemiddelformLang), produsent(produsent) {}
+    [[nodiscard]] Preparattype GetPreparattype() const;
+    [[nodiscard]] std::string GetVarenavn() const;
+    [[nodiscard]] std::string GetLegemiddelformLang() const;
+    [[nodiscard]] std::string GetProdusent() const;
 };
 
 

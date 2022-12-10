@@ -22,6 +22,10 @@ void XmlLegemiddelMerkevare::SetProdusent(const std::string &produsent) {
     this->produsent = produsent;
 }
 
+void XmlLegemiddelMerkevare::SetReseptgyldighet(const std::string &reseptgyldighet) {
+    this->reseptgyldighet = reseptgyldighet;
+}
+
 void XmlLegemiddelMerkevare::Merge() {
     oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
         GetAtc(),
@@ -32,7 +36,7 @@ void XmlLegemiddelMerkevare::Merge() {
         GetTypeSoknadSlv(),
         GetAdministreringLegemiddel(),
         GetSortertVirkestoffMedStyrke()
-    }, GetPreparattype(), varenavn, legemiddelformLang, produsent});
+    }, GetPreparattype(), varenavn, legemiddelformLang, produsent, reseptgyldighet});
 }
 
 std::shared_ptr<XMLObject> XmlLegemiddelMerkevareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,

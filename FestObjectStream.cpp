@@ -17,6 +17,8 @@
 #include "Fest/XmlSortering.h"
 #include "Fest/XmlRefVirkestoffMedStyrke.h"
 #include "Fest/XmlProduktInfo.h"
+#include "Fest/XmlReseptgyldighet.h"
+#include "Fest/XmlVarighet.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -46,6 +48,8 @@ void FestObjectStream::read() {
     parser.AddHandler("RefVirkestoffMedStyrke", std::make_shared<XmlRefVirkestoffMedStyrkeHandler>());
     parser.AddHandler("ProduktInfo", std::make_shared<XmlProduktInfoHandler>());
     parser.AddHandler("Produsent", std::make_shared<XmlProdusentHandler>());
+    parser.AddHandler("Reseptgyldighet", std::make_shared<XmlReseptgyldighetHandler>());
+    parser.AddHandler("Varighet", std::make_shared<XmlVarighetHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

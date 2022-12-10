@@ -18,15 +18,17 @@ class XmlLegemiddelMerkevare :
         public XmlPreparattypeObject {
 private:
     std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare;
-    std::string varenavn;
-    std::string legemiddelformLang;
-    std::string produsent;
+    std::string varenavn{};
+    std::string legemiddelformLang{};
+    std::string produsent{};
+    std::string reseptgyldighet{};
 public:
     XmlLegemiddelMerkevare(std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare) : oppfLegemiddelMerkevare(oppfLegemiddelMerkevare) {}
     std::string GetName() const override;
     void SetVarenavn(const std::string &varenavn);
     void SetLegemiddelformLang(const std::string &legemiddelformLang);
     void SetProdusent(const std::string &produsent);
+    void SetReseptgyldighet(const std::string &reseptgyldighet);
     void Merge();
 };
 

@@ -19,3 +19,7 @@ std::string LegemiddelMerkevare::GetLegemiddelformLang() const {
 std::string LegemiddelMerkevare::GetProdusent() const {
     return produsent;
 }
+
+std::string LegemiddelMerkevare::GetReseptgyldighet() const {
+    return reseptgyldighet;
+}

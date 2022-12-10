@@ -23,3 +23,11 @@ std::string LegemiddelMerkevare::GetProdusent() const {
 std::string LegemiddelMerkevare::GetReseptgyldighet() const {
     return reseptgyldighet;
 }
+
+MaybeBoolean LegemiddelMerkevare::GetVarseltrekant() const {
+    return varseltrekant;
+}
+
+std::string LegemiddelMerkevare::GetReferanseprodukt() const {
+    return referanseprodukt;
+}

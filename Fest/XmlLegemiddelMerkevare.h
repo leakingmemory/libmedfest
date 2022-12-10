@@ -22,6 +22,8 @@ private:
     std::string legemiddelformLang{};
     std::string produsent{};
     std::string reseptgyldighet{};
+    MaybeBoolean varseltrekant{MaybeBoolean::UNSPECIFIED};
+    std::string referanseprodukt;
 public:
     XmlLegemiddelMerkevare(std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare) : oppfLegemiddelMerkevare(oppfLegemiddelMerkevare) {}
     std::string GetName() const override;
@@ -29,6 +31,8 @@ public:
     void SetLegemiddelformLang(const std::string &legemiddelformLang);
     void SetProdusent(const std::string &produsent);
     void SetReseptgyldighet(const std::string &reseptgyldighet);
+    void SetVarseltrekant(MaybeBoolean varseltrekant);
+    void SetReferanseprodukt(const std::string &referanseprodukt);
     void Merge();
 };
 

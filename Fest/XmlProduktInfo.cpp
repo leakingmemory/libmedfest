@@ -13,8 +13,18 @@ void XmlProduktInfo::SetProdusent(const std::string &produsent) {
     this->produsent = produsent;
 }
 
+void XmlProduktInfo::SetVarseltrekant(MaybeBoolean varseltrekant) {
+    this->varseltrekant = varseltrekant;
+}
+
+void XmlProduktInfo::SetReferanseprodukt(const std::string &referanseprodukt) {
+    this->referanseprodukt = referanseprodukt;
+}
+
 bool XmlProduktInfo::Merge() {
     parent->SetProdusent(produsent);
+    parent->SetVarseltrekant(varseltrekant);
+    parent->SetReferanseprodukt(referanseprodukt);
     return true;
 }
 
@@ -39,5 +49,22 @@ bool XmlProduktInfoHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
 
 bool XmlProdusentHandler::Merge(std::shared_ptr<XmlProduktInfo> parent, const std::string &content) {
     parent->SetProdusent(content);
+    return true;
+}
+
+bool XmlVarseltrekantHandler::Merge(std::shared_ptr<XmlProduktInfo> parent, const std::string &content) {
+    if (content == "true") {
+        parent->SetVarseltrekant(MaybeBoolean::TRUE);
+        return true;
+    } else if (content == "false") {
+        parent->SetVarseltrekant(MaybeBoolean::FALSE);
+        return true;
+    }
+    std::cerr << "Error: Invalid Varseltrekant value: " << content << "\n";
+    return false;
+}
+
+bool XmlReferanseproduktHandler::Merge(std::shared_ptr<XmlProduktInfo> parent, const std::string &content) {
+    parent->SetReferanseprodukt(content);
     return true;
 }

@@ -14,11 +14,15 @@ class XmlProduktInfo : public XMLObject {
 private:
     std::shared_ptr<XmlLegemiddelMerkevare> parent;
     std::string produsent{};
+    MaybeBoolean varseltrekant{MaybeBoolean::UNSPECIFIED};
+    std::string referanseprodukt;
 public:
     XmlProduktInfo(std::shared_ptr<XmlLegemiddelMerkevare> parent) : parent(parent) {}
     virtual ~XmlProduktInfo() = default;
     std::string GetName() const override;
     void SetProdusent(const std::string &produsent);
+    void SetVarseltrekant(MaybeBoolean varseltrekant);
+    void SetReferanseprodukt(const std::string &referanseprodukt);
     bool Merge();
 };
 
@@ -31,6 +35,18 @@ public:
 class XmlProdusentHandler : public XmlContentElementHandler<XmlProduktInfo> {
 public:
     XmlProdusentHandler() : XmlContentElementHandler<XmlProduktInfo>("Produsent") {}
+    bool Merge(std::shared_ptr<XmlProduktInfo> parent, const std::string &content) override;
+};
+
+class XmlVarseltrekantHandler : public XmlContentElementHandler<XmlProduktInfo> {
+public:
+    XmlVarseltrekantHandler() : XmlContentElementHandler<XmlProduktInfo>("Varseltrekant") {}
+    bool Merge(std::shared_ptr<XmlProduktInfo> parent, const std::string &content) override;
+};
+
+class XmlReferanseproduktHandler : public XmlContentElementHandler<XmlProduktInfo> {
+public:
+    XmlReferanseproduktHandler() : XmlContentElementHandler<XmlProduktInfo>("Referanseprodukt") {}
     bool Merge(std::shared_ptr<XmlProduktInfo> parent, const std::string &content) override;
 };
 

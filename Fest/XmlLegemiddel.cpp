@@ -3,6 +3,7 @@
 //
 
 #include "XmlLegemiddel.h"
+#include "../Struct/Decoded/AdministreringLegemiddel.h"
 #include <iostream>
 
 Atc XmlLegemiddel::GetAtc() const {
@@ -51,6 +52,14 @@ TypeSoknadSlv XmlLegemiddel::GetTypeSoknadSlv() const {
 
 void XmlLegemiddel::SetTypeSoknadSlv(const TypeSoknadSlv &typeSoknadSlv) {
     this->typeSoknadSlv = typeSoknadSlv;
+}
+
+AdministreringLegemiddel XmlLegemiddel::GetAdministreringLegemiddel() const {
+    return administreringLegemiddel;
+}
+
+void XmlLegemiddel::SetAdministreringLegemiddel(const AdministreringLegemiddel &administreringLegemiddel) {
+    this->administreringLegemiddel = administreringLegemiddel;
 }
 
 std::string XmlAtc::GetName() const {

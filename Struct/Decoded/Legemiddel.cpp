@@ -27,3 +27,7 @@ std::vector<std::string> Legemiddel::GetRefVilkar() const {
 TypeSoknadSlv Legemiddel::GetTypeSoknadSlv() const {
     return typeSoknadSlv;
 }
+
+AdministreringLegemiddel Legemiddel::GetAdministreringLegemiddel() const {
+    return administreringLegemiddel;
+}

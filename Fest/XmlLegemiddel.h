@@ -14,6 +14,7 @@
 #include "../Struct/Decoded/LegemiddelformKort.h"
 #include "XmlContentElement.h"
 #include "../Struct/Decoded/TypeSoknadSlv.h"
+#include "../Struct/Decoded/AdministreringLegemiddel.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -26,6 +27,7 @@ private:
     LegemiddelformKort legemiddelformKort{};
     std::vector<std::string> refVilkar{};
     TypeSoknadSlv typeSoknadSlv{};
+    AdministreringLegemiddel administreringLegemiddel{};
 public:
     virtual ~XmlLegemiddel() = default;
     [[nodiscard]] Atc GetAtc() const;
@@ -39,7 +41,9 @@ public:
     [[nodiscard]] std::vector<std::string> GetRefVilkar() const;
     void AddRefVilkar(const std::string &refVilkar);
     [[nodiscard]] TypeSoknadSlv GetTypeSoknadSlv() const;
-    void SetTypeSoknadSlv(const TypeSoknadSlv &typeSoknadSlv1);
+    void SetTypeSoknadSlv(const TypeSoknadSlv &typeSoknadSlv);
+    [[nodiscard]] AdministreringLegemiddel GetAdministreringLegemiddel() const;
+    void SetAdministreringLegemiddel(const AdministreringLegemiddel &administreringLegemiddel);
 };
 
 class XmlAtc : public XMLObject {

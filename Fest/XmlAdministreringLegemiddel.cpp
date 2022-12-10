@@ -17,8 +17,20 @@ void XmlAdministreringLegemiddel::SetEnhetDosering(const EnhetDosering &enhetDos
     this->enhetDosering = enhetDosering;
 }
 
+void XmlAdministreringLegemiddel::AddBruksomradeEtikett(const BruksomradeEtikett &bruksomradeEtikett) {
+    this->bruksomradeEtikett.push_back(bruksomradeEtikett);
+}
+
+void XmlAdministreringLegemiddel::SetKanKnuses(const KanKnuses &kanKnuses) {
+    this->kanKnuses = kanKnuses;
+}
+
+void XmlAdministreringLegemiddel::AddForhandsregelInntak(const ForhandsregelInntak &forhandsregelInntak) {
+    this->forhandsregelInntak.push_back(forhandsregelInntak);
+}
+
 void XmlAdministreringLegemiddel::Merge() {
-    parent->SetAdministreringLegemiddel({administrasjonsvei, enhetDosering});
+    parent->SetAdministreringLegemiddel({administrasjonsvei, enhetDosering, bruksomradeEtikett, kanKnuses, forhandsregelInntak});
 }
 
 std::shared_ptr<XMLObject> XmlAdministreringLegemiddelHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -48,5 +60,20 @@ bool XmlAdministrasjonsveiHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<Xml
 
 bool XmlEnhetDoseringHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) {
     obj->GetParent()->SetEnhetDosering({obj->GetValueWithCodeSet()});
+    return true;
+}
+
+bool XmlBruksomradeEtikettHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) {
+    obj->GetParent()->AddBruksomradeEtikett({obj->GetValueWithCodeSet()});
+    return true;
+}
+
+bool XmlKanKnusesHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetKanKnuses({obj->GetValueWithDistinguishedName()});
+    return true;
+}
+
+bool XmlForhandsregelInntakHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) {
+    obj->GetParent()->AddForhandsregelInntak({obj->GetValueWithCodeSet()});
     return true;
 }

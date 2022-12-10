@@ -50,6 +50,9 @@ void FestObjectStream::read() {
     parser.AddHandler("Produsent", std::make_shared<XmlProdusentHandler>());
     parser.AddHandler("Reseptgyldighet", std::make_shared<XmlReseptgyldighetHandler>());
     parser.AddHandler("Varighet", std::make_shared<XmlVarighetHandler>());
+    parser.AddHandler("BruksomradeEtikett", std::make_shared<XmlBruksomradeEtikettHandler>());
+    parser.AddHandler("KanKnuses", std::make_shared<XmlKanKnusesHandler>());
+    parser.AddHandler("ForhandsregelInntak", std::make_shared<XmlForhandsregelInntakHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

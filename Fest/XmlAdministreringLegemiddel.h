@@ -10,6 +10,7 @@
 #include "XmlValueWithCodeSet.h"
 #include "../Struct/Decoded/AdministreringLegemiddel.h"
 #include "../Struct/Decoded/EnhetDosering.h"
+#include "../Struct/Decoded/ForhandsregelInntak.h"
 #include <memory>
 #include <map>
 
@@ -20,11 +21,17 @@ private:
     std::shared_ptr<XmlLegemiddel> parent;
     Administrasjonsvei administrasjonsvei{};
     EnhetDosering enhetDosering{};
+    std::vector<BruksomradeEtikett> bruksomradeEtikett{};
+    KanKnuses kanKnuses;
+    std::vector<ForhandsregelInntak> forhandsregelInntak{};
 public:
     XmlAdministreringLegemiddel(std::shared_ptr<XmlLegemiddel> parent) : parent(parent) {}
     std::string GetName() const override;
     void SetAdministrasjonsvei(const Administrasjonsvei &administrasjonsvei);
     void SetEnhetDosering(const EnhetDosering &enhetDosering);
+    void AddBruksomradeEtikett(const BruksomradeEtikett &bruksomradeEtikett);
+    void SetKanKnuses(const KanKnuses &kanKnuses);
+    void AddForhandsregelInntak(const ForhandsregelInntak &forhandsregelInntak);
     void Merge();
 };
 
@@ -43,6 +50,24 @@ public:
 class XmlEnhetDoseringHandler : public XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel> {
 public:
     XmlEnhetDoseringHandler() : XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel>("EnhetDosering") {}
+    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) override;
+};
+
+class XmlBruksomradeEtikettHandler : public XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel> {
+public:
+    XmlBruksomradeEtikettHandler() : XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel>("BruksomradeEtikett") {}
+    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) override;
+};
+
+class XmlKanKnusesHandler : public XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel> {
+public:
+    XmlKanKnusesHandler() : XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel>("KanKnuses") {}
+    bool Merge(std::shared_ptr<XmlType> obj) override;
+};
+
+class XmlForhandsregelInntakHandler : public XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel> {
+public:
+    XmlForhandsregelInntakHandler() : XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel>("ForhandsregelInntak") {}
     bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) override;
 };
 

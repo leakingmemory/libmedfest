@@ -11,3 +11,15 @@ Administrasjonsvei AdministreringLegemiddel::GetAdministrasjonsvei() const {
 EnhetDosering AdministreringLegemiddel::GetEnhetDosering() const {
     return enhetDosering;
 }
+
+std::vector<BruksomradeEtikett> AdministreringLegemiddel::GetBruksomradeEtikett() const {
+    return bruksomradeEtikett;
+}
+
+KanKnuses AdministreringLegemiddel::GetKanKnuses() const {
+    return kanKnuses;
+}
+
+std::vector<ForhandsregelInntak> AdministreringLegemiddel::GetForhandsregelInntak() const {
+    return forhandsregelInntak;
+}

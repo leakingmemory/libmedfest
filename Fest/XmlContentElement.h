@@ -53,7 +53,7 @@ public:
         }
         return Merge(typedObject->GetParent(), typedObject->GetContent());
     }
-    [[discard]] std::string GetName() const {
+    [[nodiscard]] std::string GetName() const {
         return name;
     }
     virtual bool Merge(std::shared_ptr<ParentType> parent, const std::string &content) = 0;

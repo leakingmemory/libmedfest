@@ -15,11 +15,12 @@
 #include "XmlContentElement.h"
 #include "../Struct/Decoded/TypeSoknadSlv.h"
 #include "../Struct/Decoded/AdministreringLegemiddel.h"
+#include "XmlSortertVirkestoffMedStyrke.h"
 #include <memory>
 #include <map>
 #include <vector>
 
-class XmlLegemiddel {
+class XmlLegemiddel : public XmlSortertVirkestoffMedStyrke {
 private:
     Atc atc{};
     std::string navnFormStyrke{};

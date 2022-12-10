@@ -13,6 +13,9 @@
 #include "Fest/XmlLegemiddel.h"
 #include "Fest/XmlPreparattypeObject.h"
 #include "Fest/XmlAdministreringLegemiddel.h"
+#include "Fest/XmlSortertVirkestoffMedStyrke.h"
+#include "Fest/XmlSortering.h"
+#include "Fest/XmlRefVirkestoffMedStyrke.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -37,6 +40,9 @@ void FestObjectStream::read() {
     parser.AddHandler("EnhetDosering", std::make_shared<XmlEnhetDoseringHandler>());
     parser.AddHandler("Varenavn", std::make_shared<XmlVarenavnHandler>());
     parser.AddHandler("LegemiddelformLang", std::make_shared<XmlLegemiddelformLangHandler>());
+    parser.AddHandler("SortertVirkestoffMedStyrke", std::make_shared<XmlSortertVirkestoffMedStyrkeHandler>());
+    parser.AddHandler("Sortering", std::make_shared<XmlSorteringHandler>());
+    parser.AddHandler("RefVirkestoffMedStyrke", std::make_shared<XmlRefVirkestoffMedStyrkeHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

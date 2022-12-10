@@ -26,7 +26,8 @@ void XmlLegemiddelMerkevare::Merge() {
         GetLegemiddelformKort(),
         GetRefVilkar(),
         GetTypeSoknadSlv(),
-        GetAdministreringLegemiddel()
+        GetAdministreringLegemiddel(),
+        GetSortertVirkestoffMedStyrke()
     }, GetPreparattype(), varenavn, legemiddelformLang});
 }
 

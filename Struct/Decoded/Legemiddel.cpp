@@ -31,3 +31,7 @@ TypeSoknadSlv Legemiddel::GetTypeSoknadSlv() const {
 AdministreringLegemiddel Legemiddel::GetAdministreringLegemiddel() const {
     return administreringLegemiddel;
 }
+
+std::vector<std::string> Legemiddel::GetSortertVirkestoffMedStyrke() const {
+    return sortertVirkestoffMedStyrke;
+}

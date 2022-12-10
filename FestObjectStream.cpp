@@ -35,6 +35,8 @@ void FestObjectStream::read() {
     parser.AddHandler("AdministreringLegemiddel", std::make_shared<XmlAdministreringLegemiddelHandler>());
     parser.AddHandler("Administrasjonsvei", std::make_shared<XmlAdministrasjonsveiHandler>());
     parser.AddHandler("EnhetDosering", std::make_shared<XmlEnhetDoseringHandler>());
+    parser.AddHandler("Varenavn", std::make_shared<XmlVarenavnHandler>());
+    parser.AddHandler("LegemiddelformLang", std::make_shared<XmlLegemiddelformLangHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

@@ -10,6 +10,14 @@ std::string XmlLegemiddelMerkevare::GetName() const {
     return "LegemiddelMerkevare";
 }
 
+void XmlLegemiddelMerkevare::SetVarenavn(const std::string &varenavn) {
+    this->varenavn = varenavn;
+}
+
+void XmlLegemiddelMerkevare::SetLegemiddelformLang(const std::string &legemiddelformLang) {
+    this->legemiddelformLang = legemiddelformLang;
+}
+
 void XmlLegemiddelMerkevare::Merge() {
     oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
         GetAtc(),
@@ -19,7 +27,7 @@ void XmlLegemiddelMerkevare::Merge() {
         GetRefVilkar(),
         GetTypeSoknadSlv(),
         GetAdministreringLegemiddel()
-    }, GetPreparattype()});
+    }, GetPreparattype(), varenavn, legemiddelformLang});
 }
 
 std::shared_ptr<XMLObject> XmlLegemiddelMerkevareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -39,5 +47,15 @@ bool XmlLegemiddelMerkevareHandler::EndElement(const std::shared_ptr<XMLObject> 
         return false;
     }
     oppf->Merge();
+    return true;
+}
+
+bool XmlVarenavnHandler::Merge(std::shared_ptr<XmlLegemiddelMerkevare> parent, const std::string &content) {
+    parent->SetVarenavn(content);
+    return true;
+}
+
+bool XmlLegemiddelformLangHandler::Merge(std::shared_ptr<XmlLegemiddelMerkevare> parent, const std::string &content) {
+    parent->SetLegemiddelformLang(content);
     return true;
 }

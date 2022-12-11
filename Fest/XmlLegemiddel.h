@@ -15,6 +15,7 @@
 #include "XmlContentElement.h"
 #include "../Struct/Decoded/TypeSoknadSlv.h"
 #include "../Struct/Decoded/AdministreringLegemiddel.h"
+#include "../Struct/Decoded/MaybeBoolean.h"
 #include "XmlSortertVirkestoffMedStyrke.h"
 #include <memory>
 #include <map>
@@ -29,6 +30,7 @@ private:
     std::vector<std::string> refVilkar{};
     TypeSoknadSlv typeSoknadSlv{};
     AdministreringLegemiddel administreringLegemiddel{};
+    MaybeBoolean opioidsoknad{MaybeBoolean::UNSPECIFIED};
 public:
     virtual ~XmlLegemiddel() = default;
     [[nodiscard]] Atc GetAtc() const;
@@ -45,6 +47,8 @@ public:
     void SetTypeSoknadSlv(const TypeSoknadSlv &typeSoknadSlv);
     [[nodiscard]] AdministreringLegemiddel GetAdministreringLegemiddel() const;
     void SetAdministreringLegemiddel(const AdministreringLegemiddel &administreringLegemiddel);
+    [[nodiscard]] MaybeBoolean GetOpioidsoknad() const;
+    void SetOpioidsoknad(bool opioidsoknad);
 };
 
 class XmlAtc : public XMLObject {
@@ -97,6 +101,12 @@ class XmlTypeSoknadSlvHandler : public XmlValueWithDistinguishedNameHandler<XmlL
 public:
     XmlTypeSoknadSlvHandler() : XmlValueWithDistinguishedNameHandler<XmlLegemiddel>("TypeSoknadSlv") {}
     bool Merge(std::shared_ptr<XmlType> obj) override;
+};
+
+class XmlOpioidsoknadHandler : public XmlContentElementHandler<XmlLegemiddel> {
+public:
+    XmlOpioidsoknadHandler() : XmlContentElementHandler<XmlLegemiddel>("Opioidsoknad") {}
+    bool Merge(std::shared_ptr<XmlLegemiddel> parent, const std::string &content) override;
 };
 
 #endif //LEGEMFEST_XMLLEGEMIDDEL_H

@@ -35,3 +35,7 @@ AdministreringLegemiddel Legemiddel::GetAdministreringLegemiddel() const {
 std::vector<std::string> Legemiddel::GetSortertVirkestoffMedStyrke() const {
     return sortertVirkestoffMedStyrke;
 }
+
+MaybeBoolean Legemiddel::GetOpioidsoknad() const {
+    return opioidsoknad;
+}

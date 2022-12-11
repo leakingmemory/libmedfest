@@ -18,7 +18,7 @@ std::shared_ptr<XMLObject>
 KatLegemiddelMerkevareHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
     std::shared_ptr<Fest> fest = std::dynamic_pointer_cast<Fest>(parent);
     if (!fest) {
-        std::cerr << "Error: HentetDato parent is not Fest\n";
+        std::cerr << "Error: KatLegemiddelMerkevare parent is not Fest\n";
         return {};
     }
     return std::make_shared<KatLegemiddelMerkevare>(fest);

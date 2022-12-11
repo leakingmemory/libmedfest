@@ -9,4 +9,6 @@ add_library(fest OBJECT Fest.cpp Fest.h FestIdObject.cpp FestIdObject.h
         XmlRefVirkestoffMedStyrke.cpp XmlRefVirkestoffMedStyrke.h XmlProduktInfo.cpp XmlProduktInfo.h
         XmlReseptgyldighet.cpp XmlReseptgyldighet.h XmlVarighet.cpp XmlVarighet.h
         XmlPreparatomtaleavsnitt.cpp XmlPreparatomtaleavsnitt.h XmlRefVirkestoff.cpp XmlRefVirkestoff.h
-        XmlSortertVirkestoffUtenStyrke.cpp XmlSortertVirkestoffUtenStyrke.h XmlKjonn.cpp XmlKjonn.h)
+        XmlSortertVirkestoffUtenStyrke.cpp XmlSortertVirkestoffUtenStyrke.h XmlKjonn.cpp XmlKjonn.h
+        XmlLegemiddelCore.cpp XmlLegemiddelCore.h KatLegemiddelpakning.cpp KatLegemiddelpakning.h
+        XmlLegemiddelpakning.cpp XmlLegemiddelpakning.h)

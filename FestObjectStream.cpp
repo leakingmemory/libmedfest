@@ -23,6 +23,7 @@
 #include "Fest/XmlRefVirkestoff.h"
 #include "Fest/XmlSortertVirkestoffUtenStyrke.h"
 #include "Fest/XmlKjonn.h"
+#include "Fest/XmlLegemiddelpakning.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -76,6 +77,9 @@ void FestObjectStream::read() {
     parser.AddHandler("Vaksinestandard", std::make_shared<XmlVaksinestandardHandler>());
     parser.AddHandler("InjeksjonshastighetBolus", std::make_shared<XmlInjeksjonshastighetBolusHandler>());
     parser.AddHandler("Blandingsveske", std::make_shared<XmlBlandingsveskeHandler>());
+    parser.AddHandler("KatLegemiddelpakning", std::make_shared<KatLegemiddelpakningHandler>());
+    parser.AddHandler("OppfLegemiddelpakning", std::make_shared<OppfLegemiddelpakningHandler>());
+    parser.AddHandler("Legemiddelpakning", std::make_shared<XmlLegemiddelpakningHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

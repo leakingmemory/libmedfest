@@ -47,17 +47,18 @@ void XmlLegemiddelMerkevare::SetVaksinestandard(const Vaksinestandard &vaksinest
 }
 
 void XmlLegemiddelMerkevare::Merge() {
-    oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
-                GetAtc(),
-                GetNavnFormStyrke(),
-                GetReseptgruppe(),
-                GetLegemiddelformKort(),
-                GetRefVilkar(),
-                GetTypeSoknadSlv(),
+    oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{{
+                    GetAtc(),
+                    GetNavnFormStyrke(),
+                    GetReseptgruppe(),
+                    GetLegemiddelformKort(),
+                    GetRefVilkar(),
+                    GetTypeSoknadSlv(),
+                    GetOpioidsoknad(),
+                    GetSvartTrekant()
+                },
                 GetAdministreringLegemiddel(),
-                GetSortertVirkestoffMedStyrke(),
-                GetOpioidsoknad(),
-                GetSvartTrekant()
+                GetSortertVirkestoffMedStyrke()
             },
             GetPreparattype(),
             varenavn,

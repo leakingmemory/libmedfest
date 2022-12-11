@@ -4,42 +4,10 @@
 
 #include "Legemiddel.h"
 
-Atc Legemiddel::GetAtc() const {
-    return atc;
-}
-
-std::string Legemiddel::GetNavnFormStyrke() const {
-    return navnFormStyrke;
-}
-
-Reseptgruppe Legemiddel::GetReseptgruppe() const {
-    return reseptgruppe;
-}
-
-LegemiddelformKort Legemiddel::GetLegemiddelformKort() const {
-    return legemiddelformKort;
-}
-
-std::vector<std::string> Legemiddel::GetRefVilkar() const {
-    return refVilkar;
-}
-
-TypeSoknadSlv Legemiddel::GetTypeSoknadSlv() const {
-    return typeSoknadSlv;
-}
-
 AdministreringLegemiddel Legemiddel::GetAdministreringLegemiddel() const {
     return administreringLegemiddel;
 }
 
 std::vector<std::string> Legemiddel::GetSortertVirkestoffMedStyrke() const {
     return sortertVirkestoffMedStyrke;
-}
-
-MaybeBoolean Legemiddel::GetOpioidsoknad() const {
-    return opioidsoknad;
-}
-
-SvartTrekant Legemiddel::GetSvartTrekant() const {
-    return svartTrekant;
 }

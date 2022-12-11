@@ -4,4 +4,6 @@ add_library(decoded OBJECT Status.cpp Status.h OppfLegemiddelMerkevare.cpp OppfL
         LegemiddelMerkevare.cpp LegemiddelMerkevare.h Atc.h Legemiddel.cpp Legemiddel.h Reseptgruppe.h
         ValueWithDistinguishedName.cpp ValueWithDistinguishedName.h ValueWithCodeSet.cpp ValueWithCodeSet.h
         LegemiddelformKort.h Preparattype.h AdministreringLegemiddel.cpp AdministreringLegemiddel.h
-        Administrasjonsvei.h Preparatomtaleavsnitt.cpp Preparatomtaleavsnitt.h Reseptgyldighet.cpp Reseptgyldighet.h)
+        Administrasjonsvei.h Preparatomtaleavsnitt.cpp Preparatomtaleavsnitt.h Reseptgyldighet.cpp Reseptgyldighet.h
+        LegemiddelCore.cpp LegemiddelCore.h Legemiddelpakning.cpp Legemiddelpakning.h
+        OppfLegemiddelpakning.cpp OppfLegemiddelpakning.h)

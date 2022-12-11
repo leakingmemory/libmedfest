@@ -6,7 +6,9 @@
 #define LEGEMFEST_FEST_H
 
 #include "../Struct/Decoded/OppfLegemiddelMerkevare.h"
+#include "../Struct/Decoded/OppfLegemiddelpakning.h"
 #include "XMLObject.h"
+#include "KatLegemiddelpakning.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -30,6 +32,7 @@ class Fest : public XMLObject {
 private:
     std::string hentetDato{};
     std::vector<OppfLegemiddelMerkevare> oppfLegemiddelMerkevare{};
+    std::vector<OppfLegemiddelpakning> oppfLegemiddelpakning{};
 public:
     std::string GetName() const override;
     void SetHentetDato(const std::string &hentetDato) {
@@ -39,6 +42,7 @@ public:
         return hentetDato;
     }
     void Add(const XmlOppfLegemiddelMerkevare &);
+    void Add(const XmlOppfLegemiddelpakning &);
 };
 
 class FestHandler {

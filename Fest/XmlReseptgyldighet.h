@@ -8,10 +8,11 @@
 #include "XMLObject.h"
 #include "XmlLegemiddelMerkevare.h"
 #include "XmlVarighet.h"
+#include "XmlKjonn.h"
 #include <memory>
 #include <map>
 
-class XmlReseptgyldighet : public XMLObject, public XmlVarighet {
+class XmlReseptgyldighet : public XMLObject, public XmlVarighet, public XmlKjonn {
 private:
     std::shared_ptr<XmlLegemiddelMerkevare> parent;
 public:

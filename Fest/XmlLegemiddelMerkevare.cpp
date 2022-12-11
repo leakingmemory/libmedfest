@@ -22,8 +22,8 @@ void XmlLegemiddelMerkevare::SetProdusent(const std::string &produsent) {
     this->produsent = produsent;
 }
 
-void XmlLegemiddelMerkevare::SetReseptgyldighet(const std::string &reseptgyldighet) {
-    this->reseptgyldighet = reseptgyldighet;
+void XmlLegemiddelMerkevare::AddReseptgyldighet(const Reseptgyldighet &reseptgyldighet) {
+    this->reseptgyldighet.push_back(reseptgyldighet);
 }
 
 void XmlLegemiddelMerkevare::SetVarseltrekant(MaybeBoolean varseltrekant) {

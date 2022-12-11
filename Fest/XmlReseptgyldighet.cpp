@@ -9,7 +9,7 @@ std::string XmlReseptgyldighet::GetName() const {
 }
 
 bool XmlReseptgyldighet::Merge() {
-    parent->SetReseptgyldighet(GetVarighet());
+    parent->AddReseptgyldighet({GetVarighet(), GetKjonn()});
     return true;
 }
 

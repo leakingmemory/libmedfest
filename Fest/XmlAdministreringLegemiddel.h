@@ -28,6 +28,7 @@ private:
     std::vector<ForhandsregelInntak> forhandsregelInntak{};
     std::vector<Kortdose> kortdose{};
     Deling deling{};
+    KanApnes kanApnes{};
 public:
     XmlAdministreringLegemiddel(std::shared_ptr<XmlLegemiddel> parent) : parent(parent) {}
     std::string GetName() const override;
@@ -38,6 +39,7 @@ public:
     void AddForhandsregelInntak(const ForhandsregelInntak &forhandsregelInntak);
     void AddKortdose(const Kortdose &kortdose);
     void SetDeling(const Deling &deling);
+    void SetKanApnes(const KanApnes &kanApnes);
     void Merge();
 };
 
@@ -86,6 +88,12 @@ public:
 class XmlDelingHandler : public XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel> {
 public:
     XmlDelingHandler() : XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel>("Deling") {}
+    bool Merge(std::shared_ptr<XmlType> obj) override;
+};
+
+class XmlKanApnesHandler : public XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel> {
+public:
+    XmlKanApnesHandler() : XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel>("KanApnes") {}
     bool Merge(std::shared_ptr<XmlType> obj) override;
 };
 

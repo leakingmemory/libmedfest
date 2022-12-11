@@ -23,7 +23,7 @@ private:
     std::string varenavn{};
     std::string legemiddelformLang{};
     std::string produsent{};
-    std::string reseptgyldighet{};
+    std::vector<Reseptgyldighet> reseptgyldighet{};
     MaybeBoolean varseltrekant{MaybeBoolean::UNSPECIFIED};
     std::string referanseprodukt{};
     Preparatomtaleavsnitt preparatomtaleavsnitt{};
@@ -34,7 +34,7 @@ public:
     void SetVarenavn(const std::string &varenavn);
     void SetLegemiddelformLang(const std::string &legemiddelformLang);
     void SetProdusent(const std::string &produsent);
-    void SetReseptgyldighet(const std::string &reseptgyldighet);
+    void AddReseptgyldighet(const Reseptgyldighet &reseptgyldighet);
     void SetVarseltrekant(MaybeBoolean varseltrekant);
     void SetReferanseprodukt(const std::string &referanseprodukt);
     void SetPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt);

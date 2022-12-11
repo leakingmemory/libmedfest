@@ -31,3 +31,7 @@ std::vector<Kortdose> AdministreringLegemiddel::GetKortdose() const {
 Deling AdministreringLegemiddel::GetDeling() const {
     return deling;
 }
+
+KanApnes AdministreringLegemiddel::GetKanApnes() const {
+    return kanApnes;
+}

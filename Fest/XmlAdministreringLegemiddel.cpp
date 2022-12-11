@@ -37,6 +37,10 @@ void XmlAdministreringLegemiddel::SetDeling(const Deling &deling) {
     this->deling = deling;
 }
 
+void XmlAdministreringLegemiddel::SetKanApnes(const KanApnes &kanApnes) {
+    this->kanApnes = kanApnes;
+}
+
 void XmlAdministreringLegemiddel::Merge() {
     parent->SetAdministreringLegemiddel({
         administrasjonsvei,
@@ -45,7 +49,8 @@ void XmlAdministreringLegemiddel::Merge() {
         kanKnuses,
         forhandsregelInntak,
         kortdose,
-        deling
+        deling,
+        kanApnes
     });
 }
 
@@ -101,5 +106,10 @@ bool XmlKortdoseHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministre
 
 bool XmlDelingHandler::Merge(std::shared_ptr<XmlType> obj) {
     obj->GetParent()->SetDeling({obj->GetValueWithDistinguishedName()});
+    return true;
+}
+
+bool XmlKanApnesHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetKanApnes({obj->GetValueWithDistinguishedName()});
     return true;
 }

@@ -22,6 +22,7 @@
 #include "Fest/XmlPreparatomtaleavsnitt.h"
 #include "Fest/XmlRefVirkestoff.h"
 #include "Fest/XmlSortertVirkestoffUtenStyrke.h"
+#include "Fest/XmlKjonn.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -69,6 +70,8 @@ void FestObjectStream::read() {
     parser.AddHandler("Smak", std::make_shared<XmlSmakHandler>());
     parser.AddHandler("RefVirkestoff", std::make_shared<XmlRefVirkestoffHandler>());
     parser.AddHandler("SortertVirkestoffUtenStyrke", std::make_shared<XmlSortertVirkestoffUtenStyrkeHandler>());
+    parser.AddHandler("KanApnes", std::make_shared<XmlKanApnesHandler>());
+    parser.AddHandler("Kjonn", std::make_shared<XmlKjonnHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

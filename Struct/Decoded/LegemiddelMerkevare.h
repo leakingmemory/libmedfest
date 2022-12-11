@@ -11,6 +11,7 @@
 #include "MaybeBoolean.h"
 #include "Preparatomtaleavsnitt.h"
 #include "Smak.h"
+#include "Reseptgyldighet.h"
 
 class LegemiddelMerkevare : public Legemiddel {
 private:
@@ -18,7 +19,7 @@ private:
     std::string varenavn;
     std::string legemiddelformLang;
     std::string produsent;
-    std::string reseptgyldighet;
+    std::vector<Reseptgyldighet> reseptgyldighet;
     MaybeBoolean varseltrekant;
     std::string referanseprodukt;
     Preparatomtaleavsnitt preparatomtaleavsnitt;
@@ -31,9 +32,9 @@ public:
             sortertVirkestoffUtenStyrke() {}
     LegemiddelMerkevare(
             const Legemiddel &legemiddel, const Preparattype &preparattype, const std::string &varenavn,
-            const std::string &legemiddelformLang, const std::string &produsent, const std::string &reseptgyldighet,
-            MaybeBoolean varseltrekant, const std::string &referanseprodukt,
-            const Preparatomtaleavsnitt &preparatomtaleavsnitt, const Smak &smak,
+            const std::string &legemiddelformLang, const std::string &produsent,
+            const std::vector<Reseptgyldighet> &reseptgyldighet, MaybeBoolean varseltrekant,
+            const std::string &referanseprodukt, const Preparatomtaleavsnitt &preparatomtaleavsnitt, const Smak &smak,
             const std::vector<std::string> &sortertVirkestoffUtenStyrke
         ) :
             Legemiddel(legemiddel), preparattype(preparattype), varenavn(varenavn),
@@ -45,7 +46,7 @@ public:
     [[nodiscard]] std::string GetVarenavn() const;
     [[nodiscard]] std::string GetLegemiddelformLang() const;
     [[nodiscard]] std::string GetProdusent() const;
-    [[nodiscard]] std::string GetReseptgyldighet() const;
+    [[nodiscard]] std::vector<Reseptgyldighet> GetReseptgyldighet() const;
     [[nodiscard]] MaybeBoolean GetVarseltrekant() const;
     [[nodiscard]] std::string GetReferanseprodukt() const;
     [[nodiscard]] Preparatomtaleavsnitt GetPreparatomtaleavsnitt() const;

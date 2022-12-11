@@ -20,7 +20,7 @@ std::string LegemiddelMerkevare::GetProdusent() const {
     return produsent;
 }
 
-std::string LegemiddelMerkevare::GetReseptgyldighet() const {
+std::vector<Reseptgyldighet> LegemiddelMerkevare::GetReseptgyldighet() const {
     return reseptgyldighet;
 }
 

@@ -19,6 +19,7 @@
 #include "Fest/XmlProduktInfo.h"
 #include "Fest/XmlReseptgyldighet.h"
 #include "Fest/XmlVarighet.h"
+#include "Fest/XmlPreparatomtaleavsnitt.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -55,6 +56,10 @@ void FestObjectStream::read() {
     parser.AddHandler("ForhandsregelInntak", std::make_shared<XmlForhandsregelInntakHandler>());
     parser.AddHandler("Varseltrekant", std::make_shared<XmlVarseltrekantHandler>());
     parser.AddHandler("Referanseprodukt", std::make_shared<XmlReferanseproduktHandler>());
+    parser.AddHandler("Preparatomtaleavsnitt", std::make_shared<XmlPreparatomtaleavsnittHandler>());
+    parser.AddHandler("Avsnittoverskrift", std::make_shared<XmlAvsnittoverskriftHandler>());
+    parser.AddHandler("Lenke", std::make_shared<XmlLenkeHandler>());
+    parser.AddHandler("Www", std::make_shared<XmlWwwHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

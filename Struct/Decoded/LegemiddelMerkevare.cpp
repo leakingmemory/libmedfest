@@ -31,3 +31,7 @@ MaybeBoolean LegemiddelMerkevare::GetVarseltrekant() const {
 std::string LegemiddelMerkevare::GetReferanseprodukt() const {
     return referanseprodukt;
 }
+
+Preparatomtaleavsnitt LegemiddelMerkevare::GetPreparatomtaleavsnitt() const {
+    return preparatomtaleavsnitt;
+}

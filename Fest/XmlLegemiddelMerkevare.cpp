@@ -34,17 +34,30 @@ void XmlLegemiddelMerkevare::SetReferanseprodukt(const std::string &referansepro
     this->referanseprodukt = referanseprodukt;
 }
 
+void XmlLegemiddelMerkevare::SetPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt) {
+    this->preparatomtaleavsnitt = preparatomtaleavsnitt;
+}
+
 void XmlLegemiddelMerkevare::Merge() {
     oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
-        GetAtc(),
-        GetNavnFormStyrke(),
-        GetReseptgruppe(),
-        GetLegemiddelformKort(),
-        GetRefVilkar(),
-        GetTypeSoknadSlv(),
-        GetAdministreringLegemiddel(),
-        GetSortertVirkestoffMedStyrke()
-    }, GetPreparattype(), varenavn, legemiddelformLang, produsent, reseptgyldighet, varseltrekant, referanseprodukt});
+                GetAtc(),
+                GetNavnFormStyrke(),
+                GetReseptgruppe(),
+                GetLegemiddelformKort(),
+                GetRefVilkar(),
+                GetTypeSoknadSlv(),
+                GetAdministreringLegemiddel(),
+                GetSortertVirkestoffMedStyrke()
+            },
+            GetPreparattype(),
+            varenavn,
+            legemiddelformLang,
+            produsent,
+            reseptgyldighet,
+            varseltrekant,
+            referanseprodukt,
+            preparatomtaleavsnitt
+        });
 }
 
 std::shared_ptr<XMLObject> XmlLegemiddelMerkevareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,

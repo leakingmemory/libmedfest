@@ -38,6 +38,10 @@ void XmlLegemiddelMerkevare::SetPreparatomtaleavsnitt(const Preparatomtaleavsnit
     this->preparatomtaleavsnitt = preparatomtaleavsnitt;
 }
 
+void XmlLegemiddelMerkevare::SetSmak(const Smak &smak) {
+    this->smak = smak;
+}
+
 void XmlLegemiddelMerkevare::Merge() {
     oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
                 GetAtc(),
@@ -58,7 +62,8 @@ void XmlLegemiddelMerkevare::Merge() {
             reseptgyldighet,
             varseltrekant,
             referanseprodukt,
-            preparatomtaleavsnitt
+            preparatomtaleavsnitt,
+            smak
         });
 }
 
@@ -89,5 +94,10 @@ bool XmlVarenavnHandler::Merge(std::shared_ptr<XmlLegemiddelMerkevare> parent, c
 
 bool XmlLegemiddelformLangHandler::Merge(std::shared_ptr<XmlLegemiddelMerkevare> parent, const std::string &content) {
     parent->SetLegemiddelformLang(content);
+    return true;
+}
+
+bool XmlSmakHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetSmak({obj->GetValueWithDistinguishedName()});
     return true;
 }

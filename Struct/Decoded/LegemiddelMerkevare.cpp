@@ -35,3 +35,7 @@ std::string LegemiddelMerkevare::GetReferanseprodukt() const {
 Preparatomtaleavsnitt LegemiddelMerkevare::GetPreparatomtaleavsnitt() const {
     return preparatomtaleavsnitt;
 }
+
+Smak LegemiddelMerkevare::GetSmak() const {
+    return smak;
+}

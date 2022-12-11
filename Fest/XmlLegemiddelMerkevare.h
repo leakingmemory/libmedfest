@@ -25,6 +25,7 @@ private:
     MaybeBoolean varseltrekant{MaybeBoolean::UNSPECIFIED};
     std::string referanseprodukt{};
     Preparatomtaleavsnitt preparatomtaleavsnitt{};
+    Smak smak{};
 public:
     XmlLegemiddelMerkevare(std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare) : oppfLegemiddelMerkevare(oppfLegemiddelMerkevare) {}
     std::string GetName() const override;
@@ -35,6 +36,7 @@ public:
     void SetVarseltrekant(MaybeBoolean varseltrekant);
     void SetReferanseprodukt(const std::string &referanseprodukt);
     void SetPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt);
+    void SetSmak(const Smak &smak);
     void Merge();
 };
 
@@ -54,6 +56,12 @@ class XmlLegemiddelformLangHandler : public XmlContentElementHandler<XmlLegemidd
 public:
     XmlLegemiddelformLangHandler() : XmlContentElementHandler<XmlLegemiddelMerkevare>("LegemiddelformLang") {}
     bool Merge(std::shared_ptr<XmlLegemiddelMerkevare> parent, const std::string &content) override;
+};
+
+class XmlSmakHandler : public XmlValueWithDistinguishedNameHandler<XmlLegemiddelMerkevare> {
+public:
+    XmlSmakHandler() : XmlValueWithDistinguishedNameHandler<XmlLegemiddelMerkevare>("Smak") {}
+    bool Merge(std::shared_ptr<XmlType> obj) override;
 };
 
 

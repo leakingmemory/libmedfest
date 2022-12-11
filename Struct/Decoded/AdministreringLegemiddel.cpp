@@ -27,3 +27,7 @@ std::vector<ForhandsregelInntak> AdministreringLegemiddel::GetForhandsregelInnta
 std::vector<Kortdose> AdministreringLegemiddel::GetKortdose() const {
     return kortdose;
 }
+
+Deling AdministreringLegemiddel::GetDeling() const {
+    return deling;
+}

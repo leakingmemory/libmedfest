@@ -33,6 +33,10 @@ void XmlAdministreringLegemiddel::AddKortdose(const Kortdose &kortdose) {
     this->kortdose.push_back(kortdose);
 }
 
+void XmlAdministreringLegemiddel::SetDeling(const Deling &deling) {
+    this->deling = deling;
+}
+
 void XmlAdministreringLegemiddel::Merge() {
     parent->SetAdministreringLegemiddel({
         administrasjonsvei,
@@ -40,7 +44,8 @@ void XmlAdministreringLegemiddel::Merge() {
         bruksomradeEtikett,
         kanKnuses,
         forhandsregelInntak,
-        kortdose
+        kortdose,
+        deling
     });
 }
 
@@ -91,5 +96,10 @@ bool XmlForhandsregelInntakHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<Xm
 
 bool XmlKortdoseHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) {
     obj->GetParent()->AddKortdose({obj->GetValueWithCodeSet()});
+    return true;
+}
+
+bool XmlDelingHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetDeling({obj->GetValueWithDistinguishedName()});
     return true;
 }

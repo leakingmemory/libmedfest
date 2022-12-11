@@ -12,6 +12,7 @@
 #include "KanKnuses.h"
 #include "ForhandsregelInntak.h"
 #include "Kortdose.h"
+#include "Deling.h"
 #include <vector>
 
 class AdministreringLegemiddel {
@@ -22,22 +23,25 @@ private:
     KanKnuses kanKnuses;
     std::vector<ForhandsregelInntak> forhandsregelInntak;
     std::vector<Kortdose> kortdose;
+    Deling deling;
 public:
-    AdministreringLegemiddel() : administrasjonsvei(), enhetDosering(), bruksomradeEtikett(), kanKnuses(), kortdose() {}
+    AdministreringLegemiddel() : administrasjonsvei(), enhetDosering(), bruksomradeEtikett(), kanKnuses(), kortdose(), deling() {}
     AdministreringLegemiddel(
             const Administrasjonsvei &administrasjonsvei, const EnhetDosering &enhetDosering,
             const std::vector<BruksomradeEtikett> &bruksomradeEtikett, const KanKnuses &kanKnuses,
-            const std::vector<ForhandsregelInntak> &forhandsregelInntak, const std::vector<Kortdose> &kortdose
+            const std::vector<ForhandsregelInntak> &forhandsregelInntak, const std::vector<Kortdose> &kortdose,
+            const Deling &deling
         ) :
             administrasjonsvei(administrasjonsvei), enhetDosering(enhetDosering),
             bruksomradeEtikett(bruksomradeEtikett), kanKnuses(kanKnuses), forhandsregelInntak(forhandsregelInntak),
-            kortdose(kortdose) {}
+            kortdose(kortdose), deling(deling) {}
     [[nodiscard]] Administrasjonsvei GetAdministrasjonsvei() const;
     [[nodiscard]] EnhetDosering GetEnhetDosering() const;
     [[nodiscard]] std::vector<BruksomradeEtikett> GetBruksomradeEtikett() const;
     [[nodiscard]] KanKnuses GetKanKnuses() const;
     [[nodiscard]] std::vector<ForhandsregelInntak> GetForhandsregelInntak() const;
     [[nodiscard]] std::vector<Kortdose> GetKortdose() const;
+    [[nodiscard]] Deling GetDeling() const;
 };
 
 

@@ -12,6 +12,7 @@
 #include "../Struct/Decoded/EnhetDosering.h"
 #include "../Struct/Decoded/ForhandsregelInntak.h"
 #include "../Struct/Decoded/Kortdose.h"
+#include "../Struct/Decoded/Deling.h"
 #include <memory>
 #include <map>
 
@@ -26,6 +27,7 @@ private:
     KanKnuses kanKnuses;
     std::vector<ForhandsregelInntak> forhandsregelInntak{};
     std::vector<Kortdose> kortdose{};
+    Deling deling{};
 public:
     XmlAdministreringLegemiddel(std::shared_ptr<XmlLegemiddel> parent) : parent(parent) {}
     std::string GetName() const override;
@@ -35,6 +37,7 @@ public:
     void SetKanKnuses(const KanKnuses &kanKnuses);
     void AddForhandsregelInntak(const ForhandsregelInntak &forhandsregelInntak);
     void AddKortdose(const Kortdose &kortdose);
+    void SetDeling(const Deling &deling);
     void Merge();
 };
 
@@ -78,6 +81,12 @@ class XmlKortdoseHandler : public XmlValueWithCodeSetHandler<XmlAdministreringLe
 public:
     XmlKortdoseHandler() : XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel>("Kortdose") {}
     bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) override;
+};
+
+class XmlDelingHandler : public XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel> {
+public:
+    XmlDelingHandler() : XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel>("Deling") {}
+    bool Merge(std::shared_ptr<XmlType> obj) override;
 };
 
 #endif //LEGEMFEST_XMLADMINISTRERINGLEGEMIDDEL_H

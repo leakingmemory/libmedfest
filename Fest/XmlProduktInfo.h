@@ -15,7 +15,8 @@ private:
     std::shared_ptr<XmlLegemiddelMerkevare> parent;
     std::string produsent{};
     MaybeBoolean varseltrekant{MaybeBoolean::UNSPECIFIED};
-    std::string referanseprodukt;
+    std::string referanseprodukt{};
+    Vaksinestandard vaksinestandard{};
 public:
     XmlProduktInfo(std::shared_ptr<XmlLegemiddelMerkevare> parent) : parent(parent) {}
     virtual ~XmlProduktInfo() = default;
@@ -23,6 +24,7 @@ public:
     void SetProdusent(const std::string &produsent);
     void SetVarseltrekant(MaybeBoolean varseltrekant);
     void SetReferanseprodukt(const std::string &referanseprodukt);
+    void SetVaksinestandard(const Vaksinestandard &vaksinestandard);
     bool Merge();
 };
 
@@ -48,6 +50,12 @@ class XmlReferanseproduktHandler : public XmlContentElementHandler<XmlProduktInf
 public:
     XmlReferanseproduktHandler() : XmlContentElementHandler<XmlProduktInfo>("Referanseprodukt") {}
     bool Merge(std::shared_ptr<XmlProduktInfo> parent, const std::string &content) override;
+};
+
+class XmlVaksinestandardHandler : public XmlValueWithCodeSetHandler<XmlProduktInfo> {
+public:
+    XmlVaksinestandardHandler() : XmlValueWithCodeSetHandler<XmlProduktInfo>("Vaksinestandard") {}
+    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlProduktInfo>> obj) override;
 };
 
 #endif //LEGEMFEST_XMLPRODUKTINFO_H

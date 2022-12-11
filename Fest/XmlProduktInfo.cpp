@@ -21,10 +21,15 @@ void XmlProduktInfo::SetReferanseprodukt(const std::string &referanseprodukt) {
     this->referanseprodukt = referanseprodukt;
 }
 
+void XmlProduktInfo::SetVaksinestandard(const Vaksinestandard &vaksinestandard) {
+    this->vaksinestandard = vaksinestandard;
+}
+
 bool XmlProduktInfo::Merge() {
     parent->SetProdusent(produsent);
     parent->SetVarseltrekant(varseltrekant);
     parent->SetReferanseprodukt(referanseprodukt);
+    parent->SetVaksinestandard(vaksinestandard);
     return true;
 }
 
@@ -66,5 +71,10 @@ bool XmlVarseltrekantHandler::Merge(std::shared_ptr<XmlProduktInfo> parent, cons
 
 bool XmlReferanseproduktHandler::Merge(std::shared_ptr<XmlProduktInfo> parent, const std::string &content) {
     parent->SetReferanseprodukt(content);
+    return true;
+}
+
+bool XmlVaksinestandardHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlProduktInfo>> obj) {
+    obj->GetParent()->SetVaksinestandard({obj->GetValueWithCodeSet()});
     return true;
 }

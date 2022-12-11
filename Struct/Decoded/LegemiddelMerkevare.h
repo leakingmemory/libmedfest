@@ -12,6 +12,7 @@
 #include "Preparatomtaleavsnitt.h"
 #include "Smak.h"
 #include "Reseptgyldighet.h"
+#include "Vaksinestandard.h"
 
 class LegemiddelMerkevare : public Legemiddel {
 private:
@@ -25,23 +26,24 @@ private:
     Preparatomtaleavsnitt preparatomtaleavsnitt;
     Smak smak;
     std::vector<std::string> sortertVirkestoffUtenStyrke;
+    Vaksinestandard vaksinestandard;
 public:
     LegemiddelMerkevare() :
             Legemiddel(), preparattype(), varenavn(), legemiddelformLang(), produsent(), reseptgyldighet(),
             varseltrekant(MaybeBoolean::UNSPECIFIED), referanseprodukt(), preparatomtaleavsnitt(), smak(),
-            sortertVirkestoffUtenStyrke() {}
+            sortertVirkestoffUtenStyrke(), vaksinestandard() {}
     LegemiddelMerkevare(
             const Legemiddel &legemiddel, const Preparattype &preparattype, const std::string &varenavn,
             const std::string &legemiddelformLang, const std::string &produsent,
             const std::vector<Reseptgyldighet> &reseptgyldighet, MaybeBoolean varseltrekant,
             const std::string &referanseprodukt, const Preparatomtaleavsnitt &preparatomtaleavsnitt, const Smak &smak,
-            const std::vector<std::string> &sortertVirkestoffUtenStyrke
+            const std::vector<std::string> &sortertVirkestoffUtenStyrke, const Vaksinestandard &vaksinestandard
         ) :
             Legemiddel(legemiddel), preparattype(preparattype), varenavn(varenavn),
             legemiddelformLang(legemiddelformLang), produsent(produsent), reseptgyldighet(reseptgyldighet),
             varseltrekant(varseltrekant), referanseprodukt(referanseprodukt),
             preparatomtaleavsnitt(preparatomtaleavsnitt), smak(smak),
-            sortertVirkestoffUtenStyrke(sortertVirkestoffUtenStyrke) {}
+            sortertVirkestoffUtenStyrke(sortertVirkestoffUtenStyrke), vaksinestandard(vaksinestandard) {}
     [[nodiscard]] Preparattype GetPreparattype() const;
     [[nodiscard]] std::string GetVarenavn() const;
     [[nodiscard]] std::string GetLegemiddelformLang() const;
@@ -52,6 +54,7 @@ public:
     [[nodiscard]] Preparatomtaleavsnitt GetPreparatomtaleavsnitt() const;
     [[nodiscard]] Smak GetSmak() const;
     [[nodiscard]] std::vector<std::string> GetSortertVirkestoffUtenStyrke() const;
+    [[nodiscard]] Vaksinestandard GetVaksinestandard() const;
 };
 
 

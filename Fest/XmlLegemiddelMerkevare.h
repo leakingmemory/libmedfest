@@ -28,6 +28,7 @@ private:
     std::string referanseprodukt{};
     Preparatomtaleavsnitt preparatomtaleavsnitt{};
     Smak smak{};
+    Vaksinestandard vaksinestandard{};
 public:
     XmlLegemiddelMerkevare(std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare) : oppfLegemiddelMerkevare(oppfLegemiddelMerkevare) {}
     std::string GetName() const override;
@@ -39,6 +40,7 @@ public:
     void SetReferanseprodukt(const std::string &referanseprodukt);
     void SetPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt);
     void SetSmak(const Smak &smak);
+    void SetVaksinestandard(const Vaksinestandard &vaksinestandard);
     void Merge();
 };
 

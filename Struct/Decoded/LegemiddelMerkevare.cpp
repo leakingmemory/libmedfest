@@ -43,3 +43,7 @@ Smak LegemiddelMerkevare::GetSmak() const {
 std::vector<std::string> LegemiddelMerkevare::GetSortertVirkestoffUtenStyrke() const {
     return sortertVirkestoffUtenStyrke;
 }
+
+Vaksinestandard LegemiddelMerkevare::GetVaksinestandard() const {
+    return vaksinestandard;
+}

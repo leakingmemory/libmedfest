@@ -42,6 +42,10 @@ void XmlLegemiddelMerkevare::SetSmak(const Smak &smak) {
     this->smak = smak;
 }
 
+void XmlLegemiddelMerkevare::SetVaksinestandard(const Vaksinestandard &vaksinestandard) {
+    this->vaksinestandard = vaksinestandard;
+}
+
 void XmlLegemiddelMerkevare::Merge() {
     oppfLegemiddelMerkevare->SetLegemiddelMerkevare({{
                 GetAtc(),
@@ -64,7 +68,8 @@ void XmlLegemiddelMerkevare::Merge() {
             referanseprodukt,
             preparatomtaleavsnitt,
             smak,
-            GetSortertVirkestoffUtenStyrke()
+            GetSortertVirkestoffUtenStyrke(),
+            vaksinestandard
         });
 }
 

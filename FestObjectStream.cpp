@@ -73,6 +73,7 @@ void FestObjectStream::read() {
     parser.AddHandler("KanApnes", std::make_shared<XmlKanApnesHandler>());
     parser.AddHandler("Kjonn", std::make_shared<XmlKjonnHandler>());
     parser.AddHandler("Bolus", std::make_shared<XmlBolusHandler>());
+    parser.AddHandler("Vaksinestandard", std::make_shared<XmlVaksinestandardHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

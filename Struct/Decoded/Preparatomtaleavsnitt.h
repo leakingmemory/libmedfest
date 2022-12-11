@@ -16,7 +16,7 @@ public:
     Preparatomtaleavsnitt(const ValueWithDistinguishedName &avsnittoverskrift, const std::string &link) :
             avsnittoverskrift(avsnittoverskrift), link(link) {}
     [[nodiscard]] ValueWithDistinguishedName GetAvsnittoverskrift() const;
-    [[nodsicard]] std::string GetLink() const;
+    [[nodiscard]] std::string GetLink() const;
 };
 
 #endif //LEGEMFEST_PREPARATOMTALEAVSNITT_H

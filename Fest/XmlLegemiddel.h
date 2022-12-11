@@ -16,6 +16,7 @@
 #include "../Struct/Decoded/TypeSoknadSlv.h"
 #include "../Struct/Decoded/AdministreringLegemiddel.h"
 #include "../Struct/Decoded/MaybeBoolean.h"
+#include "../Struct/Decoded/SvartTrekant.h"
 #include "XmlSortertVirkestoffMedStyrke.h"
 #include <memory>
 #include <map>
@@ -31,6 +32,7 @@ private:
     TypeSoknadSlv typeSoknadSlv{};
     AdministreringLegemiddel administreringLegemiddel{};
     MaybeBoolean opioidsoknad{MaybeBoolean::UNSPECIFIED};
+    SvartTrekant svartTrekant{};
 public:
     virtual ~XmlLegemiddel() = default;
     [[nodiscard]] Atc GetAtc() const;
@@ -49,6 +51,8 @@ public:
     void SetAdministreringLegemiddel(const AdministreringLegemiddel &administreringLegemiddel);
     [[nodiscard]] MaybeBoolean GetOpioidsoknad() const;
     void SetOpioidsoknad(bool opioidsoknad);
+    [[nodiscard]] SvartTrekant GetSvartTrekant() const;
+    void SetSvartTrekant(const SvartTrekant &svartTrekant);
 };
 
 class XmlAtc : public XMLObject {
@@ -107,6 +111,12 @@ class XmlOpioidsoknadHandler : public XmlContentElementHandler<XmlLegemiddel> {
 public:
     XmlOpioidsoknadHandler() : XmlContentElementHandler<XmlLegemiddel>("Opioidsoknad") {}
     bool Merge(std::shared_ptr<XmlLegemiddel> parent, const std::string &content) override;
+};
+
+class XmlSvartTrekantHandler : public XmlValueWithCodeSetHandler<XmlLegemiddel> {
+public:
+    XmlSvartTrekantHandler() : XmlValueWithCodeSetHandler<XmlLegemiddel>("SvartTrekant") {}
+    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> obj) override;
 };
 
 #endif //LEGEMFEST_XMLLEGEMIDDEL_H

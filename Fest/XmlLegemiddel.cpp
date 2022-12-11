@@ -70,6 +70,14 @@ void XmlLegemiddel::SetOpioidsoknad(bool opioidsoknad) {
     this->opioidsoknad = opioidsoknad ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
 }
 
+SvartTrekant XmlLegemiddel::GetSvartTrekant() const {
+    return svartTrekant;
+}
+
+void XmlLegemiddel::SetSvartTrekant(const SvartTrekant &svartTrekant) {
+    this->svartTrekant = svartTrekant;
+}
+
 std::string XmlAtc::GetName() const {
     return "Atc";
 }
@@ -127,4 +135,9 @@ bool XmlOpioidsoknadHandler::Merge(std::shared_ptr<XmlLegemiddel> parent, const 
     }
     std::cerr << "Error: Opioidsoknad: Unrecognized value: " << content << "\n";
     return false;
+}
+
+bool XmlSvartTrekantHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddel>> obj) {
+    obj->GetParent()->SetSvartTrekant({obj->GetValueWithCodeSet()});
+    return true;
 }

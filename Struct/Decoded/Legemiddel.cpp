@@ -39,3 +39,7 @@ std::vector<std::string> Legemiddel::GetSortertVirkestoffMedStyrke() const {
 MaybeBoolean Legemiddel::GetOpioidsoknad() const {
     return opioidsoknad;
 }
+
+SvartTrekant Legemiddel::GetSvartTrekant() const {
+    return svartTrekant;
+}

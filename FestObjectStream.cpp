@@ -63,6 +63,7 @@ void FestObjectStream::read() {
     parser.AddHandler("Kortdose", std::make_shared<XmlKortdoseHandler>());
     parser.AddHandler("Opioidsoknad", std::make_shared<XmlOpioidsoknadHandler>());
     parser.AddHandler("Deling", std::make_shared<XmlDelingHandler>());
+    parser.AddHandler("SvartTrekant", std::make_shared<XmlSvartTrekantHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

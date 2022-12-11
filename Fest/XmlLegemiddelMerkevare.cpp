@@ -48,7 +48,8 @@ void XmlLegemiddelMerkevare::Merge() {
                 GetTypeSoknadSlv(),
                 GetAdministreringLegemiddel(),
                 GetSortertVirkestoffMedStyrke(),
-                GetOpioidsoknad()
+                GetOpioidsoknad(),
+                GetSvartTrekant()
             },
             GetPreparattype(),
             varenavn,

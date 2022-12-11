@@ -35,3 +35,7 @@ Deling AdministreringLegemiddel::GetDeling() const {
 KanApnes AdministreringLegemiddel::GetKanApnes() const {
     return kanApnes;
 }
+
+Bolus AdministreringLegemiddel::GetBolus() const {
+    return bolus;
+}

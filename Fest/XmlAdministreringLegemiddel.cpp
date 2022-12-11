@@ -41,6 +41,10 @@ void XmlAdministreringLegemiddel::SetKanApnes(const KanApnes &kanApnes) {
     this->kanApnes = kanApnes;
 }
 
+void XmlAdministreringLegemiddel::SetBolus(const Bolus &bolus) {
+    this->bolus = bolus;
+}
+
 void XmlAdministreringLegemiddel::Merge() {
     parent->SetAdministreringLegemiddel({
         administrasjonsvei,
@@ -50,7 +54,8 @@ void XmlAdministreringLegemiddel::Merge() {
         forhandsregelInntak,
         kortdose,
         deling,
-        kanApnes
+        kanApnes,
+        bolus
     });
 }
 
@@ -111,5 +116,10 @@ bool XmlDelingHandler::Merge(std::shared_ptr<XmlType> obj) {
 
 bool XmlKanApnesHandler::Merge(std::shared_ptr<XmlType> obj) {
     obj->GetParent()->SetKanApnes({obj->GetValueWithDistinguishedName()});
+    return true;
+}
+
+bool XmlBolusHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetBolus({obj->GetValueWithDistinguishedName()});
     return true;
 }

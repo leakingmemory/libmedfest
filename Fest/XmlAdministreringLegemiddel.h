@@ -29,6 +29,7 @@ private:
     std::vector<Kortdose> kortdose{};
     Deling deling{};
     KanApnes kanApnes{};
+    Bolus bolus{};
 public:
     XmlAdministreringLegemiddel(std::shared_ptr<XmlLegemiddel> parent) : parent(parent) {}
     std::string GetName() const override;
@@ -40,6 +41,7 @@ public:
     void AddKortdose(const Kortdose &kortdose);
     void SetDeling(const Deling &deling);
     void SetKanApnes(const KanApnes &kanApnes);
+    void SetBolus(const Bolus &bolus);
     void Merge();
 };
 
@@ -94,6 +96,12 @@ public:
 class XmlKanApnesHandler : public XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel> {
 public:
     XmlKanApnesHandler() : XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel>("KanApnes") {}
+    bool Merge(std::shared_ptr<XmlType> obj) override;
+};
+
+class XmlBolusHandler : public XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel> {
+public:
+    XmlBolusHandler() : XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel>("Bolus") {}
     bool Merge(std::shared_ptr<XmlType> obj) override;
 };
 

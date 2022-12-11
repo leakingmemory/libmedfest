@@ -39,3 +39,7 @@ Preparatomtaleavsnitt LegemiddelMerkevare::GetPreparatomtaleavsnitt() const {
 Smak LegemiddelMerkevare::GetSmak() const {
     return smak;
 }
+
+std::vector<std::string> LegemiddelMerkevare::GetSortertVirkestoffUtenStyrke() const {
+    return sortertVirkestoffUtenStyrke;
+}

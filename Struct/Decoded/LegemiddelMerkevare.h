@@ -23,20 +23,24 @@ private:
     std::string referanseprodukt;
     Preparatomtaleavsnitt preparatomtaleavsnitt;
     Smak smak;
+    std::vector<std::string> sortertVirkestoffUtenStyrke;
 public:
     LegemiddelMerkevare() :
             Legemiddel(), preparattype(), varenavn(), legemiddelformLang(), produsent(), reseptgyldighet(),
-            varseltrekant(MaybeBoolean::UNSPECIFIED), referanseprodukt(), preparatomtaleavsnitt(), smak() {}
+            varseltrekant(MaybeBoolean::UNSPECIFIED), referanseprodukt(), preparatomtaleavsnitt(), smak(),
+            sortertVirkestoffUtenStyrke() {}
     LegemiddelMerkevare(
             const Legemiddel &legemiddel, const Preparattype &preparattype, const std::string &varenavn,
             const std::string &legemiddelformLang, const std::string &produsent, const std::string &reseptgyldighet,
             MaybeBoolean varseltrekant, const std::string &referanseprodukt,
-            const Preparatomtaleavsnitt &preparatomtaleavsnitt, const Smak &smak
+            const Preparatomtaleavsnitt &preparatomtaleavsnitt, const Smak &smak,
+            const std::vector<std::string> &sortertVirkestoffUtenStyrke
         ) :
             Legemiddel(legemiddel), preparattype(preparattype), varenavn(varenavn),
             legemiddelformLang(legemiddelformLang), produsent(produsent), reseptgyldighet(reseptgyldighet),
             varseltrekant(varseltrekant), referanseprodukt(referanseprodukt),
-            preparatomtaleavsnitt(preparatomtaleavsnitt), smak(smak) {}
+            preparatomtaleavsnitt(preparatomtaleavsnitt), smak(smak),
+            sortertVirkestoffUtenStyrke(sortertVirkestoffUtenStyrke) {}
     [[nodiscard]] Preparattype GetPreparattype() const;
     [[nodiscard]] std::string GetVarenavn() const;
     [[nodiscard]] std::string GetLegemiddelformLang() const;
@@ -46,6 +50,7 @@ public:
     [[nodiscard]] std::string GetReferanseprodukt() const;
     [[nodiscard]] Preparatomtaleavsnitt GetPreparatomtaleavsnitt() const;
     [[nodiscard]] Smak GetSmak() const;
+    [[nodiscard]] std::vector<std::string> GetSortertVirkestoffUtenStyrke() const;
 };
 
 

@@ -63,7 +63,8 @@ void XmlLegemiddelMerkevare::Merge() {
             varseltrekant,
             referanseprodukt,
             preparatomtaleavsnitt,
-            smak
+            smak,
+            GetSortertVirkestoffUtenStyrke()
         });
 }
 

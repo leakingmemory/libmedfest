@@ -10,12 +10,14 @@
 #include "KatLegemiddelMerkevare.h"
 #include "XmlLegemiddel.h"
 #include "XmlPreparattypeObject.h"
+#include "XmlSortertVirkestoffUtenStyrke.h"
 
 class XmlLegemiddelMerkevare :
         public XMLObject,
         public FestIdObject,
         public XmlLegemiddel,
-        public XmlPreparattypeObject {
+        public XmlPreparattypeObject,
+        public XmlSortertVirkestoffUtenStyrke {
 private:
     std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare;
     std::string varenavn{};

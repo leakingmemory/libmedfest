@@ -15,6 +15,8 @@
 #include "Deling.h"
 #include "KanApnes.h"
 #include "Bolus.h"
+#include "InjeksjonshastighetBolus.h"
+#include "MaybeBoolean.h"
 #include <vector>
 
 class AdministreringLegemiddel {
@@ -28,18 +30,22 @@ private:
     Deling deling;
     KanApnes kanApnes;
     Bolus bolus;
+    InjeksjonshastighetBolus injeksjonshastighetBolus;
+    MaybeBoolean blandingsveske;
 public:
     AdministreringLegemiddel() : administrasjonsvei(), enhetDosering(), bruksomradeEtikett(), kanKnuses(), kortdose(),
-            deling(), kanApnes(), bolus() {}
+            deling(), kanApnes(), bolus(), injeksjonshastighetBolus(), blandingsveske(MaybeBoolean::UNSPECIFIED) {}
     AdministreringLegemiddel(
             const Administrasjonsvei &administrasjonsvei, const EnhetDosering &enhetDosering,
             const std::vector<BruksomradeEtikett> &bruksomradeEtikett, const KanKnuses &kanKnuses,
             const std::vector<ForhandsregelInntak> &forhandsregelInntak, const std::vector<Kortdose> &kortdose,
-            const Deling &deling, const KanApnes &kanApnes, const Bolus &bolus
+            const Deling &deling, const KanApnes &kanApnes, const Bolus &bolus,
+            const InjeksjonshastighetBolus &injeksjonshastighetBolus, MaybeBoolean blandingsveske
         ) :
             administrasjonsvei(administrasjonsvei), enhetDosering(enhetDosering),
             bruksomradeEtikett(bruksomradeEtikett), kanKnuses(kanKnuses), forhandsregelInntak(forhandsregelInntak),
-            kortdose(kortdose), deling(deling), kanApnes(kanApnes), bolus(bolus) {}
+            kortdose(kortdose), deling(deling), kanApnes(kanApnes), bolus(bolus),
+            injeksjonshastighetBolus(injeksjonshastighetBolus), blandingsveske(blandingsveske) {}
     [[nodiscard]] Administrasjonsvei GetAdministrasjonsvei() const;
     [[nodiscard]] EnhetDosering GetEnhetDosering() const;
     [[nodiscard]] std::vector<BruksomradeEtikett> GetBruksomradeEtikett() const;
@@ -49,6 +55,8 @@ public:
     [[nodiscard]] Deling GetDeling() const;
     [[nodiscard]] KanApnes GetKanApnes() const;
     [[nodiscard]] Bolus GetBolus() const;
+    [[nodiscard]] InjeksjonshastighetBolus GetInjeksjonshastighetBolus() const;
+    [[nodiscard]] MaybeBoolean GetBlandingsveske();
 };
 
 

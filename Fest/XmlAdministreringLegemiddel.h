@@ -8,6 +8,7 @@
 
 #include "XMLObject.h"
 #include "XmlValueWithCodeSet.h"
+#include "XmlContentElement.h"
 #include "../Struct/Decoded/AdministreringLegemiddel.h"
 #include "../Struct/Decoded/EnhetDosering.h"
 #include "../Struct/Decoded/ForhandsregelInntak.h"
@@ -30,6 +31,8 @@ private:
     Deling deling{};
     KanApnes kanApnes{};
     Bolus bolus{};
+    InjeksjonshastighetBolus injeksjonshastighetBolus{};
+    MaybeBoolean blandingsveske{MaybeBoolean::UNSPECIFIED};
 public:
     XmlAdministreringLegemiddel(std::shared_ptr<XmlLegemiddel> parent) : parent(parent) {}
     std::string GetName() const override;
@@ -42,6 +45,8 @@ public:
     void SetDeling(const Deling &deling);
     void SetKanApnes(const KanApnes &kanApnes);
     void SetBolus(const Bolus &bolus);
+    void SetInjeksjonshastighetBolus(const InjeksjonshastighetBolus &injeksjonshastighetBolus);
+    void SetBlandingsveske(bool blandingsveske);
     void Merge();
 };
 
@@ -103,6 +108,18 @@ class XmlBolusHandler : public XmlValueWithDistinguishedNameHandler<XmlAdministr
 public:
     XmlBolusHandler() : XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel>("Bolus") {}
     bool Merge(std::shared_ptr<XmlType> obj) override;
+};
+
+class XmlInjeksjonshastighetBolusHandler : public XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel> {
+public:
+    XmlInjeksjonshastighetBolusHandler() : XmlValueWithDistinguishedNameHandler<XmlAdministreringLegemiddel>("InjeksjonshastighetBolus") {}
+    bool Merge(std::shared_ptr<XmlType> obj) override;
+};
+
+class XmlBlandingsveskeHandler : public XmlContentElementHandler<XmlAdministreringLegemiddel> {
+public:
+    XmlBlandingsveskeHandler() : XmlContentElementHandler<XmlAdministreringLegemiddel>("Blandingsveske") {}
+    bool Merge(std::shared_ptr<XmlAdministreringLegemiddel> parent, const std::string &content) override;
 };
 
 #endif //LEGEMFEST_XMLADMINISTRERINGLEGEMIDDEL_H

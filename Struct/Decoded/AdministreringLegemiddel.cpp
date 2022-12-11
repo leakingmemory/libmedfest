@@ -39,3 +39,11 @@ KanApnes AdministreringLegemiddel::GetKanApnes() const {
 Bolus AdministreringLegemiddel::GetBolus() const {
     return bolus;
 }
+
+InjeksjonshastighetBolus AdministreringLegemiddel::GetInjeksjonshastighetBolus() const {
+    return injeksjonshastighetBolus;
+}
+
+MaybeBoolean AdministreringLegemiddel::GetBlandingsveske() {
+    return blandingsveske;
+}

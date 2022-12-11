@@ -45,6 +45,14 @@ void XmlAdministreringLegemiddel::SetBolus(const Bolus &bolus) {
     this->bolus = bolus;
 }
 
+void XmlAdministreringLegemiddel::SetInjeksjonshastighetBolus(const InjeksjonshastighetBolus &injeksjonshastighetBolus) {
+    this->injeksjonshastighetBolus = injeksjonshastighetBolus;
+}
+
+void XmlAdministreringLegemiddel::SetBlandingsveske(bool blandingsveske) {
+    this->blandingsveske = blandingsveske ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
+}
+
 void XmlAdministreringLegemiddel::Merge() {
     parent->SetAdministreringLegemiddel({
         administrasjonsvei,
@@ -55,7 +63,9 @@ void XmlAdministreringLegemiddel::Merge() {
         kortdose,
         deling,
         kanApnes,
-        bolus
+        bolus,
+        injeksjonshastighetBolus,
+        blandingsveske
     });
 }
 
@@ -122,4 +132,21 @@ bool XmlKanApnesHandler::Merge(std::shared_ptr<XmlType> obj) {
 bool XmlBolusHandler::Merge(std::shared_ptr<XmlType> obj) {
     obj->GetParent()->SetBolus({obj->GetValueWithDistinguishedName()});
     return true;
+}
+
+bool XmlInjeksjonshastighetBolusHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetInjeksjonshastighetBolus({obj->GetValueWithDistinguishedName()});
+    return true;
+}
+
+bool XmlBlandingsveskeHandler::Merge(std::shared_ptr<XmlAdministreringLegemiddel> parent, const std::string &content) {
+    if (content == "true") {
+        parent->SetBlandingsveske(true);
+        return true;
+    } else if (content == "false") {
+        parent->SetBlandingsveske(false);
+        return true;
+    }
+    std::cerr << "Error: Unrecogized value for Blandingsveske: " << content << "\n";
+    return false;
 }

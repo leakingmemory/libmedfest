@@ -11,6 +11,7 @@
 #include "../Struct/Decoded/AdministreringLegemiddel.h"
 #include "../Struct/Decoded/EnhetDosering.h"
 #include "../Struct/Decoded/ForhandsregelInntak.h"
+#include "../Struct/Decoded/Kortdose.h"
 #include <memory>
 #include <map>
 
@@ -24,6 +25,7 @@ private:
     std::vector<BruksomradeEtikett> bruksomradeEtikett{};
     KanKnuses kanKnuses;
     std::vector<ForhandsregelInntak> forhandsregelInntak{};
+    std::vector<Kortdose> kortdose{};
 public:
     XmlAdministreringLegemiddel(std::shared_ptr<XmlLegemiddel> parent) : parent(parent) {}
     std::string GetName() const override;
@@ -32,6 +34,7 @@ public:
     void AddBruksomradeEtikett(const BruksomradeEtikett &bruksomradeEtikett);
     void SetKanKnuses(const KanKnuses &kanKnuses);
     void AddForhandsregelInntak(const ForhandsregelInntak &forhandsregelInntak);
+    void AddKortdose(const Kortdose &kortdose);
     void Merge();
 };
 
@@ -68,6 +71,12 @@ public:
 class XmlForhandsregelInntakHandler : public XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel> {
 public:
     XmlForhandsregelInntakHandler() : XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel>("ForhandsregelInntak") {}
+    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) override;
+};
+
+class XmlKortdoseHandler : public XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel> {
+public:
+    XmlKortdoseHandler() : XmlValueWithCodeSetHandler<XmlAdministreringLegemiddel>("Kortdose") {}
     bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) override;
 };
 

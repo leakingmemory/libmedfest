@@ -60,6 +60,7 @@ void FestObjectStream::read() {
     parser.AddHandler("Avsnittoverskrift", std::make_shared<XmlAvsnittoverskriftHandler>());
     parser.AddHandler("Lenke", std::make_shared<XmlLenkeHandler>());
     parser.AddHandler("Www", std::make_shared<XmlWwwHandler>());
+    parser.AddHandler("Kortdose", std::make_shared<XmlKortdoseHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

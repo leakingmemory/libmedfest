@@ -23,3 +23,7 @@ KanKnuses AdministreringLegemiddel::GetKanKnuses() const {
 std::vector<ForhandsregelInntak> AdministreringLegemiddel::GetForhandsregelInntak() const {
     return forhandsregelInntak;
 }
+
+std::vector<Kortdose> AdministreringLegemiddel::GetKortdose() const {
+    return kortdose;
+}

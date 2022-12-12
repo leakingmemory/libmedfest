@@ -28,6 +28,10 @@ DDD Pakningsinfo::GetDDD() const {
     return ddd;
 }
 
+std::vector<Pakningskomponent> Pakningsinfo::GetPakningskomponent() const {
+    return pakningskomponent;
+}
+
 double Pakningsinfo::GetStatistikkfaktor() const {
     return statistikkfaktor;
 }

@@ -11,6 +11,7 @@
 #include "Pakningsinfo.h"
 #include "Markedsforingsinfo.h"
 #include "PrisVare.h"
+#include "Pakningskomponent.h"
 
 
 class Legemiddelpakning : public LegemiddelCore {

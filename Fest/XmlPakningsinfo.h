@@ -24,6 +24,7 @@ private:
     Pakningstype pakningstype{};
     std::string mengde{};
     DDD ddd{};
+    std::vector<Pakningskomponent> pakningskomponent{};
     double statistikkfaktor{0.0};
     int antall{0};
 public:
@@ -34,6 +35,7 @@ public:
     void SetPakningstype(const Pakningstype &pakningstype);
     void SetMengde(const std::string &mengde);
     void SetDDD(const DDD &ddd);
+    void AddPakningskomponent(const Pakningskomponent &pakningskomponent);
     void SetStatistikkfaktor(double statistikkfaktor);
     void SetAntall(int antall);
     bool Merge();

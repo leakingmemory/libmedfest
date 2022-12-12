@@ -29,6 +29,10 @@ void XmlPakningsinfoObject::SetDDD(const DDD &ddd) {
     this->ddd = ddd;
 }
 
+void XmlPakningsinfoObject::AddPakningskomponent(const Pakningskomponent &pakningskomponent) {
+    this->pakningskomponent.push_back(pakningskomponent);
+}
+
 void XmlPakningsinfoObject::SetStatistikkfaktor(double statistikkfaktor) {
     this->statistikkfaktor = statistikkfaktor;
 }
@@ -52,7 +56,7 @@ bool XmlPakningsinfoObject::Merge() {
     }
     auto refMerkevare = refMerkevarer[0];
     parent->hasInfo = true;
-    parent->pakningsinfo = {refMerkevare, pakningsstr, enhetPakning, pakningstype, mengde, ddd, statistikkfaktor, antall};
+    parent->pakningsinfo = {refMerkevare, pakningsstr, enhetPakning, pakningstype, mengde, ddd, pakningskomponent, statistikkfaktor, antall};
     return true;
 }
 

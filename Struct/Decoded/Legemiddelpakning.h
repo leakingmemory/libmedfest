@@ -9,6 +9,7 @@
 #include "Preparattype.h"
 #include "Oppbevaring.h"
 #include "Pakningsinfo.h"
+#include "Markedsforingsinfo.h"
 
 
 class Legemiddelpakning : public LegemiddelCore {
@@ -17,15 +18,19 @@ private:
     std::string varenr;
     Oppbevaring oppbevaring;
     Pakningsinfo pakningsinfo;
+    Markedsforingsinfo markedsforingsinfo;
 public:
-    Legemiddelpakning() : LegemiddelCore(), preparattype(), varenr(), oppbevaring(), pakningsinfo() {}
+    Legemiddelpakning() : LegemiddelCore(), preparattype(), varenr(), oppbevaring(), pakningsinfo(),
+            markedsforingsinfo() {}
     Legemiddelpakning(const LegemiddelCore &legemiddelCore, const Preparattype &preparattype, const std::string &varenr,
-                      const Oppbevaring &oppbevaring, const Pakningsinfo &pakningsinfo) :
+                      const Oppbevaring &oppbevaring, const Pakningsinfo &pakningsinfo,
+                      const Markedsforingsinfo &markedsforingsinfo) :
             LegemiddelCore(legemiddelCore), preparattype(preparattype), varenr(varenr), oppbevaring(oppbevaring),
-            pakningsinfo(pakningsinfo) {}
+            pakningsinfo(pakningsinfo), markedsforingsinfo(markedsforingsinfo) {}
     [[nodiscard]] Preparattype GetPreparattype() const;
     [[nodiscard]] std::string GetVarenr() const;
     [[nodiscard]] Oppbevaring GetOppbevaring() const;
+    [[nodiscard]] Markedsforingsinfo GetMarkedsforingsinfo() const;
 };
 
 #endif //LEGEMFEST_LEGEMIDDELPAKNING_H

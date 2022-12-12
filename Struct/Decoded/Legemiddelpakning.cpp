@@ -15,3 +15,7 @@ std::string Legemiddelpakning::GetVarenr() const {
 Oppbevaring Legemiddelpakning::GetOppbevaring() const {
     return oppbevaring;
 }
+
+Markedsforingsinfo Legemiddelpakning::GetMarkedsforingsinfo() const {
+    return markedsforingsinfo;
+}

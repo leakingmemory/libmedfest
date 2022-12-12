@@ -26,6 +26,7 @@
 #include "Fest/XmlLegemiddelpakning.h"
 #include "Fest/XmlPakningsinfo.h"
 #include "Fest/XmlRefLegemiddelMerkevare.h"
+#include "Fest/XmlMarkedsforingsinfo.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -92,6 +93,8 @@ void FestObjectStream::read() {
     parser.AddHandler("Mengde", std::make_shared<XmlMengdeHandler>());
     parser.AddHandler("DDD", std::make_shared<XmlDDDHandler>());
     parser.AddHandler("Statistikkfaktor", std::make_shared<XmlStatistikkfaktorHandler>());
+    parser.AddHandler("Markedsforingsinfo", std::make_shared<XmlMarkedsforingsinfoHandler>());
+    parser.AddHandler("Markedsforingsdato", std::make_shared<XmlMarkedsforingsdatoHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

@@ -21,11 +21,13 @@ private:
     std::shared_ptr<XmlOppfLegemiddelpakning> oppfLegemiddelpakning;
     std::string varenr{};
     Oppbevaring oppbevaring{};
+    Markedsforingsinfo markedsforingsinfo{};
 public:
     XmlLegemiddelpakning(std::shared_ptr<XmlOppfLegemiddelpakning> oppfLegemiddelpakning) : oppfLegemiddelpakning(oppfLegemiddelpakning) {}
     std::string GetName() const override;
     void SetVarenr(const std::string &varenr);
     void SetOppbevaring(const Oppbevaring &oppbevaring);
+    void SetMarkedsforingsinfo(const Markedsforingsinfo &markedsforingsinfo);
     void Merge();
 };
 

@@ -16,6 +16,10 @@ void XmlLegemiddelpakning::SetOppbevaring(const Oppbevaring &oppbevaring) {
     this->oppbevaring = oppbevaring;
 }
 
+void XmlLegemiddelpakning::SetMarkedsforingsinfo(const Markedsforingsinfo &markedsforingsinfo) {
+    this->markedsforingsinfo = markedsforingsinfo;
+}
+
 void XmlLegemiddelpakning::Merge() {
     oppfLegemiddelpakning->SetLegemiddelpakning({{
             GetAtc(),
@@ -30,7 +34,8 @@ void XmlLegemiddelpakning::Merge() {
         GetPreparattype(),
         varenr,
         oppbevaring,
-        GetPakningsinfo()
+        GetPakningsinfo(),
+        markedsforingsinfo
     });
 }
 

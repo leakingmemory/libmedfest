@@ -24,7 +24,7 @@ private:
     Pakningstype pakningstype{};
     std::string mengde{};
     DDD ddd{};
-    int statistikkfaktor{0};
+    double statistikkfaktor{0.0};
     int antall{0};
 public:
     XmlPakningsinfoObject(std::shared_ptr<XmlPakningsinfo> parent) : parent(parent) {}
@@ -34,7 +34,7 @@ public:
     void SetPakningstype(const Pakningstype &pakningstype);
     void SetMengde(const std::string &mengde);
     void SetDDD(const DDD &ddd);
-    void SetStatistikkfaktor(int statistikkfaktor);
+    void SetStatistikkfaktor(double statistikkfaktor);
     void SetAntall(int antall);
     bool Merge();
 };

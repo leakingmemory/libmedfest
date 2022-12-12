@@ -28,7 +28,7 @@ DDD Pakningsinfo::GetDDD() const {
     return ddd;
 }
 
-int Pakningsinfo::GetStatistikkfaktor() const {
+double Pakningsinfo::GetStatistikkfaktor() const {
     return statistikkfaktor;
 }
 

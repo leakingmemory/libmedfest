@@ -18,13 +18,13 @@ private:
     Pakningstype pakningstype;
     std::string mengde;
     DDD ddd;
-    int statistikkfaktor;
+    double statistikkfaktor;
     int antall;
 public:
-    Pakningsinfo() : merkevareId(), pakningsstr(), enhetPakning(), pakningstype(), mengde(), ddd(), statistikkfaktor(0),
+    Pakningsinfo() : merkevareId(), pakningsstr(), enhetPakning(), pakningstype(), mengde(), ddd(), statistikkfaktor(0.0),
             antall(0) {}
     Pakningsinfo(const std::string &merkevareId, const std::string &pakningsstr, const EnhetPakning &enhetPakning,
-                 const Pakningstype &pakningstype, const std::string &mengde, const DDD &ddd, int statistikkfaktor,
+                 const Pakningstype &pakningstype, const std::string &mengde, const DDD &ddd, double statistikkfaktor,
                  int antall) :
             merkevareId(merkevareId), pakningsstr(pakningsstr), enhetPakning(enhetPakning), pakningstype(pakningstype),
             mengde(mengde), ddd(ddd), statistikkfaktor(statistikkfaktor), antall(antall) {}
@@ -34,7 +34,7 @@ public:
     [[nodiscard]] Pakningstype GetPakningstype() const;
     [[nodiscard]] std::string GetMengde() const;
     [[nodiscard]] DDD GetDDD() const;
-    int GetStatistikkfaktor() const;
+    double GetStatistikkfaktor() const;
     int GetAntall() const;
 };
 

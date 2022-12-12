@@ -29,7 +29,7 @@ void XmlPakningsinfoObject::SetDDD(const DDD &ddd) {
     this->ddd = ddd;
 }
 
-void XmlPakningsinfoObject::SetStatistikkfaktor(int statistikkfaktor) {
+void XmlPakningsinfoObject::SetStatistikkfaktor(double statistikkfaktor) {
     this->statistikkfaktor = statistikkfaktor;
 }
 
@@ -106,14 +106,9 @@ bool XmlDDDHandler::Merge(std::shared_ptr<XmlType> obj) {
 
 bool XmlStatistikkfaktorHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) {
     char *err;
-    long lval = strtol(content.c_str(), &err, 10);
+    double val = strtod(content.c_str(), &err);
     if (err == nullptr || *err != '\0') {
-        std::cerr << "Error: Statistikkfaktor: Invalid value (int): " << content << "\n";
-        return false;
-    }
-    int val = (int) lval;
-    if (((long) val) != lval) {
-        std::cerr << "Error: Statistikkfaktor: Invalid value (int): " << content << " (overflow)\n";
+        std::cerr << "Error: Statistikkfaktor: Invalid value (double): " << content << "\n";
         return false;
     }
     parent->SetStatistikkfaktor(val);
@@ -122,7 +117,7 @@ bool XmlStatistikkfaktorHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> pa
 
 bool XmlAntallHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) {
     char *err;
-    long lval = strtol(content.c_str(), &err, 10);
+    double lval = strtol(content.c_str(), &err, 10);
     if (err == nullptr || *err != '\0') {
         std::cerr << "Error: Antall: Invalid value (int): " << content << "\n";
         return false;

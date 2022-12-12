@@ -23,6 +23,7 @@ private:
     Oppbevaring oppbevaring{};
     Markedsforingsinfo markedsforingsinfo{};
     std::string ean{};
+    std::vector<PrisVare> prisVare{};
 public:
     XmlLegemiddelpakning(std::shared_ptr<XmlOppfLegemiddelpakning> oppfLegemiddelpakning) : oppfLegemiddelpakning(oppfLegemiddelpakning) {}
     std::string GetName() const override;
@@ -30,6 +31,7 @@ public:
     void SetOppbevaring(const Oppbevaring &oppbevaring);
     void SetMarkedsforingsinfo(const Markedsforingsinfo &markedsforingsinfo);
     void SetEan(const std::string &ean);
+    void AddPrisVare(const PrisVare &prisVare);
     void Merge();
 };
 

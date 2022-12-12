@@ -7,4 +7,4 @@ add_library(decoded OBJECT Status.cpp Status.h OppfLegemiddelMerkevare.cpp OppfL
         Administrasjonsvei.h Preparatomtaleavsnitt.cpp Preparatomtaleavsnitt.h Reseptgyldighet.cpp Reseptgyldighet.h
         LegemiddelCore.cpp LegemiddelCore.h Legemiddelpakning.cpp Legemiddelpakning.h
         OppfLegemiddelpakning.cpp OppfLegemiddelpakning.h Pakningsinfo.cpp Pakningsinfo.h ValueUnit.cpp ValueUnit.h
-        Markedsforingsinfo.cpp Markedsforingsinfo.h)
+        Markedsforingsinfo.cpp Markedsforingsinfo.h PrisVare.cpp PrisVare.h)

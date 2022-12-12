@@ -24,6 +24,10 @@ void XmlLegemiddelpakning::SetEan(const std::string &ean) {
     this->ean = ean;
 }
 
+void XmlLegemiddelpakning::AddPrisVare(const PrisVare &prisVare) {
+    this->prisVare.push_back(prisVare);
+}
+
 void XmlLegemiddelpakning::Merge() {
     oppfLegemiddelpakning->SetLegemiddelpakning({{
             GetAtc(),
@@ -40,7 +44,8 @@ void XmlLegemiddelpakning::Merge() {
         oppbevaring,
         GetPakningsinfo(),
         markedsforingsinfo,
-        ean
+        ean,
+        prisVare
     });
 }
 

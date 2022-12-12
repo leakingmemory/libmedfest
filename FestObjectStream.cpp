@@ -27,6 +27,7 @@
 #include "Fest/XmlPakningsinfo.h"
 #include "Fest/XmlRefLegemiddelMerkevare.h"
 #include "Fest/XmlMarkedsforingsinfo.h"
+#include "Fest/XmlPrisVare.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -97,6 +98,10 @@ void FestObjectStream::read() {
     parser.AddHandler("Markedsforingsdato", std::make_shared<XmlMarkedsforingsdatoHandler>());
     parser.AddHandler("Ean", std::make_shared<XmlEanHandler>());
     parser.AddHandler("Antall", std::make_shared<XmlAntallHandler>());
+    parser.AddHandler("PrisVare", std::make_shared<XmlPrisVareHandler>());
+    parser.AddHandler("Type", std::make_shared<XmlTypeHandler>());
+    parser.AddHandler("Pris", std::make_shared<XmlPrisHandler>());
+    parser.AddHandler("GyldigFraDato", std::make_shared<XmlGyldigFraDatoHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

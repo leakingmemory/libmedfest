@@ -10,6 +10,7 @@
 #include "Oppbevaring.h"
 #include "Pakningsinfo.h"
 #include "Markedsforingsinfo.h"
+#include "PrisVare.h"
 
 
 class Legemiddelpakning : public LegemiddelCore {
@@ -20,19 +21,22 @@ private:
     Pakningsinfo pakningsinfo;
     Markedsforingsinfo markedsforingsinfo;
     std::string ean;
+    std::vector<PrisVare> prisVare;
 public:
     Legemiddelpakning() : LegemiddelCore(), preparattype(), varenr(), oppbevaring(), pakningsinfo(),
-            markedsforingsinfo(), ean() {}
+            markedsforingsinfo(), ean(), prisVare() {}
     Legemiddelpakning(const LegemiddelCore &legemiddelCore, const Preparattype &preparattype, const std::string &varenr,
                       const Oppbevaring &oppbevaring, const Pakningsinfo &pakningsinfo,
-                      const Markedsforingsinfo &markedsforingsinfo, const std::string &ean) :
+                      const Markedsforingsinfo &markedsforingsinfo, const std::string &ean,
+                      const std::vector<PrisVare> &prisVare) :
             LegemiddelCore(legemiddelCore), preparattype(preparattype), varenr(varenr), oppbevaring(oppbevaring),
-            pakningsinfo(pakningsinfo), markedsforingsinfo(markedsforingsinfo), ean(ean) {}
+            pakningsinfo(pakningsinfo), markedsforingsinfo(markedsforingsinfo), ean(ean), prisVare(prisVare) {}
     [[nodiscard]] Preparattype GetPreparattype() const;
     [[nodiscard]] std::string GetVarenr() const;
     [[nodiscard]] Oppbevaring GetOppbevaring() const;
     [[nodiscard]] Markedsforingsinfo GetMarkedsforingsinfo() const;
     [[nodiscard]] std::string GetEan() const;
+    [[nodiscard]] std::vector<PrisVare> GetPrisVare() const;
 };
 
 #endif //LEGEMFEST_LEGEMIDDELPAKNING_H

@@ -23,3 +23,7 @@ Markedsforingsinfo Legemiddelpakning::GetMarkedsforingsinfo() const {
 std::string Legemiddelpakning::GetEan() const {
     return ean;
 }
+
+std::vector<PrisVare> Legemiddelpakning::GetPrisVare() const {
+    return prisVare;
+}

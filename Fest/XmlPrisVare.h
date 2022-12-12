@@ -1,0 +1,49 @@
+//
+// Created by sigsegv on 12/12/22.
+//
+
+#ifndef LEGEMFEST_XMLPRISVARE_H
+#define LEGEMFEST_XMLPRISVARE_H
+
+#include "XMLObject.h"
+#include "XmlLegemiddelpakning.h"
+
+class XmlPrisVare : public XMLObject {
+    std::shared_ptr<XmlLegemiddelpakning> parent;
+    ValueWithCodeSet type{};
+    Pris pris{};
+    std::string gyldigFraDato{};
+public:
+    XmlPrisVare(std::shared_ptr<XmlLegemiddelpakning> parent) : parent(parent) {}
+    std::string GetName() const override;
+    void SetType(const ValueWithCodeSet &type);
+    void SetPris(const Pris &pris);
+    void SetGyldigFraDato(const std::string &gyldigFraDato);
+    bool Merge();
+};
+
+class XmlPrisVareHandler {
+public:
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
+    bool EndElement(const std::shared_ptr<XMLObject> &obj);
+};
+
+class XmlTypeHandler : public XmlValueWithCodeSetHandler<XmlPrisVare> {
+public:
+    XmlTypeHandler() : XmlValueWithCodeSetHandler<XmlPrisVare>("Type") {}
+    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPrisVare>> obj) override;
+};
+
+class XmlPrisHandler : public XmlValueUnitHandler<XmlPrisVare> {
+public:
+    XmlPrisHandler() : XmlValueUnitHandler<XmlPrisVare>("Pris") {}
+    bool Merge(std::shared_ptr<XmlType> obj) override;
+};
+
+class XmlGyldigFraDatoHandler : public XmlContentElementHandler<XmlPrisVare> {
+public:
+    XmlGyldigFraDatoHandler() : XmlContentElementHandler<XmlPrisVare>("GyldigFraDato") {}
+    bool Merge(std::shared_ptr<XmlPrisVare> parent, const std::string &content) override;
+};
+
+#endif //LEGEMFEST_XMLPRISVARE_H

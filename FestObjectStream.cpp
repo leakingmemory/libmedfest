@@ -24,6 +24,8 @@
 #include "Fest/XmlSortertVirkestoffUtenStyrke.h"
 #include "Fest/XmlKjonn.h"
 #include "Fest/XmlLegemiddelpakning.h"
+#include "Fest/XmlPakningsinfo.h"
+#include "Fest/XmlRefLegemiddelMerkevare.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -82,6 +84,14 @@ void FestObjectStream::read() {
     parser.AddHandler("Legemiddelpakning", std::make_shared<XmlLegemiddelpakningHandler>());
     parser.AddHandler("Varenr", std::make_shared<XmlVarenrHandler>());
     parser.AddHandler("Oppbevaring", std::make_shared<XmlOppbevaringHandler>());
+    parser.AddHandler("Pakningsinfo", std::make_shared<XmlPakningsinfoHandler>());
+    parser.AddHandler("RefLegemiddelMerkevare", std::make_shared<XmlRefLegemiddelMerkevareHandler>());
+    parser.AddHandler("Pakningsstr", std::make_shared<XmlPakningsstrHandler>());
+    parser.AddHandler("EnhetPakning", std::make_shared<XmlEnhetPakningHandler>());
+    parser.AddHandler("Pakningstype", std::make_shared<XmlPakningstypeHandler>());
+    parser.AddHandler("Mengde", std::make_shared<XmlMengdeHandler>());
+    parser.AddHandler("DDD", std::make_shared<XmlDDDHandler>());
+    parser.AddHandler("Statistikkfaktor", std::make_shared<XmlStatistikkfaktorHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

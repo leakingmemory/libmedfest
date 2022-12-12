@@ -29,7 +29,8 @@ void XmlLegemiddelpakning::Merge() {
         },
         GetPreparattype(),
         varenr,
-        oppbevaring
+        oppbevaring,
+        GetPakningsinfo()
     });
 }
 

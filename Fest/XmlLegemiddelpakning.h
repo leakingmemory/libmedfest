@@ -22,12 +22,14 @@ private:
     std::string varenr{};
     Oppbevaring oppbevaring{};
     Markedsforingsinfo markedsforingsinfo{};
+    std::string ean{};
 public:
     XmlLegemiddelpakning(std::shared_ptr<XmlOppfLegemiddelpakning> oppfLegemiddelpakning) : oppfLegemiddelpakning(oppfLegemiddelpakning) {}
     std::string GetName() const override;
     void SetVarenr(const std::string &varenr);
     void SetOppbevaring(const Oppbevaring &oppbevaring);
     void SetMarkedsforingsinfo(const Markedsforingsinfo &markedsforingsinfo);
+    void SetEan(const std::string &ean);
     void Merge();
 };
 
@@ -47,6 +49,12 @@ class XmlOppbevaringHandler : public XmlValueWithDistinguishedNameHandler<XmlLeg
 public:
     XmlOppbevaringHandler() : XmlValueWithDistinguishedNameHandler<XmlLegemiddelpakning>("Oppbevaring") {}
     bool Merge(std::shared_ptr<XmlType> obj) override;
+};
+
+class XmlEanHandler : public XmlContentElementHandler<XmlLegemiddelpakning> {
+public:
+    XmlEanHandler() : XmlContentElementHandler<XmlLegemiddelpakning>("Ean") {}
+    bool Merge(std::shared_ptr<XmlLegemiddelpakning> parent, const std::string &content) override;
 };
 
 #endif //LEGEMFEST_XMLLEGEMIDDELPAKNING_H

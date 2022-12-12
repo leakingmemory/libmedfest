@@ -20,6 +20,10 @@ void XmlLegemiddelpakning::SetMarkedsforingsinfo(const Markedsforingsinfo &marke
     this->markedsforingsinfo = markedsforingsinfo;
 }
 
+void XmlLegemiddelpakning::SetEan(const std::string &ean) {
+    this->ean = ean;
+}
+
 void XmlLegemiddelpakning::Merge() {
     oppfLegemiddelpakning->SetLegemiddelpakning({{
             GetAtc(),
@@ -35,7 +39,8 @@ void XmlLegemiddelpakning::Merge() {
         varenr,
         oppbevaring,
         GetPakningsinfo(),
-        markedsforingsinfo
+        markedsforingsinfo,
+        ean
     });
 }
 
@@ -66,5 +71,10 @@ bool XmlVarenrHandler::Merge(std::shared_ptr <XmlLegemiddelpakning> parent, cons
 
 bool XmlOppbevaringHandler::Merge(std::shared_ptr<XmlType> obj) {
     obj->GetParent()->SetOppbevaring(obj->GetValueWithDistinguishedName());
+    return true;
+}
+
+bool XmlEanHandler::Merge(std::shared_ptr<XmlLegemiddelpakning> parent, const std::string &content) {
+    parent->SetEan(content);
     return true;
 }

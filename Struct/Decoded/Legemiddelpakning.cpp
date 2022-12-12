@@ -19,3 +19,7 @@ Oppbevaring Legemiddelpakning::GetOppbevaring() const {
 Markedsforingsinfo Legemiddelpakning::GetMarkedsforingsinfo() const {
     return markedsforingsinfo;
 }
+
+std::string Legemiddelpakning::GetEan() const {
+    return ean;
+}

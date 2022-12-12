@@ -96,6 +96,7 @@ void FestObjectStream::read() {
     parser.AddHandler("Markedsforingsinfo", std::make_shared<XmlMarkedsforingsinfoHandler>());
     parser.AddHandler("Markedsforingsdato", std::make_shared<XmlMarkedsforingsdatoHandler>());
     parser.AddHandler("Ean", std::make_shared<XmlEanHandler>());
+    parser.AddHandler("Antall", std::make_shared<XmlAntallHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

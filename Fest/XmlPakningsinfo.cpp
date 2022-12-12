@@ -33,6 +33,10 @@ void XmlPakningsinfoObject::SetStatistikkfaktor(int statistikkfaktor) {
     this->statistikkfaktor = statistikkfaktor;
 }
 
+void XmlPakningsinfoObject::SetAntall(int antall) {
+    this->antall = antall;
+}
+
 bool XmlPakningsinfoObject::Merge() {
     if (parent->hasInfo) {
         std::cerr << "Error: Duplicate Pakningsinfo\n";
@@ -48,7 +52,7 @@ bool XmlPakningsinfoObject::Merge() {
     }
     auto refMerkevare = refMerkevarer[0];
     parent->hasInfo = true;
-    parent->pakningsinfo = {refMerkevare, pakningsstr, enhetPakning, pakningstype, mengde, ddd, statistikkfaktor};
+    parent->pakningsinfo = {refMerkevare, pakningsstr, enhetPakning, pakningstype, mengde, ddd, statistikkfaktor, antall};
     return true;
 }
 
@@ -113,5 +117,21 @@ bool XmlStatistikkfaktorHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> pa
         return false;
     }
     parent->SetStatistikkfaktor(val);
+    return true;
+}
+
+bool XmlAntallHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) {
+    char *err;
+    long lval = strtol(content.c_str(), &err, 10);
+    if (err == nullptr || *err != '\0') {
+        std::cerr << "Error: Antall: Invalid value (int): " << content << "\n";
+        return false;
+    }
+    int val = (int) lval;
+    if (((long) val) != lval) {
+        std::cerr << "Error: Antall: Invalid value (int): " << content << " (overflow)\n";
+        return false;
+    }
+    parent->SetAntall(val);
     return true;
 }

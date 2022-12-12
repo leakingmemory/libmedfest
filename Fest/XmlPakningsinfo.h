@@ -25,6 +25,7 @@ private:
     std::string mengde{};
     DDD ddd{};
     int statistikkfaktor{0};
+    int antall{0};
 public:
     XmlPakningsinfoObject(std::shared_ptr<XmlPakningsinfo> parent) : parent(parent) {}
     std::string GetName() const override;
@@ -34,6 +35,7 @@ public:
     void SetMengde(const std::string &mengde);
     void SetDDD(const DDD &ddd);
     void SetStatistikkfaktor(int statistikkfaktor);
+    void SetAntall(int antall);
     bool Merge();
 };
 
@@ -86,6 +88,12 @@ public:
 class XmlStatistikkfaktorHandler : public XmlContentElementHandler<XmlPakningsinfoObject> {
 public:
     XmlStatistikkfaktorHandler() : XmlContentElementHandler<XmlPakningsinfoObject>("Statistikkfaktor") {}
+    bool Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) override;
+};
+
+class XmlAntallHandler : public XmlContentElementHandler<XmlPakningsinfoObject> {
+public:
+    XmlAntallHandler() : XmlContentElementHandler<XmlPakningsinfoObject>("Antall") {}
     bool Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) override;
 };
 

@@ -4,6 +4,14 @@
 
 #include "Legemiddelpakning.h"
 
-Preparattype Legemiddelpakning::GetPreparattype() {
+Preparattype Legemiddelpakning::GetPreparattype() const {
     return preparattype;
+}
+
+std::string Legemiddelpakning::GetVarenr() const {
+    return varenr;
+}
+
+Oppbevaring Legemiddelpakning::GetOppbevaring() const {
+    return oppbevaring;
 }

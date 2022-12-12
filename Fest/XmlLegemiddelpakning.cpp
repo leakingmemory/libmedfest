@@ -8,6 +8,14 @@ std::string XmlLegemiddelpakning::GetName() const {
     return "Legemiddelpakning";
 }
 
+void XmlLegemiddelpakning::SetVarenr(const std::string &varenr) {
+    this->varenr = varenr;
+}
+
+void XmlLegemiddelpakning::SetOppbevaring(const Oppbevaring &oppbevaring) {
+    this->oppbevaring = oppbevaring;
+}
+
 void XmlLegemiddelpakning::Merge() {
     oppfLegemiddelpakning->SetLegemiddelpakning({{
             GetAtc(),
@@ -19,7 +27,9 @@ void XmlLegemiddelpakning::Merge() {
             GetOpioidsoknad(),
             GetSvartTrekant()
         },
-        GetPreparattype()
+        GetPreparattype(),
+        varenr,
+        oppbevaring
     });
 }
 
@@ -40,5 +50,15 @@ bool XmlLegemiddelpakningHandler::EndElement(const std::shared_ptr<XMLObject> &o
         return false;
     }
     oppf->Merge();
+    return true;
+}
+
+bool XmlVarenrHandler::Merge(std::shared_ptr <XmlLegemiddelpakning> parent, const std::string &content) {
+    parent->SetVarenr(content);
+    return true;
+}
+
+bool XmlOppbevaringHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetOppbevaring(obj->GetValueWithDistinguishedName());
     return true;
 }

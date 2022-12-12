@@ -80,6 +80,8 @@ void FestObjectStream::read() {
     parser.AddHandler("KatLegemiddelpakning", std::make_shared<KatLegemiddelpakningHandler>());
     parser.AddHandler("OppfLegemiddelpakning", std::make_shared<OppfLegemiddelpakningHandler>());
     parser.AddHandler("Legemiddelpakning", std::make_shared<XmlLegemiddelpakningHandler>());
+    parser.AddHandler("Varenr", std::make_shared<XmlVarenrHandler>());
+    parser.AddHandler("Oppbevaring", std::make_shared<XmlOppbevaringHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

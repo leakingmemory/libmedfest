@@ -29,6 +29,7 @@
 #include "Fest/XmlMarkedsforingsinfo.h"
 #include "Fest/XmlPrisVare.h"
 #include "Fest/XmlPakningskomponent.h"
+#include "Fest/XmlPakningstype.h"
 #include <iostream>
 
 void FestObjectStream::read() {

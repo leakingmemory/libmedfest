@@ -17,12 +17,9 @@ void XmlPakningsinfoObject::SetEnhetPakning(const EnhetPakning &enhetPakning) {
     this->enhetPakning = enhetPakning;
 }
 
-void XmlPakningsinfoObject::SetPakningstype(const Pakningstype &pakningstype) {
-    this->pakningstype = pakningstype;
-}
-
-void XmlPakningsinfoObject::SetMengde(const std::string &mengde) {
+bool XmlPakningsinfoObject::Mengde(const std::string &mengde) {
     this->mengde = mengde;
+    return true;
 }
 
 void XmlPakningsinfoObject::SetDDD(const DDD &ddd) {
@@ -56,7 +53,7 @@ bool XmlPakningsinfoObject::Merge() {
     }
     auto refMerkevare = refMerkevarer[0];
     parent->hasInfo = true;
-    parent->pakningsinfo = {refMerkevare, pakningsstr, enhetPakning, pakningstype, mengde, ddd, pakningskomponent, statistikkfaktor, antall};
+    parent->pakningsinfo = {refMerkevare, pakningsstr, enhetPakning, GetPakningstype(), mengde, ddd, pakningskomponent, statistikkfaktor, antall};
     return true;
 }
 
@@ -90,16 +87,6 @@ bool XmlPakningsstrHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> parent,
 
 bool XmlEnhetPakningHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPakningsinfoObject>> obj) {
     obj->GetParent()->SetEnhetPakning({obj->GetValueWithCodeSet()});
-    return true;
-}
-
-bool XmlPakningstypeHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPakningsinfoObject>> obj) {
-    obj->GetParent()->SetPakningstype({obj->GetValueWithCodeSet()});
-    return true;
-}
-
-bool XmlMengdeHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) {
-    parent->SetMengde(content);
     return true;
 }
 

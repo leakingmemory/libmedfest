@@ -8,7 +8,13 @@ std::string XmlPakningskomponent::GetName() const {
     return "Pakningskomponent";
 }
 
+bool XmlPakningskomponent::Mengde(const ValueUnit &mengde) {
+    this->mengde = mengde;
+    return true;
+}
+
 bool XmlPakningskomponent::Merge() {
+    parent->AddPakningskomponent({GetPakningstype(), mengde});
     return true;
 }
 

@@ -11,12 +11,14 @@
 #include "../Struct/Decoded/Pakningsinfo.h"
 #include "XmlRefLegemiddelMerkevare.h"
 #include "XmlValueUnit.h"
+#include "XmlPakningstype.h"
+#include "XmlMengde.h"
 #include <memory>
 #include <map>
 
 class XmlPakningsinfo;
 
-class XmlPakningsinfoObject : public XMLObject, public XmlRefLegemiddelMerkevare {
+class XmlPakningsinfoObject : public XMLObject, public XmlRefLegemiddelMerkevare, public XmlPakningstype, public XmlMengde {
 private:
     std::shared_ptr<XmlPakningsinfo> parent;
     std::string pakningsstr{};
@@ -32,8 +34,7 @@ public:
     std::string GetName() const override;
     void SetPakningsstr(const std::string &pakningsstr);
     void SetEnhetPakning(const EnhetPakning &enhetPakning);
-    void SetPakningstype(const Pakningstype &pakningstype);
-    void SetMengde(const std::string &mengde);
+    bool Mengde(const std::string &mengde) override;
     void SetDDD(const DDD &ddd);
     void AddPakningskomponent(const Pakningskomponent &pakningskomponent);
     void SetStatistikkfaktor(double statistikkfaktor);
@@ -67,18 +68,6 @@ class XmlEnhetPakningHandler : public XmlValueWithCodeSetHandler<XmlPakningsinfo
 public:
     XmlEnhetPakningHandler() : XmlValueWithCodeSetHandler<XmlPakningsinfoObject>("EnhetPakning") {}
     bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPakningsinfoObject>> obj) override;
-};
-
-class XmlPakningstypeHandler : public XmlValueWithCodeSetHandler<XmlPakningsinfoObject> {
-public:
-    XmlPakningstypeHandler() : XmlValueWithCodeSetHandler<XmlPakningsinfoObject>("Pakningstype") {}
-    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPakningsinfoObject>> obj) override;
-};
-
-class XmlMengdeHandler : public XmlContentElementHandler<XmlPakningsinfoObject> {
-public:
-    XmlMengdeHandler() : XmlContentElementHandler<XmlPakningsinfoObject>("Mengde") {}
-    bool Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) override;
 };
 
 class XmlDDDHandler : public XmlValueUnitHandler<XmlPakningsinfoObject> {

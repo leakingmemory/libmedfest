@@ -3,3 +3,11 @@
 //
 
 #include "Pakningskomponent.h"
+
+Pakningstype Pakningskomponent::GetPakningstype() const {
+    return pakningstype;
+}
+
+ValueUnit Pakningskomponent::GetMengde() const {
+    return mengde;
+}

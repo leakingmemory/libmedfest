@@ -7,13 +7,16 @@
 
 #include "XMLObject.h"
 #include "XmlPakningsinfo.h"
+#include "XmlMengde.h"
 
-class XmlPakningskomponent : public XMLObject {
+class XmlPakningskomponent : public XMLObject, public XmlPakningstype, public XmlMengde {
 private:
     std::shared_ptr<XmlPakningsinfoObject> parent;
+    ValueUnit mengde{};
 public:
     XmlPakningskomponent(std::shared_ptr<XmlPakningsinfoObject> parent) : parent(parent) {}
     std::string GetName() const override;
+    bool Mengde(const ValueUnit &mengde) override;
     bool Merge();
 };
 

@@ -16,12 +16,8 @@ void XmlPrisVare::SetPris(const Pris &pris) {
     this->pris = pris;
 }
 
-void XmlPrisVare::SetGyldigFraDato(const std::string &gyldigFraDato) {
-    this->gyldigFraDato = gyldigFraDato;
-}
-
 bool XmlPrisVare::Merge() {
-    parent->AddPrisVare({type, pris, gyldigFraDato});
+    parent->AddPrisVare({type, pris, GetGyldigFraDato()});
     return true;
 }
 
@@ -51,10 +47,5 @@ bool XmlTypeHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPrisVare>> obj
 
 bool XmlPrisHandler::Merge(std::shared_ptr<XmlType> obj) {
     obj->GetParent()->SetPris({obj->GetValueUnit()});
-    return true;
-}
-
-bool XmlGyldigFraDatoHandler::Merge(std::shared_ptr<XmlPrisVare> parent, const std::string &content) {
-    parent->SetGyldigFraDato(content);
     return true;
 }

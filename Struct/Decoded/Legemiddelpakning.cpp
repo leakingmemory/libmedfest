@@ -27,3 +27,7 @@ std::string Legemiddelpakning::GetEan() const {
 std::vector<PrisVare> Legemiddelpakning::GetPrisVare() const {
     return prisVare;
 }
+
+Refusjon Legemiddelpakning::GetRefusjon() const {
+    return refusjon;
+}

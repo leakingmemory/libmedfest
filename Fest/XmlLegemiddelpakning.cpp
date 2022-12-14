@@ -45,7 +45,8 @@ void XmlLegemiddelpakning::Merge() {
         GetPakningsinfo(),
         markedsforingsinfo,
         ean,
-        prisVare
+        prisVare,
+        GetRefusjon()
     });
 }
 

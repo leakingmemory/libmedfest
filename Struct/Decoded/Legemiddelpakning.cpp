@@ -16,6 +16,10 @@ Oppbevaring Legemiddelpakning::GetOppbevaring() const {
     return oppbevaring;
 }
 
+std::vector<Pakningsinfo> Legemiddelpakning::GetPakningsinfo() const {
+    return pakningsinfo;
+}
+
 Markedsforingsinfo Legemiddelpakning::GetMarkedsforingsinfo() const {
     return markedsforingsinfo;
 }

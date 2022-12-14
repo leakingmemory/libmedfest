@@ -13,12 +13,15 @@
 #include "XmlValueUnit.h"
 #include "XmlPakningstype.h"
 #include "XmlMengde.h"
+#include "XmlSortering.h"
 #include <memory>
 #include <map>
+#include <vector>
 
 class XmlPakningsinfo;
 
-class XmlPakningsinfoObject : public XMLObject, public XmlRefLegemiddelMerkevare, public XmlPakningstype, public XmlMengde {
+class XmlPakningsinfoObject : public XMLObject, public XmlRefLegemiddelMerkevare, public XmlPakningstype, public XmlMengde, public XmlSortering {
+    friend XmlPakningsinfo;
 private:
     std::shared_ptr<XmlPakningsinfo> parent;
     std::string pakningsstr{};
@@ -39,17 +42,20 @@ public:
     void AddPakningskomponent(const Pakningskomponent &pakningskomponent);
     void SetStatistikkfaktor(double statistikkfaktor);
     void SetAntall(int antall);
-    bool Merge();
+    std::shared_ptr<XmlPakningsinfo> GetParent() const;
 };
+
+class XmlPakningsinfoHandler;
 
 class XmlPakningsinfo {
     friend XmlPakningsinfoObject;
+    friend XmlPakningsinfoHandler;
 private:
-    Pakningsinfo pakningsinfo{};
+    std::vector<std::shared_ptr<XmlPakningsinfoObject>> pakningsinfo{};
     bool hasInfo{false};
 public:
     virtual ~XmlPakningsinfo() = default;
-    [[nodiscard]] Pakningsinfo GetPakningsinfo() const;
+    [[nodiscard]] std::vector<Pakningsinfo> GetPakningsinfo() const;
 };
 
 class XmlPakningsinfoHandler {

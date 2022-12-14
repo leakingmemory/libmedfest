@@ -21,7 +21,7 @@ private:
     Preparattype preparattype;
     std::string varenr;
     Oppbevaring oppbevaring;
-    Pakningsinfo pakningsinfo;
+    std::vector<Pakningsinfo> pakningsinfo;
     Markedsforingsinfo markedsforingsinfo;
     std::string ean;
     std::vector<PrisVare> prisVare;
@@ -31,7 +31,7 @@ public:
     Legemiddelpakning() : LegemiddelCore(), preparattype(), varenr(), oppbevaring(), pakningsinfo(),
             markedsforingsinfo(), ean(), prisVare(), refusjon(), pakningByttegruppe() {}
     Legemiddelpakning(const LegemiddelCore &legemiddelCore, const Preparattype &preparattype, const std::string &varenr,
-                      const Oppbevaring &oppbevaring, const Pakningsinfo &pakningsinfo,
+                      const Oppbevaring &oppbevaring, const std::vector<Pakningsinfo> &pakningsinfo,
                       const Markedsforingsinfo &markedsforingsinfo, const std::string &ean,
                       const std::vector<PrisVare> &prisVare, const Refusjon &refusjon,
                       const PakningByttegruppe &pakningByttegruppe) :
@@ -41,6 +41,7 @@ public:
     [[nodiscard]] Preparattype GetPreparattype() const;
     [[nodiscard]] std::string GetVarenr() const;
     [[nodiscard]] Oppbevaring GetOppbevaring() const;
+    [[nodiscard]] std::vector<Pakningsinfo> GetPakningsinfo() const;
     [[nodiscard]] Markedsforingsinfo GetMarkedsforingsinfo() const;
     [[nodiscard]] std::string GetEan() const;
     [[nodiscard]] std::vector<PrisVare> GetPrisVare() const;

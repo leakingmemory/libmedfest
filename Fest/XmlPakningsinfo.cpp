@@ -38,26 +38,26 @@ void XmlPakningsinfoObject::SetAntall(int antall) {
     this->antall = antall;
 }
 
-bool XmlPakningsinfoObject::Merge() {
-    if (parent->hasInfo) {
-        std::cerr << "Error: Duplicate Pakningsinfo\n";
-        return false;
-    }
-    auto refMerkevarer = GetRefLegemiddelMerkevare();
-    if (refMerkevarer.size() <= 0) {
-        std::cerr << "Error: Pakningsinfo should have RefLegemiddelMerkevare\n";
-        return false;
-    } else if (refMerkevarer.size() > 1) {
-        std::cerr << "Error: Pakningsinfo does have more than one RefLegemiddelMerkevare\n";
-        return false;
-    }
-    auto refMerkevare = refMerkevarer[0];
-    parent->hasInfo = true;
-    parent->pakningsinfo = {refMerkevare, pakningsstr, enhetPakning, GetPakningstype(), mengde, ddd, pakningskomponent, statistikkfaktor, antall};
-    return true;
+std::shared_ptr<XmlPakningsinfo> XmlPakningsinfoObject::GetParent() const {
+    return parent;
 }
 
-Pakningsinfo XmlPakningsinfo::GetPakningsinfo() const {
+std::vector<Pakningsinfo> XmlPakningsinfo::GetPakningsinfo() const {
+    std::vector<Pakningsinfo> pakningsinfo{};
+    std::vector<std::shared_ptr<XmlPakningsinfoObject>> source{this->pakningsinfo};
+    XmlSortering::Sort(source.begin(), source.end());
+    for (auto &pi : source) {
+        auto refMerkevarer = pi->GetRefLegemiddelMerkevare();
+        if (refMerkevarer.size() <= 0) {
+            std::cerr << "Error: Pakningsinfo should have RefLegemiddelMerkevare\n";
+            continue;
+        } else if (refMerkevarer.size() > 1) {
+            std::cerr << "Error: Pakningsinfo does have more than one RefLegemiddelMerkevare\n";
+            continue;
+        }
+        auto refMerkevare = refMerkevarer[0];
+        pakningsinfo.emplace_back(refMerkevare, pi->pakningsstr, pi->enhetPakning, pi->GetPakningstype(), pi->mengde, pi->ddd, pi->pakningskomponent, pi->statistikkfaktor, pi->antall);
+    }
     return pakningsinfo;
 }
 
@@ -72,12 +72,13 @@ std::shared_ptr<XMLObject> XmlPakningsinfoHandler::StartElement(const std::share
 }
 
 bool XmlPakningsinfoHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
-    auto *p = dynamic_cast<XmlPakningsinfoObject *>(&(*obj));
-    if (p == nullptr) {
+    std::shared_ptr<XmlPakningsinfoObject> p = std::dynamic_pointer_cast<XmlPakningsinfoObject>(obj);
+    if (!p) {
         std::cerr << "Error: Did not end Pakningsinfo\n";
         return false;
     }
-    return p->Merge();
+    p->GetParent()->pakningsinfo.push_back(p);
+    return true;
 }
 
 bool XmlPakningsstrHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) {

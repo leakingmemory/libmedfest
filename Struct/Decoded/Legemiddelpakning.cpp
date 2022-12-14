@@ -39,3 +39,7 @@ Refusjon Legemiddelpakning::GetRefusjon() const {
 PakningByttegruppe Legemiddelpakning::GetPakningByttegruppe() const {
     return pakningByttegruppe;
 }
+
+Preparatomtaleavsnitt Legemiddelpakning::GetPreparatomtaleavsnitt() const {
+    return preparatomtaleavsnitt;
+}

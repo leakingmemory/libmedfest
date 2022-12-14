@@ -14,6 +14,7 @@
 #include "Pakningskomponent.h"
 #include "Refusjon.h"
 #include "PakningByttegruppe.h"
+#include "Preparatomtaleavsnitt.h"
 
 
 class Legemiddelpakning : public LegemiddelCore {
@@ -27,17 +28,18 @@ private:
     std::vector<PrisVare> prisVare;
     Refusjon refusjon;
     PakningByttegruppe pakningByttegruppe;
+    Preparatomtaleavsnitt preparatomtaleavsnitt;
 public:
     Legemiddelpakning() : LegemiddelCore(), preparattype(), varenr(), oppbevaring(), pakningsinfo(),
-            markedsforingsinfo(), ean(), prisVare(), refusjon(), pakningByttegruppe() {}
+            markedsforingsinfo(), ean(), prisVare(), refusjon(), pakningByttegruppe(), preparatomtaleavsnitt() {}
     Legemiddelpakning(const LegemiddelCore &legemiddelCore, const Preparattype &preparattype, const std::string &varenr,
                       const Oppbevaring &oppbevaring, const std::vector<Pakningsinfo> &pakningsinfo,
                       const Markedsforingsinfo &markedsforingsinfo, const std::string &ean,
                       const std::vector<PrisVare> &prisVare, const Refusjon &refusjon,
-                      const PakningByttegruppe &pakningByttegruppe) :
+                      const PakningByttegruppe &pakningByttegruppe, const Preparatomtaleavsnitt &preparatomtaleavsnitt) :
             LegemiddelCore(legemiddelCore), preparattype(preparattype), varenr(varenr), oppbevaring(oppbevaring),
             pakningsinfo(pakningsinfo), markedsforingsinfo(markedsforingsinfo), ean(ean), prisVare(prisVare),
-            refusjon(refusjon), pakningByttegruppe(pakningByttegruppe) {}
+            refusjon(refusjon), pakningByttegruppe(pakningByttegruppe), preparatomtaleavsnitt(preparatomtaleavsnitt) {}
     [[nodiscard]] Preparattype GetPreparattype() const;
     [[nodiscard]] std::string GetVarenr() const;
     [[nodiscard]] Oppbevaring GetOppbevaring() const;
@@ -47,6 +49,7 @@ public:
     [[nodiscard]] std::vector<PrisVare> GetPrisVare() const;
     [[nodiscard]] Refusjon GetRefusjon() const;
     [[nodiscard]] PakningByttegruppe GetPakningByttegruppe() const;
+    [[nodiscard]] Preparatomtaleavsnitt GetPreparatomtaleavsnitt() const;
 };
 
 #endif //LEGEMFEST_LEGEMIDDELPAKNING_H

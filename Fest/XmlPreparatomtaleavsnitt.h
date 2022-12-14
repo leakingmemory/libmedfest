@@ -6,16 +6,25 @@
 #define LEGEMFEST_XMLPREPARATOMTALEAVSNITT_H
 
 #include "XMLObject.h"
-#include "XmlLegemiddelMerkevare.h"
 #include "XmlValue.h"
+#include "XmlValueWithDistinguishedName.h"
+#include "../Struct/Decoded/Preparatomtaleavsnitt.h"
 
-class XmlPreparatomtaleavsnitt : public XMLObject {
+class XmlPreparatomtaleavsnitt {
 private:
-    std::shared_ptr<XmlLegemiddelMerkevare> parent;
+    Preparatomtaleavsnitt preparatomtaleavsnitt{};
+public:
+    void SetPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt);
+    [[nodiscard]] Preparatomtaleavsnitt GetPreparatomtaleavsnitt() const;
+};
+
+class XmlPreparatomtaleavsnittObject : public XMLObject {
+private:
+    std::shared_ptr<XmlPreparatomtaleavsnitt> parent;
     ValueWithDistinguishedName avsnittoverskrift{};
     std::string link{};
 public:
-    XmlPreparatomtaleavsnitt(std::shared_ptr<XmlLegemiddelMerkevare> parent) : parent(parent) {}
+    XmlPreparatomtaleavsnittObject(std::shared_ptr<XmlPreparatomtaleavsnitt> parent) : parent(parent) {}
     std::string GetName() const;
     void SetAvsnittoverskrift(const ValueWithDistinguishedName &avsnittoverskrift);
     void SetLink(const std::string &link);
@@ -28,18 +37,18 @@ public:
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
 };
 
-class XmlAvsnittoverskriftHandler : public XmlValueWithDistinguishedNameHandler<XmlPreparatomtaleavsnitt> {
+class XmlAvsnittoverskriftHandler : public XmlValueWithDistinguishedNameHandler<XmlPreparatomtaleavsnittObject> {
 public:
-    XmlAvsnittoverskriftHandler() : XmlValueWithDistinguishedNameHandler<XmlPreparatomtaleavsnitt>("Avsnittoverskrift") {}
+    XmlAvsnittoverskriftHandler() : XmlValueWithDistinguishedNameHandler<XmlPreparatomtaleavsnittObject>("Avsnittoverskrift") {}
     bool Merge(std::shared_ptr<XmlType> obj) override;
 };
 
 class XmlLenke : public XMLObject {
 private:
-    std::shared_ptr<XmlPreparatomtaleavsnitt> parent;
+    std::shared_ptr<XmlPreparatomtaleavsnittObject> parent;
     std::string link{};
 public:
-    XmlLenke(std::shared_ptr<XmlPreparatomtaleavsnitt> parent) : parent(parent) {}
+    XmlLenke(std::shared_ptr<XmlPreparatomtaleavsnittObject> parent) : parent(parent) {}
     std::string GetName() const;
     void SetLink(const std::string &link);
     bool Merge();

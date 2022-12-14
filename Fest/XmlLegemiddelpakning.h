@@ -12,13 +12,15 @@
 #include "XmlContentElement.h"
 #include "XmlPakningsinfo.h"
 #include "XmlRefusjon.h"
+#include "XmlPreparatomtaleavsnitt.h"
 
 class XmlLegemiddelpakning : public XMLObject,
                                 public FestIdObject,
                                 public XmlLegemiddelCore,
                                 public XmlPreparattypeObject,
                                 public XmlPakningsinfo,
-                                public XmlRefusjon {
+                                public XmlRefusjon,
+                                public XmlPreparatomtaleavsnitt {
 private:
     std::shared_ptr<XmlOppfLegemiddelpakning> oppfLegemiddelpakning;
     std::string varenr{};

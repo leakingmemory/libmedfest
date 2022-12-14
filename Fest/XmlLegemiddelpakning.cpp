@@ -51,7 +51,8 @@ void XmlLegemiddelpakning::Merge() {
         ean,
         prisVare,
         GetRefusjon(),
-        pakningByttegruppe
+        pakningByttegruppe,
+        GetPreparatomtaleavsnitt()
     });
 }
 

@@ -34,10 +34,6 @@ void XmlLegemiddelMerkevare::SetReferanseprodukt(const std::string &referansepro
     this->referanseprodukt = referanseprodukt;
 }
 
-void XmlLegemiddelMerkevare::SetPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt) {
-    this->preparatomtaleavsnitt = preparatomtaleavsnitt;
-}
-
 void XmlLegemiddelMerkevare::SetSmak(const Smak &smak) {
     this->smak = smak;
 }
@@ -67,7 +63,7 @@ void XmlLegemiddelMerkevare::Merge() {
             reseptgyldighet,
             varseltrekant,
             referanseprodukt,
-            preparatomtaleavsnitt,
+            GetPreparatomtaleavsnitt(),
             smak,
             GetSortertVirkestoffUtenStyrke(),
             vaksinestandard

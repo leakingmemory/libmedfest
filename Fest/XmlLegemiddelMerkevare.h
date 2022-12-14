@@ -11,13 +11,15 @@
 #include "XmlLegemiddel.h"
 #include "XmlPreparattypeObject.h"
 #include "XmlSortertVirkestoffUtenStyrke.h"
+#include "XmlPreparatomtaleavsnitt.h"
 
 class XmlLegemiddelMerkevare :
         public XMLObject,
         public FestIdObject,
         public XmlLegemiddel,
         public XmlPreparattypeObject,
-        public XmlSortertVirkestoffUtenStyrke {
+        public XmlSortertVirkestoffUtenStyrke,
+        public XmlPreparatomtaleavsnitt {
 private:
     std::shared_ptr<XmlOppfLegemiddelMerkevare> oppfLegemiddelMerkevare;
     std::string varenavn{};
@@ -26,7 +28,6 @@ private:
     std::vector<Reseptgyldighet> reseptgyldighet{};
     MaybeBoolean varseltrekant{MaybeBoolean::UNSPECIFIED};
     std::string referanseprodukt{};
-    Preparatomtaleavsnitt preparatomtaleavsnitt{};
     Smak smak{};
     Vaksinestandard vaksinestandard{};
 public:
@@ -38,7 +39,6 @@ public:
     void AddReseptgyldighet(const Reseptgyldighet &reseptgyldighet);
     void SetVarseltrekant(MaybeBoolean varseltrekant);
     void SetReferanseprodukt(const std::string &referanseprodukt);
-    void SetPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt);
     void SetSmak(const Smak &smak);
     void SetVaksinestandard(const Vaksinestandard &vaksinestandard);
     void Merge();

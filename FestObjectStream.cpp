@@ -31,6 +31,7 @@
 #include "Fest/XmlPakningskomponent.h"
 #include "Fest/XmlPakningstype.h"
 #include "Fest/XmlRefusjon.h"
+#include "Fest/XmlPakningByttegruppe.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -108,6 +109,8 @@ void FestObjectStream::read() {
     parser.AddHandler("Pakningskomponent", std::make_shared<XmlPakningskomponentHandler>());
     parser.AddHandler("Refusjon", std::make_shared<XmlRefusjonHandler>());
     parser.AddHandler("RefRefusjonsgruppe", std::make_shared<XmlRefRefusjonsgruppeHandler>());
+    parser.AddHandler("PakningByttegruppe", std::make_shared<XmlPakningByttegruppeHandler>());
+    parser.AddHandler("RefByttegruppe", std::make_shared<XmlRefByttegruppeHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

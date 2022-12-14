@@ -28,6 +28,10 @@ void XmlLegemiddelpakning::AddPrisVare(const PrisVare &prisVare) {
     this->prisVare.push_back(prisVare);
 }
 
+void XmlLegemiddelpakning::SetPakningByttegruppe(const PakningByttegruppe &pakningByttegruppe) {
+    this->pakningByttegruppe = pakningByttegruppe;
+}
+
 void XmlLegemiddelpakning::Merge() {
     oppfLegemiddelpakning->SetLegemiddelpakning({{
             GetAtc(),
@@ -46,7 +50,8 @@ void XmlLegemiddelpakning::Merge() {
         markedsforingsinfo,
         ean,
         prisVare,
-        GetRefusjon()
+        GetRefusjon(),
+        pakningByttegruppe
     });
 }
 

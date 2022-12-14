@@ -8,4 +8,4 @@ add_library(decoded OBJECT Status.cpp Status.h OppfLegemiddelMerkevare.cpp OppfL
         LegemiddelCore.cpp LegemiddelCore.h Legemiddelpakning.cpp Legemiddelpakning.h
         OppfLegemiddelpakning.cpp OppfLegemiddelpakning.h Pakningsinfo.cpp Pakningsinfo.h ValueUnit.cpp ValueUnit.h
         Markedsforingsinfo.cpp Markedsforingsinfo.h PrisVare.cpp PrisVare.h Pakningskomponent.cpp Pakningskomponent.h
-        Refusjon.cpp Refusjon.h)
+        Refusjon.cpp Refusjon.h PakningByttegruppe.cpp PakningByttegruppe.h)

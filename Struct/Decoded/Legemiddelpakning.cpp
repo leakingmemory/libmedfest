@@ -31,3 +31,7 @@ std::vector<PrisVare> Legemiddelpakning::GetPrisVare() const {
 Refusjon Legemiddelpakning::GetRefusjon() const {
     return refusjon;
 }
+
+PakningByttegruppe Legemiddelpakning::GetPakningByttegruppe() const {
+    return pakningByttegruppe;
+}

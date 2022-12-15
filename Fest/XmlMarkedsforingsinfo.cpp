@@ -16,8 +16,12 @@ void XmlMarkedsforingsinfo::SetVarenrUtgaende(const std::string &varenrUtgaende)
     this->varenrUtgaende = varenrUtgaende;
 }
 
+void XmlMarkedsforingsinfo::SetMidlUtgattDato(const std::string &midlUtgattDato) {
+    this->midlUtgattDato = midlUtgattDato;
+}
+
 bool XmlMarkedsforingsinfo::Merge() {
-    parent->SetMarkedsforingsinfo({markedsforingsdato, varenrUtgaende});
+    parent->SetMarkedsforingsinfo({markedsforingsdato, varenrUtgaende, midlUtgattDato});
     return true;
 }
 
@@ -47,5 +51,10 @@ bool XmlMarkedsforingsdatoHandler::Merge(std::shared_ptr<XmlMarkedsforingsinfo> 
 
 bool XmlVarenrUtgaendeHandler::Merge(std::shared_ptr<XmlMarkedsforingsinfo> parent, const std::string &content) {
     parent->SetVarenrUtgaende(content);
+    return true;
+}
+
+bool XmlMidlUtgattDatoHandler::Merge(std::shared_ptr <XmlMarkedsforingsinfo> parent, const std::string &content) {
+    parent->SetMidlUtgattDato(content);
     return true;
 }

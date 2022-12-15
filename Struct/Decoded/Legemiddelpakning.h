@@ -29,17 +29,21 @@ private:
     Refusjon refusjon;
     PakningByttegruppe pakningByttegruppe;
     Preparatomtaleavsnitt preparatomtaleavsnitt;
+    bool ikkeKonservering;
 public:
     Legemiddelpakning() : LegemiddelCore(), preparattype(), varenr(), oppbevaring(), pakningsinfo(),
-            markedsforingsinfo(), ean(), prisVare(), refusjon(), pakningByttegruppe(), preparatomtaleavsnitt() {}
+            markedsforingsinfo(), ean(), prisVare(), refusjon(), pakningByttegruppe(), preparatomtaleavsnitt(),
+            ikkeKonservering(false) {}
     Legemiddelpakning(const LegemiddelCore &legemiddelCore, const Preparattype &preparattype, const std::string &varenr,
                       const Oppbevaring &oppbevaring, const std::vector<Pakningsinfo> &pakningsinfo,
                       const Markedsforingsinfo &markedsforingsinfo, const std::string &ean,
                       const std::vector<PrisVare> &prisVare, const Refusjon &refusjon,
-                      const PakningByttegruppe &pakningByttegruppe, const Preparatomtaleavsnitt &preparatomtaleavsnitt) :
+                      const PakningByttegruppe &pakningByttegruppe, const Preparatomtaleavsnitt &preparatomtaleavsnitt,
+                      bool ikkeKonservering) :
             LegemiddelCore(legemiddelCore), preparattype(preparattype), varenr(varenr), oppbevaring(oppbevaring),
             pakningsinfo(pakningsinfo), markedsforingsinfo(markedsforingsinfo), ean(ean), prisVare(prisVare),
-            refusjon(refusjon), pakningByttegruppe(pakningByttegruppe), preparatomtaleavsnitt(preparatomtaleavsnitt) {}
+            refusjon(refusjon), pakningByttegruppe(pakningByttegruppe), preparatomtaleavsnitt(preparatomtaleavsnitt),
+            ikkeKonservering(ikkeKonservering) {}
     [[nodiscard]] Preparattype GetPreparattype() const;
     [[nodiscard]] std::string GetVarenr() const;
     [[nodiscard]] Oppbevaring GetOppbevaring() const;
@@ -50,6 +54,7 @@ public:
     [[nodiscard]] Refusjon GetRefusjon() const;
     [[nodiscard]] PakningByttegruppe GetPakningByttegruppe() const;
     [[nodiscard]] Preparatomtaleavsnitt GetPreparatomtaleavsnitt() const;
+    [[nodiscard]] bool GetIkkeKonservering() const;
 };
 
 #endif //LEGEMFEST_LEGEMIDDELPAKNING_H

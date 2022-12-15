@@ -11,11 +11,15 @@ class Markedsforingsinfo {
 private:
     std::string markedsforingsdato;
     std::string varenrUtgaende;
+    std::string midlUtgattDato;
 public:
-    Markedsforingsinfo() : markedsforingsdato(), varenrUtgaende() {}
-    Markedsforingsinfo(const std::string &markedsforingsdato, const std::string &varenrUtgaende) : markedsforingsdato(markedsforingsdato), varenrUtgaende(varenrUtgaende) {}
+    Markedsforingsinfo() : markedsforingsdato(), varenrUtgaende(), midlUtgattDato() {}
+    Markedsforingsinfo(const std::string &markedsforingsdato, const std::string &varenrUtgaende,
+                       const std::string &midlUtgattDato) :
+            markedsforingsdato(markedsforingsdato), varenrUtgaende(varenrUtgaende), midlUtgattDato(midlUtgattDato) {}
     [[nodiscard]] std::string GetMarkedsforingsdato() const;
     [[nodiscard]] std::string GetVarenrUtgaende() const;
+    [[nodiscard]] std::string GetMidlUtgattDato() const;
 };
 
 

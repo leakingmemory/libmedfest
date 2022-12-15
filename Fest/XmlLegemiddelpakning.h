@@ -29,6 +29,7 @@ private:
     std::string ean{};
     std::vector<PrisVare> prisVare{};
     PakningByttegruppe pakningByttegruppe{};
+    bool ikkeKonservering{false};
 public:
     XmlLegemiddelpakning(std::shared_ptr<XmlOppfLegemiddelpakning> oppfLegemiddelpakning) : oppfLegemiddelpakning(oppfLegemiddelpakning) {}
     std::string GetName() const override;
@@ -38,6 +39,7 @@ public:
     void SetEan(const std::string &ean);
     void AddPrisVare(const PrisVare &prisVare);
     void SetPakningByttegruppe(const PakningByttegruppe &pakningByttegruppe);
+    void SetIkkeKonservering(bool ikkeKonservering);
     void Merge();
 };
 
@@ -62,6 +64,12 @@ public:
 class XmlEanHandler : public XmlContentElementHandler<XmlLegemiddelpakning> {
 public:
     XmlEanHandler() : XmlContentElementHandler<XmlLegemiddelpakning>("Ean") {}
+    bool Merge(std::shared_ptr<XmlLegemiddelpakning> parent, const std::string &content) override;
+};
+
+class XmlIkkeKonserveringHandler : public XmlContentElementHandler<XmlLegemiddelpakning> {
+public:
+    XmlIkkeKonserveringHandler() : XmlContentElementHandler<XmlLegemiddelpakning>("IkkeKonservering") {}
     bool Merge(std::shared_ptr<XmlLegemiddelpakning> parent, const std::string &content) override;
 };
 

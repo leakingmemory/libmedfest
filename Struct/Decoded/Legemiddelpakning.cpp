@@ -43,3 +43,7 @@ PakningByttegruppe Legemiddelpakning::GetPakningByttegruppe() const {
 Preparatomtaleavsnitt Legemiddelpakning::GetPreparatomtaleavsnitt() const {
     return preparatomtaleavsnitt;
 }
+
+bool Legemiddelpakning::GetIkkeKonservering() const {
+    return ikkeKonservering;
+}

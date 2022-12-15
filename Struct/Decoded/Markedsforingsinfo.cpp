@@ -11,3 +11,7 @@ std::string Markedsforingsinfo::GetMarkedsforingsdato() const {
 std::string Markedsforingsinfo::GetVarenrUtgaende() const {
     return varenrUtgaende;
 }
+
+std::string Markedsforingsinfo::GetMidlUtgattDato() const {
+    return midlUtgattDato;
+}

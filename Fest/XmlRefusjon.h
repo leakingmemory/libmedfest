@@ -25,10 +25,12 @@ class XmlRefusjonObject : public XMLObject, public XmlGyldigFraDato {
 private:
     std::shared_ptr<XmlRefusjon> parent;
     std::string ref;
+    std::string forskrivesTilDato;
 public:
     XmlRefusjonObject(std::shared_ptr<XmlRefusjon> parent) : parent(parent) {}
     std::string GetName() const override;
     void SetRefRefusjonsgruppe(const std::string &ref);
+    void SetForskrivesTilDato(const std::string &forskrivesTilDato);
     bool Merge();
 };
 
@@ -41,6 +43,12 @@ public:
 class XmlRefRefusjonsgruppeHandler : public XmlContentElementHandler<XmlRefusjonObject> {
 public:
     XmlRefRefusjonsgruppeHandler() : XmlContentElementHandler<XmlRefusjonObject>("RefRefusjonsgruppe") {}
+    bool Merge(std::shared_ptr<XmlRefusjonObject> parent, const std::string &content) override;
+};
+
+class XmlForskrivesTilDatoHandler : public XmlContentElementHandler<XmlRefusjonObject> {
+public:
+    XmlForskrivesTilDatoHandler() : XmlContentElementHandler<XmlRefusjonObject>("ForskrivesTilDato") {}
     bool Merge(std::shared_ptr<XmlRefusjonObject> parent, const std::string &content) override;
 };
 

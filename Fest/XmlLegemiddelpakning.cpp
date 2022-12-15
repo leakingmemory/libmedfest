@@ -32,6 +32,10 @@ void XmlLegemiddelpakning::SetPakningByttegruppe(const PakningByttegruppe &pakni
     this->pakningByttegruppe = pakningByttegruppe;
 }
 
+void XmlLegemiddelpakning::SetIkkeKonservering(bool ikkeKonservering) {
+    this->ikkeKonservering = ikkeKonservering;
+}
+
 void XmlLegemiddelpakning::Merge() {
     oppfLegemiddelpakning->SetLegemiddelpakning({{
             GetAtc(),
@@ -52,7 +56,8 @@ void XmlLegemiddelpakning::Merge() {
         prisVare,
         GetRefusjon(),
         pakningByttegruppe,
-        GetPreparatomtaleavsnitt()
+        GetPreparatomtaleavsnitt(),
+        ikkeKonservering
     });
 }
 
@@ -89,4 +94,16 @@ bool XmlOppbevaringHandler::Merge(std::shared_ptr<XmlType> obj) {
 bool XmlEanHandler::Merge(std::shared_ptr<XmlLegemiddelpakning> parent, const std::string &content) {
     parent->SetEan(content);
     return true;
+}
+
+bool XmlIkkeKonserveringHandler::Merge(std::shared_ptr<XmlLegemiddelpakning> parent, const std::string &content) {
+    if (content == "true") {
+        parent->SetIkkeKonservering(true);
+        return true;
+    } else if (content == "false") {
+        parent->SetIkkeKonservering(false);
+        return true;
+    }
+    std::cerr << "Error: IkkeKonservering: Invalid value: " << content << "\n";
+    return false;
 }

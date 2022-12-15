@@ -111,6 +111,8 @@ void FestObjectStream::read() {
     parser.AddHandler("RefRefusjonsgruppe", std::make_shared<XmlRefRefusjonsgruppeHandler>());
     parser.AddHandler("PakningByttegruppe", std::make_shared<XmlPakningByttegruppeHandler>());
     parser.AddHandler("RefByttegruppe", std::make_shared<XmlRefByttegruppeHandler>());
+    parser.AddHandler("VarenrUtgaende", std::make_shared<XmlVarenrUtgaendeHandler>());
+    parser.AddHandler("GyldigTilDato", std::make_shared<XmlGyldigTilDatoHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

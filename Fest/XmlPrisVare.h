@@ -8,8 +8,9 @@
 #include "XMLObject.h"
 #include "XmlLegemiddelpakning.h"
 #include "XmlGyldigFraDato.h"
+#include "XmlGyldigTilDato.h"
 
-class XmlPrisVare : public XMLObject, public XmlGyldigFraDato {
+class XmlPrisVare : public XMLObject, public XmlGyldigFraDato, public XmlGyldigTilDato {
     std::shared_ptr<XmlLegemiddelpakning> parent;
     ValueWithCodeSet type{};
     Pris pris{};

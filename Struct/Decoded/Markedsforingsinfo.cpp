@@ -7,3 +7,7 @@
 std::string Markedsforingsinfo::GetMarkedsforingsdato() const {
     return markedsforingsdato;
 }
+
+std::string Markedsforingsinfo::GetVarenrUtgaende() const {
+    return varenrUtgaende;
+}

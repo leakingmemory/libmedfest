@@ -34,10 +34,6 @@ void XmlPakningsinfoObject::SetStatistikkfaktor(double statistikkfaktor) {
     this->statistikkfaktor = statistikkfaktor;
 }
 
-void XmlPakningsinfoObject::SetAntall(int antall) {
-    this->antall = antall;
-}
-
 std::shared_ptr<XmlPakningsinfo> XmlPakningsinfoObject::GetParent() const {
     return parent;
 }
@@ -56,7 +52,7 @@ std::vector<Pakningsinfo> XmlPakningsinfo::GetPakningsinfo() const {
             continue;
         }
         auto refMerkevare = refMerkevarer[0];
-        pakningsinfo.emplace_back(refMerkevare, pi->pakningsstr, pi->enhetPakning, pi->GetPakningstype(), pi->mengde, pi->ddd, pi->pakningskomponent, pi->statistikkfaktor, pi->antall);
+        pakningsinfo.emplace_back(refMerkevare, pi->pakningsstr, pi->enhetPakning, pi->GetPakningstype(), pi->mengde, pi->ddd, pi->pakningskomponent, pi->statistikkfaktor, pi->GetAntall());
     }
     return pakningsinfo;
 }
@@ -104,21 +100,5 @@ bool XmlStatistikkfaktorHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> pa
         return false;
     }
     parent->SetStatistikkfaktor(val);
-    return true;
-}
-
-bool XmlAntallHandler::Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) {
-    char *err;
-    double lval = strtol(content.c_str(), &err, 10);
-    if (err == nullptr || *err != '\0') {
-        std::cerr << "Error: Antall: Invalid value (int): " << content << "\n";
-        return false;
-    }
-    int val = (int) lval;
-    if (((long) val) != lval) {
-        std::cerr << "Error: Antall: Invalid value (int): " << content << " (overflow)\n";
-        return false;
-    }
-    parent->SetAntall(val);
     return true;
 }

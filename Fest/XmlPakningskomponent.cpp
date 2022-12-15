@@ -14,7 +14,7 @@ bool XmlPakningskomponent::Mengde(const ValueUnit &mengde) {
 }
 
 bool XmlPakningskomponent::Merge() {
-    parent->AddPakningskomponent({GetPakningstype(), mengde});
+    parent->AddPakningskomponent({GetPakningstype(), mengde, GetAntall()});
     return true;
 }
 

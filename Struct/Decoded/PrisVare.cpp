@@ -15,3 +15,7 @@ Pris PrisVare::GetPris() const {
 std::string PrisVare::GetGyldigFraDato() const {
     return gyldigFraDato;
 }
+
+std::string PrisVare::GetGyldigTilDato() const {
+    return gyldigTilDato;
+}

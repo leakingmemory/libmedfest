@@ -17,7 +17,7 @@ void XmlPrisVare::SetPris(const Pris &pris) {
 }
 
 bool XmlPrisVare::Merge() {
-    parent->AddPrisVare({type, pris, GetGyldigFraDato()});
+    parent->AddPrisVare({type, pris, GetGyldigFraDato(), GetGyldigTilDato()});
     return true;
 }
 

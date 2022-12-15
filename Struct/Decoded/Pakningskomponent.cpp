@@ -11,3 +11,7 @@ Pakningstype Pakningskomponent::GetPakningstype() const {
 ValueUnit Pakningskomponent::GetMengde() const {
     return mengde;
 }
+
+int Pakningskomponent::GetAntall() const {
+    return antall;
+}

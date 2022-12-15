@@ -14,13 +14,16 @@
 #include "XmlPakningstype.h"
 #include "XmlMengde.h"
 #include "XmlSortering.h"
+#include "XmlAntall.h"
 #include <memory>
 #include <map>
 #include <vector>
 
 class XmlPakningsinfo;
 
-class XmlPakningsinfoObject : public XMLObject, public XmlRefLegemiddelMerkevare, public XmlPakningstype, public XmlMengde, public XmlSortering {
+class XmlPakningsinfoObject :
+        public XMLObject, public XmlRefLegemiddelMerkevare, public XmlPakningstype, public XmlMengde,
+        public XmlSortering, public XmlAntall {
     friend XmlPakningsinfo;
 private:
     std::shared_ptr<XmlPakningsinfo> parent;
@@ -31,7 +34,6 @@ private:
     DDD ddd{};
     std::vector<Pakningskomponent> pakningskomponent{};
     double statistikkfaktor{0.0};
-    int antall{0};
 public:
     XmlPakningsinfoObject(std::shared_ptr<XmlPakningsinfo> parent) : parent(parent) {}
     std::string GetName() const override;
@@ -41,7 +43,6 @@ public:
     void SetDDD(const DDD &ddd);
     void AddPakningskomponent(const Pakningskomponent &pakningskomponent);
     void SetStatistikkfaktor(double statistikkfaktor);
-    void SetAntall(int antall);
     std::shared_ptr<XmlPakningsinfo> GetParent() const;
 };
 
@@ -85,12 +86,6 @@ public:
 class XmlStatistikkfaktorHandler : public XmlContentElementHandler<XmlPakningsinfoObject> {
 public:
     XmlStatistikkfaktorHandler() : XmlContentElementHandler<XmlPakningsinfoObject>("Statistikkfaktor") {}
-    bool Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) override;
-};
-
-class XmlAntallHandler : public XmlContentElementHandler<XmlPakningsinfoObject> {
-public:
-    XmlAntallHandler() : XmlContentElementHandler<XmlPakningsinfoObject>("Antall") {}
     bool Merge(std::shared_ptr<XmlPakningsinfoObject> parent, const std::string &content) override;
 };
 

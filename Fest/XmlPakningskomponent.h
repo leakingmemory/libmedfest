@@ -9,7 +9,7 @@
 #include "XmlPakningsinfo.h"
 #include "XmlMengde.h"
 
-class XmlPakningskomponent : public XMLObject, public XmlPakningstype, public XmlMengde {
+class XmlPakningskomponent : public XMLObject, public XmlPakningstype, public XmlMengde, public XmlAntall {
 private:
     std::shared_ptr<XmlPakningsinfoObject> parent;
     ValueUnit mengde{};

@@ -12,11 +12,14 @@ class Pakningskomponent {
 private:
     Pakningstype pakningstype;
     ValueUnit mengde;
+    int antall;
 public:
-    Pakningskomponent() : pakningstype(), mengde() {}
-    Pakningskomponent(const Pakningstype &pakningstype, const ValueUnit &mengde) : pakningstype(pakningstype), mengde(mengde) {}
+    Pakningskomponent() : pakningstype(), mengde(), antall(0) {}
+    Pakningskomponent(const Pakningstype &pakningstype, const ValueUnit &mengde, int antall) :
+            pakningstype(pakningstype), mengde(mengde), antall(antall) {}
     [[nodiscard]] Pakningstype GetPakningstype() const;
     [[nodiscard]] ValueUnit GetMengde() const;
+    [[nodiscard]] int GetAntall() const;
 };
 
 

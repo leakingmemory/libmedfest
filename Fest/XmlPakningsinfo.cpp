@@ -52,7 +52,7 @@ std::vector<Pakningsinfo> XmlPakningsinfo::GetPakningsinfo() const {
             continue;
         }
         auto refMerkevare = refMerkevarer[0];
-        pakningsinfo.emplace_back(refMerkevare, pi->pakningsstr, pi->enhetPakning, pi->GetPakningstype(), pi->mengde, pi->ddd, pi->pakningskomponent, pi->statistikkfaktor, pi->GetAntall());
+        pakningsinfo.emplace_back(refMerkevare, pi->pakningsstr, pi->enhetPakning, pi->GetPakningstype(), pi->mengde, pi->ddd, pi->pakningskomponent, pi->statistikkfaktor, pi->GetAntall(), pi->GetMultippel());
     }
     return pakningsinfo;
 }

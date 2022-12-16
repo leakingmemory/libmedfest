@@ -26,11 +26,13 @@ private:
     std::shared_ptr<XmlRefusjon> parent;
     std::string ref;
     std::string forskrivesTilDato;
+    std::string utleveresTilDato;
 public:
     XmlRefusjonObject(std::shared_ptr<XmlRefusjon> parent) : parent(parent) {}
     std::string GetName() const override;
     void SetRefRefusjonsgruppe(const std::string &ref);
     void SetForskrivesTilDato(const std::string &forskrivesTilDato);
+    void SetUtleveresTilDato(const std::string &utleveresTilDato);
     bool Merge();
 };
 
@@ -52,5 +54,10 @@ public:
     bool Merge(std::shared_ptr<XmlRefusjonObject> parent, const std::string &content) override;
 };
 
+class XmlUtleveresTilDatoHandler : public XmlContentElementHandler<XmlRefusjonObject> {
+public:
+    XmlUtleveresTilDatoHandler() : XmlContentElementHandler<XmlRefusjonObject>("UtleveresTilDato") {}
+    bool Merge(std::shared_ptr<XmlRefusjonObject> parent, const std::string &content) override;
+};
 
 #endif //LEGEMFEST_XMLREFUSJON_H

@@ -23,15 +23,16 @@ private:
     std::vector<Pakningskomponent> pakningskomponent;
     double statistikkfaktor;
     int antall;
+    int multippel;
 public:
     Pakningsinfo() : merkevareId(), pakningsstr(), enhetPakning(), pakningstype(), mengde(), ddd(), pakningskomponent(),
-            statistikkfaktor(0.0), antall(0) {}
+            statistikkfaktor(0.0), antall(0), multippel(0) {}
     Pakningsinfo(const std::string &merkevareId, const std::string &pakningsstr, const EnhetPakning &enhetPakning,
                  const Pakningstype &pakningstype, const std::string &mengde, const DDD &ddd,
-                 std::vector<Pakningskomponent> pakningskomponent, double statistikkfaktor, int antall) :
+                 std::vector<Pakningskomponent> pakningskomponent, double statistikkfaktor, int antall, int multippel) :
             merkevareId(merkevareId), pakningsstr(pakningsstr), enhetPakning(enhetPakning), pakningstype(pakningstype),
             mengde(mengde), ddd(ddd), pakningskomponent(pakningskomponent), statistikkfaktor(statistikkfaktor),
-            antall(antall) {}
+            antall(antall), multippel(multippel) {}
     [[nodiscard]] std::string GetMerkevareId() const;
     [[nodiscard]] std::string GetPakningsstr() const;
     [[nodiscard]] EnhetPakning GetEnhetPakning() const;
@@ -41,6 +42,7 @@ public:
     [[nodiscard]] std::vector<Pakningskomponent> GetPakningskomponent() const;
     double GetStatistikkfaktor() const;
     int GetAntall() const;
+    int GetMultippel() const;
 
 };
 

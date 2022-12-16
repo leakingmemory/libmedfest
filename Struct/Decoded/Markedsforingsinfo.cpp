@@ -15,3 +15,7 @@ std::string Markedsforingsinfo::GetVarenrUtgaende() const {
 std::string Markedsforingsinfo::GetMidlUtgattDato() const {
     return midlUtgattDato;
 }
+
+std::string Markedsforingsinfo::GetAvregDato() const {
+    return avregDato;
+}

@@ -12,14 +12,17 @@ private:
     std::string markedsforingsdato;
     std::string varenrUtgaende;
     std::string midlUtgattDato;
+    std::string avregDato;
 public:
-    Markedsforingsinfo() : markedsforingsdato(), varenrUtgaende(), midlUtgattDato() {}
+    Markedsforingsinfo() : markedsforingsdato(), varenrUtgaende(), midlUtgattDato(), avregDato() {}
     Markedsforingsinfo(const std::string &markedsforingsdato, const std::string &varenrUtgaende,
-                       const std::string &midlUtgattDato) :
-            markedsforingsdato(markedsforingsdato), varenrUtgaende(varenrUtgaende), midlUtgattDato(midlUtgattDato) {}
+                       const std::string &midlUtgattDato, const std::string &avregDato) :
+            markedsforingsdato(markedsforingsdato), varenrUtgaende(varenrUtgaende), midlUtgattDato(midlUtgattDato),
+            avregDato(avregDato) {}
     [[nodiscard]] std::string GetMarkedsforingsdato() const;
     [[nodiscard]] std::string GetVarenrUtgaende() const;
     [[nodiscard]] std::string GetMidlUtgattDato() const;
+    [[nodiscard]] std::string GetAvregDato() const;
 };
 
 

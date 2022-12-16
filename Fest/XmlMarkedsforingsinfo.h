@@ -14,12 +14,14 @@ private:
     std::string markedsforingsdato{};
     std::string varenrUtgaende{};
     std::string midlUtgattDato{};
+    std::string avregDato;
 public:
     XmlMarkedsforingsinfo(std::shared_ptr<XmlLegemiddelpakning> parent) : parent(parent) {}
     std::string GetName() const override;
     void SetMarkedsforingsdato(const std::string &markedsforingsdato);
     void SetVarenrUtgaende(const std::string &varenrUtgaende);
     void SetMidlUtgattDato(const std::string &midlUtgattDato);
+    void SetAvregDato(const std::string &avregDato);
     bool Merge();
 };
 
@@ -44,6 +46,12 @@ public:
 class XmlMidlUtgattDatoHandler : public XmlContentElementHandler<XmlMarkedsforingsinfo> {
 public:
     XmlMidlUtgattDatoHandler() : XmlContentElementHandler<XmlMarkedsforingsinfo>("MidlUtgattDato") {}
+    bool Merge(std::shared_ptr<XmlMarkedsforingsinfo> parent, const std::string &content) override;
+};
+
+class XmlAvregDatoHandler : public XmlContentElementHandler<XmlMarkedsforingsinfo> {
+public:
+    XmlAvregDatoHandler() : XmlContentElementHandler<XmlMarkedsforingsinfo>("AvregDato") {}
     bool Merge(std::shared_ptr<XmlMarkedsforingsinfo> parent, const std::string &content) override;
 };
 

@@ -25,8 +25,12 @@ void XmlRefusjonObject::SetForskrivesTilDato(const std::string &forskrivesTilDat
     this->forskrivesTilDato = forskrivesTilDato;
 }
 
+void XmlRefusjonObject::SetUtleveresTilDato(const std::string &utleveresTilDato) {
+    this->utleveresTilDato = utleveresTilDato;
+}
+
 bool XmlRefusjonObject::Merge() {
-    parent->SetRefusjon({ref, GetGyldigFraDato(), forskrivesTilDato});
+    parent->SetRefusjon({ref, GetGyldigFraDato(), forskrivesTilDato, utleveresTilDato});
     return true;
 }
 
@@ -55,5 +59,10 @@ bool XmlRefRefusjonsgruppeHandler::Merge(std::shared_ptr<XmlRefusjonObject> pare
 
 bool XmlForskrivesTilDatoHandler::Merge(std::shared_ptr<XmlRefusjonObject> parent, const std::string &content) {
     parent->SetForskrivesTilDato(content);
+    return true;
+}
+
+bool XmlUtleveresTilDatoHandler::Merge(std::shared_ptr<XmlRefusjonObject> parent, const std::string &content) {
+    parent->SetUtleveresTilDato(content);
     return true;
 }

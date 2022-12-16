@@ -15,3 +15,7 @@ std::string Refusjon::GetGyldigFraDato() const {
 std::string Refusjon::GetForskrivesTilDato() const {
     return forskrivesTilDato;
 }
+
+std::string Refusjon::GetUtleveresTilDato() const {
+    return utleveresTilDato;
+}

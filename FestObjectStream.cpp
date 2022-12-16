@@ -116,6 +116,9 @@ void FestObjectStream::read() {
     parser.AddHandler("IkkeKonservering", std::make_shared<XmlIkkeKonserveringHandler>());
     parser.AddHandler("MidlUtgattDato", std::make_shared<XmlMidlUtgattDatoHandler>());
     parser.AddHandler("ForskrivesTilDato", std::make_shared<XmlForskrivesTilDatoHandler>());
+    parser.AddHandler("UtleveresTilDato", std::make_shared<XmlUtleveresTilDatoHandler>());
+    parser.AddHandler("AvregDato", std::make_shared<XmlAvregDatoHandler>());
+    parser.AddHandler("Multippel", std::make_shared<XmlMultippelHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

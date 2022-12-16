@@ -15,6 +15,7 @@
 #include "XmlMengde.h"
 #include "XmlSortering.h"
 #include "XmlAntall.h"
+#include "XmlMultippel.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -23,7 +24,7 @@ class XmlPakningsinfo;
 
 class XmlPakningsinfoObject :
         public XMLObject, public XmlRefLegemiddelMerkevare, public XmlPakningstype, public XmlMengde,
-        public XmlSortering, public XmlAntall {
+        public XmlSortering, public XmlAntall, public XmlMultippel {
     friend XmlPakningsinfo;
 private:
     std::shared_ptr<XmlPakningsinfo> parent;

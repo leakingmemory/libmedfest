@@ -32,6 +32,8 @@
 #include "Fest/XmlPakningstype.h"
 #include "Fest/XmlRefusjon.h"
 #include "Fest/XmlPakningByttegruppe.h"
+#include "Fest/KatVirkestoff.h"
+#include "Fest/XmlVirkestoff.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -119,6 +121,11 @@ void FestObjectStream::read() {
     parser.AddHandler("UtleveresTilDato", std::make_shared<XmlUtleveresTilDatoHandler>());
     parser.AddHandler("AvregDato", std::make_shared<XmlAvregDatoHandler>());
     parser.AddHandler("Multippel", std::make_shared<XmlMultippelHandler>());
+    parser.AddHandler("KatVirkestoff", std::make_shared<KatVirkestoffHandler>());
+    parser.AddHandler("OppfVirkestoff", std::make_shared<XmlOppfVirkestoffHandler>());
+    parser.AddHandler("Virkestoff", std::make_shared<XmlVirkestoffHandler>());
+    parser.AddHandler("Navn", std::make_shared<XmlNavnHandler>());
+    parser.AddHandler("NavnEngelsk", std::make_shared<XmlNavnEngelskHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

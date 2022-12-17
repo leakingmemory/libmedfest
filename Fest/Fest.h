@@ -9,6 +9,8 @@
 #include "../Struct/Decoded/OppfLegemiddelpakning.h"
 #include "XMLObject.h"
 #include "KatLegemiddelpakning.h"
+#include "../Struct/Decoded/OppfVirkestoff.h"
+#include "KatVirkestoff.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -33,6 +35,7 @@ private:
     std::string hentetDato{};
     std::vector<OppfLegemiddelMerkevare> oppfLegemiddelMerkevare{};
     std::vector<OppfLegemiddelpakning> oppfLegemiddelpakning{};
+    std::vector<OppfVirkestoff> oppfVirkestoff{};
 public:
     std::string GetName() const override;
     void SetHentetDato(const std::string &hentetDato) {
@@ -43,6 +46,7 @@ public:
     }
     void Add(const XmlOppfLegemiddelMerkevare &);
     void Add(const XmlOppfLegemiddelpakning &);
+    void Add(const XmlOppfVirkestoff &);
 };
 
 class FestHandler {

@@ -32,6 +32,10 @@ void Fest::Add(const XmlOppfLegemiddelpakning &xmlOppf) {
     oppfLegemiddelpakning.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetLegemiddelpakning());
 }
 
+void Fest::Add(const XmlOppfVirkestoff &xmlOppf) {
+    oppfVirkestoff.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetVirkestoff());
+}
+
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
     return std::make_shared<Fest>();
 }

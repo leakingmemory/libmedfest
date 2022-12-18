@@ -35,6 +35,9 @@
 #include "Fest/KatVirkestoff.h"
 #include "Fest/XmlVirkestoff.h"
 #include "Fest/XmlVirkestoffMedStyrke.h"
+#include "Fest/KatLegemiddelVirkestoff.h"
+#include "Fest/XmlLegemiddelVirkestoff.h"
+#include "Fest/XmlRefPakning.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -135,6 +138,11 @@ void FestObjectStream::read() {
     parser.AddHandler("AlternativStyrkeNevner", std::make_shared<XmlAlternativStyrkeNevnerHandler>());
     parser.AddHandler("AtcKombipreparat", std::make_shared<XmlAtcKombipreparatHandler>());
     parser.AddHandler("StyrkeOvreVerdi", std::make_shared<XmlStyrkeOvreVerdiHandler>());
+    parser.AddHandler("KatLegemiddelVirkestoff", std::make_shared<KatLegemiddelVirkestoffHandler>());
+    parser.AddHandler("OppfLegemiddelVirkestoff", std::make_shared<OppfLegemiddelVirkestoffHandler>());
+    parser.AddHandler("LegemiddelVirkestoff", std::make_shared<XmlLegemiddelVirkestoffHandler>());
+    parser.AddHandler("RefPakning", std::make_shared<XmlRefPakningHandler>());
+    parser.AddHandler("ForskrivningsenhetResept", std::make_shared<XmlForskrivningsenhetReseptHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

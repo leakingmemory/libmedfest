@@ -9,4 +9,6 @@ add_library(decoded OBJECT Status.cpp Status.h OppfLegemiddelMerkevare.cpp OppfL
         OppfLegemiddelpakning.cpp OppfLegemiddelpakning.h Pakningsinfo.cpp Pakningsinfo.h ValueUnit.cpp ValueUnit.h
         Markedsforingsinfo.cpp Markedsforingsinfo.h PrisVare.cpp PrisVare.h Pakningskomponent.cpp Pakningskomponent.h
         Refusjon.cpp Refusjon.h PakningByttegruppe.cpp PakningByttegruppe.h OppfVirkestoff.cpp OppfVirkestoff.h
-        Virkestoff.cpp Virkestoff.h)
+        Virkestoff.cpp Virkestoff.h Styrke.cpp Styrke.h Styrkenevner.cpp Styrkenevner.h
+        Styrkeoperator.cpp Styrkeoperator.h VirkestoffMedStyrke.cpp VirkestoffMedStyrke.h
+        OppfVirkestoffMedStyrke.cpp OppfVirkestoffMedStyrke.h)

@@ -32,8 +32,25 @@ void Fest::Add(const XmlOppfLegemiddelpakning &xmlOppf) {
     oppfLegemiddelpakning.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetLegemiddelpakning());
 }
 
-void Fest::Add(const XmlOppfVirkestoff &xmlOppf) {
-    oppfVirkestoff.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetVirkestoff());
+bool Fest::Add(const XmlOppfVirkestoff &xmlOppf) {
+    auto virkestoff = xmlOppf.GetVirkestoff();
+    auto virkestoffMedStyrke = xmlOppf.GetVirkestoffMedStyrke();
+    auto hasVirkestoff = !(virkestoff.GetId().empty());
+    auto hasVirkestoffMedStyrke = !(virkestoffMedStyrke.GetId().empty());
+    if (hasVirkestoff && hasVirkestoffMedStyrke) {
+        std::cerr << "Error: Has both OppfVirkestoff virkestoff and virkestoff med styrke\n";
+        return false;
+    }
+    if (!hasVirkestoff && !hasVirkestoffMedStyrke) {
+        std::cerr << "Error: OppfVirkestoff has none of virkestoff and virkestoff med styrke\n";
+        return false;
+    }
+    if (hasVirkestoff) {
+        oppfVirkestoff.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), virkestoff);
+    } else if (hasVirkestoffMedStyrke) {
+        oppfVirkestoffMedStyrke.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), virkestoffMedStyrke);
+    }
+    return true;
 }
 
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {

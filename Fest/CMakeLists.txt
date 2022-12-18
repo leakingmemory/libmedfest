@@ -18,4 +18,4 @@ add_library(fest OBJECT Fest.cpp Fest.h FestIdObject.cpp FestIdObject.h
         XmlGyldigFraDato.cpp XmlGyldigFraDato.h XmlPakningByttegruppe.cpp XmlPakningByttegruppe.h
         XmlGyldigTilDato.cpp XmlGyldigTilDato.h XmlAntall.cpp XmlAntall.h XmlMultippel.cpp XmlMultippel.h
         KatVirkestoff.cpp KatVirkestoff.h XmlVirkestoff.cpp XmlVirkestoff.h XmlNavn.cpp XmlNavn.h
-        XmlNavnEngelsk.cpp XmlNavnEngelsk.h)
+        XmlNavnEngelsk.cpp XmlNavnEngelsk.h XmlVirkestoffMedStyrke.cpp XmlVirkestoffMedStyrke.h)

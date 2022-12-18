@@ -10,6 +10,7 @@
 #include "TidspunktObject.h"
 #include "StatusObject.h"
 #include "../Struct/Decoded/Virkestoff.h"
+#include "../Struct/Decoded/VirkestoffMedStyrke.h"
 #include <memory>
 #include <map>
 
@@ -22,7 +23,7 @@ private:
 public:
     KatVirkestoff(std::shared_ptr<Fest> fest) : fest(fest) {}
     std::string GetName() const override;
-    void Merge(XmlOppfVirkestoff &);
+    [[nodiscard]] bool Merge(XmlOppfVirkestoff &);
 };
 
 class KatVirkestoffHandler {
@@ -35,12 +36,15 @@ class XmlOppfVirkestoff : public XMLObject, public FestIdObject, public Tidspunk
 private:
     std::shared_ptr<KatVirkestoff> kat;
     Virkestoff virkestoff{};
+    VirkestoffMedStyrke virkestoffMedStyrke{};
 public:
     XmlOppfVirkestoff(std::shared_ptr<KatVirkestoff> kat) : kat(kat) {}
     std::string GetName() const override;
     void SetVirkestoff(const Virkestoff &virkestoff);
     [[nodiscard]] Virkestoff GetVirkestoff() const;
-    void Merge();
+    void SetVirkestoffMedStyrke(const VirkestoffMedStyrke &virkestoffMedStyrke);
+    [[nodiscard]] VirkestoffMedStyrke GetVirkestoffMedStyrke() const;
+    [[nodiscard]] bool Merge();
 };
 
 class XmlOppfVirkestoffHandler {

@@ -10,8 +10,8 @@ std::string KatVirkestoff::GetName() const {
     return "KatVirkestoff";
 }
 
-void KatVirkestoff::Merge(XmlOppfVirkestoff &oppf) {
-    fest->Add(oppf);
+bool KatVirkestoff::Merge(XmlOppfVirkestoff &oppf) {
+    return fest->Add(oppf);
 }
 
 std::shared_ptr<XMLObject> KatVirkestoffHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
@@ -39,8 +39,16 @@ Virkestoff XmlOppfVirkestoff::GetVirkestoff() const {
     return virkestoff;
 }
 
-void XmlOppfVirkestoff::Merge() {
-    kat->Merge(*this);
+void XmlOppfVirkestoff::SetVirkestoffMedStyrke(const VirkestoffMedStyrke &virkestoffMedStyrke) {
+    this->virkestoffMedStyrke = virkestoffMedStyrke;
+}
+
+VirkestoffMedStyrke XmlOppfVirkestoff::GetVirkestoffMedStyrke() const {
+    return virkestoffMedStyrke;
+}
+
+bool XmlOppfVirkestoff::Merge() {
+    return kat->Merge(*this);
 }
 
 std::shared_ptr<XMLObject> XmlOppfVirkestoffHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -59,6 +67,5 @@ bool XmlOppfVirkestoffHandler::EndElement(const std::shared_ptr<XMLObject> &obj)
         std::cerr << "Error: End element, not for the OppfVirkestoff\n";
         return false;
     }
-    oppf->Merge();
-    return true;
+    return oppf->Merge();
 }

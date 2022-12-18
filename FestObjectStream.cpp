@@ -34,6 +34,7 @@
 #include "Fest/XmlPakningByttegruppe.h"
 #include "Fest/KatVirkestoff.h"
 #include "Fest/XmlVirkestoff.h"
+#include "Fest/XmlVirkestoffMedStyrke.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -126,6 +127,14 @@ void FestObjectStream::read() {
     parser.AddHandler("Virkestoff", std::make_shared<XmlVirkestoffHandler>());
     parser.AddHandler("Navn", std::make_shared<XmlNavnHandler>());
     parser.AddHandler("NavnEngelsk", std::make_shared<XmlNavnEngelskHandler>());
+    parser.AddHandler("VirkestoffMedStyrke", std::make_shared<XmlVirkestoffMedStyrkeHandler>());
+    parser.AddHandler("Styrke", std::make_shared<XmlStyrkeHandler>());
+    parser.AddHandler("Styrkeoperator", std::make_shared<XmlStyrkeoperatorHandler>());
+    parser.AddHandler("StyrkeNevner", std::make_shared<XmlStyrkeNevnerHandler>());
+    parser.AddHandler("AlternativStyrke", std::make_shared<XmlAlternativStyrkeHandler>());
+    parser.AddHandler("AlternativStyrkeNevner", std::make_shared<XmlAlternativStyrkeNevnerHandler>());
+    parser.AddHandler("AtcKombipreparat", std::make_shared<XmlAtcKombipreparatHandler>());
+    parser.AddHandler("StyrkeOvreVerdi", std::make_shared<XmlStyrkeOvreVerdiHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

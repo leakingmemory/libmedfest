@@ -39,6 +39,7 @@ libzip_file::libzip_file(libzip_file &&mv) : archive(mv.archive), file(mv.file) 
 libzip_file &libzip_file::operator=(libzip_file &&mv) {
     libzip_file tmp{std::move(mv)};
     swap(*this, tmp);
+    return *this;
 }
 
 int libzip_file::read(void *buf, int nbytes) {

@@ -4,14 +4,18 @@
 
 #include "OppfHandelsvare.h"
 
-std::string OppfHandelsvare::GetId() {
+std::string OppfHandelsvare::GetId() const {
     return id;
 }
 
-std::string OppfHandelsvare::GetTidspunkt() {
+std::string OppfHandelsvare::GetTidspunkt() const {
     return tidspunkt;
 }
 
-Status OppfHandelsvare::GetStatus() {
+Status OppfHandelsvare::GetStatus() const {
     return status;
+}
+
+MedForbrMatr OppfHandelsvare::GetMedForbrMatr() const {
+    return medForbrMatr;
 }

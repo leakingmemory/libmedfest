@@ -7,6 +7,7 @@
 
 #include "XMLObject.h"
 #include "Fest.h"
+#include "../Struct/Decoded/MedForbrMatr.h"
 
 class XmlOppfHandelsvare;
 
@@ -28,9 +29,12 @@ public:
 class XmlOppfHandelsvare : public XMLObject, public FestIdObject, public TidspunktObject, public StatusObject {
 private:
     std::shared_ptr<KatHandelsvare> kat;
+    MedForbrMatr medForbrMatr{};
 public:
     XmlOppfHandelsvare(std::shared_ptr<KatHandelsvare> kat) : kat(kat) {}
     std::string GetName() const override;
+    void SetMedForbrMatr(const MedForbrMatr &medForbrMatr);
+    [[nodiscard]] MedForbrMatr GetMedForbrMatr() const;
     void Merge();
 };
 

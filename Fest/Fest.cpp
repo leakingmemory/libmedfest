@@ -5,6 +5,7 @@
 #include "Fest.h"
 #include "KatLegemiddelMerkevare.h"
 #include "KatLegemiddelVirkestoff.h"
+#include "KatHandelsvare.h"
 #include <iostream>
 #include <map>
 
@@ -56,6 +57,10 @@ bool Fest::Add(const XmlOppfVirkestoff &xmlOppf) {
 
 void Fest::Add(const XmlOppfLegemiddelVirkestoff &xmlOppf) {
     oppfLegemiddelVirkestoff.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetLegemiddelVirkestoff());
+}
+
+void Fest::Add(const XmlOppfHandelsvare &xmlOppf) {
+    oppfHandelsvare.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetMedForbrMatr());
 }
 
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {

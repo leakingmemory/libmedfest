@@ -10,7 +10,7 @@ std::string KatHandelsvare::GetName() const {
 }
 
 void KatHandelsvare::Merge(const XmlOppfHandelsvare &oppf) {
-
+    fest->Add(oppf);
 }
 
 std::shared_ptr<XMLObject> KatHandelsvareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -29,6 +29,14 @@ bool KatHandelsvareHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
 
 std::string XmlOppfHandelsvare::GetName() const {
     return "OppfHandelsvare";
+}
+
+void XmlOppfHandelsvare::SetMedForbrMatr(const MedForbrMatr &medForbrMatr) {
+    this->medForbrMatr = medForbrMatr;
+}
+
+MedForbrMatr XmlOppfHandelsvare::GetMedForbrMatr() const {
+    return medForbrMatr;
 }
 
 void XmlOppfHandelsvare::Merge() {

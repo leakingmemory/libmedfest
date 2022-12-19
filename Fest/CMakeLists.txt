@@ -20,4 +20,4 @@ add_library(fest OBJECT Fest.cpp Fest.h FestIdObject.cpp FestIdObject.h
         KatVirkestoff.cpp KatVirkestoff.h XmlVirkestoff.cpp XmlVirkestoff.h XmlNavn.cpp XmlNavn.h
         XmlNavnEngelsk.cpp XmlNavnEngelsk.h XmlVirkestoffMedStyrke.cpp XmlVirkestoffMedStyrke.h
         KatLegemiddelVirkestoff.cpp KatLegemiddelVirkestoff.h XmlLegemiddelVirkestoff.cpp XmlLegemiddelVirkestoff.h
-        XmlRefPakning.cpp XmlRefPakning.h KatHandelsvare.cpp KatHandelsvare.h)
+        XmlRefPakning.cpp XmlRefPakning.h KatHandelsvare.cpp KatHandelsvare.h XmlMedForbrMatr.cpp XmlMedForbrMatr.h)

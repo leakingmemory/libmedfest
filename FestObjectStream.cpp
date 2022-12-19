@@ -39,6 +39,7 @@
 #include "Fest/XmlLegemiddelVirkestoff.h"
 #include "Fest/XmlRefPakning.h"
 #include "Fest/KatHandelsvare.h"
+#include "Fest/XmlMedForbrMatr.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -146,6 +147,8 @@ void FestObjectStream::read() {
     parser.AddHandler("ForskrivningsenhetResept", std::make_shared<XmlForskrivningsenhetReseptHandler>());
     parser.AddHandler("KatHandelsvare", std::make_shared<KatHandelsvareHandler>());
     parser.AddHandler("OppfHandelsvare", std::make_shared<OppfHandelsvareHandler>());
+    parser.AddHandler("MedForbMatr", std::make_shared<XmlMedForbrMatrHandler>());
+    parser.AddHandler("Nr", std::make_shared<XmlNrHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

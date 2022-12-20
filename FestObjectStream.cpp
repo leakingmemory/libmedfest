@@ -40,6 +40,7 @@
 #include "Fest/XmlRefPakning.h"
 #include "Fest/KatHandelsvare.h"
 #include "Fest/XmlMedForbrMatr.h"
+#include "Fest/XmlProduktInfoVare.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -149,6 +150,12 @@ void FestObjectStream::read() {
     parser.AddHandler("OppfHandelsvare", std::make_shared<OppfHandelsvareHandler>());
     parser.AddHandler("MedForbMatr", std::make_shared<XmlMedForbrMatrHandler>());
     parser.AddHandler("Nr", std::make_shared<XmlNrHandler>());
+    parser.AddHandler("ProduktInfoVare", std::make_shared<XmlProduktInfoVareHandler>());
+    parser.AddHandler("ProduktNr", std::make_shared<XmlProduktNrHandler>());
+    parser.AddHandler("Volum", std::make_shared<XmlVolumHandler>());
+    parser.AddHandler("EnhetStorrelse", std::make_shared<XmlEnhetStorrelseHandler>());
+    parser.AddHandler("AntPerPakning", std::make_shared<XmlAntPerPakningHandler>());
+    parser.AddHandler("TillattMerMakspris", std::make_shared<XmlTillattMerMaksprisHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

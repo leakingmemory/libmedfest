@@ -13,8 +13,12 @@ void XmlMedForbrMatr::SetNr(const std::string &nr) {
     this->nr = nr;
 }
 
+void XmlMedForbrMatr::SetProduktInfoVare(const ProduktInfoVare &produktInfoVare) {
+    this->produktInfoVare = produktInfoVare;
+}
+
 bool XmlMedForbrMatr::Merge() {
-    oppf->SetMedForbrMatr({nr, GetNavn()});
+    oppf->SetMedForbrMatr({nr, GetNavn(), produktInfoVare});
     return true;
 }
 

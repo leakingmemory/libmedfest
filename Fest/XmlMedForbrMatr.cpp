@@ -17,8 +17,12 @@ void XmlMedForbrMatr::SetProduktInfoVare(const ProduktInfoVare &produktInfoVare)
     this->produktInfoVare = produktInfoVare;
 }
 
+void XmlMedForbrMatr::SetLeverandor(const Leverandor &leverandor) {
+    this->leverandor = leverandor;
+}
+
 bool XmlMedForbrMatr::Merge() {
-    oppf->SetMedForbrMatr({nr, GetNavn(), produktInfoVare});
+    oppf->SetMedForbrMatr({nr, GetNavn(), produktInfoVare, leverandor});
     return true;
 }
 

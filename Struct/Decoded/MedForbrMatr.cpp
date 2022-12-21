@@ -15,3 +15,7 @@ std::string MedForbrMatr::GetNavn() const {
 ProduktInfoVare MedForbrMatr::GetProduktInfoVare() const {
     return produktInfoVare;
 }
+
+Leverandor MedForbrMatr::GetLeverandor() const {
+    return leverandor;
+}

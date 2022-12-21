@@ -13,4 +13,4 @@ add_library(decoded OBJECT Status.cpp Status.h OppfLegemiddelMerkevare.cpp OppfL
         Styrkeoperator.cpp Styrkeoperator.h VirkestoffMedStyrke.cpp VirkestoffMedStyrke.h
         OppfVirkestoffMedStyrke.cpp OppfVirkestoffMedStyrke.h OppfLegemiddelVirkestoff.cpp OppfLegemiddelVirkestoff.h
         LegemiddelVirkestoff.cpp LegemiddelVirkestoff.h OppfHandelsvare.cpp OppfHandelsvare.h
-        ProduktInfoVare.cpp ProduktInfoVare.h)
+        ProduktInfoVare.cpp ProduktInfoVare.h Leverandor.cpp Leverandor.h)

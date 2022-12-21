@@ -41,6 +41,7 @@
 #include "Fest/KatHandelsvare.h"
 #include "Fest/XmlMedForbrMatr.h"
 #include "Fest/XmlProduktInfoVare.h"
+#include "Fest/XmlLeverandor.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -156,6 +157,9 @@ void FestObjectStream::read() {
     parser.AddHandler("EnhetStorrelse", std::make_shared<XmlEnhetStorrelseHandler>());
     parser.AddHandler("AntPerPakning", std::make_shared<XmlAntPerPakningHandler>());
     parser.AddHandler("TillattMerMakspris", std::make_shared<XmlTillattMerMaksprisHandler>());
+    parser.AddHandler("Leverandor", std::make_shared<XmlLeverandorHandler>());
+    parser.AddHandler("Adresse", std::make_shared<XmlAdresseHandler>());
+    parser.AddHandler("Telefon", std::make_shared<XmlTelefonHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

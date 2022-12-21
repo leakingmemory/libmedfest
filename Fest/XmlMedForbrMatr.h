@@ -8,6 +8,7 @@
 #include "XMLObject.h"
 #include "XmlNavn.h"
 #include "../Struct/Decoded/ProduktInfoVare.h"
+#include "../Struct/Decoded/Leverandor.h"
 #include <memory>
 
 class XmlOppfHandelsvare;
@@ -17,11 +18,13 @@ private:
     std::shared_ptr<XmlOppfHandelsvare> oppf;
     std::string nr{};
     ProduktInfoVare produktInfoVare{};
+    Leverandor leverandor{};
 public:
     XmlMedForbrMatr(std::shared_ptr<XmlOppfHandelsvare> oppf) : oppf(oppf) {}
     std::string GetName() const override;
     void SetNr(const std::string &nr);
     void SetProduktInfoVare(const ProduktInfoVare &produktInfoVare);
+    void SetLeverandor(const Leverandor &leverandor);
     bool Merge();
 };
 
@@ -36,6 +39,5 @@ public:
     XmlNrHandler() : XmlContentElementHandler<XmlMedForbrMatr>("Nr") {}
     bool Merge(std::shared_ptr<XmlMedForbrMatr> parent, const std::string &content) override;
 };
-
 
 #endif //LEGEMFEST_XMLMEDFORBRMATR_H

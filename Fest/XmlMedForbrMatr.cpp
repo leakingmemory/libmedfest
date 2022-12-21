@@ -22,7 +22,7 @@ void XmlMedForbrMatr::SetLeverandor(const Leverandor &leverandor) {
 }
 
 bool XmlMedForbrMatr::Merge() {
-    oppf->SetMedForbrMatr({nr, GetNavn(), produktInfoVare, leverandor});
+    oppf->SetMedForbrMatr({nr, GetNavn(), produktInfoVare, leverandor, GetPrisVare(), GetRefusjon()});
     return true;
 }
 

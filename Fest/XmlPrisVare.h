@@ -6,16 +6,28 @@
 #define LEGEMFEST_XMLPRISVARE_H
 
 #include "XMLObject.h"
-#include "XmlLegemiddelpakning.h"
 #include "XmlGyldigFraDato.h"
 #include "XmlGyldigTilDato.h"
+#include "XmlValueWithCodeSet.h"
+#include "XmlValueUnit.h"
+#include "../Struct/Decoded/PrisVare.h"
+#include <vector>
 
-class XmlPrisVare : public XMLObject, public XmlGyldigFraDato, public XmlGyldigTilDato {
-    std::shared_ptr<XmlLegemiddelpakning> parent;
+class XmlPrisVare {
+private:
+    std::vector<PrisVare> prisVare{};
+public:
+    virtual ~XmlPrisVare() = default;
+    void AddPrisVare(const PrisVare &prisVare);
+    [[nodiscard]] std::vector<PrisVare> GetPrisVare() const;
+};
+
+class XmlPrisVareObject : public XMLObject, public XmlGyldigFraDato, public XmlGyldigTilDato {
+    std::shared_ptr<XmlPrisVare> parent;
     ValueWithCodeSet type{};
     Pris pris{};
 public:
-    XmlPrisVare(std::shared_ptr<XmlLegemiddelpakning> parent) : parent(parent) {}
+    XmlPrisVareObject(std::shared_ptr<XmlPrisVare> parent) : parent(parent) {}
     std::string GetName() const override;
     void SetType(const ValueWithCodeSet &type);
     void SetPris(const Pris &pris);
@@ -28,15 +40,15 @@ public:
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
 };
 
-class XmlTypeHandler : public XmlValueWithCodeSetHandler<XmlPrisVare> {
+class XmlTypeHandler : public XmlValueWithCodeSetHandler<XmlPrisVareObject> {
 public:
-    XmlTypeHandler() : XmlValueWithCodeSetHandler<XmlPrisVare>("Type") {}
-    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPrisVare>> obj) override;
+    XmlTypeHandler() : XmlValueWithCodeSetHandler<XmlPrisVareObject>("Type") {}
+    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPrisVareObject>> obj) override;
 };
 
-class XmlPrisHandler : public XmlValueUnitHandler<XmlPrisVare> {
+class XmlPrisHandler : public XmlValueUnitHandler<XmlPrisVareObject> {
 public:
-    XmlPrisHandler() : XmlValueUnitHandler<XmlPrisVare>("Pris") {}
+    XmlPrisHandler() : XmlValueUnitHandler<XmlPrisVareObject>("Pris") {}
     bool Merge(std::shared_ptr<XmlType> obj) override;
 };
 

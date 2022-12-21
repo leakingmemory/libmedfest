@@ -19,3 +19,11 @@ ProduktInfoVare MedForbrMatr::GetProduktInfoVare() const {
 Leverandor MedForbrMatr::GetLeverandor() const {
     return leverandor;
 }
+
+std::vector<PrisVare> MedForbrMatr::GetPrisVare() const {
+    return prisVare;
+}
+
+Refusjon MedForbrMatr::GetRefusjon() const {
+    return refusjon;
+}

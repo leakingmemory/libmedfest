@@ -24,10 +24,6 @@ void XmlLegemiddelpakning::SetEan(const std::string &ean) {
     this->ean = ean;
 }
 
-void XmlLegemiddelpakning::AddPrisVare(const PrisVare &prisVare) {
-    this->prisVare.push_back(prisVare);
-}
-
 void XmlLegemiddelpakning::SetPakningByttegruppe(const PakningByttegruppe &pakningByttegruppe) {
     this->pakningByttegruppe = pakningByttegruppe;
 }
@@ -53,7 +49,7 @@ void XmlLegemiddelpakning::Merge() {
         GetPakningsinfo(),
         markedsforingsinfo,
         ean,
-        prisVare,
+        GetPrisVare(),
         GetRefusjon(),
         pakningByttegruppe,
         GetPreparatomtaleavsnitt(),

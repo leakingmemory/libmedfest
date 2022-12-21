@@ -13,6 +13,7 @@
 #include "XmlPakningsinfo.h"
 #include "XmlRefusjon.h"
 #include "XmlPreparatomtaleavsnitt.h"
+#include "XmlPrisVare.h"
 
 class XmlLegemiddelpakning : public XMLObject,
                                 public FestIdObject,
@@ -20,14 +21,14 @@ class XmlLegemiddelpakning : public XMLObject,
                                 public XmlPreparattypeObject,
                                 public XmlPakningsinfo,
                                 public XmlRefusjon,
-                                public XmlPreparatomtaleavsnitt {
+                                public XmlPreparatomtaleavsnitt,
+                                public XmlPrisVare {
 private:
     std::shared_ptr<XmlOppfLegemiddelpakning> oppfLegemiddelpakning;
     std::string varenr{};
     Oppbevaring oppbevaring{};
     Markedsforingsinfo markedsforingsinfo{};
     std::string ean{};
-    std::vector<PrisVare> prisVare{};
     PakningByttegruppe pakningByttegruppe{};
     bool ikkeKonservering{false};
 public:
@@ -37,7 +38,6 @@ public:
     void SetOppbevaring(const Oppbevaring &oppbevaring);
     void SetMarkedsforingsinfo(const Markedsforingsinfo &markedsforingsinfo);
     void SetEan(const std::string &ean);
-    void AddPrisVare(const PrisVare &prisVare);
     void SetPakningByttegruppe(const PakningByttegruppe &pakningByttegruppe);
     void SetIkkeKonservering(bool ikkeKonservering);
     void Merge();

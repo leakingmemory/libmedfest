@@ -4,35 +4,43 @@
 
 #include "XmlPrisVare.h"
 
-std::string XmlPrisVare::GetName() const {
+void XmlPrisVare::AddPrisVare(const PrisVare &prisVare) {
+    this->prisVare.emplace_back(prisVare);
+}
+
+std::vector<PrisVare> XmlPrisVare::GetPrisVare() const {
+    return prisVare;
+}
+
+std::string XmlPrisVareObject::GetName() const {
     return "PrisVare";
 }
 
-void XmlPrisVare::SetType(const ValueWithCodeSet &type) {
+void XmlPrisVareObject::SetType(const ValueWithCodeSet &type) {
     this->type = type;
 }
 
-void XmlPrisVare::SetPris(const Pris &pris) {
+void XmlPrisVareObject::SetPris(const Pris &pris) {
     this->pris = pris;
 }
 
-bool XmlPrisVare::Merge() {
+bool XmlPrisVareObject::Merge() {
     parent->AddPrisVare({type, pris, GetGyldigFraDato(), GetGyldigTilDato()});
     return true;
 }
 
 std::shared_ptr<XMLObject> XmlPrisVareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
                                                             const std::map<std::string, std::string> &attributes) {
-    std::shared_ptr<XmlLegemiddelpakning> typedParent = std::dynamic_pointer_cast<XmlLegemiddelpakning>(parent);
+    std::shared_ptr<XmlPrisVare> typedParent = std::dynamic_pointer_cast<XmlPrisVare>(parent);
     if (!typedParent) {
         std::cerr << "Error: Unexpected PrisVare\n";
         return {};
     }
-    return std::make_shared<XmlPrisVare>(typedParent);
+    return std::make_shared<XmlPrisVareObject>(typedParent);
 }
 
 bool XmlPrisVareHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
-    auto *pi = dynamic_cast<XmlPrisVare *>(&(*obj));
+    auto *pi = dynamic_cast<XmlPrisVareObject *>(&(*obj));
     if (pi == nullptr) {
         std::cerr << "Error: Not ending PrisVare\n";
         return false;
@@ -40,7 +48,7 @@ bool XmlPrisVareHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
     return pi->Merge();
 }
 
-bool XmlTypeHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPrisVare>> obj) {
+bool XmlTypeHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPrisVareObject>> obj) {
     obj->GetParent()->SetType(obj->GetValueWithCodeSet());
     return true;
 }

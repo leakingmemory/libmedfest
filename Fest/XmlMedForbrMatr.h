@@ -7,13 +7,15 @@
 
 #include "XMLObject.h"
 #include "XmlNavn.h"
+#include "XmlPrisVare.h"
+#include "XmlRefusjon.h"
 #include "../Struct/Decoded/ProduktInfoVare.h"
 #include "../Struct/Decoded/Leverandor.h"
 #include <memory>
 
 class XmlOppfHandelsvare;
 
-class XmlMedForbrMatr : public XMLObject, public XmlNavn {
+class XmlMedForbrMatr : public XMLObject, public XmlNavn, public XmlPrisVare, public XmlRefusjon {
 private:
     std::shared_ptr<XmlOppfHandelsvare> oppf;
     std::string nr{};

@@ -9,8 +9,8 @@ std::string KatHandelsvare::GetName() const {
     return "KatHandelsvare";
 }
 
-void KatHandelsvare::Merge(const XmlOppfHandelsvare &oppf) {
-    fest->Add(oppf);
+bool KatHandelsvare::Merge(const XmlOppfHandelsvare &oppf) {
+    return fest->Add(oppf);
 }
 
 std::shared_ptr<XMLObject> KatHandelsvareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -39,8 +39,16 @@ MedForbrMatr XmlOppfHandelsvare::GetMedForbrMatr() const {
     return medForbrMatr;
 }
 
-void XmlOppfHandelsvare::Merge() {
-    kat->Merge(*this);
+void XmlOppfHandelsvare::SetNaringsmiddel(const Naringsmiddel &naringsmiddel) {
+    this->naringsmiddel = naringsmiddel;
+}
+
+Naringsmiddel XmlOppfHandelsvare::GetNaringsmiddel() const {
+    return naringsmiddel;
+}
+
+bool XmlOppfHandelsvare::Merge() {
+    return kat->Merge(*this);
 }
 
 std::shared_ptr<XMLObject> OppfHandelsvareHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -59,6 +67,5 @@ bool OppfHandelsvareHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
         std::cerr << "Error: End element, not for the XmlOppfLegemiddelpakning\n";
         return false;
     }
-    oppf->Merge();
-    return true;
+    return oppf->Merge();
 }

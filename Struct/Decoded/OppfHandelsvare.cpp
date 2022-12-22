@@ -16,6 +16,10 @@ Status OppfHandelsvare::GetStatus() const {
     return status;
 }
 
-MedForbrMatr OppfHandelsvare::GetMedForbrMatr() const {
+MedForbrMatr OppfMedForbrMatr::GetMedForbrMatr() const {
     return medForbrMatr;
+}
+
+Naringsmiddel OppfNaringsmiddel::GetNaringsmiddel() const {
+    return naringsmiddel;
 }

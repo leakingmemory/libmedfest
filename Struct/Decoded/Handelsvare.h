@@ -2,8 +2,8 @@
 // Created by sigsegv on 12/19/22.
 //
 
-#ifndef LEGEMFEST_MEDFORBRMATR_H
-#define LEGEMFEST_MEDFORBRMATR_H
+#ifndef LEGEMFEST_HANDELSVARE_H
+#define LEGEMFEST_HANDELSVARE_H
 
 #include "ProduktInfoVare.h"
 #include "Leverandor.h"
@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-class MedForbrMatr {
+class Handelsvare {
 private:
     std::string nr;
     std::string navn;
@@ -21,8 +21,8 @@ private:
     std::vector<PrisVare> prisVare;
     Refusjon refusjon;
 public:
-    MedForbrMatr() : nr(), navn(), produktInfoVare(), leverandor(), prisVare(), refusjon() {}
-    MedForbrMatr(const std::string &nr, const std::string &navn, const ProduktInfoVare &produktInfoVare,
+    Handelsvare() : nr(), navn(), produktInfoVare(), leverandor(), prisVare(), refusjon() {}
+    Handelsvare(const std::string &nr, const std::string &navn, const ProduktInfoVare &produktInfoVare,
                  const Leverandor &leverandor, const std::vector<PrisVare> &prisVare, const Refusjon &refusjon) :
             nr(nr), navn(navn), produktInfoVare(produktInfoVare), leverandor(leverandor), prisVare(prisVare),
             refusjon(refusjon) {}
@@ -34,5 +34,17 @@ public:
     [[nodiscard]] Refusjon GetRefusjon() const;
 };
 
+class MedForbrMatr : public Handelsvare {
+public:
+    MedForbrMatr() : Handelsvare() {}
+    MedForbrMatr(const Handelsvare &handelsvare) : Handelsvare(handelsvare) {}
+};
 
-#endif //LEGEMFEST_MEDFORBRMATR_H
+class Naringsmiddel : public Handelsvare {
+public:
+    Naringsmiddel() : Handelsvare() {}
+    Naringsmiddel(const Handelsvare &handelsvare) : Handelsvare(handelsvare) {}
+};
+
+
+#endif //LEGEMFEST_HANDELSVARE_H

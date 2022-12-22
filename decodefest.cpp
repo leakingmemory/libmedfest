@@ -9,6 +9,7 @@
 int DecodeFest(const std::string &zipname) {
     FestZip festzip{zipname};
     festzip.Decode();
+    return 0;
 }
 
 int usage(const std::string &cmd) {

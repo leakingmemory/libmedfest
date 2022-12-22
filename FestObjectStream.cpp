@@ -39,7 +39,7 @@
 #include "Fest/XmlLegemiddelVirkestoff.h"
 #include "Fest/XmlRefPakning.h"
 #include "Fest/KatHandelsvare.h"
-#include "Fest/XmlMedForbrMatr.h"
+#include "Fest/XmlHandelsvare.h"
 #include "Fest/XmlProduktInfoVare.h"
 #include "Fest/XmlLeverandor.h"
 #include <iostream>
@@ -160,6 +160,7 @@ void FestObjectStream::read() {
     parser.AddHandler("Leverandor", std::make_shared<XmlLeverandorHandler>());
     parser.AddHandler("Adresse", std::make_shared<XmlAdresseHandler>());
     parser.AddHandler("Telefon", std::make_shared<XmlTelefonHandler>());
+    parser.AddHandler("Naringsmiddel", std::make_shared<XmlNaringsmiddelHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

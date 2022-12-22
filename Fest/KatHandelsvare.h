@@ -7,7 +7,7 @@
 
 #include "XMLObject.h"
 #include "Fest.h"
-#include "../Struct/Decoded/MedForbrMatr.h"
+#include "../Struct/Decoded/Handelsvare.h"
 
 class XmlOppfHandelsvare;
 
@@ -17,7 +17,7 @@ private:
 public:
     KatHandelsvare(std::shared_ptr<Fest> fest) : fest(fest) {}
     std::string GetName() const override;
-    void Merge(const XmlOppfHandelsvare &oppf);
+    [[nodiscard]] bool Merge(const XmlOppfHandelsvare &oppf);
 };
 
 class KatHandelsvareHandler {
@@ -30,12 +30,15 @@ class XmlOppfHandelsvare : public XMLObject, public FestIdObject, public Tidspun
 private:
     std::shared_ptr<KatHandelsvare> kat;
     MedForbrMatr medForbrMatr{};
+    Naringsmiddel naringsmiddel{};
 public:
     XmlOppfHandelsvare(std::shared_ptr<KatHandelsvare> kat) : kat(kat) {}
     std::string GetName() const override;
     void SetMedForbrMatr(const MedForbrMatr &medForbrMatr);
     [[nodiscard]] MedForbrMatr GetMedForbrMatr() const;
-    void Merge();
+    void SetNaringsmiddel(const Naringsmiddel &naringsmiddel);
+    [[nodiscard]] Naringsmiddel GetNaringsmiddel() const;
+    [[nodiscard]] bool Merge();
 };
 
 class OppfHandelsvareHandler {

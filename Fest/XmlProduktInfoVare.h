@@ -13,18 +13,18 @@
 #include <memory>
 #include <map>
 
-class XmlMedForbrMatr;
+class XmlHandelsvare;
 
 class XmlProduktInfoVare : public XMLObject {
 private:
-    std::shared_ptr<XmlMedForbrMatr> parent;
+    std::shared_ptr<XmlHandelsvare> parent;
     std::string produktNr{};
     std::string volum{};
     EnhetStorrelse enhetStorrelse{};
     int antPerPakning{0};
     MaybeBoolean tillattMerMakspris{MaybeBoolean::UNSPECIFIED};
 public:
-    XmlProduktInfoVare(const std::shared_ptr<XmlMedForbrMatr> &parent) : parent(parent) {}
+    XmlProduktInfoVare(const std::shared_ptr<XmlHandelsvare> &parent) : parent(parent) {}
     std::string GetName() const override;
     void SetProduktNr(const std::string &produktNr);
     void SetVolum(const std::string &volum);

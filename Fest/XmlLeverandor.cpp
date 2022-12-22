@@ -3,7 +3,7 @@
 //
 
 #include "XmlLeverandor.h"
-#include "XmlMedForbrMatr.h"
+#include "XmlHandelsvare.h"
 
 std::string XmlLeverandor::GetName() const {
     return "Leverandor";
@@ -24,7 +24,7 @@ bool XmlLeverandor::Merge() {
 
 std::shared_ptr<XMLObject> XmlLeverandorHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
                                                               const std::map<std::string, std::string> &attributes) {
-    std::shared_ptr<XmlMedForbrMatr> typedParent = std::dynamic_pointer_cast<XmlMedForbrMatr>(parent);
+    std::shared_ptr<XmlHandelsvare> typedParent = std::dynamic_pointer_cast<XmlHandelsvare>(parent);
     if (!typedParent) {
         std::cerr << "Error: Unexpected Leverandor\n";
         return {};

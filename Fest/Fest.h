@@ -43,7 +43,8 @@ private:
     std::vector<OppfVirkestoff> oppfVirkestoff{};
     std::vector<OppfVirkestoffMedStyrke> oppfVirkestoffMedStyrke{};
     std::vector<OppfLegemiddelVirkestoff> oppfLegemiddelVirkestoff{};
-    std::vector<OppfHandelsvare> oppfHandelsvare{};
+    std::vector<OppfMedForbrMatr> oppfMedForbrVare{};
+    std::vector<OppfNaringsmiddel> oppfNaringsmiddel{};
 public:
     std::string GetName() const override;
     void SetHentetDato(const std::string &hentetDato) {
@@ -56,7 +57,7 @@ public:
     void Add(const XmlOppfLegemiddelpakning &);
     [[nodiscard]] bool Add(const XmlOppfVirkestoff &);
     void Add(const XmlOppfLegemiddelVirkestoff &);
-    void Add(const XmlOppfHandelsvare &);
+    [[nodiscard]] bool Add(const XmlOppfHandelsvare &);
 };
 
 class FestHandler {

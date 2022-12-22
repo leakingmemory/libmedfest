@@ -10,15 +10,15 @@
 #include "XmlContentElement.h"
 #include <memory>
 
-class XmlMedForbrMatr;
+class XmlHandelsvare;
 
 class XmlLeverandor : public XMLObject, public XmlNavn {
 private:
-    std::shared_ptr<XmlMedForbrMatr> parent;
+    std::shared_ptr<XmlHandelsvare> parent;
     std::string adresse{};
     std::string telefon{};
 public:
-    XmlLeverandor(std::shared_ptr<XmlMedForbrMatr> parent) : parent(parent) {}
+    XmlLeverandor(std::shared_ptr<XmlHandelsvare> parent) : parent(parent) {}
     std::string GetName() const override;
     void SetAdresse(const std::string &adresse);
     void SetTelefon(const std::string &telefon);

@@ -3,7 +3,7 @@
 //
 
 #include "XmlProduktInfoVare.h"
-#include "XmlMedForbrMatr.h"
+#include "XmlHandelsvare.h"
 
 std::string XmlProduktInfoVare::GetName() const {
     return "ProduktInfoVare";
@@ -36,7 +36,7 @@ bool XmlProduktInfoVare::Merge() {
 
 std::shared_ptr<XMLObject>
 XmlProduktInfoVareHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
-    std::shared_ptr<XmlMedForbrMatr> typedParent = std::dynamic_pointer_cast<XmlMedForbrMatr>(parent);
+    std::shared_ptr<XmlHandelsvare> typedParent = std::dynamic_pointer_cast<XmlHandelsvare>(parent);
     if (!typedParent) {
         std::cerr << "Error: Unexpected ProductInfoVare\n";
         return {};

@@ -59,8 +59,25 @@ void Fest::Add(const XmlOppfLegemiddelVirkestoff &xmlOppf) {
     oppfLegemiddelVirkestoff.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetLegemiddelVirkestoff());
 }
 
-void Fest::Add(const XmlOppfHandelsvare &xmlOppf) {
-    oppfHandelsvare.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetMedForbrMatr());
+bool Fest::Add(const XmlOppfHandelsvare &xmlOppf) {
+    auto medForbrVare = xmlOppf.GetMedForbrMatr();
+    auto naringsmiddel = xmlOppf.GetNaringsmiddel();
+    auto hasMedForbrVare = !medForbrVare.GetNavn().empty() || !medForbrVare.GetNr().empty();
+    auto hasNaringsmiddel = !naringsmiddel.GetNavn().empty() || !naringsmiddel.GetNr().empty();
+    if (hasMedForbrVare && hasNaringsmiddel) {
+        std::cerr << "Error: OppfHandelsvare: Has both MedForbVare and Naringsmiddel\n";
+        return false;
+    }
+    if (!hasMedForbrVare && !hasNaringsmiddel) {
+        std::cerr << "Error: OppfHandelsvare: Has none of MedForbVare and Naringsmiddel\n";
+        return false;
+    }
+    if (hasMedForbrVare) {
+        oppfMedForbrVare.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), medForbrVare);
+    } else {
+        oppfNaringsmiddel.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), naringsmiddel);
+    }
+    return true;
 }
 
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {

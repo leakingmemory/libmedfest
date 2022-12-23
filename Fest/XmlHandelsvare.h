@@ -44,6 +44,13 @@ public:
     bool Merge() override;
 };
 
+class XmlBrystprotese : public XmlHandelsvare {
+public:
+    XmlBrystprotese(std::shared_ptr<XmlOppfHandelsvare> oppf) : XmlHandelsvare(oppf) {}
+    std::string GetName() const override;
+    bool Merge() override;
+};
+
 class XmlMedForbrMatrHandler {
 public:
     std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
@@ -51,6 +58,12 @@ public:
 };
 
 class XmlNaringsmiddelHandler {
+public:
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
+    bool EndElement(const std::shared_ptr<XMLObject> &obj);
+};
+
+class XmlBrystproteseHandler {
 public:
     std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
     bool EndElement(const std::shared_ptr<XMLObject> &obj);

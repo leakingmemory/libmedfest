@@ -47,6 +47,14 @@ Naringsmiddel XmlOppfHandelsvare::GetNaringsmiddel() const {
     return naringsmiddel;
 }
 
+void XmlOppfHandelsvare::SetBrystprotese(const Brystprotese &brystprotese) {
+    this->brystprotese = brystprotese;
+}
+
+Brystprotese XmlOppfHandelsvare::GetBrystprotese() const {
+    return brystprotese;
+}
+
 bool XmlOppfHandelsvare::Merge() {
     return kat->Merge(*this);
 }

@@ -161,6 +161,7 @@ void FestObjectStream::read() {
     parser.AddHandler("Adresse", std::make_shared<XmlAdresseHandler>());
     parser.AddHandler("Telefon", std::make_shared<XmlTelefonHandler>());
     parser.AddHandler("Naringsmiddel", std::make_shared<XmlNaringsmiddelHandler>());
+    parser.AddHandler("Brystprotese", std::make_shared<XmlBrystproteseHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

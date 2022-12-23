@@ -23,3 +23,7 @@ MedForbrMatr OppfMedForbrMatr::GetMedForbrMatr() const {
 Naringsmiddel OppfNaringsmiddel::GetNaringsmiddel() const {
     return naringsmiddel;
 }
+
+Brystprotese OppfBrystprotese::GetBrystprotese() const {
+    return brystprotese;
+}

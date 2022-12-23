@@ -31,6 +31,7 @@ private:
     std::shared_ptr<KatHandelsvare> kat;
     MedForbrMatr medForbrMatr{};
     Naringsmiddel naringsmiddel{};
+    Brystprotese brystprotese{};
 public:
     XmlOppfHandelsvare(std::shared_ptr<KatHandelsvare> kat) : kat(kat) {}
     std::string GetName() const override;
@@ -38,6 +39,8 @@ public:
     [[nodiscard]] MedForbrMatr GetMedForbrMatr() const;
     void SetNaringsmiddel(const Naringsmiddel &naringsmiddel);
     [[nodiscard]] Naringsmiddel GetNaringsmiddel() const;
+    void SetBrystprotese(const Brystprotese &brystprotese);
+    [[nodiscard]] Brystprotese GetBrystprotese() const;
     [[nodiscard]] bool Merge();
 };
 

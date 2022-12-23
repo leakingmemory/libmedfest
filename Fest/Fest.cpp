@@ -62,20 +62,33 @@ void Fest::Add(const XmlOppfLegemiddelVirkestoff &xmlOppf) {
 bool Fest::Add(const XmlOppfHandelsvare &xmlOppf) {
     auto medForbrVare = xmlOppf.GetMedForbrMatr();
     auto naringsmiddel = xmlOppf.GetNaringsmiddel();
+    auto brystprotese = xmlOppf.GetBrystprotese();
     auto hasMedForbrVare = !medForbrVare.GetNavn().empty() || !medForbrVare.GetNr().empty();
     auto hasNaringsmiddel = !naringsmiddel.GetNavn().empty() || !naringsmiddel.GetNr().empty();
-    if (hasMedForbrVare && hasNaringsmiddel) {
-        std::cerr << "Error: OppfHandelsvare: Has both MedForbVare and Naringsmiddel\n";
-        return false;
-    }
-    if (!hasMedForbrVare && !hasNaringsmiddel) {
-        std::cerr << "Error: OppfHandelsvare: Has none of MedForbVare and Naringsmiddel\n";
-        return false;
+    auto hasBrystprotese = !brystprotese.GetNavn().empty() || !brystprotese.GetNr().empty();
+    {
+        auto count = hasMedForbrVare ? 1 : 0;
+        if (hasNaringsmiddel) {
+            ++count;
+        }
+        if (hasBrystprotese) {
+            ++count;
+        }
+        if (count > 1) {
+            std::cerr << "Error: OppfHandelsvare: Has more than one of MedForbVare, Naringsmiddel and Brystprotese\n";
+            return false;
+        }
+        if (count < 1) {
+            std::cerr << "Error: OppfHandelsvare: Has none of MedForbVare, Naringsmiddel and Brystprotese\n";
+            return false;
+        }
     }
     if (hasMedForbrVare) {
         oppfMedForbrVare.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), medForbrVare);
-    } else {
+    } else if (hasNaringsmiddel) {
         oppfNaringsmiddel.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), naringsmiddel);
+    } else if (hasBrystprotese) {
+        oppfBrystprotese.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), brystprotese);
     }
     return true;
 }

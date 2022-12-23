@@ -44,4 +44,15 @@ public:
     [[nodiscard]] Naringsmiddel GetNaringsmiddel() const;
 };
 
+class OppfBrystprotese : public OppfHandelsvare {
+private:
+    Brystprotese brystprotese;
+public:
+    OppfBrystprotese() : OppfHandelsvare(), brystprotese() {}
+    OppfBrystprotese(const std::string &id, const std::string &tidspunkt, const Status &status,
+                      const Brystprotese &brystprotese) :
+            OppfHandelsvare(id, tidspunkt, status), brystprotese(brystprotese) {}
+    [[nodiscard]] Brystprotese GetBrystprotese() const;
+};
+
 #endif //LEGEMFEST_OPPFHANDELSVARE_H

@@ -46,5 +46,11 @@ public:
     Naringsmiddel(const Handelsvare &handelsvare) : Handelsvare(handelsvare) {}
 };
 
+class Brystprotese : public Handelsvare {
+public:
+    Brystprotese() : Handelsvare() {}
+    Brystprotese(const Handelsvare &handelsvare) : Handelsvare(handelsvare) {}
+};
+
 
 #endif //LEGEMFEST_HANDELSVARE_H

@@ -45,6 +45,7 @@ private:
     std::vector<OppfLegemiddelVirkestoff> oppfLegemiddelVirkestoff{};
     std::vector<OppfMedForbrMatr> oppfMedForbrVare{};
     std::vector<OppfNaringsmiddel> oppfNaringsmiddel{};
+    std::vector<OppfBrystprotese> oppfBrystprotese{};
 public:
     std::string GetName() const override;
     void SetHentetDato(const std::string &hentetDato) {

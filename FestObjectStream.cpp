@@ -42,6 +42,7 @@
 #include "Fest/XmlHandelsvare.h"
 #include "Fest/XmlProduktInfoVare.h"
 #include "Fest/XmlLeverandor.h"
+#include "Fest/KatRefusjon.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -162,6 +163,8 @@ void FestObjectStream::read() {
     parser.AddHandler("Telefon", std::make_shared<XmlTelefonHandler>());
     parser.AddHandler("Naringsmiddel", std::make_shared<XmlNaringsmiddelHandler>());
     parser.AddHandler("Brystprotese", std::make_shared<XmlBrystproteseHandler>());
+    parser.AddHandler("KatRefusjon", std::make_shared<KatRefusjonHandler>());
+    parser.AddHandler("OppfRefusjon", std::make_shared<OppfRefusjonHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

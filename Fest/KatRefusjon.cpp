@@ -31,6 +31,14 @@ std::string XmlOppfRefusjon::GetName() const {
     return "OppfRefusjon";
 }
 
+void XmlOppfRefusjon::SetRefusjonshjemmel(const Refusjonshjemmel &refusjonshjemmel) {
+    this->refusjonshjemmel = refusjonshjemmel;
+}
+
+Refusjonshjemmel XmlOppfRefusjon::GetRefusjonshjemmel() const {
+    return refusjonshjemmel;
+}
+
 void XmlOppfRefusjon::Merge() {
     parent->Merge(*this);
 }

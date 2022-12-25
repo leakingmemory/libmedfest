@@ -32,9 +32,12 @@ public:
 class XmlOppfRefusjon : public XMLObject, public FestIdObject, public StatusObject, public TidspunktObject {
 private:
     std::shared_ptr<KatRefusjon> parent;
+    Refusjonshjemmel refusjonshjemmel;
 public:
     XmlOppfRefusjon(std::shared_ptr<KatRefusjon> parent) : parent(parent) {}
     std::string GetName() const override;
+    void SetRefusjonshjemmel(const Refusjonshjemmel &refusjonshjemmel);
+    [[nodiscard]] Refusjonshjemmel GetRefusjonshjemmel() const;
     void Merge();
 };
 

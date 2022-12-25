@@ -15,3 +15,7 @@ std::string OppfRefusjon::GetTidspunkt() const {
 Status OppfRefusjon::GetStatus() const {
     return status;
 }
+
+Refusjonshjemmel OppfRefusjon::GetRefusjonshjemmel() const {
+    return refusjonshjemmel;
+}

@@ -95,7 +95,7 @@ bool Fest::Add(const XmlOppfHandelsvare &xmlOppf) {
 }
 
 void Fest::Add(const XmlOppfRefusjon &oppf) {
-    oppfRefusjon.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus());
+    oppfRefusjon.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetRefusjonshjemmel());
 }
 
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {

@@ -5,14 +5,6 @@
 #include "XmlLegemiddelCore.h"
 #include <iostream>
 
-Atc XmlLegemiddelCore::GetAtc() const {
-    return atc;
-}
-
-void XmlLegemiddelCore::SetAtc(const Atc &atc) {
-    this->atc = atc;
-}
-
 std::string XmlLegemiddelCore::GetNavnFormStyrke() {
     return navnFormStyrke;
 }
@@ -35,14 +27,6 @@ LegemiddelformKort XmlLegemiddelCore::GetLegemiddelformKort() const {
 
 void XmlLegemiddelCore::SetLegemiddelformKort(const LegemiddelformKort &legemiddelformKort) {
     this->legemiddelformKort = legemiddelformKort;
-}
-
-std::vector<std::string> XmlLegemiddelCore::GetRefVilkar() const {
-    return refVilkar;
-}
-
-void XmlLegemiddelCore::AddRefVilkar(const std::string &refVilkar) {
-    this->refVilkar.push_back(refVilkar);
 }
 
 TypeSoknadSlv XmlLegemiddelCore::GetTypeSoknadSlv() const {
@@ -69,10 +53,6 @@ void XmlLegemiddelCore::SetSvartTrekant(const SvartTrekant &svartTrekant) {
     this->svartTrekant = svartTrekant;
 }
 
-std::string XmlAtc::GetName() const {
-    return "Atc";
-}
-
 std::string XmlNavnFormStyrke::GetName() const {
     return "NavnFormStyrke";
 }
@@ -84,11 +64,6 @@ bool XmlNavnFormStyrke::AppendCharacterData(const std::string &charData) {
 
 void XmlNavnFormStyrke::Merge() {
     legemiddel->SetNavnFormStyrke(navnFormStyrke);
-}
-
-bool XmlAtcHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddelCore>> obj) {
-    obj->GetParent()->SetAtc(Atc(obj->GetValueWithCodeSet()));
-    return true;
 }
 
 bool XmlNavnFormStyrkeHandler::Merge(std::shared_ptr<XmlLegemiddelCore> parent, const std::string &content) {
@@ -103,11 +78,6 @@ bool XmlReseptgruppeHandler::Merge(std::shared_ptr<XmlType> obj) {
 
 bool XmlLegemiddelformKortHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddelCore>> obj) {
     obj->GetParent()->SetLegemiddelformKort({obj->GetValueWithCodeSet()});
-    return true;
-}
-
-bool XmlRefVilkarHandler::Merge(std::shared_ptr<XmlLegemiddelCore> parent, const std::string &content) {
-    parent->AddRefVilkar(content);
     return true;
 }
 

@@ -43,6 +43,11 @@
 #include "Fest/XmlProduktInfoVare.h"
 #include "Fest/XmlLeverandor.h"
 #include "Fest/KatRefusjon.h"
+#include "Fest/XmlRefusjonshjemmel.h"
+#include "Fest/XmlRefusjonsgruppe.h"
+#include "Fest/XmlRefusjonskode.h"
+#include "Fest/XmlRefusjonsvilkar.h"
+#include "Fest/XmlRefVilkar.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -165,6 +170,17 @@ void FestObjectStream::read() {
     parser.AddHandler("Brystprotese", std::make_shared<XmlBrystproteseHandler>());
     parser.AddHandler("KatRefusjon", std::make_shared<KatRefusjonHandler>());
     parser.AddHandler("OppfRefusjon", std::make_shared<OppfRefusjonHandler>());
+    parser.AddHandler("Refusjonshjemmel", std::make_shared<XmlRefusjonshjemmelHandler>());
+    parser.AddHandler("KreverVarekobling", std::make_shared<XmlKreverVarekoblingHandler>());
+    parser.AddHandler("KreverVedtak", std::make_shared<XmlKreverVedtakHandler>());
+    parser.AddHandler("Refusjonsgruppe", std::make_shared<XmlRefusjonsgruppeHandler>());
+    parser.AddHandler("GruppeNr", std::make_shared<XmlGruppeNrHandler>());
+    parser.AddHandler("KreverRefusjonskode", std::make_shared<XmlKreverRefusjonskodeHandler>());
+    parser.AddHandler("RefusjonsberettighetBruk", std::make_shared<XmlRefusjonsberettigetBrukHandler>());
+    parser.AddHandler("Refusjonskode", std::make_shared<XmlRefusjonskodeHandler>());
+    parser.AddHandler("Underterm", std::make_shared<XmlUndertermHandler>());
+    parser.AddHandler("Refusjonsvilkar", std::make_shared<XmlRefusjonsvilkarHandler>());
+    parser.AddHandler("FraDato", std::make_shared<XmlFraDatoHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

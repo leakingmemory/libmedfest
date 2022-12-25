@@ -21,4 +21,7 @@ add_library(fest OBJECT Fest.cpp Fest.h FestIdObject.cpp FestIdObject.h
         XmlNavnEngelsk.cpp XmlNavnEngelsk.h XmlVirkestoffMedStyrke.cpp XmlVirkestoffMedStyrke.h
         KatLegemiddelVirkestoff.cpp KatLegemiddelVirkestoff.h XmlLegemiddelVirkestoff.cpp XmlLegemiddelVirkestoff.h
         XmlRefPakning.cpp XmlRefPakning.h KatHandelsvare.cpp KatHandelsvare.h XmlHandelsvare.cpp XmlHandelsvare.h
-        XmlProduktInfoVare.cpp XmlProduktInfoVare.h XmlLeverandor.cpp XmlLeverandor.h KatRefusjon.cpp KatRefusjon.h)
+        XmlProduktInfoVare.cpp XmlProduktInfoVare.h XmlLeverandor.cpp XmlLeverandor.h KatRefusjon.cpp KatRefusjon.h
+        XmlRefusjonshjemmel.cpp XmlRefusjonshjemmel.h XmlRefusjonsgruppe.cpp XmlRefusjonsgruppe.h XmlAtc.cpp XmlAtc.h
+        XmlRefusjonskode.cpp XmlRefusjonskode.h XmlRefusjonsvilkar.cpp XmlRefusjonsvilkar.h
+        XmlRefVilkar.cpp XmlRefVilkar.h XmlForskrivesTilDato.cpp XmlForskrivesTilDato.h)

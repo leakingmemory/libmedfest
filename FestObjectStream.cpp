@@ -48,6 +48,8 @@
 #include "Fest/XmlRefusjonskode.h"
 #include "Fest/XmlRefusjonsvilkar.h"
 #include "Fest/XmlRefVilkar.h"
+#include "Fest/KatVilkar.h"
+#include "Fest/XmlVilkar.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -181,6 +183,16 @@ void FestObjectStream::read() {
     parser.AddHandler("Underterm", std::make_shared<XmlUndertermHandler>());
     parser.AddHandler("Refusjonsvilkar", std::make_shared<XmlRefusjonsvilkarHandler>());
     parser.AddHandler("FraDato", std::make_shared<XmlFraDatoHandler>());
+    parser.AddHandler("KatVilkar", std::make_shared<KatVilkarHandler>());
+    parser.AddHandler("OppfVilkar", std::make_shared<OppfVilkarHandler>());
+    parser.AddHandler("Vilkar", std::make_shared<XmlVilkarHandler>());
+    parser.AddHandler("VilkarNr", std::make_shared<XmlVilkarNrHandler>());
+    parser.AddHandler("Gruppe", std::make_shared<XmlGruppeHandler>());
+    parser.AddHandler("GjelderFor", std::make_shared<XmlGjelderForHandler>());
+    parser.AddHandler("Tekst", std::make_shared<XmlTekstHandler>());
+    parser.AddHandler("StrukturertVilkar", std::make_shared<XmlStrukturertVilkarHandler>());
+    parser.AddHandler("VerdiKodet", std::make_shared<XmlVerdiKodetHandler>());
+    parser.AddHandler("VerdiTekst", std::make_shared<XmlVerdiTekstHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

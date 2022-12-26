@@ -15,6 +15,7 @@
 #include "../Struct/Decoded/OppfLegemiddelVirkestoff.h"
 #include "../Struct/Decoded/OppfHandelsvare.h"
 #include "../Struct/Decoded/OppfRefusjon.h"
+#include "../Struct/Decoded/OppfVilkar.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -36,6 +37,7 @@ class XmlOppfLegemiddelMerkevare;
 class XmlOppfLegemiddelVirkestoff;
 class XmlOppfHandelsvare;
 class XmlOppfRefusjon;
+class XmlOppfVilkar;
 
 class Fest : public XMLObject {
 private:
@@ -49,6 +51,7 @@ private:
     std::vector<OppfNaringsmiddel> oppfNaringsmiddel{};
     std::vector<OppfBrystprotese> oppfBrystprotese{};
     std::vector<OppfRefusjon> oppfRefusjon{};
+    std::vector<OppfVilkar> oppfVilkar{};
 public:
     std::string GetName() const override;
     void SetHentetDato(const std::string &hentetDato) {
@@ -63,6 +66,7 @@ public:
     void Add(const XmlOppfLegemiddelVirkestoff &);
     [[nodiscard]] bool Add(const XmlOppfHandelsvare &);
     void Add(const XmlOppfRefusjon &);
+    void Add(const XmlOppfVilkar &);
 };
 
 class FestHandler {

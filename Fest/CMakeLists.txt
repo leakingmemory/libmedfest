@@ -13,7 +13,7 @@ add_library(fest OBJECT Fest.cpp Fest.h FestIdObject.cpp FestIdObject.h
         XmlLegemiddelCore.cpp XmlLegemiddelCore.h KatLegemiddelpakning.cpp KatLegemiddelpakning.h
         XmlLegemiddelpakning.cpp XmlLegemiddelpakning.h XmlPakningsinfo.cpp XmlPakningsinfo.h
         XmlRefLegemiddelMerkevare.cpp XmlRefLegemiddelMerkevare.h XmlMarkedsforingsinfo.cpp XmlMarkedsforingsinfo.h
-        XmlPrisVare.cpp XmlPrisVare.h XmlPakningskomponent.cpp XmlPakningskomponent.h
+        XmlPrisVare.cpp XmlPrisVare.h XmlPakningskomponent.cpp XmlPakningskomponent.h XmlType.cpp XmlType.h
         XmlPakningstype.cpp XmlPakningstype.h XmlMengde.cpp XmlMengde.h XmlRefusjon.cpp XmlRefusjon.h
         XmlGyldigFraDato.cpp XmlGyldigFraDato.h XmlPakningByttegruppe.cpp XmlPakningByttegruppe.h
         XmlGyldigTilDato.cpp XmlGyldigTilDato.h XmlAntall.cpp XmlAntall.h XmlMultippel.cpp XmlMultippel.h
@@ -23,5 +23,5 @@ add_library(fest OBJECT Fest.cpp Fest.h FestIdObject.cpp FestIdObject.h
         XmlRefPakning.cpp XmlRefPakning.h KatHandelsvare.cpp KatHandelsvare.h XmlHandelsvare.cpp XmlHandelsvare.h
         XmlProduktInfoVare.cpp XmlProduktInfoVare.h XmlLeverandor.cpp XmlLeverandor.h KatRefusjon.cpp KatRefusjon.h
         XmlRefusjonshjemmel.cpp XmlRefusjonshjemmel.h XmlRefusjonsgruppe.cpp XmlRefusjonsgruppe.h XmlAtc.cpp XmlAtc.h
-        XmlRefusjonskode.cpp XmlRefusjonskode.h XmlRefusjonsvilkar.cpp XmlRefusjonsvilkar.h
-        XmlRefVilkar.cpp XmlRefVilkar.h XmlForskrivesTilDato.cpp XmlForskrivesTilDato.h)
+        XmlRefusjonskode.cpp XmlRefusjonskode.h XmlRefusjonsvilkar.cpp XmlRefusjonsvilkar.h KatVilkar.cpp KatVilkar.h
+        XmlRefVilkar.cpp XmlRefVilkar.h XmlForskrivesTilDato.cpp XmlForskrivesTilDato.h XmlVilkar.cpp XmlVilkar.h)

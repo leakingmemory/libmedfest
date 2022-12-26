@@ -10,6 +10,7 @@
 #include "XmlGyldigTilDato.h"
 #include "XmlValueWithCodeSet.h"
 #include "XmlValueUnit.h"
+#include "XmlType.h"
 #include "../Struct/Decoded/PrisVare.h"
 #include <vector>
 
@@ -22,14 +23,12 @@ public:
     [[nodiscard]] std::vector<PrisVare> GetPrisVare() const;
 };
 
-class XmlPrisVareObject : public XMLObject, public XmlGyldigFraDato, public XmlGyldigTilDato {
+class XmlPrisVareObject : public XMLObject, public XmlGyldigFraDato, public XmlGyldigTilDato, public XmlTypeObject {
     std::shared_ptr<XmlPrisVare> parent;
-    ValueWithCodeSet type{};
     Pris pris{};
 public:
     XmlPrisVareObject(std::shared_ptr<XmlPrisVare> parent) : parent(parent) {}
     std::string GetName() const override;
-    void SetType(const ValueWithCodeSet &type);
     void SetPris(const Pris &pris);
     bool Merge();
 };
@@ -38,12 +37,6 @@ class XmlPrisVareHandler {
 public:
     std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
-};
-
-class XmlTypeHandler : public XmlValueWithCodeSetHandler<XmlPrisVareObject> {
-public:
-    XmlTypeHandler() : XmlValueWithCodeSetHandler<XmlPrisVareObject>("Type") {}
-    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPrisVareObject>> obj) override;
 };
 
 class XmlPrisHandler : public XmlValueUnitHandler<XmlPrisVareObject> {

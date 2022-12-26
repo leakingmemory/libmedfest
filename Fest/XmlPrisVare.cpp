@@ -16,16 +16,12 @@ std::string XmlPrisVareObject::GetName() const {
     return "PrisVare";
 }
 
-void XmlPrisVareObject::SetType(const ValueWithCodeSet &type) {
-    this->type = type;
-}
-
 void XmlPrisVareObject::SetPris(const Pris &pris) {
     this->pris = pris;
 }
 
 bool XmlPrisVareObject::Merge() {
-    parent->AddPrisVare({type, pris, GetGyldigFraDato(), GetGyldigTilDato()});
+    parent->AddPrisVare({GetType(), pris, GetGyldigFraDato(), GetGyldigTilDato()});
     return true;
 }
 
@@ -46,11 +42,6 @@ bool XmlPrisVareHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
         return false;
     }
     return pi->Merge();
-}
-
-bool XmlTypeHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlPrisVareObject>> obj) {
-    obj->GetParent()->SetType(obj->GetValueWithCodeSet());
-    return true;
 }
 
 bool XmlPrisHandler::Merge(std::shared_ptr<XmlType> obj) {

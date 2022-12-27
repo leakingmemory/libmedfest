@@ -8,6 +8,6 @@ ValueWithDistinguishedName Preparatomtaleavsnitt::GetAvsnittoverskrift() const {
     return avsnittoverskrift;
 }
 
-std::string Preparatomtaleavsnitt::GetLink() const {
-    return link;
+Lenke Preparatomtaleavsnitt::GetLenke() const {
+    return lenke;
 }

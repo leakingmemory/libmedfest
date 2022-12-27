@@ -21,12 +21,8 @@ void XmlPreparatomtaleavsnittObject::SetAvsnittoverskrift(const ValueWithDisting
     this->avsnittoverskrift = avsnittoverskrift;
 }
 
-void XmlPreparatomtaleavsnittObject::SetLink(const std::string &link) {
-    this->link = link;
-}
-
 bool XmlPreparatomtaleavsnittObject::Merge() {
-    parent->SetPreparatomtaleavsnitt({avsnittoverskrift, link});
+    parent->SetPreparatomtaleavsnitt({avsnittoverskrift, GetLenke()});
     return true;
 }
 
@@ -51,42 +47,5 @@ bool XmlPreparatomtaleavsnittHandler::EndElement(const std::shared_ptr<XMLObject
 
 bool XmlAvsnittoverskriftHandler::Merge(std::shared_ptr<XmlType> obj) {
     obj->GetParent()->SetAvsnittoverskrift(obj->GetValueWithDistinguishedName());
-    return true;
-}
-
-std::string XmlLenke::GetName() const {
-    return "Lenke";
-}
-
-void XmlLenke::SetLink(const std::string &link) {
-    this->link = link;
-}
-
-bool XmlLenke::Merge() {
-    parent->SetLink(link);
-    return true;
-}
-
-std::shared_ptr<XMLObject> XmlLenkeHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
-                                                         const std::map<std::string, std::string> &attributes) {
-    std::shared_ptr<XmlPreparatomtaleavsnittObject> typedParent = std::dynamic_pointer_cast<XmlPreparatomtaleavsnittObject>(parent);
-    if (!typedParent) {
-        std::cerr << "Error: Unexpected Lenke\n";
-        return {};
-    }
-    return std::make_shared<XmlLenke>(typedParent);
-}
-
-bool XmlLenkeHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
-    auto *l = dynamic_cast<XmlLenke *>(&(*obj));
-    if (l == nullptr) {
-        std::cerr << "Error: Did not end Lenke\n";
-        return false;
-    }
-    return l->Merge();
-}
-
-bool XmlWwwHandler::Merge(std::shared_ptr<XmlType> obj) {
-    obj->GetParent()->SetLink(obj->GetValue());
     return true;
 }

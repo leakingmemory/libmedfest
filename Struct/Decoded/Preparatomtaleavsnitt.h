@@ -6,17 +6,18 @@
 #define LEGEMFEST_PREPARATOMTALEAVSNITT_H
 
 #include "ValueWithDistinguishedName.h"
+#include "Lenke.h"
 
 class Preparatomtaleavsnitt {
 private:
     ValueWithDistinguishedName avsnittoverskrift;
-    std::string link;
+    Lenke lenke;
 public:
-    Preparatomtaleavsnitt() : avsnittoverskrift(), link() {}
-    Preparatomtaleavsnitt(const ValueWithDistinguishedName &avsnittoverskrift, const std::string &link) :
-            avsnittoverskrift(avsnittoverskrift), link(link) {}
+    Preparatomtaleavsnitt() : avsnittoverskrift(), lenke() {}
+    Preparatomtaleavsnitt(const ValueWithDistinguishedName &avsnittoverskrift, const Lenke &lenke) :
+            avsnittoverskrift(avsnittoverskrift), lenke(lenke) {}
     [[nodiscard]] ValueWithDistinguishedName GetAvsnittoverskrift() const;
-    [[nodiscard]] std::string GetLink() const;
+    [[nodiscard]] Lenke GetLenke() const;
 };
 
 #endif //LEGEMFEST_PREPARATOMTALEAVSNITT_H

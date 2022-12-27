@@ -50,6 +50,9 @@
 #include "Fest/XmlRefVilkar.h"
 #include "Fest/KatVilkar.h"
 #include "Fest/XmlVilkar.h"
+#include "Fest/KatVarselSlv.h"
+#include "Fest/XmlVarselSlv.h"
+#include "Fest/XmlReferanseelement.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -193,6 +196,16 @@ void FestObjectStream::read() {
     parser.AddHandler("StrukturertVilkar", std::make_shared<XmlStrukturertVilkarHandler>());
     parser.AddHandler("VerdiKodet", std::make_shared<XmlVerdiKodetHandler>());
     parser.AddHandler("VerdiTekst", std::make_shared<XmlVerdiTekstHandler>());
+    parser.AddHandler("KatVarselSlv", std::make_shared<KatVarselSlvHandler>());
+    parser.AddHandler("OppfVarselSlv", std::make_shared<XmlOppfVarselSlvHandler>());
+    parser.AddHandler("VarselSlv", std::make_shared<XmlVarselSlvHandler>());
+    parser.AddHandler("Overskrift", std::make_shared<XmlOverskriftHandler>());
+    parser.AddHandler("Varseltekst", std::make_shared<XmlVarseltekstHandler>());
+    parser.AddHandler("Visningsregel", std::make_shared<XmlVisningsregelHandler>());
+    parser.AddHandler("Beskrivelse", std::make_shared<XmlBeskrivelseHandler>());
+    parser.AddHandler("Referanseelement", std::make_shared<XmlReferanseelementHandler>());
+    parser.AddHandler("Klasse", std::make_shared<XmlKlasseHandler>());
+    parser.AddHandler("RefElement", std::make_shared<XmlRefElementHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

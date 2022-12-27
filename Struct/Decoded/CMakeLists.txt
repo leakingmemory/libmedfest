@@ -15,4 +15,6 @@ add_library(decoded OBJECT Status.cpp Status.h OppfLegemiddelMerkevare.cpp OppfL
         LegemiddelVirkestoff.cpp LegemiddelVirkestoff.h OppfHandelsvare.cpp OppfHandelsvare.h
         Handelsvare.cpp Handelsvare.h  ProduktInfoVare.cpp ProduktInfoVare.h Leverandor.cpp Leverandor.h
         OppfRefusjon.cpp OppfRefusjon.h Refusjonshjemmel.cpp Refusjonshjemmel.h Refusjonsgruppe.cpp Refusjonsgruppe.h
-        RefRefusjonsvilkar.cpp RefRefusjonsvilkar.h OppfVilkar.cpp OppfVilkar.h Vilkar.cpp Vilkar.h)
+        RefRefusjonsvilkar.cpp RefRefusjonsvilkar.h OppfVilkar.cpp OppfVilkar.h Vilkar.cpp Vilkar.h
+        OppfVarselSlv.cpp OppfVarselSlv.h VarselSlv.cpp VarselSlv.h Lenke.cpp Lenke.h
+        Referanseelement.cpp Referanseelement.h)

@@ -17,10 +17,6 @@ std::string XmlRefRefusjonsvilkarObject::GetName() const {
     return "Refusjonsvilkar";
 }
 
-void XmlRefRefusjonsvilkarObject::SetFraDato(const std::string &fraDato) {
-    this->fraDato = fraDato;
-}
-
 bool XmlRefRefusjonsvilkarObject::Merge() {
     std::string id{};
     {
@@ -35,7 +31,7 @@ bool XmlRefRefusjonsvilkarObject::Merge() {
         }
         id = ids[0];
     }
-    parent->AddRefusjonsvilkar({id, fraDato});
+    parent->AddRefusjonsvilkar({id, GetFraDato()});
     return true;
 }
 
@@ -59,9 +55,4 @@ bool XmlRefusjonsvilkarHandler::EndElement(const std::shared_ptr<XMLObject> &obj
         return false;
     }
     return mergeable->Merge();
-}
-
-bool XmlFraDatoHandler::Merge(std::shared_ptr<XmlRefRefusjonsvilkarObject> parent, const std::string &content) {
-    parent->SetFraDato(content);
-    return true;
 }

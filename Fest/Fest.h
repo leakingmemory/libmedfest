@@ -17,6 +17,7 @@
 #include "../Struct/Decoded/OppfRefusjon.h"
 #include "../Struct/Decoded/OppfVilkar.h"
 #include "../Struct/Decoded/OppfVarselSlv.h"
+#include "../Struct/Decoded/OppfKodeverk.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -40,6 +41,7 @@ class XmlOppfHandelsvare;
 class XmlOppfRefusjon;
 class XmlOppfVilkar;
 class XmlOppfVarselSlv;
+class XmlOppfKodeverk;
 
 class Fest : public XMLObject {
 private:
@@ -55,6 +57,7 @@ private:
     std::vector<OppfRefusjon> oppfRefusjon{};
     std::vector<OppfVilkar> oppfVilkar{};
     std::vector<OppfVarselSlv> oppfVarselSlv{};
+    std::vector<OppfKodeverk> oppfKodeverk{};
 public:
     std::string GetName() const override;
     void SetHentetDato(const std::string &hentetDato) {
@@ -71,6 +74,7 @@ public:
     void Add(const XmlOppfRefusjon &);
     void Add(const XmlOppfVilkar &);
     void Add(const XmlOppfVarselSlv &);
+    void Add(const XmlOppfKodeverk &);
 };
 
 class FestHandler {

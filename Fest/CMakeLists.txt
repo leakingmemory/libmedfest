@@ -26,4 +26,5 @@ add_library(fest OBJECT Fest.cpp Fest.h FestIdObject.cpp FestIdObject.h
         XmlRefusjonskode.cpp XmlRefusjonskode.h XmlRefusjonsvilkar.cpp XmlRefusjonsvilkar.h KatVilkar.cpp KatVilkar.h
         XmlRefVilkar.cpp XmlRefVilkar.h XmlForskrivesTilDato.cpp XmlForskrivesTilDato.h XmlVilkar.cpp XmlVilkar.h
         KatVarselSlv.cpp KatVarselSlv.h XmlVarselSlv.cpp XmlVarselSlv.h XmlFraDato.cpp XmlFraDato.h
-        XmlLenke.cpp XmlLenke.h XmlReferanseelement.cpp XmlReferanseelement.h)
+        XmlLenke.cpp XmlLenke.h XmlReferanseelement.cpp XmlReferanseelement.h KatKodeverk.cpp KatKodeverk.h
+        XmlInfo.cpp XmlInfo.h XmlElement.cpp XmlElement.h)

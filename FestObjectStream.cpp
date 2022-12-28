@@ -53,6 +53,9 @@
 #include "Fest/KatVarselSlv.h"
 #include "Fest/XmlVarselSlv.h"
 #include "Fest/XmlReferanseelement.h"
+#include "Fest/KatKodeverk.h"
+#include "Fest/XmlInfo.h"
+#include "Fest/XmlElement.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -206,6 +209,17 @@ void FestObjectStream::read() {
     parser.AddHandler("Referanseelement", std::make_shared<XmlReferanseelementHandler>());
     parser.AddHandler("Klasse", std::make_shared<XmlKlasseHandler>());
     parser.AddHandler("RefElement", std::make_shared<XmlRefElementHandler>());
+    parser.AddHandler("KatKodeverk", std::make_shared<KatKodeverkHandler>());
+    parser.AddHandler("OppfKodeverk", std::make_shared<OppfKodeverkHandler>());
+    parser.AddHandler("Info", std::make_shared<XmlInfoHandler>());
+    parser.AddHandler("Betegnelse", std::make_shared<XmlBetegnelseHandler>());
+    parser.AddHandler("Kortnavn", std::make_shared<XmlKortnavnHandler>());
+    parser.AddHandler("AnsvarligUtgiver", std::make_shared<XmlAnsvarligUtgiverHandler>());
+    parser.AddHandler("Element", std::make_shared<XmlElementHandler>());
+    parser.AddHandler("Kode", std::make_shared<XmlKodeHandler>());
+    parser.AddHandler("Term", std::make_shared<XmlTermHandler>());
+    parser.AddHandler("Sprak", std::make_shared<XmlSprakHandler>());
+    parser.AddHandler("BeskrivelseTerm", std::make_shared<XmlBeskrivelseTermHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

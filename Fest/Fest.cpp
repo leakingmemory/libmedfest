@@ -9,6 +9,7 @@
 #include "KatRefusjon.h"
 #include "KatVilkar.h"
 #include "KatVarselSlv.h"
+#include "KatKodeverk.h"
 #include <iostream>
 #include <map>
 
@@ -106,6 +107,10 @@ void Fest::Add(const XmlOppfVilkar &oppf) {
 
 void Fest::Add(const XmlOppfVarselSlv &oppf) {
     oppfVarselSlv.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetVarselSlv());
+}
+
+void Fest::Add(const XmlOppfKodeverk &oppf) {
+    oppfKodeverk.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetInfo(), oppf.GetElement());
 }
 
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {

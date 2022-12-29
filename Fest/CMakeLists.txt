@@ -28,4 +28,5 @@ add_library(fest OBJECT Fest.cpp Fest.h FestIdObject.cpp FestIdObject.h
         KatVarselSlv.cpp KatVarselSlv.h XmlVarselSlv.cpp XmlVarselSlv.h XmlFraDato.cpp XmlFraDato.h
         XmlLenke.cpp XmlLenke.h XmlReferanseelement.cpp XmlReferanseelement.h KatKodeverk.cpp KatKodeverk.h
         XmlInfo.cpp XmlInfo.h XmlElement.cpp XmlElement.h KatByttegruppe.cpp KatByttegruppe.h XmlKode.cpp XmlKode.h
-        XmlByttegruppe.cpp XmlByttegruppe.h)
+        XmlByttegruppe.cpp XmlByttegruppe.h KatLegemiddeldose.cpp KatLegemiddeldose.h
+        XmlLegemiddeldose.cpp XmlLegemiddeldose.h)

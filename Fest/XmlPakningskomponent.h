@@ -8,16 +8,35 @@
 #include "XMLObject.h"
 #include "XmlPakningsinfo.h"
 #include "XmlMengde.h"
+#include "../Struct/Decoded/PakningskomponentInfo.h"
 
-class XmlPakningskomponent : public XMLObject, public XmlPakningstype, public XmlMengde, public XmlAntall {
+class XmlPakningskomponentInfo {
+public:
+    virtual bool Merge(const PakningskomponentInfo &pakningskomponentInfo) = 0;
+};
+
+class XmlPakningskomponentInfoObject : public XMLObject, public XmlPakningstype, public XmlMengde {
 private:
-    std::shared_ptr<XmlPakningsinfoObject> parent;
+    std::shared_ptr<XmlPakningskomponentInfo> parentRef;
+    XmlPakningskomponentInfo &parent;
     ValueUnit mengde{};
 public:
-    XmlPakningskomponent(std::shared_ptr<XmlPakningsinfoObject> parent) : parent(parent) {}
+    XmlPakningskomponentInfoObject(std::shared_ptr<XmlPakningskomponentInfo> parentRef) :
+        parentRef(parentRef), parent(*parentRef) {}
+protected:
+    XmlPakningskomponentInfoObject(XmlPakningskomponentInfo &parent) : parentRef(), parent(parent) {}
+public:
     std::string GetName() const override;
     bool Mengde(const ValueUnit &mengde) override;
     bool Merge();
+};
+
+class XmlPakningskomponent : public XmlPakningskomponentInfo, public XmlPakningskomponentInfoObject, public XmlAntall {
+private:
+    std::shared_ptr<XmlPakningsinfoObject> parent;
+public:
+    XmlPakningskomponent(std::shared_ptr<XmlPakningsinfoObject> parent) : XmlPakningskomponentInfoObject(static_cast<XmlPakningskomponentInfo &>(*this)), parent(parent) {}
+    bool Merge(const PakningskomponentInfo &) override;
 };
 
 class XmlPakningskomponentHandler {

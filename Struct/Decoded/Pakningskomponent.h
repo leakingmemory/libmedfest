@@ -5,20 +5,14 @@
 #ifndef LEGEMFEST_PAKNINGSKOMPONENT_H
 #define LEGEMFEST_PAKNINGSKOMPONENT_H
 
-#include "Pakningstype.h"
-#include "ValueUnit.h"
+#include "PakningskomponentInfo.h"
 
-class Pakningskomponent {
+class Pakningskomponent : public PakningskomponentInfo {
 private:
-    Pakningstype pakningstype;
-    ValueUnit mengde;
     int antall;
 public:
-    Pakningskomponent() : pakningstype(), mengde(), antall(0) {}
-    Pakningskomponent(const Pakningstype &pakningstype, const ValueUnit &mengde, int antall) :
-            pakningstype(pakningstype), mengde(mengde), antall(antall) {}
-    [[nodiscard]] Pakningstype GetPakningstype() const;
-    [[nodiscard]] ValueUnit GetMengde() const;
+    Pakningskomponent() : PakningskomponentInfo(), antall(0) {}
+    Pakningskomponent(const PakningskomponentInfo &info, int antall) : PakningskomponentInfo(info), antall(antall) {}
     [[nodiscard]] int GetAntall() const;
 };
 

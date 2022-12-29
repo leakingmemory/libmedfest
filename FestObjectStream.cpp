@@ -58,6 +58,8 @@
 #include "Fest/XmlElement.h"
 #include "Fest/KatByttegruppe.h"
 #include "Fest/XmlByttegruppe.h"
+#include "Fest/KatLegemiddeldose.h"
+#include "Fest/XmlLegemiddeldose.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -227,6 +229,10 @@ void FestObjectStream::read() {
     parser.AddHandler("Byttegruppe", std::make_shared<XmlByttegruppeHandler>());
     parser.AddHandler("MerknadTilByttbarhet", std::make_shared<XmlMerknadTilByttbarhetHandler>());
     parser.AddHandler("BeskrivelseByttbarhet", std::make_shared<XmlBeskrivelseByttbarhetHandler>());
+    parser.AddHandler("KatLegemiddeldose", std::make_shared<KatLegemiddeldoseHandler>());
+    parser.AddHandler("OppfLegemiddeldose", std::make_shared<XmlOppfLegemiddeldoseHandler>());
+    parser.AddHandler("Legemiddeldose", std::make_shared<XmlLegemiddeldoseHandler>());
+    parser.AddHandler("LmrLopenr", std::make_shared<XmlLmrLopenrHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

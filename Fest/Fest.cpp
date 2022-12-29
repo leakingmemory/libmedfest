@@ -11,6 +11,7 @@
 #include "KatVarselSlv.h"
 #include "KatKodeverk.h"
 #include "KatByttegruppe.h"
+#include "KatLegemiddeldose.h"
 #include <iostream>
 #include <map>
 
@@ -116,6 +117,10 @@ void Fest::Add(const XmlOppfKodeverk &oppf) {
 
 void Fest::Add(const XmlOppfByttegruppe &oppf) {
     oppfByttegruppe.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetByttegruppe());
+}
+
+void Fest::Add(const XmlOppfLegemiddeldose &oppf) {
+    oppfLegemiddeldose.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetLegemiddeldose());
 }
 
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {

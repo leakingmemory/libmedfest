@@ -9,6 +9,7 @@
 #include "XmlContentElement.h"
 #include "XmlValueWithDistinguishedName.h"
 #include "FestIdObject.h"
+#include "XmlKode.h"
 #include "../Struct/Decoded/Sprak.h"
 #include "../Struct/Decoded/Term.h"
 #include <memory>
@@ -16,15 +17,13 @@
 
 class XmlOppfKodeverk;
 
-class XmlElement : public XMLObject, public FestIdObject {
+class XmlElement : public XMLObject, public FestIdObject, public XmlKode {
 private:
     std::shared_ptr<XmlOppfKodeverk> parent;
-    std::string kode{};
     Term term{};
 public:
     XmlElement(std::shared_ptr<XmlOppfKodeverk> parent) : parent(parent) {}
     std::string GetName() const override;
-    void SetKode(const std::string &kode);
     void SetTerm(const Term &term);
     bool Merge();
 };
@@ -48,12 +47,6 @@ class XmlElementHandler {
 public:
     std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
-};
-
-class XmlKodeHandler : public XmlContentElementHandler<XmlElement> {
-public:
-    XmlKodeHandler() : XmlContentElementHandler<XmlElement>("Kode") {}
-    bool Merge(std::shared_ptr<XmlElement> parent, const std::string &content) override;
 };
 
 class XmlTermHandler : private XmlContentElementHandler<XmlTerm> {

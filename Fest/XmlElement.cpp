@@ -10,16 +10,12 @@ std::string XmlElement::GetName() const {
     return "Element";
 }
 
-void XmlElement::SetKode(const std::string &kode) {
-    this->kode = kode;
-}
-
 void XmlElement::SetTerm(const Term &term) {
     this->term = term;
 }
 
 bool XmlElement::Merge() {
-    parent->AddElement({GetId(), kode, term});
+    parent->AddElement({GetId(), GetKode(), term});
     return true;
 }
 
@@ -61,11 +57,6 @@ bool XmlElementHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
         return false;
     }
     return e->Merge();
-}
-
-bool XmlKodeHandler::Merge(std::shared_ptr<XmlElement> parent, const std::string &content) {
-    parent->SetKode(content);
-    return true;
 }
 
 std::shared_ptr<XMLObject> XmlTermHandler::StartElement(const std::shared_ptr<XMLObject> &parent,

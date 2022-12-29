@@ -10,6 +10,7 @@
 #include "KatVilkar.h"
 #include "KatVarselSlv.h"
 #include "KatKodeverk.h"
+#include "KatByttegruppe.h"
 #include <iostream>
 #include <map>
 
@@ -111,6 +112,10 @@ void Fest::Add(const XmlOppfVarselSlv &oppf) {
 
 void Fest::Add(const XmlOppfKodeverk &oppf) {
     oppfKodeverk.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetInfo(), oppf.GetElement());
+}
+
+void Fest::Add(const XmlOppfByttegruppe &oppf) {
+    oppfByttegruppe.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetByttegruppe());
 }
 
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {

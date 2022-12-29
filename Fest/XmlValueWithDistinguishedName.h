@@ -52,6 +52,14 @@ public:
         return std::make_shared<XmlType>(typedParent, name, ValueWithDistinguishedName(i_v->second, i_dn->second));
     }
     virtual bool Merge(std::shared_ptr<XmlType> obj) = 0;
+    bool IsHandledBy(const std::shared_ptr<XMLObject> &obj) {
+        std::shared_ptr<XmlType> xmlType = std::dynamic_pointer_cast<XmlType>(obj);
+        if (xmlType) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     bool EndElement(const std::shared_ptr<XMLObject> &obj) {
         std::shared_ptr<XmlType> xmlType = std::dynamic_pointer_cast<XmlType>(obj);
         if (!obj) {

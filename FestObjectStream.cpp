@@ -56,6 +56,8 @@
 #include "Fest/KatKodeverk.h"
 #include "Fest/XmlInfo.h"
 #include "Fest/XmlElement.h"
+#include "Fest/KatByttegruppe.h"
+#include "Fest/XmlByttegruppe.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -220,6 +222,11 @@ void FestObjectStream::read() {
     parser.AddHandler("Term", std::make_shared<XmlTermHandler>());
     parser.AddHandler("Sprak", std::make_shared<XmlSprakHandler>());
     parser.AddHandler("BeskrivelseTerm", std::make_shared<XmlBeskrivelseTermHandler>());
+    parser.AddHandler("KatByttegruppe", std::make_shared<KatByttegruppeHandler>());
+    parser.AddHandler("OppfByttegruppe", std::make_shared<XmlOppfByttegruppeHandler>());
+    parser.AddHandler("Byttegruppe", std::make_shared<XmlByttegruppeHandler>());
+    parser.AddHandler("MerknadTilByttbarhet", std::make_shared<XmlMerknadTilByttbarhetHandler>());
+    parser.AddHandler("BeskrivelseByttbarhet", std::make_shared<XmlBeskrivelseByttbarhetHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

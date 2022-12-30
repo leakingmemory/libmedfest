@@ -60,6 +60,11 @@
 #include "Fest/XmlByttegruppe.h"
 #include "Fest/KatLegemiddeldose.h"
 #include "Fest/XmlLegemiddeldose.h"
+#include "Fest/KatInteraksjon.h"
+#include "Fest/XmlInteraksjon.h"
+#include "Fest/XmlReferanse.h"
+#include "Fest/XmlSubstansgruppe.h"
+#include "Fest/XmlSubstans.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -233,6 +238,19 @@ void FestObjectStream::read() {
     parser.AddHandler("OppfLegemiddeldose", std::make_shared<XmlOppfLegemiddeldoseHandler>());
     parser.AddHandler("Legemiddeldose", std::make_shared<XmlLegemiddeldoseHandler>());
     parser.AddHandler("LmrLopenr", std::make_shared<XmlLmrLopenrHandler>());
+    parser.AddHandler("KatInteraksjon", std::make_shared<KatInteraksjonHandler>());
+    parser.AddHandler("OppfInteraksjon", std::make_shared<XmlOppfInteraksjonHandler>());
+    parser.AddHandler("Interaksjon", std::make_shared<XmlInteraksjonHandler>());
+    parser.AddHandler("Relevans", std::make_shared<XmlRelevansHandler>());
+    parser.AddHandler("KliniskKonsekvens", std::make_shared<XmlKliniskKonsekvensHandler>());
+    parser.AddHandler("Interaksjonsmekanisme", std::make_shared<XmlInteraksjonsmekanismeHandler>());
+    parser.AddHandler("Kildegrunnlag", std::make_shared<XmlKildegrunnlagHandler>());
+    parser.AddHandler("Handtering", std::make_shared<XmlHandteringHandler>());
+    parser.AddHandler("Referanse", std::make_shared<XmlReferanseHandler>());
+    parser.AddHandler("Kilde", std::make_shared<XmlKildeHandler>());
+    parser.AddHandler("Substansgruppe", std::make_shared<XmlSubstansgruppeHandler>());
+    parser.AddHandler("Substans", std::make_shared<XmlSubstansHandler>());
+    parser.AddHandler("Situasjonskriterium", std::make_shared<XmlSituasjonskriteriumHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

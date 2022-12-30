@@ -12,7 +12,7 @@
 #include "XmlFraDato.h"
 #include "XmlLenke.h"
 #include "XmlReferanseelement.h"
-#include "../Struct/Decoded/Visningsregel.h"
+#include "XmlVisningsregel.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -20,18 +20,16 @@
 class XmlOppfVarselSlv;
 
 class XmlVarselSlv : public XMLObject, public XmlTypeObject, public XmlFraDato, public XmlLenke,
-                     public XmlReferanseelement {
+                     public XmlReferanseelement, public XmlVisningsregel {
 private:
     std::shared_ptr<XmlOppfVarselSlv> parent;
     std::string overskrift{};
     std::string varseltekst{};
-    std::vector<Visningsregel> visningsregel{};
 public:
     XmlVarselSlv(std::shared_ptr<XmlOppfVarselSlv> parent) : parent(parent) {}
     std::string GetName() const override;
     void SetOverskrift(const std::string &overskrift);
     void SetVarseltekst(const std::string &varseltekst);
-    void AddVisningsregel(const Visningsregel &visningsregel);
     bool Merge();
 };
 
@@ -51,12 +49,6 @@ class XmlVarseltekstHandler : public XmlContentElementHandler<XmlVarselSlv> {
 public:
     XmlVarseltekstHandler() : XmlContentElementHandler<XmlVarselSlv>("Varseltekst") {}
     bool Merge(std::shared_ptr<XmlVarselSlv> parent, const std::string &content) override;
-};
-
-class XmlVisningsregelHandler : public XmlValueWithCodeSetHandler<XmlVarselSlv> {
-public:
-    XmlVisningsregelHandler() : XmlValueWithCodeSetHandler<XmlVarselSlv>("Visningsregel") {}
-    bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlVarselSlv>> obj) override;
 };
 
 #endif //LEGEMFEST_XMLVARSELSLV_H

@@ -12,6 +12,14 @@ Lenke XmlLenke::GetLenke() const {
     return lenke;
 }
 
+void XmlLenkeValue::SetLenke(const std::string &lenke) {
+    this->lenke = lenke;
+}
+
+std::string XmlLenkeValue::GetLenke() const {
+    return lenke;
+}
+
 std::string XmlLenkeObject::GetName() const {
     return "Lenke";
 }
@@ -33,8 +41,7 @@ std::shared_ptr<XMLObject> XmlLenkeHandler::StartElement(const std::shared_ptr<X
                                                          const std::map<std::string, std::string> &attributes) {
     std::shared_ptr<XmlLenke> typedParent = std::dynamic_pointer_cast<XmlLenke>(parent);
     if (!typedParent) {
-        std::cerr << "Error: Unexpected Lenke\n";
-        return {};
+        return XmlValueHandler<XmlLenkeValue>::StartElement(parent, attributes);
     }
     return std::make_shared<XmlLenkeObject>(typedParent);
 }
@@ -42,10 +49,14 @@ std::shared_ptr<XMLObject> XmlLenkeHandler::StartElement(const std::shared_ptr<X
 bool XmlLenkeHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
     auto *l = dynamic_cast<XmlLenkeObject *>(&(*obj));
     if (l == nullptr) {
-        std::cerr << "Error: Did not end Lenke\n";
-        return false;
+        return XmlValueHandler<XmlLenkeValue>::EndElement(obj);
     }
     return l->Merge();
+}
+
+bool XmlLenkeHandler::Merge(std::shared_ptr<XmlType> obj) {
+    obj->GetParent()->SetLenke(obj->GetValue());
+    return true;
 }
 
 bool XmlBeskrivelseHandler::Merge(std::shared_ptr<XmlLenkeObject> parent, const std::string &content) {

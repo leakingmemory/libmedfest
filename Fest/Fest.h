@@ -46,6 +46,7 @@ class XmlOppfVarselSlv;
 class XmlOppfKodeverk;
 class XmlOppfByttegruppe;
 class XmlOppfLegemiddeldose;
+class XmlOppfInteraksjon;
 
 class Fest : public XMLObject {
 private:
@@ -83,6 +84,7 @@ public:
     void Add(const XmlOppfKodeverk &);
     void Add(const XmlOppfByttegruppe &);
     void Add(const XmlOppfLegemiddeldose &);
+    void Add(const XmlOppfInteraksjon &);
 };
 
 class FestHandler {

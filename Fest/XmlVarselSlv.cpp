@@ -18,12 +18,8 @@ void XmlVarselSlv::SetVarseltekst(const std::string &varseltekst) {
     this->varseltekst = varseltekst;
 }
 
-void XmlVarselSlv::AddVisningsregel(const Visningsregel &visningsregel) {
-    this->visningsregel.emplace_back(visningsregel);
-}
-
 bool XmlVarselSlv::Merge() {
-    parent->SetVarselSlv({GetType(), overskrift, varseltekst, visningsregel, GetFraDato(), GetLenke(), GetReferanseelement()});
+    parent->SetVarselSlv({GetType(), overskrift, varseltekst, GetVisningsregel(), GetFraDato(), GetLenke(), GetReferanseelement()});
     return true;
 }
 
@@ -53,10 +49,5 @@ bool XmlOverskriftHandler::Merge(std::shared_ptr<XmlVarselSlv> parent, const std
 
 bool XmlVarseltekstHandler::Merge(std::shared_ptr<XmlVarselSlv> parent, const std::string &content) {
     parent->SetVarseltekst(content);
-    return true;
-}
-
-bool XmlVisningsregelHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlVarselSlv>> obj) {
-    obj->GetParent()->AddVisningsregel({obj->GetValueWithCodeSet()});
     return true;
 }

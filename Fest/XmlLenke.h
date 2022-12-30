@@ -8,6 +8,7 @@
 #include "XMLObject.h"
 #include "XmlValue.h"
 #include "XmlContentElement.h"
+#include "XmlValue.h"
 #include "../Struct/Decoded/Lenke.h"
 #include <memory>
 
@@ -18,6 +19,15 @@ public:
     virtual ~XmlLenke() = default;
     void SetLenke(const Lenke &lenke);
     [[nodiscard]] Lenke GetLenke() const;
+};
+
+class XmlLenkeValue {
+private:
+    std::string lenke{};
+public:
+    virtual ~XmlLenkeValue() = default;
+    void SetLenke(const std::string &lenke);
+    [[nodiscard]] std::string GetLenke() const;
 };
 
 class XmlLenkeObject : public XMLObject {
@@ -33,10 +43,12 @@ public:
     bool Merge();
 };
 
-class XmlLenkeHandler {
+class XmlLenkeHandler : private XmlValueHandler<XmlLenkeValue> {
 public:
+    XmlLenkeHandler() : XmlValueHandler<XmlLenkeValue>("Lenke") {}
     std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
+    bool Merge(std::shared_ptr<XmlType> obj) override;
 };
 
 class XmlBeskrivelseHandler : public XmlContentElementHandler<XmlLenkeObject> {

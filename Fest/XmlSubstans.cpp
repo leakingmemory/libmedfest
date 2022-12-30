@@ -15,7 +15,18 @@ void XmlSubstans::SetSubstans(const std::string &substans) {
 }
 
 bool XmlSubstans::Merge() {
-    parent->AddSubstans({substans, GetAtc()});
+    std::string refVirkestoff{};
+    {
+        auto refs = GetRefVirkestoff();
+        if (refs.size() > 0) {
+            if (refs.size() > 1) {
+                std::cerr << "Error: Substans: Multiple RefVirkestoff\n";
+                return false;
+            }
+            refVirkestoff = refs[0];
+        }
+    }
+    parent->AddSubstans({substans, GetAtc(), refVirkestoff});
     return true;
 }
 

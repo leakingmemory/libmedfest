@@ -8,12 +8,13 @@
 #include "XMLObject.h"
 #include "XmlContentElement.h"
 #include "XmlAtc.h"
+#include "XmlRefVirkestoff.h"
 #include <memory>
 #include <map>
 
 class XmlSubstansgruppe;
 
-class XmlSubstans : public XMLObject, public XmlAtc {
+class XmlSubstans : public XMLObject, public XmlAtc, public XmlRefVirkestoff {
 private:
     std::shared_ptr<XmlSubstansgruppe> parent;
     std::string substans{};

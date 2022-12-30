@@ -11,11 +11,14 @@ class Substans {
 private:
     std::string substans;
     Atc atc;
+    std::string refVirkestoff;
 public:
-    Substans() : substans(), atc() {}
-    Substans(const std::string &substans, const Atc &atc) : substans(substans), atc(atc) {}
+    Substans() : substans(), atc(), refVirkestoff() {}
+    Substans(const std::string &substans, const Atc &atc, const std::string &refVirkestoff) :
+            substans(substans), atc(atc), refVirkestoff(refVirkestoff) {}
     [[nodiscard]] std::string GetSubstans() const;
     [[nodiscard]] Atc GetAtc() const;
+    [[nodiscard]] std::string GetRefVirkestoff() const;
 };
 
 

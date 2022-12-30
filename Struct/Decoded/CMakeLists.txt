@@ -22,4 +22,4 @@ add_library(decoded OBJECT Status.cpp Status.h OppfLegemiddelMerkevare.cpp OppfL
         Legemiddeldose.cpp Legemiddeldose.h PakningskomponentInfo.cpp PakningskomponentInfo.h
         OppfInteraksjonBase.cpp OppfInteraksjonBase.h Interaksjon.cpp Interaksjon.h
         OppfInteraksjon.cpp OppfInteraksjon.h Referanse.cpp Referanse.h Substansgruppe.cpp Substansgruppe.h
-        Substans.cpp Substans.h)
+        Substans.cpp Substans.h InteraksjonIkkeVurdert.cpp InteraksjonIkkeVurdert.h)

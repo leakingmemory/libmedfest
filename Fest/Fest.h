@@ -20,6 +20,8 @@
 #include "../Struct/Decoded/OppfKodeverk.h"
 #include "../Struct/Decoded/OppfByttegruppe.h"
 #include "../Struct/Decoded/OppfLegemiddeldose.h"
+#include "../Struct/Decoded/OppfInteraksjon.h"
+#include "../Struct/Decoded/OppfInteraksjonIkkeVurdert.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -65,6 +67,8 @@ private:
     std::vector<OppfKodeverk> oppfKodeverk{};
     std::vector<OppfByttegruppe> oppfByttegruppe{};
     std::vector<OppfLegemiddeldose> oppfLegemiddeldose{};
+    std::vector<OppfInteraksjon> oppfInteraksjon{};
+    std::vector<OppfInteraksjonIkkeVurdert> oppfInteraksjonIkkeVurdert{};
 public:
     std::string GetName() const override;
     void SetHentetDato(const std::string &hentetDato) {
@@ -84,7 +88,7 @@ public:
     void Add(const XmlOppfKodeverk &);
     void Add(const XmlOppfByttegruppe &);
     void Add(const XmlOppfLegemiddeldose &);
-    void Add(const XmlOppfInteraksjon &);
+    [[nodiscard]] bool Add(const XmlOppfInteraksjon &);
 };
 
 class FestHandler {

@@ -10,8 +10,8 @@ std::string KatInteraksjon::GetName() const {
     return "KatInteraksjon";
 }
 
-void KatInteraksjon::Merge(const XmlOppfInteraksjon &oppf) {
-    fest->Add(oppf);
+bool KatInteraksjon::Merge(const XmlOppfInteraksjon &oppf) {
+    return fest->Add(oppf);
 }
 
 std::string XmlOppfInteraksjon::GetName() const {
@@ -32,8 +32,22 @@ Interaksjon XmlOppfInteraksjon::GetInteraksjon() const {
     return interaksjon;
 }
 
-void XmlOppfInteraksjon::Merge() {
-    kat->Merge(*this);
+bool XmlOppfInteraksjon::SetInteraksjonIkkeVurdert(const InteraksjonIkkeVurdert &interaksjonIkkeVurdert) {
+    if (this->interaksjonIkkeVurdert.GetAtc().GetValue().empty()) {
+        this->interaksjonIkkeVurdert = interaksjonIkkeVurdert;
+        return true;
+    } else {
+        std::cerr << "Error: Duplicate OppfInteraksjon -> InteraksjonIkkeVurdert\n";
+        return false;
+    }
+}
+
+InteraksjonIkkeVurdert XmlOppfInteraksjon::GetInteraksjonIkkeVurdert() const {
+    return interaksjonIkkeVurdert;
+}
+
+bool XmlOppfInteraksjon::Merge() {
+    return kat->Merge(*this);
 }
 
 std::shared_ptr<XMLObject> KatInteraksjonHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -66,6 +80,5 @@ bool XmlOppfInteraksjonHandler::EndElement(const std::shared_ptr<XMLObject> &obj
         std::cerr << "Error: Not ending OppfInteraksjon\n";
         return false;
     }
-    i->Merge();
-    return true;
+    return i->Merge();
 }

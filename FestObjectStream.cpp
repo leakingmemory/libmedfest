@@ -65,6 +65,7 @@
 #include "Fest/XmlReferanse.h"
 #include "Fest/XmlSubstansgruppe.h"
 #include "Fest/XmlSubstans.h"
+#include "Fest/XmlInteraksjonIkkeVurdert.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -251,6 +252,7 @@ void FestObjectStream::read() {
     parser.AddHandler("Substansgruppe", std::make_shared<XmlSubstansgruppeHandler>());
     parser.AddHandler("Substans", std::make_shared<XmlSubstansHandler>());
     parser.AddHandler("Situasjonskriterium", std::make_shared<XmlSituasjonskriteriumHandler>());
+    parser.AddHandler("InteraksjonIkkeVurdert", std::make_shared<XmlInteraksjonIkkeVurdertHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

@@ -125,8 +125,26 @@ void Fest::Add(const XmlOppfLegemiddeldose &oppf) {
     oppfLegemiddeldose.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetLegemiddeldose());
 }
 
-void Fest::Add(const XmlOppfInteraksjon &oppf) {
+bool Fest::Add(const XmlOppfInteraksjon &oppf) {
     OppfInteraksjonBase oppfInteraksjon{oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus()};
+    auto interaksjon = oppf.GetInteraksjon();
+    auto interaksjonIkkeVurdert = oppf.GetInteraksjonIkkeVurdert();
+    auto hasInteraksjon = !interaksjon.GetId().empty();
+    auto hasInteraksjonIkkeVurdert = !interaksjonIkkeVurdert.GetAtc().GetValue().empty();
+    if (hasInteraksjon) {
+        if (hasInteraksjonIkkeVurdert) {
+            std::cerr << "Error: OppfInteraksjon: Both Interaksjon and InteraksjonIkkeVurdert\n";
+            return false;
+        }
+        this->oppfInteraksjon.emplace_back(oppfInteraksjon, interaksjon);
+        return true;
+    } else if (hasInteraksjonIkkeVurdert) {
+        this->oppfInteraksjonIkkeVurdert.emplace_back(oppfInteraksjon, interaksjonIkkeVurdert);
+        return true;
+    } else {
+        std::cerr << "Error: Expected Interaksjon or InteraksjonIkkeVurdert\n";
+        return false;
+    }
 }
 
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {

@@ -10,6 +10,7 @@
 #include "TidspunktObject.h"
 #include "StatusObject.h"
 #include "../Struct/Decoded/Interaksjon.h"
+#include "../Struct/Decoded/InteraksjonIkkeVurdert.h"
 #include <memory>
 #include <map>
 
@@ -22,19 +23,22 @@ private:
 public:
     KatInteraksjon(const std::shared_ptr<Fest> &fest) : fest(fest) {}
     std::string GetName() const override;
-    void Merge(const XmlOppfInteraksjon &);
+    [[nodiscard]] bool Merge(const XmlOppfInteraksjon &);
 };
 
 class XmlOppfInteraksjon : public XMLObject, public FestIdObject, public TidspunktObject, public StatusObject {
 private:
     std::shared_ptr<KatInteraksjon> kat;
     Interaksjon interaksjon{};
+    InteraksjonIkkeVurdert interaksjonIkkeVurdert{};
 public:
     XmlOppfInteraksjon(const std::shared_ptr<KatInteraksjon> &kat) : kat(kat) {}
     std::string GetName() const override;
     [[nodiscard]] bool SetInteraksjon(const Interaksjon &interaksjon);
     [[nodiscard]] Interaksjon GetInteraksjon() const;
-    void Merge();
+    [[nodiscard]] bool SetInteraksjonIkkeVurdert(const InteraksjonIkkeVurdert &interaksjonIkkeVurdert);
+    [[nodiscard]] InteraksjonIkkeVurdert GetInteraksjonIkkeVurdert() const;
+    [[nodiscard]] bool Merge();
 };
 
 class KatInteraksjonHandler {

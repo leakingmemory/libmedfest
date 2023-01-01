@@ -5,13 +5,11 @@
 #ifndef LEGEMFEST_ADMINISTRERINGLEGEMIDDEL_H
 #define LEGEMFEST_ADMINISTRERINGLEGEMIDDEL_H
 
-
 #include "Administrasjonsvei.h"
 #include "EnhetDosering.h"
 #include "BruksomradeEtikett.h"
 #include "KanKnuses.h"
 #include "ForhandsregelInntak.h"
-#include "Kortdose.h"
 #include "Deling.h"
 #include "KanApnes.h"
 #include "Bolus.h"
@@ -26,7 +24,7 @@ private:
     std::vector<BruksomradeEtikett> bruksomradeEtikett;
     KanKnuses kanKnuses;
     std::vector<ForhandsregelInntak> forhandsregelInntak;
-    std::vector<Kortdose> kortdose;
+    std::vector<ValueWithCodeSet> kortdose;
     Deling deling;
     KanApnes kanApnes;
     Bolus bolus;
@@ -38,7 +36,7 @@ public:
     AdministreringLegemiddel(
             const Administrasjonsvei &administrasjonsvei, const EnhetDosering &enhetDosering,
             const std::vector<BruksomradeEtikett> &bruksomradeEtikett, const KanKnuses &kanKnuses,
-            const std::vector<ForhandsregelInntak> &forhandsregelInntak, const std::vector<Kortdose> &kortdose,
+            const std::vector<ForhandsregelInntak> &forhandsregelInntak, const std::vector<ValueWithCodeSet> &kortdose,
             const Deling &deling, const KanApnes &kanApnes, const Bolus &bolus,
             const InjeksjonshastighetBolus &injeksjonshastighetBolus, MaybeBoolean blandingsveske
         ) :
@@ -51,7 +49,7 @@ public:
     [[nodiscard]] std::vector<BruksomradeEtikett> GetBruksomradeEtikett() const;
     [[nodiscard]] KanKnuses GetKanKnuses() const;
     [[nodiscard]] std::vector<ForhandsregelInntak> GetForhandsregelInntak() const;
-    [[nodiscard]] std::vector<Kortdose> GetKortdose() const;
+    [[nodiscard]] std::vector<ValueWithCodeSet> GetKortdose() const;
     [[nodiscard]] Deling GetDeling() const;
     [[nodiscard]] KanApnes GetKanApnes() const;
     [[nodiscard]] Bolus GetBolus() const;

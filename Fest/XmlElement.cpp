@@ -27,16 +27,12 @@ void XmlTerm::SetTerm(const std::string &term) {
     this->term = term;
 }
 
-void XmlTerm::SetBeskrivelseTerm(const std::string &beskrivelseTerm) {
-    this->beskrivelseTerm = beskrivelseTerm;
-}
-
 void XmlTerm::SetSprak(const Sprak &sprak) {
     this->sprak = sprak;
 }
 
 bool XmlTerm::Merge() {
-    parent->SetTerm({term, beskrivelseTerm, sprak});
+    parent->SetTerm({term, GetBeskrivelseTerm(), sprak});
     return true;
 }
 
@@ -78,11 +74,6 @@ bool XmlTermHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
 
 bool XmlTermHandler::Merge(std::shared_ptr<XmlTerm> parent, const std::string &content) {
     parent->SetTerm(content);
-    return true;
-}
-
-bool XmlBeskrivelseTermHandler::Merge(std::shared_ptr<XmlTerm> parent, const std::string &content) {
-    parent->SetBeskrivelseTerm(content);
     return true;
 }
 

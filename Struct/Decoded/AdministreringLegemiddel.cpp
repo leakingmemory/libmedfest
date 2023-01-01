@@ -24,7 +24,7 @@ std::vector<ForhandsregelInntak> AdministreringLegemiddel::GetForhandsregelInnta
     return forhandsregelInntak;
 }
 
-std::vector<Kortdose> AdministreringLegemiddel::GetKortdose() const {
+std::vector<ValueWithCodeSet> AdministreringLegemiddel::GetKortdose() const {
     return kortdose;
 }
 

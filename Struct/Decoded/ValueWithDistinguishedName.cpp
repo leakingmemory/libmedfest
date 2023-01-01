@@ -9,5 +9,5 @@ std::string ValueWithDistinguishedName::GetValue() const {
 }
 
 std::string ValueWithDistinguishedName::GetDistinguishedName() const {
-
+    return distinguishedName;
 }

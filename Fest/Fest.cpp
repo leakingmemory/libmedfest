@@ -13,7 +13,7 @@
 #include "KatByttegruppe.h"
 #include "KatLegemiddeldose.h"
 #include "KatInteraksjon.h"
-#include "../Struct/Decoded/OppfInteraksjonBase.h"
+#include "KatStrDosering.h"
 #include <iostream>
 #include <map>
 
@@ -123,6 +123,10 @@ void Fest::Add(const XmlOppfByttegruppe &oppf) {
 
 void Fest::Add(const XmlOppfLegemiddeldose &oppf) {
     oppfLegemiddeldose.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetLegemiddeldose());
+}
+
+void Fest::Add(const XmlOppfStrDosering &oppf) {
+    oppfStrDosering.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetKortdose());
 }
 
 bool Fest::Add(const XmlOppfInteraksjon &oppf) {

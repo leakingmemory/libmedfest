@@ -29,10 +29,6 @@ void XmlAdministreringLegemiddel::AddForhandsregelInntak(const ForhandsregelInnt
     this->forhandsregelInntak.push_back(forhandsregelInntak);
 }
 
-void XmlAdministreringLegemiddel::AddKortdose(const Kortdose &kortdose) {
-    this->kortdose.push_back(kortdose);
-}
-
 void XmlAdministreringLegemiddel::SetDeling(const Deling &deling) {
     this->deling = deling;
 }
@@ -60,7 +56,7 @@ void XmlAdministreringLegemiddel::Merge() {
         bruksomradeEtikett,
         kanKnuses,
         forhandsregelInntak,
-        kortdose,
+        GetKortdose(),
         deling,
         kanApnes,
         bolus,
@@ -111,11 +107,6 @@ bool XmlKanKnusesHandler::Merge(std::shared_ptr<XmlType> obj) {
 
 bool XmlForhandsregelInntakHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) {
     obj->GetParent()->AddForhandsregelInntak({obj->GetValueWithCodeSet()});
-    return true;
-}
-
-bool XmlKortdoseHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlAdministreringLegemiddel>> obj) {
-    obj->GetParent()->AddKortdose({obj->GetValueWithCodeSet()});
     return true;
 }
 

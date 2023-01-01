@@ -6,11 +6,22 @@
 #define LEGEMFEST_KORTDOSE_H
 
 #include "ValueWithCodeSet.h"
+#include "Legemiddelforbruk.h"
+#include <vector>
 
-class Kortdose : public ValueWithCodeSet {
+class Kortdose {
+private:
+    ValueWithCodeSet kortdose;
+    std::string beskrivelseTerm;
+    std::vector<Legemiddelforbruk> legemiddelforbruk;
 public:
-    Kortdose() : ValueWithCodeSet() {}
-    Kortdose(const ValueWithCodeSet &valueWithCodeSet) : ValueWithCodeSet(valueWithCodeSet) {}
+    Kortdose() : kortdose(), beskrivelseTerm(), legemiddelforbruk() {}
+    Kortdose(const ValueWithCodeSet &valueWithCodeSet, const std::string &beskrivelseTerm,
+             const std::vector<Legemiddelforbruk> &legemiddelforbruk) :
+            kortdose(valueWithCodeSet), beskrivelseTerm(beskrivelseTerm), legemiddelforbruk(legemiddelforbruk) {}
+    [[nodiscard]] ValueWithCodeSet GetKortdose() const;
+    [[nodiscard]] std::string GetBeskrivelseTerm() const;
+    [[nodiscard]] std::vector<Legemiddelforbruk> GetLegemiddelforbruk() const;
 };
 
 #endif //LEGEMFEST_KORTDOSE_H

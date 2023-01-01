@@ -32,4 +32,7 @@ add_library(fest OBJECT Fest.cpp Fest.h FestIdObject.cpp FestIdObject.h
         XmlLegemiddeldose.cpp XmlLegemiddeldose.h KatInteraksjon.cpp KatInteraksjon.h
         XmlInteraksjon.cpp XmlInteraksjon.h XmlVisningsregel.cpp XmlVisningsregel.h XmlReferanse.cpp XmlReferanse.h
         XmlSubstansgruppe.cpp XmlSubstansgruppe.h XmlSubstans.cpp XmlSubstans.h
-        XmlInteraksjonIkkeVurdert.cpp XmlInteraksjonIkkeVurdert.h)
+        XmlInteraksjonIkkeVurdert.cpp XmlInteraksjonIkkeVurdert.h KatStrDosering.cpp KatStrDosering.h
+        XmlKortdose.cpp XmlKortdose.h XmlBeskrivelseTerm.cpp XmlBeskrivelseTerm.h
+        XmlLegemiddelforbruk.cpp XmlLegemiddelforbruk.h XmlDosering.cpp XmlDosering.h
+        XmlDoseFastTidspunkt.cpp XmlDoseFastTidspunkt.h XmlFastDose.cpp XmlFastDose.h)

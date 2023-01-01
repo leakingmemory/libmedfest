@@ -66,6 +66,11 @@
 #include "Fest/XmlSubstansgruppe.h"
 #include "Fest/XmlSubstans.h"
 #include "Fest/XmlInteraksjonIkkeVurdert.h"
+#include "Fest/KatStrDosering.h"
+#include "Fest/XmlLegemiddelforbruk.h"
+#include "Fest/XmlDosering.h"
+#include "Fest/XmlDoseFastTidspunkt.h"
+#include "Fest/XmlFastDose.h"
 #include <iostream>
 
 void FestObjectStream::read() {
@@ -253,6 +258,20 @@ void FestObjectStream::read() {
     parser.AddHandler("Substans", std::make_shared<XmlSubstansHandler>());
     parser.AddHandler("Situasjonskriterium", std::make_shared<XmlSituasjonskriteriumHandler>());
     parser.AddHandler("InteraksjonIkkeVurdert", std::make_shared<XmlInteraksjonIkkeVurdertHandler>());
+    parser.AddHandler("KatStrDosering", std::make_shared<KatStrDoseringHandler>());
+    parser.AddHandler("OppfStrDosering", std::make_shared<XmlOppfStrDoseringHandler>());
+    parser.AddHandler("Legemiddelforbruk", std::make_shared<XmlLegemiddelforbrukHandler>());
+    parser.AddHandler("Lopenr", std::make_shared<XmlLopenrHandler>());
+    parser.AddHandler("Periode", std::make_shared<XmlPeriodeHandler>());
+    parser.AddHandler("Iterasjoner", std::make_shared<XmlIterasjonerHandler>());
+    parser.AddHandler("Dosering", std::make_shared<XmlDoseringHandler>());
+    parser.AddHandler("DoseFastTidspunkt", std::make_shared<XmlDoseFastTidspunktHandler>());
+    parser.AddHandler("Intervall", std::make_shared<XmlIntervallHandler>());
+    parser.AddHandler("Tidsomrade", std::make_shared<XmlTidsomradeHandler>());
+    parser.AddHandler("GisEksakt", std::make_shared<XmlGisEksaktHandler>());
+    parser.AddHandler("FastDose", std::make_shared<XmlFastDoseHandler>());
+    parser.AddHandler("DagerPa", std::make_shared<XmlDagerPaHandler>());
+    parser.AddHandler("DagerAv", std::make_shared<XmlDagerAvHandler>());
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

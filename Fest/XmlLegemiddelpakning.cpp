@@ -44,6 +44,7 @@ void XmlLegemiddelpakning::Merge() {
             GetSvartTrekant()
         },
         GetPreparattype(),
+        GetId(),
         varenr,
         oppbevaring,
         GetPakningsinfo(),

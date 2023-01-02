@@ -32,6 +32,7 @@ void XmlLegemiddelVirkestoff::Merge() {
                                                         GetAdministreringLegemiddel(),
                                                         GetSortertVirkestoffMedStyrke()
                                                     },
+                                                    GetId(),
                                                     GetRefusjon(),
                                                     GetRefLegemiddelMerkevare(),
                                                     GetRefPakning(),

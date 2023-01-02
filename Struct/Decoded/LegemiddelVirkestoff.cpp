@@ -4,6 +4,10 @@
 
 #include "LegemiddelVirkestoff.h"
 
+std::string LegemiddelVirkestoff::GetId() const {
+    return id;
+}
+
 Refusjon LegemiddelVirkestoff::GetRefusjon() const {
     return refusjon;
 }

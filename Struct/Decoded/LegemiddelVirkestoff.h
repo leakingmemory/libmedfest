@@ -11,18 +11,20 @@
 
 class LegemiddelVirkestoff : public Legemiddel {
 private:
+    std::string id;
     Refusjon refusjon;
     std::vector<std::string> refLegemiddelMerkevare;
     std::vector<std::string> refPakning;
     EnhetForskrivning forskrivningsenhetResept;
 public:
-    LegemiddelVirkestoff() : Legemiddel(), refusjon(), refLegemiddelMerkevare(), refPakning(),
+    LegemiddelVirkestoff() : Legemiddel(), id(), refusjon(), refLegemiddelMerkevare(), refPakning(),
                              forskrivningsenhetResept() {}
-    LegemiddelVirkestoff(const Legemiddel &legemiddel, const Refusjon &refusjon,
+    LegemiddelVirkestoff(const Legemiddel &legemiddel, const std::string &id, const Refusjon &refusjon,
                          const std::vector<std::string> &refLegemiddelMerkevare,
                          const std::vector<std::string> &refPakning, const EnhetForskrivning &forskrivningsenhetResept) :
-            Legemiddel(legemiddel), refusjon(refusjon), refLegemiddelMerkevare(refLegemiddelMerkevare),
+            Legemiddel(legemiddel), id(id), refusjon(refusjon), refLegemiddelMerkevare(refLegemiddelMerkevare),
             refPakning(refPakning), forskrivningsenhetResept(forskrivningsenhetResept) {}
+    [[nodiscard]] std::string GetId() const;
     [[nodiscard]] Refusjon GetRefusjon() const;
     [[nodiscard]] std::vector<std::string> GetRefLegemiddelMerkevare() const;
     [[nodiscard]] std::vector<std::string> GetRefPakning() const;

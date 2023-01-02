@@ -20,6 +20,7 @@
 class Legemiddelpakning : public LegemiddelCore {
 private:
     Preparattype preparattype;
+    std::string id;
     std::string varenr;
     Oppbevaring oppbevaring;
     std::vector<Pakningsinfo> pakningsinfo;
@@ -31,20 +32,21 @@ private:
     Preparatomtaleavsnitt preparatomtaleavsnitt;
     bool ikkeKonservering;
 public:
-    Legemiddelpakning() : LegemiddelCore(), preparattype(), varenr(), oppbevaring(), pakningsinfo(),
+    Legemiddelpakning() : LegemiddelCore(), preparattype(), id(), varenr(), oppbevaring(), pakningsinfo(),
             markedsforingsinfo(), ean(), prisVare(), refusjon(), pakningByttegruppe(), preparatomtaleavsnitt(),
             ikkeKonservering(false) {}
-    Legemiddelpakning(const LegemiddelCore &legemiddelCore, const Preparattype &preparattype, const std::string &varenr,
-                      const Oppbevaring &oppbevaring, const std::vector<Pakningsinfo> &pakningsinfo,
-                      const Markedsforingsinfo &markedsforingsinfo, const std::string &ean,
-                      const std::vector<PrisVare> &prisVare, const Refusjon &refusjon,
+    Legemiddelpakning(const LegemiddelCore &legemiddelCore, const Preparattype &preparattype, const std::string &id,
+                      const std::string &varenr, const Oppbevaring &oppbevaring,
+                      const std::vector<Pakningsinfo> &pakningsinfo, const Markedsforingsinfo &markedsforingsinfo,
+                      const std::string &ean, const std::vector<PrisVare> &prisVare, const Refusjon &refusjon,
                       const PakningByttegruppe &pakningByttegruppe, const Preparatomtaleavsnitt &preparatomtaleavsnitt,
                       bool ikkeKonservering) :
-            LegemiddelCore(legemiddelCore), preparattype(preparattype), varenr(varenr), oppbevaring(oppbevaring),
+            LegemiddelCore(legemiddelCore), preparattype(preparattype), id(id), varenr(varenr), oppbevaring(oppbevaring),
             pakningsinfo(pakningsinfo), markedsforingsinfo(markedsforingsinfo), ean(ean), prisVare(prisVare),
             refusjon(refusjon), pakningByttegruppe(pakningByttegruppe), preparatomtaleavsnitt(preparatomtaleavsnitt),
             ikkeKonservering(ikkeKonservering) {}
     [[nodiscard]] Preparattype GetPreparattype() const;
+    [[nodiscard]] std::string GetId() const;
     [[nodiscard]] std::string GetVarenr() const;
     [[nodiscard]] Oppbevaring GetOppbevaring() const;
     [[nodiscard]] std::vector<Pakningsinfo> GetPakningsinfo() const;

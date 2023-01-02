@@ -8,6 +8,10 @@ Preparattype Legemiddelpakning::GetPreparattype() const {
     return preparattype;
 }
 
+std::string Legemiddelpakning::GetId() const {
+    return id;
+}
+
 std::string Legemiddelpakning::GetVarenr() const {
     return varenr;
 }

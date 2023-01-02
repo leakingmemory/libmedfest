@@ -57,6 +57,7 @@ void XmlLegemiddelMerkevare::Merge() {
                 GetSortertVirkestoffMedStyrke()
             },
             GetPreparattype(),
+            GetId(),
             varenavn,
             legemiddelformLang,
             produsent,

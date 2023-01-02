@@ -33,6 +33,8 @@ public:
     }
 };
 
+class Fest;
+
 class FestObjectStream {
 private:
     std::unique_ptr<FestObjectStreamSource> source;
@@ -41,7 +43,7 @@ public:
     template <FestSourceStream Source> FestObjectStream(std::shared_ptr<Source> source) {
         this->source = std::make_unique<FestObjectStreamSourceImpl<Source>>(source);
     }
-    void read();
+    std::shared_ptr<Fest> read();
 };
 
 

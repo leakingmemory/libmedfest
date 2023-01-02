@@ -73,7 +73,7 @@
 #include "Fest/XmlFastDose.h"
 #include <iostream>
 
-void FestObjectStream::read() {
+std::shared_ptr<Fest> FestObjectStream::read() {
     XMLParser parser{};
     parser.AddHandler("FEST", std::make_shared<FestHandler>());
     parser.AddHandler("HentetDato", std::make_shared<HentetDatoHandler>());
@@ -276,7 +276,7 @@ void FestObjectStream::read() {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {
             std::cerr << "Read error, xml stream\n";
-            return;
+            return {};
         }
         if (num == 0) {
             break;
@@ -284,8 +284,9 @@ void FestObjectStream::read() {
         std::cout << "Read " << num << " bytes\n";
         if (!parser.ParseBuffer(&(buf[0]), num, false)) {
             std::cerr << "XML Parse error\n";
-            return;
+            return {};
         }
     } while (true);
     parser.ParseBuffer(nullptr, 0, true);
+    return parser.GetRoot<Fest>();
 }

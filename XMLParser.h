@@ -10,6 +10,7 @@
 #include <string>
 #include <memory>
 #include <map>
+#include <iostream>
 #include "Fest/XMLObject.h"
 
 template <typename T> concept XMLObjectHandler = requires (T handler) {
@@ -63,6 +64,23 @@ public:
     void CharacterData(const std::string &charData);
 
     bool ParseBuffer(const void *buf, int len, bool lastBuffer);
+
+    template <class T> std::shared_ptr<T> GetRoot() {
+        bool found = false;
+        std::shared_ptr<T> root = {};
+        for (auto potentialRoot : roots) {
+            std::shared_ptr<T> typedRoot = std::dynamic_pointer_cast<T>(potentialRoot);
+            if (typedRoot) {
+                if (found) {
+                    std::cerr << "Error: Duplicate roots\n";
+                    return {};
+                }
+                found = true;
+                root = typedRoot;
+            }
+        }
+        return root;
+    }
 };
 
 

@@ -36,11 +36,11 @@ std::shared_ptr<libzip_file> FestZip::GetXmlFile() {
     return z->Open(xmlname);
 }
 
-void FestZip::Decode() {
+std::shared_ptr<Fest> FestZip::Decode() {
     auto file = GetXmlFile();
     if (!file) {
         std::cerr << "Error: Couldn't find xml file inside the zip archive\n";
     }
     FestObjectStream inputStream{file};
-    inputStream.read();
+    return inputStream.read();
 }

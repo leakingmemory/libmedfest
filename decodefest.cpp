@@ -8,8 +8,13 @@
 
 int DecodeFest(const std::string &zipname) {
     FestZip festzip{zipname};
-    festzip.Decode();
-    return 0;
+    auto fest = festzip.Decode();
+    if (fest) {
+        return 0;
+    } else {
+        std::cerr << "Error: Failed to read in FEST\n";
+        return 1;
+    }
 }
 
 int usage(const std::string &cmd) {

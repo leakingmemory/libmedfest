@@ -8,5 +8,9 @@ target_link_libraries(pstringtest PRIVATE packed)
 add_executable(pfestidtest PFestIdTest.cpp)
 target_link_libraries(pfestidtest PRIVATE packed)
 
+add_executable(festuuidlisttest FestUuidListTest.cpp)
+target_link_libraries(festuuidlisttest PRIVATE packed)
+
 add_test(PStringTest COMMAND pstringtest)
 add_test(PFestIdTest COMMAND pfestidtest)
+add_test(FestUuidListTest COMMAND festuuidlisttest)

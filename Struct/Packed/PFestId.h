@@ -13,6 +13,9 @@ class PFestId {
 public:
     PFestId(const std::string &id, std::vector<FestUuid> &uuidblock);
     [[nodiscard]] FestUuid GetFestId(const std::vector<FestUuid> &uuidblock) const;
+    constexpr bool operator == (const PFestId &other) const {
+        return this->id == other.id;
+    }
 };
 
 static_assert(sizeof(PFestId) == sizeof(uint32_t));

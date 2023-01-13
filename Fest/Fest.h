@@ -52,6 +52,11 @@ class XmlOppfLegemiddeldose;
 class XmlOppfInteraksjon;
 class XmlOppfStrDosering;
 
+class FestVisitor {
+public:
+    [[nodiscard]] virtual bool Visit(const OppfLegemiddelMerkevare &merkevare) = 0;
+};
+
 class Fest : public XMLObject {
 private:
     std::string hentetDato{};
@@ -93,6 +98,8 @@ public:
     void Add(const XmlOppfLegemiddeldose &);
     [[nodiscard]] bool Add(const XmlOppfInteraksjon &);
     void Add(const XmlOppfStrDosering &);
+
+    [[nodiscard]] bool Accept(FestVisitor &visitor) const;
 };
 
 class FestHandler {

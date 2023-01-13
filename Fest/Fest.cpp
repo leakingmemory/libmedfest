@@ -151,6 +151,15 @@ bool Fest::Add(const XmlOppfInteraksjon &oppf) {
     }
 }
 
+bool Fest::Accept(FestVisitor &visitor) const {
+    for (auto &merkevare : oppfLegemiddelMerkevare) {
+        if (!visitor.Visit(merkevare)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 std::shared_ptr<XMLObject> FestHandler::StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) {
     return std::make_shared<Fest>();
 }

@@ -8,9 +8,13 @@ PString::PString(const std::string &str, std::string &textblock) {
     int pos = 0;
     while (pos < textblock.size()) {
         pos = textblock.find(str, pos);
-        if (pos < textblock.size() && textblock[pos + str.size()] == '\0') {
-            this->offset = pos;
-            return;
+        if (pos < textblock.size()) {
+            if (textblock[pos + str.size()] == '\0') {
+                this->offset = pos;
+                return;
+            } else {
+                ++pos;
+            }
         }
     }
     if (textblock.size() > 0) {

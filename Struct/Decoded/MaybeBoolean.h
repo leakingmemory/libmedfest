@@ -11,4 +11,25 @@ enum class MaybeBoolean {
     UNSPECIFIED = -1
 };
 
-#endif //LEGEMFEST_MAYBEBOOLEAN_H
+constexpr uint8_t ToRaw(MaybeBoolean maybeBoolean) {
+    if (maybeBoolean == MaybeBoolean::FALSE) {
+        return 0;
+    } else if (maybeBoolean == MaybeBoolean::TRUE) {
+        return 1;
+    } else {
+        return 3;
+    }
+}
+
+constexpr MaybeBoolean FromRaw(uint8_t raw) {
+    switch (raw) {
+        case 0:
+            return MaybeBoolean::FALSE;
+        case 1:
+            return MaybeBoolean::TRUE;
+        default:
+            return MaybeBoolean::UNSPECIFIED;
+    }
+}
+
+#endif

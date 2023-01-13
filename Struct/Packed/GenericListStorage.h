@@ -114,6 +114,9 @@ public:
     [[nodiscard]] std::vector<T> GetList() const {
         return list;
     }
+    [[nodiscard]] size_t GetSize() const {
+        return list.size();
+    }
 };
 
 #endif //LEGEMFEST_GENERICLISTSTORAGE_H

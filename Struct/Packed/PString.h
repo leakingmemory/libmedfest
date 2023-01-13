@@ -12,8 +12,12 @@ class PString {
 private:
     uint32_t offset;
 public:
+    PString() : offset(0) {}
     PString(const std::string &str, std::string &textblock);
     [[nodiscard]] std::string ToString(const std::string &textblock) const;
+    bool operator == (const PString other) const {
+        return offset == other.offset;
+    }
 };
 
 

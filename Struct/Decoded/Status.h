@@ -5,17 +5,13 @@
 #ifndef LEGEMFEST_STATUS_H
 #define LEGEMFEST_STATUS_H
 
+#include "ValueWithDistinguishedName.h"
 #include <string>
 
-class Status {
-private:
-    std::string value;
-    std::string distinguishedName;
+class Status : public ValueWithDistinguishedName {
 public:
-    Status() : value(), distinguishedName() {}
-    Status(const std::string &value, const std::string &distinguishedName) : value(value), distinguishedName(distinguishedName) {}
-    std::string GetValue();
-    std::string GetDistinguishedName();
+    Status() : ValueWithDistinguishedName() {}
+    Status(const std::string &value, const std::string &distinguishedName) : ValueWithDistinguishedName(value, distinguishedName) {}
 };
 
 

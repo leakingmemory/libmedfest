@@ -33,3 +33,7 @@ std::vector<std::string> FestUuidList::RetrieveList(const GenericListItems &lite
 std::vector<PFestId> FestUuidList::GetStorageBlock() const {
     return GetList();
 }
+
+size_t FestUuidList::size() const {
+    return GetSize();
+}

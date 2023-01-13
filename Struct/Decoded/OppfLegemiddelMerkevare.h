@@ -6,23 +6,17 @@
 #define LEGEMFEST_OPPFLEGEMIDDELMERKEVARE_H
 
 
-#include "Status.h"
+#include "Oppf.h"
 #include "LegemiddelMerkevare.h"
 
-class OppfLegemiddelMerkevare {
+class OppfLegemiddelMerkevare : public Oppf {
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     LegemiddelMerkevare legemiddelMerkevare;
 public:
     OppfLegemiddelMerkevare() :
-            id(), tidspunkt(), status(), legemiddelMerkevare() {}
+            Oppf(), legemiddelMerkevare() {}
     OppfLegemiddelMerkevare(const std::string &id, const std::string &tidspunkt, const Status &status, const LegemiddelMerkevare &legemiddelMerkevare) :
-            id(id), tidspunkt(tidspunkt), status(status), legemiddelMerkevare(legemiddelMerkevare) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), legemiddelMerkevare(legemiddelMerkevare) {}
     [[nodiscard]] LegemiddelMerkevare GetLegemiddelMerkevare() const;
 };
 

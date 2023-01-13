@@ -16,6 +16,7 @@ public:
     GenericListItems StoreList(const std::vector<std::string> &ids);
     [[nodiscard]] std::vector<std::string> RetrieveList(const GenericListItems &litems) const;
     [[nodiscard]] std::vector<PFestId> GetStorageBlock() const;
+    [[nodiscard]] size_t size() const;
 };
 
 

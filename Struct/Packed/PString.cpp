@@ -24,16 +24,20 @@ PString::PString(const std::string &str, std::string &textblock) {
     textblock.append(str);
 }
 
-std::string PString::ToString(const std::string &textblock) const {
+std::string PString::ToString(const char *textblock, size_t size) const {
     auto offset = this->offset;
-    if (offset < textblock.size()) {
+    if (offset < size) {
         auto end = offset;
-        while (end < textblock.size() && textblock[end] != '\0') {
+        while (end < size && textblock[end] != '\0') {
             ++end;
         }
         std::string result{};
-        result.append(textblock, offset, end - offset);
+        result.append(textblock + offset, end - offset);
         return result;
     }
     return "";
+}
+
+std::string PString::ToString(const std::string &textblock) const {
+    return ToString(textblock.c_str(), textblock.size());
 }

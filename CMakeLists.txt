@@ -23,3 +23,8 @@ target_link_libraries(decodefest decoded)
 target_link_libraries(decodefest packed)
 target_link_libraries(decodefest -lexpat)
 target_link_libraries(decodefest ${libzip_LIBRARIES})
+
+add_executable(dumpfestdata cppmain.cpp cppmain.h dumpfestdata.cpp FestDeserializer.cpp FestDeserializer.h)
+
+target_link_libraries(dumpfestdata packed)
+target_link_libraries(dumpfestdata decoded)

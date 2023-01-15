@@ -14,6 +14,8 @@ private:
 public:
     PString() : offset(0) {}
     PString(const std::string &str, std::string &textblock);
+    explicit PString(uint32_t offset) : offset(offset) {}
+    [[nodiscard]] std::string ToString(const char *textblock, size_t size) const;
     [[nodiscard]] std::string ToString(const std::string &textblock) const;
     bool operator == (const PString other) const {
         return offset == other.offset;

@@ -7,9 +7,11 @@
 
 #include "PValueWithDistinguishedName.h"
 
+class FestDeserializer;
 class ValueWithCodeSet;
 
 class PValueWithCodeset : public PValueWithDistinguishedName {
+    friend FestDeserializer;
 private:
     PString codeSet;
 public:

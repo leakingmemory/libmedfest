@@ -9,6 +9,7 @@
 #include "Struct/Packed/POppfLegemiddelMerkevare.h"
 #include "Struct/Packed/PReseptgyldighet.h"
 #include "Struct/Packed/PString.h"
+#include "Struct/Decoded/Reseptgyldighet.h"
 
 class FestDeserializer {
 private:
@@ -30,7 +31,11 @@ public:
     FestDeserializer(const std::string &filename);
     ~FestDeserializer();
     [[nodiscard]] std::vector<PString> GetStrings() const;
+    [[nodiscard]] std::vector<PReseptgyldighet> GetReseptgyldighet() const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
+    [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
+    [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
+    [[nodiscard]] ValueWithCodeSet Unpack(const PValueWithCodeset &valueWithCodeset) const;
 };
 
 

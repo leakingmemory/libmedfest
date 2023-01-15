@@ -20,5 +20,10 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
     for (const auto &str : festDeserializer.GetStrings()) {
         std::cout << festDeserializer.Unpack(str) << "\n";
     }
+    std::cout << "Reseptgyldighet lister:\n";
+    for (const auto &rg : festDeserializer.GetReseptgyldighet()) {
+        auto rgv = festDeserializer.Unpack(rg);
+        std::cout << rgv.GetVarighet() << " " << rgv.GetKjonn().GetValue() << " " << rgv.GetKjonn().GetDistinguishedName() << "\n";
+    }
     return 0;
 }

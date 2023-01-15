@@ -7,9 +7,11 @@
 
 #include "PValueWithDistinguishedName.h"
 
+class FestDeserializer;
 class Reseptgyldighet;
 
 class PReseptgyldighet {
+    friend FestDeserializer;
 private:
     PValueWithDistinguishedName kjonn;
     PString varighet;

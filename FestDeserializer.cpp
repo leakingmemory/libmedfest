@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <iostream>
+#include <type_traits>
 
 FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullptr), mapsize(0) {
     auto fd = open(filename.c_str(), O_RDONLY);
@@ -118,6 +119,34 @@ std::vector<PString> FestDeserializer::GetStrings() const {
     return strings;
 }
 
+std::vector<PReseptgyldighet> FestDeserializer::GetReseptgyldighet() const {
+    std::vector<PReseptgyldighet> reseptgyldighet{};
+    reseptgyldighet.reserve(numReseptgyldighet);
+    for (std::remove_const<typeof(numReseptgyldighet)>::type i = 0; i < numReseptgyldighet; i++) {
+        reseptgyldighet.emplace_back(this->reseptgyldighetList[i]);
+    }
+    return reseptgyldighet;
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
+}
+
+Reseptgyldighet FestDeserializer::Unpack(const PReseptgyldighet &reseptgyldighet) const {
+    Reseptgyldighet r{Unpack(reseptgyldighet.varighet), Unpack(reseptgyldighet.kjonn)};
+    return r;
+}
+
+ValueWithDistinguishedName FestDeserializer::Unpack(
+        const PValueWithDistinguishedName &valueWithDistinguishedName) const {
+    ValueWithDistinguishedName v{
+        Unpack(valueWithDistinguishedName.value), Unpack(valueWithDistinguishedName.distinguishedName)};
+    return v;
+}
+
+ValueWithCodeSet FestDeserializer::Unpack(const PValueWithCodeset &valueWithCodeset) const {
+    ValueWithCodeSet v{
+        {Unpack(valueWithCodeset.value), Unpack(valueWithCodeset.distinguishedName)},
+        Unpack(valueWithCodeset.codeSet)};
+    return v;
 }

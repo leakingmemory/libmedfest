@@ -128,6 +128,15 @@ std::vector<PReseptgyldighet> FestDeserializer::GetReseptgyldighet() const {
     return reseptgyldighet;
 }
 
+std::vector<PValueWithCodeset> FestDeserializer::GetValueWithCodeset() const {
+    std::vector<PValueWithCodeset> valueWithCodeset{};
+    valueWithCodeset.reserve(numValueWithCodesetList);
+    for (std::remove_const<typeof(numValueWithCodesetList)>::type i = 0; i < numValueWithCodesetList; i++) {
+        valueWithCodeset.emplace_back(this->valueWithCodesetList[i]);
+    }
+    return valueWithCodeset;
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }

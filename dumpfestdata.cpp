@@ -25,5 +25,10 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         auto rgv = festDeserializer.Unpack(rg);
         std::cout << rgv.GetVarighet() << " " << rgv.GetKjonn().GetValue() << " " << rgv.GetKjonn().GetDistinguishedName() << "\n";
     }
+    std::cout << "Value with code set lister:\n";
+    for (const auto &rv : festDeserializer.GetValueWithCodeset()) {
+        auto v = festDeserializer.Unpack(rv);
+        std::cout << v.GetValue() << " " << v.GetDistinguishedName() << " " << v.GetCodeSet() << "\n";
+    }
     return 0;
 }

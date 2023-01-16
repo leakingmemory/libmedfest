@@ -20,12 +20,12 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
     for (const auto &str : festDeserializer.GetStrings()) {
         std::cout << festDeserializer.Unpack(str) << "\n";
     }
-    std::cout << "Reseptgyldighet lister:\n";
+    std::cout << "Reseptgyldighet lists storage dump:\n";
     for (const auto &rg : festDeserializer.GetReseptgyldighet()) {
         auto rgv = festDeserializer.Unpack(rg);
         std::cout << rgv.GetVarighet() << " " << rgv.GetKjonn().GetValue() << " " << rgv.GetKjonn().GetDistinguishedName() << "\n";
     }
-    std::cout << "Value with code set lister:\n";
+    std::cout << "Value with code set lists storage dump:\n";
     for (const auto &rv : festDeserializer.GetValueWithCodeset()) {
         auto v = festDeserializer.Unpack(rv);
         std::cout << v.GetValue() << " " << v.GetDistinguishedName() << " " << v.GetCodeSet() << "\n";
@@ -33,6 +33,10 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
     std::cout << "Fest uuids:\n";
     for (const auto &uuid : festDeserializer.GetFestIds()) {
         std::cout << uuid.ToString() << "\n";
+    }
+    std::cout << "Fest uuid lists storage dump:\n";
+    for (const auto &id : festDeserializer.GetFestIdLists()) {
+        std::cout << festDeserializer.Unpack(id).ToString() << "\n";
     }
     return 0;
 }

@@ -35,10 +35,12 @@ public:
     [[nodiscard]] std::vector<PReseptgyldighet> GetReseptgyldighet() const;
     [[nodiscard]] std::vector<PValueWithCodeset> GetValueWithCodeset() const;
     [[nodiscard]] std::vector<FestUuid> GetFestIds() const;
+    [[nodiscard]] std::vector<PFestId> GetFestIdLists() const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
     [[nodiscard]] ValueWithCodeSet Unpack(const PValueWithCodeset &valueWithCodeset) const;
+    [[nodiscard]] FestUuid Unpack(PFestId festId) const;
 };
 
 

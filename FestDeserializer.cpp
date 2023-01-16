@@ -146,6 +146,15 @@ std::vector<FestUuid> FestDeserializer::GetFestIds() const {
     return uuids;
 }
 
+std::vector<PFestId> FestDeserializer::GetFestIdLists() const {
+    std::vector<PFestId> festIds{};
+    festIds.reserve(numFestUuidList);
+    for (std::remove_const<typeof(numFestUuidList)>::type i = 0; i < numFestUuidList; i++) {
+        festIds.emplace_back(this->festUuidList[i]);
+    }
+    return festIds;
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -167,4 +176,12 @@ ValueWithCodeSet FestDeserializer::Unpack(const PValueWithCodeset &valueWithCode
         {Unpack(valueWithCodeset.value), Unpack(valueWithCodeset.distinguishedName)},
         Unpack(valueWithCodeset.codeSet)};
     return v;
+}
+
+FestUuid FestDeserializer::Unpack(PFestId festId) const {
+    if (festId.id >= 0 && festId.id < numFestUuid) {
+        return this->festUuid[festId.id];
+    } else {
+        return {};
+    }
 }

@@ -8,7 +8,11 @@
 #include "FestUuid.h"
 #include <vector>
 
+class FestDeserializer;
+
 class PFestId {
+    friend FestDeserializer;
+private:
     uint32_t id;
 public:
     PFestId(const std::string &id, std::vector<FestUuid> &uuidblock);

@@ -30,5 +30,9 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         auto v = festDeserializer.Unpack(rv);
         std::cout << v.GetValue() << " " << v.GetDistinguishedName() << " " << v.GetCodeSet() << "\n";
     }
+    std::cout << "Fest uuids:\n";
+    for (const auto &uuid : festDeserializer.GetFestIds()) {
+        std::cout << uuid.ToString() << "\n";
+    }
     return 0;
 }

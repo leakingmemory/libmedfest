@@ -137,6 +137,15 @@ std::vector<PValueWithCodeset> FestDeserializer::GetValueWithCodeset() const {
     return valueWithCodeset;
 }
 
+std::vector<FestUuid> FestDeserializer::GetFestIds() const {
+    std::vector<FestUuid> uuids{};
+    uuids.reserve(numFestUuid);
+    for (std::remove_const<typeof(numFestUuid)>::type i = 0; i < numFestUuid; i++) {
+        uuids.emplace_back(festUuid[i]);
+    }
+    return uuids;
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }

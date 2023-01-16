@@ -34,6 +34,7 @@ public:
     [[nodiscard]] std::vector<PString> GetStrings() const;
     [[nodiscard]] std::vector<PReseptgyldighet> GetReseptgyldighet() const;
     [[nodiscard]] std::vector<PValueWithCodeset> GetValueWithCodeset() const;
+    [[nodiscard]] std::vector<FestUuid> GetFestIds() const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;

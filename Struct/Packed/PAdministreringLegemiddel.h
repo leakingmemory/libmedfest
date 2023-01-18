@@ -8,11 +8,13 @@
 #include "PValueWithCodeset.h"
 #include "GenericListStorage.h"
 
+class FestDeserializer;
 class AdministreringLegemiddel;
 class ValueWithCodesetList;
 class ValueWithDistinguishedNameList;
 
 class PAdministreringLegemiddel {
+    friend FestDeserializer;
 private:
     PValueWithCodeset administrasjonsvei;
     PValueWithCodeset enhetDosering;

@@ -9,9 +9,11 @@
 #include "PValueWithDistinguishedName.h"
 #include "PLenke.h"
 
+class FestDeserializer;
 class Preparatomtaleavsnitt;
 
 class PPreparatomtaleavsnitt {
+    friend FestDeserializer;
 private:
     PValueWithDistinguishedName avsnittoverskrift;
     PLenke lenke;

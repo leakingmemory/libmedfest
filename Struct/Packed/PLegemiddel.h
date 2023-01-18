@@ -8,10 +8,12 @@
 #include "PAdministreringLegemiddel.h"
 #include "PLegemiddelCore.h"
 
+class FestDeserializer;
 class Legemiddel;
 class FestUuidList;
 
 class PLegemiddel : public PLegemiddelCore {
+    friend FestDeserializer;
 private:
     PAdministreringLegemiddel administreringLegemiddel;
     GenericListItems sortertVirkestoffMedStyrke;

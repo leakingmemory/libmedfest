@@ -8,10 +8,12 @@
 #include "PValueWithCodeset.h"
 #include "GenericListStorage.h"
 
+class FestDeserializer;
 class LegemiddelCore;
 class FestUuidList;
 
 class PLegemiddelCore {
+    friend FestDeserializer;
 private:
     PValueWithCodeset atc;
     PString navnFormStyrke;

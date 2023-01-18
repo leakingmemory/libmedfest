@@ -11,9 +11,11 @@
 #include "FestUuid.h"
 #include <vector>
 
+class FestDeserializer;
 class Oppf;
 
 class POppf {
+    friend FestDeserializer;
 private:
     PFestId id;
     PString tidspunkt;

@@ -4,6 +4,7 @@
 
 #include "cppmain.h"
 #include "FestDeserializer.h"
+#include "Struct/Decoded/OppfLegemiddelMerkevare.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -38,5 +39,13 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
     for (const auto &id : festDeserializer.GetFestIdLists()) {
         std::cout << festDeserializer.Unpack(id).ToString() << "\n";
     }
+    std::cout << "Merkevarer:\n";
+    festDeserializer.ForEachMerkevare([&festDeserializer] (const POppfLegemiddelMerkevare &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto legemiddel = oppf.GetLegemiddelMerkevare();
+        std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << legemiddel.GetId() << "\n";
+        std::cout << " " << legemiddel.GetNavnFormStyrke() << " (" << legemiddel.GetReseptgruppe().GetValue() << ")\n";
+    });
     return 0;
 }

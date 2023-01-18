@@ -7,9 +7,11 @@
 
 #include "PString.h"
 
+class FestDeserializer;
 class Lenke;
 
 class PLenke {
+    friend FestDeserializer;
 private:
     PString beskrivelse;
     PString www;

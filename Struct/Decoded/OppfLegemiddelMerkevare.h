@@ -15,6 +15,8 @@ private:
 public:
     OppfLegemiddelMerkevare() :
             Oppf(), legemiddelMerkevare() {}
+    OppfLegemiddelMerkevare(const Oppf &oppf, const LegemiddelMerkevare &legemiddelMerkevare) :
+            Oppf(oppf), legemiddelMerkevare(legemiddelMerkevare) {}
     OppfLegemiddelMerkevare(const std::string &id, const std::string &tidspunkt, const Status &status, const LegemiddelMerkevare &legemiddelMerkevare) :
             Oppf(id, tidspunkt, status), legemiddelMerkevare(legemiddelMerkevare) {}
     [[nodiscard]] LegemiddelMerkevare GetLegemiddelMerkevare() const;

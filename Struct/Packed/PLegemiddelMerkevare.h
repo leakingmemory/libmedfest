@@ -11,12 +11,14 @@
 #include "PPreparatomtaleavsnitt.h"
 #include "PLegemiddel.h"
 
+class FestDeserializer;
 class LegemiddelMerkevare;
 class ReseptgyldighetList;
 class ValueWithCodesetList;
 class FestUuidList;
 
 class PLegemiddelMerkevare : public PLegemiddel {
+    friend FestDeserializer;
 private:
     PValueWithCodeset vaksinestandard;
     PValueWithDistinguishedName preparattype;

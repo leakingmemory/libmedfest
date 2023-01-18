@@ -11,6 +11,7 @@
 class Status : public ValueWithDistinguishedName {
 public:
     Status() : ValueWithDistinguishedName() {}
+    Status(const ValueWithDistinguishedName &v) : ValueWithDistinguishedName(v) {}
     Status(const std::string &value, const std::string &distinguishedName) : ValueWithDistinguishedName(value, distinguishedName) {}
 };
 

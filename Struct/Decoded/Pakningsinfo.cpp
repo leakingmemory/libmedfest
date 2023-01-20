@@ -39,3 +39,7 @@ double Pakningsinfo::GetStatistikkfaktor() const {
 int Pakningsinfo::GetAntall() const {
     return antall;
 }
+
+int Pakningsinfo::GetMultippel() const {
+    return multippel;
+}

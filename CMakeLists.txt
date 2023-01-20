@@ -11,6 +11,8 @@ find_package(expat REQUIRED)
 
 INCLUDE_DIRECTORIES ( ${EXPAT_INCLUDE_DIRS} )
 
+enable_testing()
+
 add_subdirectory(Fest)
 add_subdirectory(Struct/Decoded)
 add_subdirectory(Struct/Packed)

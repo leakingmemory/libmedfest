@@ -1,0 +1,19 @@
+//
+// Created by sigsegv on 1/19/23.
+//
+
+#ifndef LEGEMFEST_PRISVARELIST_H
+#define LEGEMFEST_PRISVARELIST_H
+
+#include "GenericListStorage.h"
+#include "PPrisVare.h"
+
+class PrisVareList : private GenericListStorage<PPrisVare> {
+public:
+    GenericListItems StoreList(const std::vector<PPrisVare> &);
+    [[nodiscard]] std::vector<PPrisVare> GetStorageList() const;
+    [[nodiscard]] size_t size() const;
+};
+
+
+#endif //LEGEMFEST_PRISVARELIST_H

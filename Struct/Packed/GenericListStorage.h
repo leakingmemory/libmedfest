@@ -23,6 +23,11 @@ struct GenericListItems {
     constexpr static int_type max_size = (1 << size_bits) - 1;
     int_type start : addr_bits;
     int_type size : size_bits;
+
+    bool operator == (const GenericListItems &other) const {
+        return  start == other.start &&
+                size == other.size;
+    }
 } __attribute__((__packed__));
 static_assert(sizeof(GenericListItems) == sizeof(GenericListItems::int_type));
 

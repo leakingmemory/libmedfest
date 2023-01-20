@@ -55,6 +55,7 @@ class XmlOppfStrDosering;
 class FestVisitor {
 public:
     [[nodiscard]] virtual bool Visit(const OppfLegemiddelMerkevare &merkevare) = 0;
+    [[nodiscard]] virtual bool Visit(const OppfLegemiddelpakning &pakning) = 0;
 };
 
 class Fest : public XMLObject {

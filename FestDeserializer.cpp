@@ -55,6 +55,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    pakning = (POppfLegemiddelpakning *) (void *) (((uint8_t *) mapping) + offset);
+    numPakning = header->numPakning;
+    offset += ((size_t) numPakning) * sizeof(*pakning);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -88,6 +98,36 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     reseptgyldighetList = (const PReseptgyldighet *) (void *) (((uint8_t *) mapping) + offset);
     numReseptgyldighet = header->numReseptgyldighet;
     offset += ((size_t) numReseptgyldighet) * sizeof(*reseptgyldighetList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    pakningskomponentList = (const PPakningskomponent *) (void *) (((uint8_t *) mapping) + offset);
+    numPakningskomponent = header->numPakningskomponent;
+    offset += ((size_t) numPakningskomponent) * sizeof(*pakningskomponentList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    pakningsinfoList = (const PPakningsinfo *) (void *) (((uint8_t *) mapping) + offset);
+    numPakningsinfo = header->numPakningsinfo;
+    offset += ((size_t) numPakningsinfo) * sizeof(*pakningsinfoList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    prisVareList = (const PPrisVare *) (void *) (((uint8_t *) mapping) + offset);
+    numPrisVare = header->numPrisVare;
+    offset += ((size_t) numPrisVare) * sizeof(*prisVareList);
     stringblock = (const char *) (void *) (((uint8_t *) mapping) + offset);
     if (offset < size) {
         stringblocksize = size - offset;

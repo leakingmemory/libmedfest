@@ -11,6 +11,10 @@
 #include "Struct/Packed/ValueWithCodesetList.h"
 #include "Struct/Packed/ReseptgyldighetList.h"
 #include "Struct/Packed/POppfLegemiddelMerkevare.h"
+#include "Struct/Packed/POppfLegemiddelpakning.h"
+#include "Struct/Packed/PakningsinfoList.h"
+#include "Struct/Packed/PrisVareList.h"
+#include "Struct/Packed/PakningskomponentList.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -22,7 +26,11 @@ struct FestFirstHeader {
     uint8_t numReseptgyldighet;
     uint16_t numLegemiddelMerkevare;
     uint16_t numValueCodeset;
-    uint32_t numUuidLists : 24;
+    uint16_t numPakningskomponent;
+    uint16_t numPakningsinfo;
+    uint16_t numPrisVare;
+    uint16_t numUuidLists;
+    uint16_t numPakning;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -34,7 +42,11 @@ private:
     FestUuidList festUuidList{festidblock};
     ValueWithCodesetList valueWithCodesetList{};
     ReseptgyldighetList reseptgyldighetList{};
+    PakningskomponentList pakningskomponentList{};
+    PakningsinfoList pakningsinfoList{};
+    PrisVareList prisVareList{};
     std::vector<POppfLegemiddelMerkevare> legemiddelMerkevare{};
+    std::vector<POppfLegemiddelpakning> legemiddelpakning{};
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
     FestSerializer(const FestSerializer &) = delete;
@@ -48,6 +60,7 @@ public:
     bool Write();
 private:
     bool Visit(const OppfLegemiddelMerkevare &merkevare) override;
+    bool Visit(const OppfLegemiddelpakning &pakning) override;
 };
 
 

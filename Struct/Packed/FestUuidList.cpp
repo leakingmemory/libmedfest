@@ -23,7 +23,7 @@ std::vector<std::string> FestUuidList::RetrieveList(const GenericListItems &lite
     {
         auto packed = GenericListStorage<PFestId>::RetrieveList(litems);
         for (const auto &p : packed) {
-            auto id = p.GetFestId(uuidblock).ToString();
+            auto id = p.ToString(uuidblock);
             result.emplace_back(id);
         }
     }

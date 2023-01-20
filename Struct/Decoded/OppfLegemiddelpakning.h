@@ -5,23 +5,18 @@
 #ifndef LEGEMFEST_OPPFLEGEMIDDELPAKNING_H
 #define LEGEMFEST_OPPFLEGEMIDDELPAKNING_H
 
+#include "Oppf.h"
 #include "Status.h"
 #include "Legemiddelpakning.h"
 
-class OppfLegemiddelpakning {
+class OppfLegemiddelpakning : public Oppf {
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     Legemiddelpakning legemiddelpakning;
 public:
     OppfLegemiddelpakning() :
-            id(), tidspunkt(), status(), legemiddelpakning() {}
+            Oppf(), legemiddelpakning() {}
     OppfLegemiddelpakning(const std::string &id, const std::string &tidspunkt, const Status &status, const Legemiddelpakning &legemiddelpakning) :
-            id(id), tidspunkt(tidspunkt), status(status), legemiddelpakning(legemiddelpakning) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), legemiddelpakning(legemiddelpakning) {}
     [[nodiscard]] Legemiddelpakning GetLegemiddelpakning() const;
 };
 

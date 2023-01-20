@@ -9,43 +9,43 @@ int main() {
     std::vector<FestUuid> uuidblock{};
     auto s0 = uuidblock.size();
     PFestId n1{"ID_212709D3-4175-4F7E-BC65-C3D8ED04196B", uuidblock};
-    if (n1.GetFestId(uuidblock).ToString() != "ID_212709D3-4175-4F7E-BC65-C3D8ED04196B") {
-        std::cerr << "Incorrect n1: " << n1.GetFestId(uuidblock).ToString() << "\n";
+    if (n1.ToString(uuidblock) != "ID_212709D3-4175-4F7E-BC65-C3D8ED04196B") {
+        std::cerr << "Incorrect n1: " << n1.ToString(uuidblock) << "\n";
         return 127;
     }
     auto s1 = uuidblock.size();
     PFestId n2{"ID_149D939B-EB27-4806-BEAA-A33B008C815E", uuidblock};
-    if (n2.GetFestId(uuidblock).ToString() != "ID_149D939B-EB27-4806-BEAA-A33B008C815E") {
-        std::cerr << "Incorrect n2: " << n2.GetFestId(uuidblock).ToString() << "\n";
+    if (n2.ToString(uuidblock) != "ID_149D939B-EB27-4806-BEAA-A33B008C815E") {
+        std::cerr << "Incorrect n2: " << n2.ToString(uuidblock) << "\n";
         return 127;
     }
     auto s2 = uuidblock.size();
     PFestId n3{"ID_149D939B-EB27-4806-BEAA-A33B008C815E", uuidblock};
-    if (n3.GetFestId(uuidblock).ToString() != "ID_149D939B-EB27-4806-BEAA-A33B008C815E") {
-        std::cerr << "Incorrect n3: " << n3.GetFestId(uuidblock).ToString() << "\n";
+    if (n3.ToString(uuidblock) != "ID_149D939B-EB27-4806-BEAA-A33B008C815E") {
+        std::cerr << "Incorrect n3: " << n3.ToString(uuidblock) << "\n";
         return 127;
     }
     auto s3 = uuidblock.size();
     PFestId n4{"ID_E82F4A7D-BDF0-440A-9EE2-C80F4D3B6C31", uuidblock};
-    if (n4.GetFestId(uuidblock).ToString() != "ID_E82F4A7D-BDF0-440A-9EE2-C80F4D3B6C31") {
-        std::cerr << "Incorrect n4: " << n4.GetFestId(uuidblock).ToString() << "\n";
+    if (n4.ToString(uuidblock) != "ID_E82F4A7D-BDF0-440A-9EE2-C80F4D3B6C31") {
+        std::cerr << "Incorrect n4: " << n4.ToString(uuidblock) << "\n";
         return 127;
     }
     auto s4 = uuidblock.size();
-    if (n1.GetFestId(uuidblock).ToString() != "ID_212709D3-4175-4F7E-BC65-C3D8ED04196B") {
-        std::cerr << "Incorrect n1: " << n1.GetFestId(uuidblock).ToString() << "\n";
+    if (n1.ToString(uuidblock) != "ID_212709D3-4175-4F7E-BC65-C3D8ED04196B") {
+        std::cerr << "Incorrect n1: " << n1.ToString(uuidblock) << "\n";
         return 127;
     }
-    if (n2.GetFestId(uuidblock).ToString() != "ID_149D939B-EB27-4806-BEAA-A33B008C815E") {
-        std::cerr << "Incorrect n2: " << n2.GetFestId(uuidblock).ToString() << "\n";
+    if (n2.ToString(uuidblock) != "ID_149D939B-EB27-4806-BEAA-A33B008C815E") {
+        std::cerr << "Incorrect n2: " << n2.ToString(uuidblock) << "\n";
         return 127;
     }
-    if (n3.GetFestId(uuidblock).ToString() != "ID_149D939B-EB27-4806-BEAA-A33B008C815E") {
-        std::cerr << "Incorrect n3: " << n3.GetFestId(uuidblock).ToString() << "\n";
+    if (n3.ToString(uuidblock) != "ID_149D939B-EB27-4806-BEAA-A33B008C815E") {
+        std::cerr << "Incorrect n3: " << n3.ToString(uuidblock) << "\n";
         return 127;
     }
-    if (n4.GetFestId(uuidblock).ToString() != "ID_E82F4A7D-BDF0-440A-9EE2-C80F4D3B6C31") {
-        std::cerr << "Incorrect n4: " << n4.GetFestId(uuidblock).ToString() << "\n";
+    if (n4.ToString(uuidblock) != "ID_E82F4A7D-BDF0-440A-9EE2-C80F4D3B6C31") {
+        std::cerr << "Incorrect n4: " << n4.ToString(uuidblock) << "\n";
         return 127;
     }
     if (s0 != 0) {

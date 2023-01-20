@@ -13,22 +13,34 @@
 #include "Struct/Packed/PString.h"
 #include "Struct/Decoded/Reseptgyldighet.h"
 #include "Struct/Decoded/ValueWithCodeSet.h"
+#include "Struct/Packed/PPakningskomponent.h"
+#include "Struct/Packed/PPakningsinfo.h"
+#include "Struct/Packed/PPrisVare.h"
+#include "Struct/Packed/POppfLegemiddelpakning.h"
 
 class FestDeserializer {
 private:
     void *mapping;
     size_t mapsize;
     const POppfLegemiddelMerkevare *merkevare;
+    const POppfLegemiddelpakning *pakning;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
     const PReseptgyldighet *reseptgyldighetList;
+    const PPakningskomponent *pakningskomponentList;
+    const PPakningsinfo *pakningsinfoList;
+    const PPrisVare *prisVareList;
     const char *stringblock;
     size_t numMerkevare;
+    size_t numPakning;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
     size_t numReseptgyldighet;
+    size_t numPakningskomponent;
+    size_t numPakningsinfo;
+    size_t numPrisVare;
     size_t stringblocksize;
 public:
     FestDeserializer(const std::string &filename);

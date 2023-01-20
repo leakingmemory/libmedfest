@@ -157,6 +157,11 @@ bool Fest::Accept(FestVisitor &visitor) const {
             return false;
         }
     }
+    for (auto &pakning : oppfLegemiddelpakning) {
+        if (!visitor.Visit(pakning)) {
+            return false;
+        }
+    }
     return true;
 }
 

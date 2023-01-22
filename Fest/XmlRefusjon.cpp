@@ -5,11 +5,11 @@
 #include "XmlRefusjon.h"
 #include <iostream>
 
-void XmlRefusjon::SetRefusjon(const Refusjon &refusjon) {
-    this->refusjon = refusjon;
+void XmlRefusjon::AddRefusjon(const Refusjon &refusjon) {
+    this->refusjon.emplace_back(refusjon);
 }
 
-Refusjon XmlRefusjon::GetRefusjon() const {
+std::vector<Refusjon> XmlRefusjon::GetRefusjon() const {
     return refusjon;
 }
 
@@ -17,8 +17,8 @@ std::string XmlRefusjonObject::GetName() const {
     return "Refusjon";
 }
 
-void XmlRefusjonObject::SetRefRefusjonsgruppe(const std::string &ref) {
-    this->ref = ref;
+void XmlRefusjonObject::AddRefRefusjonsgruppe(const std::string &ref) {
+    this->ref.emplace_back(ref);
 }
 
 void XmlRefusjonObject::SetUtleveresTilDato(const std::string &utleveresTilDato) {
@@ -26,7 +26,7 @@ void XmlRefusjonObject::SetUtleveresTilDato(const std::string &utleveresTilDato)
 }
 
 bool XmlRefusjonObject::Merge() {
-    parent->SetRefusjon({ref, GetGyldigFraDato(), GetForskrivesTilDato(), utleveresTilDato});
+    parent->AddRefusjon({ref, GetGyldigFraDato(), GetForskrivesTilDato(), utleveresTilDato});
     return true;
 }
 
@@ -49,7 +49,7 @@ bool XmlRefusjonHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
 }
 
 bool XmlRefRefusjonsgruppeHandler::Merge(std::shared_ptr<XmlRefusjonObject> parent, const std::string &content) {
-    parent->SetRefRefusjonsgruppe(content);
+    parent->AddRefRefusjonsgruppe(content);
     return true;
 }
 

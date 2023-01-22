@@ -27,7 +27,7 @@ public:
     void SetNr(const std::string &nr);
     void SetProduktInfoVare(const ProduktInfoVare &produktInfoVare);
     void SetLeverandor(const Leverandor &leverandor);
-    virtual bool Merge() = 0;
+    [[nodiscard]] virtual bool Merge() = 0;
 };
 
 class XmlMedForbrMatr : public XmlHandelsvare {

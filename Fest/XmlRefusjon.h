@@ -12,25 +12,26 @@
 #include "XmlForskrivesTilDato.h"
 #include <memory>
 #include <map>
+#include <vector>
 
 class XmlRefusjon {
 private:
-    Refusjon refusjon{};
+    std::vector<Refusjon> refusjon{};
 public:
     virtual ~XmlRefusjon() = default;
-    void SetRefusjon(const Refusjon &refusjon);
-    [[nodiscard]] Refusjon GetRefusjon() const;
+    void AddRefusjon(const Refusjon &refusjon);
+    [[nodiscard]] std::vector<Refusjon> GetRefusjon() const;
 };
 
 class XmlRefusjonObject : public XMLObject, public XmlGyldigFraDato, public XmlForskrivesTilDato {
 private:
     std::shared_ptr<XmlRefusjon> parent;
-    std::string ref;
+    std::vector<std::string> ref;
     std::string utleveresTilDato;
 public:
     XmlRefusjonObject(std::shared_ptr<XmlRefusjon> parent) : parent(parent) {}
     std::string GetName() const override;
-    void SetRefRefusjonsgruppe(const std::string &ref);
+    void AddRefRefusjonsgruppe(const std::string &ref);
     void SetUtleveresTilDato(const std::string &utleveresTilDato);
     bool Merge();
 };

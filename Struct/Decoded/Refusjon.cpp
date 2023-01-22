@@ -4,7 +4,7 @@
 
 #include "Refusjon.h"
 
-std::string Refusjon::GetRefRefusjonsgruppe() const {
+std::vector<std::string> Refusjon::GetRefRefusjonsgruppe() const {
     return refRefusjonsgruppe;
 }
 

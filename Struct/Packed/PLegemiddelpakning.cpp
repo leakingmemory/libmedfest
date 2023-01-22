@@ -21,7 +21,7 @@ PLegemiddelpakning::PLegemiddelpakning(const Legemiddelpakning &legemiddelpaknin
         pakningsinfo(),
         prisVare(),
         markedsforingsinfo(legemiddelpakning.GetMarkedsforingsinfo(), strblock),
-        refusjon(legemiddelpakning.GetRefusjon(), uuidblock, strblock),
+        refusjon(legemiddelpakning.GetRefusjon(), festUuidList, strblock),
         pakningByttegruppe(legemiddelpakning.GetPakningByttegruppe(), uuidblock, strblock),
         preparatomtaleavsnitt(legemiddelpakning.GetPreparatomtaleavsnitt(), strblock),
         ikkeKonservering(legemiddelpakning.GetIkkeKonservering())

@@ -8,13 +8,17 @@ std::string XmlPakningByttegruppe::GetName() const {
     return "PakningByttegruppe";
 }
 
-void XmlPakningByttegruppe::SetRefByttegruppe(const std::string &refByttegruppe) {
+bool XmlPakningByttegruppe::SetRefByttegruppe(const std::string &refByttegruppe) {
+    if (!this->refByttegruppe.empty()) {
+        std::cerr << "Error: PakningByttegruppe: Multiple RefByttegruppe\n";
+        return false;
+    }
     this->refByttegruppe = refByttegruppe;
+    return true;
 }
 
 bool XmlPakningByttegruppe::Merge() {
-    parent->SetPakningByttegruppe({refByttegruppe, GetGyldigFraDato()});
-    return true;
+    return parent->SetPakningByttegruppe({refByttegruppe, GetGyldigFraDato()});
 }
 
 std::shared_ptr<XMLObject> XmlPakningByttegruppeHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -37,6 +41,5 @@ bool XmlPakningByttegruppeHandler::EndElement(const std::shared_ptr<XMLObject> &
 }
 
 bool XmlRefByttegruppeHandler::Merge(std::shared_ptr<XmlPakningByttegruppe> parent, const std::string &content) {
-    parent->SetRefByttegruppe(content);
-    return true;
+    return parent->SetRefByttegruppe(content);
 }

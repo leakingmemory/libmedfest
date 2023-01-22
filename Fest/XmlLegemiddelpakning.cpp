@@ -24,15 +24,30 @@ void XmlLegemiddelpakning::SetEan(const std::string &ean) {
     this->ean = ean;
 }
 
-void XmlLegemiddelpakning::SetPakningByttegruppe(const PakningByttegruppe &pakningByttegruppe) {
+bool XmlLegemiddelpakning::SetPakningByttegruppe(const PakningByttegruppe &pakningByttegruppe) {
+    if (!this->pakningByttegruppe.GetRefByttegruppe().empty()) {
+        std::cerr << "Error: Legemiddelpakning: Duplicate PakningByttegruppe\n";
+        return false;
+    }
     this->pakningByttegruppe = pakningByttegruppe;
+    return true;
 }
 
 void XmlLegemiddelpakning::SetIkkeKonservering(bool ikkeKonservering) {
     this->ikkeKonservering = ikkeKonservering;
 }
 
-void XmlLegemiddelpakning::Merge() {
+bool XmlLegemiddelpakning::Merge() {
+    Refusjon refusjon{};
+    {
+        auto refusjonListe = GetRefusjon();
+        if (!refusjonListe.empty()) {
+            if (refusjonListe.size() != 1) {
+                std::cerr << "Error: Legemiddelpakning: Duplicate Refusjon\n";
+                return false;
+            }
+        }
+    }
     oppfLegemiddelpakning->SetLegemiddelpakning({{
             GetAtc(),
             GetNavnFormStyrke(),
@@ -51,11 +66,12 @@ void XmlLegemiddelpakning::Merge() {
         markedsforingsinfo,
         ean,
         GetPrisVare(),
-        GetRefusjon(),
+        refusjon,
         pakningByttegruppe,
         GetPreparatomtaleavsnitt(),
         ikkeKonservering
     });
+    return true;
 }
 
 std::shared_ptr<XMLObject> XmlLegemiddelpakningHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -74,8 +90,7 @@ bool XmlLegemiddelpakningHandler::EndElement(const std::shared_ptr<XMLObject> &o
         std::cerr << "Error: End of Legemiddelpakning, but not currently a L..\n";
         return false;
     }
-    oppf->Merge();
-    return true;
+    return oppf->Merge();
 }
 
 bool XmlVarenrHandler::Merge(std::shared_ptr <XmlLegemiddelpakning> parent, const std::string &content) {

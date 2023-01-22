@@ -18,7 +18,7 @@ bool XmlLegemiddelVirkestoff::SetForskrivningsenhetResept(const EnhetForskrivnin
     return true;
 }
 
-void XmlLegemiddelVirkestoff::Merge() {
+bool XmlLegemiddelVirkestoff::Merge() {
     oppfLegemiddelVirkestoff->SetLegemiddelVirkestoff({{{
                                                                 GetAtc(),
                                                                 GetNavnFormStyrke(),
@@ -38,6 +38,7 @@ void XmlLegemiddelVirkestoff::Merge() {
                                                     GetRefPakning(),
                                                     forskrivningsenhetResept
     });
+    return true;
 }
 
 std::shared_ptr<XMLObject> XmlLegemiddelVirkestoffHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -56,8 +57,7 @@ bool XmlLegemiddelVirkestoffHandler::EndElement(const std::shared_ptr<XMLObject>
         std::cerr << "Error: End of LegemiddelVirkestoff, but not currently a L..\n";
         return false;
     }
-    oppf->Merge();
-    return true;
+    return oppf->Merge();
 }
 
 bool XmlForskrivningsenhetReseptHandler::Merge(std::shared_ptr<XmlValueWithCodeSet<XmlLegemiddelVirkestoff>> obj) {

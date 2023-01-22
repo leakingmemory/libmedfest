@@ -38,9 +38,9 @@ public:
     void SetOppbevaring(const Oppbevaring &oppbevaring);
     void SetMarkedsforingsinfo(const Markedsforingsinfo &markedsforingsinfo);
     void SetEan(const std::string &ean);
-    void SetPakningByttegruppe(const PakningByttegruppe &pakningByttegruppe);
+    [[nodiscard]] bool SetPakningByttegruppe(const PakningByttegruppe &pakningByttegruppe);
     void SetIkkeKonservering(bool ikkeKonservering);
-    void Merge();
+    [[nodiscard]] bool Merge();
 };
 
 class XmlLegemiddelpakningHandler {

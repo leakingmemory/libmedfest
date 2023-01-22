@@ -15,7 +15,7 @@ private:
 public:
     XmlPakningByttegruppe(std::shared_ptr<XmlLegemiddelpakning> parent) : parent(parent) {}
     std::string GetName() const override;
-    void SetRefByttegruppe(const std::string &refByttegruppe);
+    [[nodiscard]] bool SetRefByttegruppe(const std::string &refByttegruppe);
     bool Merge();
 };
 

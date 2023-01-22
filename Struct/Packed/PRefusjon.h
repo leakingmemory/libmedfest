@@ -5,21 +5,22 @@
 #ifndef LEGEMFEST_PREFUSJON_H
 #define LEGEMFEST_PREFUSJON_H
 
-#include "PFestId.h"
 #include "PString.h"
+#include "GenericListStorage.h"
 
 class FestDeserializer;
 class Refusjon;
+class FestUuidList;
 
 class PRefusjon {
     friend FestDeserializer;
 private:
-    PFestId refRefusjonsgruppe;
+    GenericListItems refRefusjonsgruppe;
     PString gyldigFraDato;
     PString forskrivesTilDato;
     PString utleveresTilDato;
 public:
-    PRefusjon(const Refusjon &, std::vector<FestUuid> &uuidblock, std::string &strblock);
+    PRefusjon(const Refusjon &, FestUuidList &uuidlist, std::string &strblock);
 };
 
 

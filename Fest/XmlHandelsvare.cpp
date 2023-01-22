@@ -22,7 +22,18 @@ std::string XmlMedForbrMatr::GetName() const {
 }
 
 bool XmlMedForbrMatr::Merge() {
-    oppf->SetMedForbrMatr({{nr, GetNavn(), produktInfoVare, leverandor, GetPrisVare(), GetRefusjon()}});
+    Refusjon refusjon{};
+    {
+        auto refusjonListe = GetRefusjon();
+        if (!refusjonListe.empty()) {
+            if (refusjonListe.size() != 1) {
+                std::cerr << "Error: Handelsvare: Multiple Refusjon\n";
+                return false;
+            }
+            refusjon = refusjonListe[0];
+        }
+    }
+    oppf->SetMedForbrMatr({{nr, GetNavn(), produktInfoVare, leverandor, GetPrisVare(), refusjon}});
     return true;
 }
 
@@ -31,7 +42,18 @@ std::string XmlNaringsmiddel::GetName() const {
 }
 
 bool XmlNaringsmiddel::Merge() {
-    oppf->SetNaringsmiddel({{nr, GetNavn(), produktInfoVare, leverandor, GetPrisVare(), GetRefusjon()}});
+    Refusjon refusjon{};
+    {
+        auto refusjonListe = GetRefusjon();
+        if (!refusjonListe.empty()) {
+            if (refusjonListe.size() != 1) {
+                std::cerr << "Error: Handelsvare: Multiple Refusjon\n";
+                return false;
+            }
+            refusjon = refusjonListe[0];
+        }
+    }
+    oppf->SetNaringsmiddel({{nr, GetNavn(), produktInfoVare, leverandor, GetPrisVare(), refusjon}});
     return true;
 }
 
@@ -40,7 +62,18 @@ std::string XmlBrystprotese::GetName() const {
 }
 
 bool XmlBrystprotese::Merge() {
-    oppf->SetBrystprotese({{nr, GetNavn(), produktInfoVare, leverandor, GetPrisVare(), GetRefusjon()}});
+    Refusjon refusjon{};
+    {
+        auto refusjonListe = GetRefusjon();
+        if (!refusjonListe.empty()) {
+            if (refusjonListe.size() != 1) {
+                std::cerr << "Error: Handelsvare: Multiple Refusjon\n";
+                return false;
+            }
+            refusjon = refusjonListe[0];
+        }
+    }
+    oppf->SetBrystprotese({{nr, GetNavn(), produktInfoVare, leverandor, GetPrisVare(), refusjon}});
     return true;
 }
 
@@ -60,8 +93,7 @@ bool XmlMedForbrMatrHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
         std::cerr << "Error: End of MedForbMatr, but not currently a L..\n";
         return false;
     }
-    oppf->Merge();
-    return true;
+    return oppf->Merge();
 }
 
 std::shared_ptr<XMLObject> XmlNaringsmiddelHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -80,8 +112,7 @@ bool XmlNaringsmiddelHandler::EndElement(const std::shared_ptr<XMLObject> &obj) 
         std::cerr << "Error: End of Naringsmiddel, but not currently a N..\n";
         return false;
     }
-    oppf->Merge();
-    return true;
+    return oppf->Merge();
 }
 
 std::shared_ptr<XMLObject> XmlBrystproteseHandler::StartElement(const std::shared_ptr<XMLObject> &parent,
@@ -100,8 +131,7 @@ bool XmlBrystproteseHandler::EndElement(const std::shared_ptr<XMLObject> &obj) {
         std::cerr << "Error: End of Brystprotese, but not currently a B..\n";
         return false;
     }
-    oppf->Merge();
-    return true;
+    return oppf->Merge();
 }
 
 bool XmlNrHandler::Merge(std::shared_ptr<XmlHandelsvare> parent, const std::string &content) {

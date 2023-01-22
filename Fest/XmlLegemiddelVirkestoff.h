@@ -23,7 +23,7 @@ public:
             oppfLegemiddelVirkestoff(oppfLegemiddelVirkestoff) {}
     std::string GetName() const override;
     bool SetForskrivningsenhetResept(const EnhetForskrivning &forskrivningsenhetResept);
-    void Merge();
+    [[nodiscard]] bool Merge();
 };
 
 class XmlLegemiddelVirkestoffHandler {

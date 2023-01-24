@@ -5,6 +5,7 @@
 #include "cppmain.h"
 #include "FestDeserializer.h"
 #include "Struct/Decoded/OppfLegemiddelMerkevare.h"
+#include "Struct/Decoded/OppfLegemiddelpakning.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -39,6 +40,41 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
     for (const auto &id : festDeserializer.GetFestIdLists()) {
         std::cout << festDeserializer.Unpack(id).ToString() << "\n";
     }
+    std::cout << "Pakningskomponenter lists storage dump:\n";
+    for (const auto &pp : festDeserializer.GetPakningskomponent()) {
+        auto p = festDeserializer.Unpack(pp);
+        auto antall = p.GetAntall();
+        std::cout << " ";
+        if (antall != 0) {
+            std::cout << antall << " X ";
+        }
+        auto mengde = p.GetMengde();
+        std::cout << mengde.GetValue() << " " << mengde.GetUnit() << " " << p.GetPakningstype().GetValue() << "\n";
+    }
+    std::cout << "Pakningsinfo lists storage dump:\n";
+    for (const auto &ppi : festDeserializer.GetPakningsinfo()) {
+        auto pi = festDeserializer.Unpack(ppi);
+        std::cout << " " << pi.GetMerkevareId() << " " << pi.GetPakningsstr() << " " << pi.GetEnhetPakning().GetValue()
+                  << " " << pi.GetPakningstype().GetValue() << "/" << pi.GetPakningstype().GetDistinguishedName()
+                  << " " << pi.GetMengde()<< " " << pi.GetDDD().GetValue() << " " << pi.GetStatistikkfaktor()
+                  << " " << pi.GetAntall() << " " << pi.GetMultippel() << " (";
+        for (const auto &p : pi.GetPakningskomponent()) {
+            auto antall = p.GetAntall();
+            std::cout << " ";
+            if (antall != 0) {
+                std::cout << antall << " X ";
+            }
+            auto mengde = p.GetMengde();
+            std::cout << mengde.GetValue() << " " << mengde.GetUnit() << " " << p.GetPakningstype().GetValue() << ", ";
+        }
+        std::cout << " end)\n";
+    }
+    std::cout << "Pris vare list storage dump:\n";
+    for (const auto &ppv : festDeserializer.GetPrisVare()) {
+        auto pv = festDeserializer.Unpack(ppv);
+        std::cout << " " << pv.GetType().GetDistinguishedName() << ": " << pv.GetPris().GetValue() << " "
+                  << pv.GetPris().GetUnit() << " " << pv.GetGyldigFraDato() << " " << pv.GetGyldigTilDato() << "\n";
+    }
     std::cout << "Merkevarer:\n";
     festDeserializer.ForEachMerkevare([&festDeserializer] (const POppfLegemiddelMerkevare &poppf) {
         auto oppf = festDeserializer.Unpack(poppf);
@@ -46,6 +82,17 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
                   << legemiddel.GetId() << "\n";
         std::cout << " " << legemiddel.GetNavnFormStyrke() << " (" << legemiddel.GetReseptgruppe().GetValue() << ")\n";
+    });
+    std::cout << "Pakninger:\n";
+    festDeserializer.ForEachPakning([&festDeserializer] (const POppfLegemiddelpakning &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto legemiddel = oppf.GetLegemiddelpakning();
+        std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << legemiddel.GetId() << "\n";
+        std::cout << " " << legemiddel.GetNavnFormStyrke() << " (" << legemiddel.GetReseptgruppe().GetValue() << ")\n";
+        for (auto &pi : legemiddel.GetPakningsinfo()) {
+            std::cout << "  - " << pi.GetPakningsstr() << "\n";
+        }
     });
     return 0;
 }

@@ -159,6 +159,33 @@ std::vector<PString> FestDeserializer::GetStrings() const {
     return strings;
 }
 
+std::vector<PPrisVare> FestDeserializer::GetPrisVare() const {
+    std::vector<PPrisVare> prisVare{};
+    prisVare.reserve(numPrisVare);
+    for (std::remove_const<typeof(numPrisVare)>::type i = 0; i < numPrisVare; i++) {
+        prisVare.emplace_back(this->prisVareList[i]);
+    }
+    return prisVare;
+}
+
+std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfo() const {
+    std::vector<PPakningsinfo> pakningsinfo{};
+    pakningsinfo.reserve(numPakningsinfo);
+    for (std::remove_const<typeof(numPakningsinfo)>::type i = 0; i < numPakningsinfo; i++) {
+        pakningsinfo.emplace_back(this->pakningsinfoList[i]);
+    }
+    return pakningsinfo;
+}
+
+std::vector<PPakningskomponent> FestDeserializer::GetPakningskomponent() const {
+    std::vector<PPakningskomponent> pakningskomponent{};
+    pakningskomponent.reserve(numPakningskomponent);
+    for (std::remove_const<typeof(numPakningskomponent)>::type i = 0; i < numPakningskomponent; i++) {
+        pakningskomponent.emplace_back(this->pakningskomponentList[i]);
+    }
+    return pakningskomponent;
+}
+
 std::vector<PReseptgyldighet> FestDeserializer::GetReseptgyldighet() const {
     std::vector<PReseptgyldighet> reseptgyldighet{};
     reseptgyldighet.reserve(numReseptgyldighet);
@@ -201,6 +228,12 @@ void FestDeserializer::ForEachMerkevare(const std::function<void(const POppfLege
     }
 }
 
+void FestDeserializer::ForEachPakning(const std::function<void(const POppfLegemiddelpakning &)> &func) {
+    for (std::remove_const<typeof(numPakning)>::type i = 0; i < numPakning; i++) {
+        func(this->pakning[i]);
+    }
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -224,9 +257,14 @@ ValueWithCodeSet FestDeserializer::Unpack(const PValueWithCodeset &valueWithCode
     return v;
 }
 
+ValueUnit FestDeserializer::Unpack(const PValueUnit &valueUnit) const {
+    ValueUnit v{valueUnit.value, Unpack(valueUnit.unit)};
+    return v;
+}
+
 FestUuid FestDeserializer::Unpack(PFestId festId) const {
-    if (festId.id >= 0 && festId.id < numFestUuid) {
-        return this->festUuid[festId.id];
+    if (festId.id > 0 && festId.id <= numFestUuid) {
+        return this->festUuid[festId.id - 1];
     } else {
         return {};
     }
@@ -234,6 +272,10 @@ FestUuid FestDeserializer::Unpack(PFestId festId) const {
 
 OppfLegemiddelMerkevare FestDeserializer::Unpack(const POppfLegemiddelMerkevare &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelMerkevare>(poppf))};
+}
+
+OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelpakning>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -270,6 +312,40 @@ LegemiddelMerkevare FestDeserializer::Unpack(const PLegemiddelMerkevare &pmerkev
         {Unpack(pmerkevare.smak)},
         sortertVirkestoffUtenStyrke,
         {Unpack(pmerkevare.vaksinestandard)}
+    };
+}
+
+Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning &ppakning) const {
+    std::vector<Pakningsinfo> pakningsinfo{};
+    {
+        auto list = Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
+        for (const auto &ppi : list) {
+            auto pi = Unpack(ppi);
+            pakningsinfo.push_back(pi);
+        }
+    }
+    std::vector<PrisVare> prisVare{};
+    {
+        auto list = Unpack(prisVareList, numPrisVare, ppakning.prisVare);
+        for (const auto &ppv : list) {
+            auto pv = Unpack(ppv);
+            prisVare.push_back(pv);
+        }
+    }
+    return {
+            Unpack(static_cast<PLegemiddelCore>(ppakning)),
+            {Unpack(ppakning.preparattype)},
+            Unpack(ppakning.id).ToString(),
+            Unpack(ppakning.varenr),
+            {Unpack(ppakning.oppbevaring)},
+            pakningsinfo,
+            Unpack(ppakning.markedsforingsinfo),
+            Unpack(ppakning.ean),
+            prisVare,
+            Unpack(ppakning.refusjon),
+            Unpack(ppakning.pakningByttegruppe),
+            Unpack(ppakning.preparatomtaleavsnitt),
+            ppakning.ikkeKonservering
     };
 }
 
@@ -344,6 +420,68 @@ Preparatomtaleavsnitt FestDeserializer::Unpack(const PPreparatomtaleavsnitt &pPr
     return {
             Unpack(pPreparatomtaleavsnitt.avsnittoverskrift),
             Unpack(pPreparatomtaleavsnitt.lenke)
+    };
+}
+
+Pakningskomponent FestDeserializer::Unpack(const PPakningskomponent &pPakningskomponent) const {
+    return {{Unpack(pPakningskomponent.pakningstype), Unpack(pPakningskomponent.mengde)}, pPakningskomponent.antall};
+}
+
+Pakningsinfo FestDeserializer::Unpack(const PPakningsinfo &pakningsinfo) const {
+    std::vector<Pakningskomponent> pakningskomponent{};
+    {
+        auto list = Unpack(pakningskomponentList, numPakningskomponent, pakningsinfo.pakningskomponent);
+        for (const auto &p : list) {
+            pakningskomponent.emplace_back(Unpack(p));
+        }
+    }
+    return {
+        Unpack(pakningsinfo.merkevareId).ToString(),
+        Unpack(pakningsinfo.pakningsstr),
+        {Unpack(pakningsinfo.enhetPakning)},
+        {Unpack(pakningsinfo.pakningstype)},
+        Unpack(pakningsinfo.mengde),
+        {Unpack(pakningsinfo.ddd)},
+        pakningskomponent,
+        pakningsinfo.statistikkfaktor,
+        pakningsinfo.antall,
+        pakningsinfo.multippel
+    };
+}
+
+PrisVare FestDeserializer::Unpack(const PPrisVare &prisVare) const {
+    return {Unpack(prisVare.type), Unpack(prisVare.pris), Unpack(prisVare.gyldigFraDato), Unpack(prisVare.gyldigTilDato)};
+}
+
+Markedsforingsinfo FestDeserializer::Unpack(const PMarkedsforingsinfo &pmarkedsforingsinfo) const {
+    return {
+        Unpack(pmarkedsforingsinfo.markedsforingsdato),
+        Unpack(pmarkedsforingsinfo.varenrUtgaende),
+        Unpack(pmarkedsforingsinfo.midlUtgattDato),
+        Unpack(pmarkedsforingsinfo.avregDato)
+    };
+}
+
+Refusjon FestDeserializer::Unpack(const PRefusjon &pRefusjon) const {
+    std::vector<std::string> refRefusjonsgruppe{};
+    {
+        auto list = Unpack(festUuidList, numFestUuidList, pRefusjon.refRefusjonsgruppe);
+        for (const auto &id : list) {
+            refRefusjonsgruppe.push_back(Unpack(id).ToString());
+        }
+    }
+    return {
+        refRefusjonsgruppe,
+        Unpack(pRefusjon.gyldigFraDato),
+        Unpack(pRefusjon.forskrivesTilDato),
+        Unpack(pRefusjon.utleveresTilDato)
+    };
+}
+
+PakningByttegruppe FestDeserializer::Unpack(const PPakningByttegruppe &pPakningByttegruppe) const {
+    return {
+        Unpack(pPakningByttegruppe.refByttegruppe).ToString(),
+        Unpack(pPakningByttegruppe.gyldigFraDato)
     };
 }
 

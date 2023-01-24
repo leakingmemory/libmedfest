@@ -12,6 +12,7 @@ class FestDeserializer;
 class PakningskomponentInfo;
 
 class PPakningskomponentInfo {
+    friend FestDeserializer;
 private:
     PValueWithCodeset pakningstype;
     PValueUnit mengde;

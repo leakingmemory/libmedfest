@@ -13,6 +13,7 @@ class FestDeserializer;
 class PakningByttegruppe;
 
 class PPakningByttegruppe {
+    friend FestDeserializer;
 private:
     PFestId refByttegruppe;
     PString gyldigFraDato;

@@ -11,6 +11,7 @@ class FestDeserializer;
 class ValueUnit;
 
 class PValueUnit {
+    friend FestDeserializer;
 private:
     double value;
     PString unit;

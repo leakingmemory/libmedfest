@@ -21,6 +21,7 @@ private:
     PString utleveresTilDato;
 public:
     PRefusjon(const Refusjon &, FestUuidList &uuidlist, std::string &strblock);
+    bool operator ==(const PRefusjon &) const;
 };
 
 

@@ -14,6 +14,7 @@ add_library(packed OBJECT PackException.cpp PackException.h PFestId.cpp PFestId.
         PPrisVare.cpp PPrisVare.h PrisVareList.cpp PrisVareList.h PMarkedsforingsinfo.cpp PMarkedsforingsinfo.h
         PRefusjon.cpp PRefusjon.h PPakningByttegruppe.cpp PPakningByttegruppe.h
         PPakningskomponent.cpp PPakningskomponent.h PPakningsinfo.cpp PPakningsinfo.h
-        PakningskomponentList.cpp PakningskomponentList.h)
+        PakningskomponentList.cpp PakningskomponentList.h PLegemiddelVirkestoff.cpp PLegemiddelVirkestoff.h
+        POppfLegemiddelVirkestoff.cpp POppfLegemiddelVirkestoff.h RefusjonList.cpp RefusjonList.h)
 
 include_directories(packed ${Boost_INCLUDE_DIRS} )

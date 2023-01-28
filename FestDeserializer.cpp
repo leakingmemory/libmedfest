@@ -65,6 +65,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    legemiddelVirkestoff = (POppfLegemiddelVirkestoff *) (void *) (((uint8_t *) mapping) + offset);
+    numLegemiddelVirkestoff = header->numLegemiddelVirkestoff;
+    offset += ((size_t) numLegemiddelVirkestoff) * sizeof(*legemiddelVirkestoff);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -128,6 +138,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     prisVareList = (const PPrisVare *) (void *) (((uint8_t *) mapping) + offset);
     numPrisVare = header->numPrisVare;
     offset += ((size_t) numPrisVare) * sizeof(*prisVareList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    refusjon = (const PRefusjon *) (void *) (((uint8_t *) mapping) + offset);
+    numRefusjon = header->numRefusjon;
+    offset += ((size_t) numRefusjon) * sizeof(*refusjon);
     stringblock = (const char *) (void *) (((uint8_t *) mapping) + offset);
     if (offset < size) {
         stringblocksize = size - offset;
@@ -222,6 +242,15 @@ std::vector<PFestId> FestDeserializer::GetFestIdLists() const {
     return festIds;
 }
 
+std::vector<PRefusjon> FestDeserializer::GetRefusjon() const {
+    std::vector<PRefusjon> refusjon{};
+    refusjon.reserve(numRefusjon);
+    for (std::remove_const<typeof(numRefusjon)>::type i = 0; i < numRefusjon; i++) {
+        refusjon.emplace_back(this->refusjon[i]);
+    }
+    return refusjon;
+}
+
 void FestDeserializer::ForEachMerkevare(const std::function<void(const POppfLegemiddelMerkevare &)> &func) {
     for (std::remove_const<typeof(numMerkevare)>::type i = 0; i < numMerkevare; i++) {
         func(this->merkevare[i]);
@@ -231,6 +260,12 @@ void FestDeserializer::ForEachMerkevare(const std::function<void(const POppfLege
 void FestDeserializer::ForEachPakning(const std::function<void(const POppfLegemiddelpakning &)> &func) {
     for (std::remove_const<typeof(numPakning)>::type i = 0; i < numPakning; i++) {
         func(this->pakning[i]);
+    }
+}
+
+void FestDeserializer::ForEachLegemiddelVirkestoff(const std::function<void(const POppfLegemiddelVirkestoff &)> &func) {
+    for (std::remove_const<typeof(numLegemiddelVirkestoff)>::type i = 0; i < numLegemiddelVirkestoff; i++) {
+        func(this->legemiddelVirkestoff[i]);
     }
 }
 
@@ -276,6 +311,10 @@ OppfLegemiddelMerkevare FestDeserializer::Unpack(const POppfLegemiddelMerkevare 
 
 OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelpakning>(poppf))};
+}
+
+OppfLegemiddelVirkestoff FestDeserializer::Unpack(const POppfLegemiddelVirkestoff &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PLegemiddelVirkestoff>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -346,6 +385,38 @@ Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning &ppakning) c
             Unpack(ppakning.pakningByttegruppe),
             Unpack(ppakning.preparatomtaleavsnitt),
             ppakning.ikkeKonservering
+    };
+}
+
+LegemiddelVirkestoff FestDeserializer::Unpack(const PLegemiddelVirkestoff &pvirkestoff) const {
+    std::vector<Refusjon> refusjon{};
+    {
+        auto list = Unpack(this->refusjon, numRefusjon, pvirkestoff.refusjon);
+        for (const auto &item : list) {
+            refusjon.emplace_back(Unpack(item));
+        }
+    }
+    std::vector<std::string> refLegemiddelMerkevare{};
+    {
+        auto list = Unpack(festUuidList, numFestUuidList, pvirkestoff.refLegemiddelMerkevare);
+        for (const auto &id : list) {
+            refLegemiddelMerkevare.emplace_back(Unpack(id).ToString());
+        }
+    }
+    std::vector<std::string> refPakning{};
+    {
+        auto list = Unpack(festUuidList, numFestUuidList, pvirkestoff.refPakning);
+        for (const auto &id : list) {
+            refPakning.emplace_back(Unpack(id).ToString());
+        }
+    }
+    return {
+        Unpack(static_cast<PLegemiddel>(pvirkestoff)),
+        Unpack(pvirkestoff.id).ToString(),
+        refusjon,
+        refLegemiddelMerkevare,
+        refPakning,
+        {Unpack(pvirkestoff.forskrivningsenhetResept)}
     };
 }
 

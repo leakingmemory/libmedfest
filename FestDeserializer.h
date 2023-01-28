@@ -23,6 +23,7 @@
 #include "Struct/Packed/PPakningsinfo.h"
 #include "Struct/Packed/PPrisVare.h"
 #include "Struct/Packed/POppfLegemiddelpakning.h"
+#include "Struct/Packed/POppfLegemiddelVirkestoff.h"
 
 class FestDeserializer {
 private:
@@ -30,6 +31,7 @@ private:
     size_t mapsize;
     const POppfLegemiddelMerkevare *merkevare;
     const POppfLegemiddelpakning *pakning;
+    const POppfLegemiddelVirkestoff *legemiddelVirkestoff;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -37,9 +39,11 @@ private:
     const PPakningskomponent *pakningskomponentList;
     const PPakningsinfo *pakningsinfoList;
     const PPrisVare *prisVareList;
+    const PRefusjon *refusjon;
     const char *stringblock;
     size_t numMerkevare;
     size_t numPakning;
+    size_t numLegemiddelVirkestoff;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
@@ -47,6 +51,7 @@ private:
     size_t numPakningskomponent;
     size_t numPakningsinfo;
     size_t numPrisVare;
+    size_t numRefusjon;
     size_t stringblocksize;
 public:
     FestDeserializer(const std::string &filename);
@@ -59,8 +64,10 @@ public:
     [[nodiscard]] std::vector<PValueWithCodeset> GetValueWithCodeset() const;
     [[nodiscard]] std::vector<FestUuid> GetFestIds() const;
     [[nodiscard]] std::vector<PFestId> GetFestIdLists() const;
+    [[nodiscard]] std::vector<PRefusjon> GetRefusjon() const;
     void ForEachMerkevare(const std::function<void (const POppfLegemiddelMerkevare &)> &);
     void ForEachPakning(const std::function<void (const POppfLegemiddelpakning &)> &);
+    void ForEachLegemiddelVirkestoff(const std::function<void (const POppfLegemiddelVirkestoff &)> &);
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -69,9 +76,11 @@ public:
     [[nodiscard]] FestUuid Unpack(PFestId festId) const;
     [[nodiscard]] OppfLegemiddelMerkevare Unpack(const POppfLegemiddelMerkevare &poppf) const;
     [[nodiscard]] OppfLegemiddelpakning Unpack(const POppfLegemiddelpakning &poppf) const;
+    [[nodiscard]] OppfLegemiddelVirkestoff Unpack(const POppfLegemiddelVirkestoff &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
+    [[nodiscard]] LegemiddelVirkestoff Unpack(const PLegemiddelVirkestoff &pvirkestoff) const;
     [[nodiscard]] Legemiddel Unpack(const PLegemiddel &pLegemiddel) const;
     [[nodiscard]] LegemiddelCore Unpack(const PLegemiddelCore &pLegemiddelCore) const;
     [[nodiscard]] AdministreringLegemiddel Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const;

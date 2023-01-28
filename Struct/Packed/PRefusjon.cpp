@@ -12,3 +12,10 @@ PRefusjon::PRefusjon(const Refusjon &refusjon, FestUuidList &uuidlist, std::stri
         forskrivesTilDato(refusjon.GetForskrivesTilDato(), strblock),
         utleveresTilDato(refusjon.GetUtleveresTilDato(), strblock) {
 }
+
+bool PRefusjon::operator==(const PRefusjon &other) const {
+    return refRefusjonsgruppe == other.refRefusjonsgruppe &&
+        gyldigFraDato == other.gyldigFraDato &&
+        forskrivesTilDato == other.forskrivesTilDato &&
+        utleveresTilDato == other.utleveresTilDato;
+}

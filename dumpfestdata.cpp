@@ -6,6 +6,7 @@
 #include "FestDeserializer.h"
 #include "Struct/Decoded/OppfLegemiddelMerkevare.h"
 #include "Struct/Decoded/OppfLegemiddelpakning.h"
+#include "Struct/Decoded/OppfLegemiddelVirkestoff.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -69,6 +70,16 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         }
         std::cout << " end)\n";
     }
+    std::cout << "Refusjon list storage dump:\n";
+    for (const auto &r : festDeserializer.GetRefusjon()) {
+        auto refusjon = festDeserializer.Unpack(r);
+        std::cout << "Ref:";
+        for (const auto &id : refusjon.GetRefRefusjonsgruppe()) {
+            std::cout << " " << id;
+        }
+        std::cout << ": " << refusjon.GetGyldigFraDato() << " " << refusjon.GetForskrivesTilDato() << " "
+                  << refusjon.GetUtleveresTilDato() << "\n";
+    }
     std::cout << "Pris vare list storage dump:\n";
     for (const auto &ppv : festDeserializer.GetPrisVare()) {
         auto pv = festDeserializer.Unpack(ppv);
@@ -93,6 +104,14 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         for (auto &pi : legemiddel.GetPakningsinfo()) {
             std::cout << "  - " << pi.GetPakningsstr() << "\n";
         }
+    });
+    std::cout << "Legemiddel virkestoff:\n";
+    festDeserializer.ForEachLegemiddelVirkestoff([&festDeserializer] (const POppfLegemiddelVirkestoff &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto legemiddel = oppf.GetLegemiddelVirkestoff();
+        std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << legemiddel.GetId() << "\n";
+        std::cout << " " << legemiddel.GetNavnFormStyrke() << " (" << legemiddel.GetReseptgruppe().GetValue() << ")\n";
     });
     return 0;
 }

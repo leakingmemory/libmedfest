@@ -10,7 +10,7 @@ std::string KatLegemiddelVirkestoff::GetName() const {
 }
 
 void KatLegemiddelVirkestoff::Merge(const XmlOppfLegemiddelVirkestoff &oppf) {
-
+    fest->Add(oppf);
 }
 
 std::shared_ptr<XMLObject> KatLegemiddelVirkestoffHandler::StartElement(const std::shared_ptr<XMLObject> &parent,

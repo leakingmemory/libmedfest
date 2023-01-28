@@ -6,6 +6,7 @@
 #include "libzip_zip.h"
 #include "FestObjectStream.h"
 #include <iostream>
+#include <algorithm>
 
 FestZip::FestZip(const std::string &zipname) {
     z = libzip_zip::Create(zipname);

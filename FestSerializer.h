@@ -15,6 +15,8 @@
 #include "Struct/Packed/PakningsinfoList.h"
 #include "Struct/Packed/PrisVareList.h"
 #include "Struct/Packed/PakningskomponentList.h"
+#include "Struct/Packed/RefusjonList.h"
+#include "Struct/Packed/POppfLegemiddelVirkestoff.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -31,6 +33,8 @@ struct FestFirstHeader {
     uint16_t numPrisVare;
     uint16_t numUuidLists;
     uint16_t numPakning;
+    uint16_t numRefusjon;
+    uint16_t numLegemiddelVirkestoff;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -45,8 +49,10 @@ private:
     PakningskomponentList pakningskomponentList{};
     PakningsinfoList pakningsinfoList{};
     PrisVareList prisVareList{};
+    RefusjonList refusjonList{};
     std::vector<POppfLegemiddelMerkevare> legemiddelMerkevare{};
     std::vector<POppfLegemiddelpakning> legemiddelpakning{};
+    std::vector<POppfLegemiddelVirkestoff> legemiddelVirkestoff{};
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
     FestSerializer(const FestSerializer &) = delete;
@@ -61,6 +67,7 @@ public:
 private:
     bool Visit(const OppfLegemiddelMerkevare &merkevare) override;
     bool Visit(const OppfLegemiddelpakning &pakning) override;
+    bool Visit(const OppfLegemiddelVirkestoff &virkestoff) override;
 };
 
 

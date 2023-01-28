@@ -162,6 +162,11 @@ bool Fest::Accept(FestVisitor &visitor) const {
             return false;
         }
     }
+    for (auto &virkestoff : oppfLegemiddelVirkestoff) {
+        if (!visitor.Visit(virkestoff)) {
+            return false;
+        }
+    }
     return true;
 }
 

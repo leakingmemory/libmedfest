@@ -42,7 +42,7 @@ public:
 class XmlKortdoseHandler : private XmlValueWithCodeSetHandler<XmlKortdose> {
 public:
     XmlKortdoseHandler() : XmlValueWithCodeSetHandler<XmlKortdose>("Kortdose") {}
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) override;
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
     bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlKortdose>> obj) override;
 };

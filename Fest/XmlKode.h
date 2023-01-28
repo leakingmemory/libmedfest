@@ -24,7 +24,7 @@ public:
 class XmlKodeHandler : private XmlValueWithDistinguishedNameHandler<XmlKode>, private XmlContentElementHandler<XmlKode> {
 public:
     XmlKodeHandler() : XmlValueWithDistinguishedNameHandler<XmlKode>("Kode"), XmlContentElementHandler<XmlKode>("Kode") {}
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) override;
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
     bool Merge(std::shared_ptr<XmlKode> parent, const std::string &content) override;
     bool Merge(std::shared_ptr<XmlType> obj) override;

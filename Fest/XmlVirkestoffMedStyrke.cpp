@@ -31,7 +31,7 @@ void XmlVirkestoffMedStyrke::SetAlternativStyrkenevner(const Styrkenevner &styrk
 }
 
 void XmlVirkestoffMedStyrke::SetAtcKombipreparat(const Atc &atc) {
-    this->atcKombipreparat = atcKombipreparat;
+    this->atcKombipreparat = atc;
 }
 
 void XmlVirkestoffMedStyrke::SetStyrkeOvreVerdi(double styrkeOvreVerdi) {

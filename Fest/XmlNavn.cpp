@@ -5,7 +5,7 @@
 #include "XmlNavn.h"
 
 void XmlNavn::SetNavn(const std::string &name) {
-    this->navn = navn;
+    this->navn = name;
 }
 
 std::string XmlNavn::GetNavn() const {

@@ -29,7 +29,7 @@ public:
 class XmlRefusjonskodeHandler : private XmlValueWithCodeSetHandler<XmlRefusjonskode> {
 public:
     XmlRefusjonskodeHandler() : XmlValueWithCodeSetHandler<XmlRefusjonskode>("Refusjonskode") {}
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) override;
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
     bool Merge(std::shared_ptr<XmlValueWithCodeSet<XmlRefusjonskode>> obj) override;
 };

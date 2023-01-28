@@ -46,7 +46,7 @@ public:
 class XmlLenkeHandler : private XmlValueHandler<XmlLenkeValue> {
 public:
     XmlLenkeHandler() : XmlValueHandler<XmlLenkeValue>("Lenke") {}
-    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes);
+    std::shared_ptr<XMLObject> StartElement(const std::shared_ptr<XMLObject> &parent, const std::map<std::string,std::string> &attributes) override;
     bool EndElement(const std::shared_ptr<XMLObject> &obj);
     bool Merge(std::shared_ptr<XmlType> obj) override;
 };

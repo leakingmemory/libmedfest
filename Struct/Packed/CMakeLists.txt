@@ -15,3 +15,5 @@ add_library(packed OBJECT PackException.cpp PackException.h PFestId.cpp PFestId.
         PRefusjon.cpp PRefusjon.h PPakningByttegruppe.cpp PPakningByttegruppe.h
         PPakningskomponent.cpp PPakningskomponent.h PPakningsinfo.cpp PPakningsinfo.h
         PakningskomponentList.cpp PakningskomponentList.h)
+
+include_directories(packed ${Boost_INCLUDE_DIRS} )

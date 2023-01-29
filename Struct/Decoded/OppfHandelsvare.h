@@ -7,22 +7,21 @@
 
 #include "Status.h"
 #include "Handelsvare.h"
+#include "Oppf.h"
 
-class OppfHandelsvare {
-private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
+class POppfMedForbrMatr;
+class POppfNaringsmiddel;
+class POppfBrystprotese;
+
+class OppfHandelsvare : public Oppf {
 public:
-    OppfHandelsvare() : id(), tidspunkt(), status() {}
+    OppfHandelsvare() : Oppf() {}
     OppfHandelsvare(const std::string &id, const std::string &tidspunkt, const Status &status) :
-            id(id), tidspunkt(tidspunkt), status(status) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status) {}
 };
 
 class OppfMedForbrMatr : public OppfHandelsvare {
+    friend POppfMedForbrMatr;
 private:
     MedForbrMatr medForbrMatr;
 public:
@@ -34,6 +33,7 @@ public:
 };
 
 class OppfNaringsmiddel : public OppfHandelsvare {
+    friend POppfNaringsmiddel;
 private:
     Naringsmiddel naringsmiddel;
 public:
@@ -45,6 +45,7 @@ public:
 };
 
 class OppfBrystprotese : public OppfHandelsvare {
+    friend POppfBrystprotese;
 private:
     Brystprotese brystprotese;
 public:

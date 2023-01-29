@@ -80,6 +80,11 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         std::cout << ": " << refusjon.GetGyldigFraDato() << " " << refusjon.GetForskrivesTilDato() << " "
                   << refusjon.GetUtleveresTilDato() << "\n";
     }
+    std::cout << "String list storage dump:\n";
+    for (const auto &ps : festDeserializer.GetStringList()) {
+        auto str = festDeserializer.Unpack(ps);
+        std::cout << " " << str << "\n";
+    }
     std::cout << "Pris vare list storage dump:\n";
     for (const auto &ppv : festDeserializer.GetPrisVare()) {
         auto pv = festDeserializer.Unpack(ppv);

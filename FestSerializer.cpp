@@ -53,6 +53,9 @@ bool FestSerializer::Write() {
     if (legemiddelVirkestoff.size() >= (1 << 16)) {
         throw PackException("Max size legemiddel-virkestoff");
     }
+    if (stringList.size() >= (1 << 16)) {
+        throw PackException("Max size string-list");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -64,7 +67,8 @@ bool FestSerializer::Write() {
         .numUuidLists = (uint16_t) festUuidList.size(),
         .numPakning = (uint16_t) legemiddelpakning.size(),
         .numRefusjon = (uint16_t) refusjonList.size(),
-        .numLegemiddelVirkestoff = (uint16_t) legemiddelVirkestoff.size()
+        .numLegemiddelVirkestoff = (uint16_t) legemiddelVirkestoff.size(),
+        .numStringList = (uint16_t) stringList.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -229,6 +233,21 @@ bool FestSerializer::Write() {
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto list = stringList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
     output.write(stringblock.c_str(), stringblock.size());
     output.close();
     return true;
@@ -240,11 +259,16 @@ bool FestSerializer::Visit(const OppfLegemiddelMerkevare &merkevare) {
 }
 
 bool FestSerializer::Visit(const OppfLegemiddelpakning &pakning) {
-    this->legemiddelpakning.emplace_back(pakning, pakningskomponentList, pakningsinfoList, prisVareList, festUuidList, festidblock, stringblock);
+    this->legemiddelpakning.emplace_back(pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, festidblock, stringblock);
     return true;
 }
 
 bool FestSerializer::Visit(const OppfLegemiddelVirkestoff &virkestoff) {
-    this->legemiddelVirkestoff.emplace_back(virkestoff, stringblock, festidblock, festUuidList, valueWithCodesetList, refusjonList);
+    this->legemiddelVirkestoff.emplace_back(virkestoff, stringblock, festidblock, stringList, festUuidList, valueWithCodesetList, refusjonList);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfMedForbrMatr &medForbrMatr) {
+    this->medForbrMatr.emplace_back(medForbrMatr, prisVareList, stringList, festidblock, stringblock);
     return true;
 }

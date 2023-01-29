@@ -8,9 +8,9 @@
 POppfLegemiddelpakning::POppfLegemiddelpakning(const OppfLegemiddelpakning &oppf,
                                                PakningskomponentList &pakningskomponentList,
                                                PakningsinfoList &pakningsinfoList,
-                                               PrisVareList &prisVareList, FestUuidList &festUuidList,
+                                               PrisVareList &prisVareList, StringList &stringList, FestUuidList &festUuidList,
                                                std::vector<FestUuid> &uuidblock, std::string &strblock) :
         POppf(oppf, uuidblock, strblock),
-        PLegemiddelpakning(oppf.GetLegemiddelpakning(), pakningskomponentList, pakningsinfoList, prisVareList, festUuidList, uuidblock, strblock)
+        PLegemiddelpakning(oppf.GetLegemiddelpakning(), pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, uuidblock, strblock)
 {
 }

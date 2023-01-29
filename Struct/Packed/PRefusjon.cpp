@@ -4,10 +4,10 @@
 
 #include "PRefusjon.h"
 #include "../Decoded/Refusjon.h"
-#include "FestUuidList.h"
+#include "StringList.h"
 
-PRefusjon::PRefusjon(const Refusjon &refusjon, FestUuidList &uuidlist, std::string &strblock) :
-        refRefusjonsgruppe(uuidlist.StoreList(refusjon.GetRefRefusjonsgruppe())),
+PRefusjon::PRefusjon(const Refusjon &refusjon, StringList &stringList, std::string &strblock) :
+        refRefusjonsgruppe(stringList.StoreList(refusjon.GetRefRefusjonsgruppe(), strblock)),
         gyldigFraDato(refusjon.GetGyldigFraDato(), strblock),
         forskrivesTilDato(refusjon.GetForskrivesTilDato(), strblock),
         utleveresTilDato(refusjon.GetUtleveresTilDato(), strblock) {

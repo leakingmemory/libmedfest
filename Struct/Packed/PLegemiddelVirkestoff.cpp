@@ -8,7 +8,7 @@
 #include "FestUuidList.h"
 
 PLegemiddelVirkestoff::PLegemiddelVirkestoff(const LegemiddelVirkestoff &legemiddelVirkestoff, std::string &strblock,
-                                             std::vector<FestUuid> uuidlist, FestUuidList &festUuidList,
+                                             std::vector<FestUuid> uuidlist, StringList &stringList, FestUuidList &festUuidList,
                                              ValueWithCodesetList &valueWithCodesetList, RefusjonList &refusjonList) :
         PLegemiddel(legemiddelVirkestoff, strblock, festUuidList, valueWithCodesetList),
         forskrivningsenhetResept(legemiddelVirkestoff.GetForskrivningsenhetResept(), strblock),
@@ -18,7 +18,7 @@ PLegemiddelVirkestoff::PLegemiddelVirkestoff(const LegemiddelVirkestoff &legemid
         refPakning(festUuidList.StoreList(legemiddelVirkestoff.GetRefPakning())) {
     std::vector<PRefusjon> refusjon{};
     for (const auto &r : legemiddelVirkestoff.GetRefusjon()) {
-        refusjon.emplace_back(r, festUuidList, strblock);
+        refusjon.emplace_back(r, stringList, strblock);
     }
     this->refusjon = refusjonList.StoreList(refusjon);
 }

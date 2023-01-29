@@ -148,6 +148,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     refusjon = (const PRefusjon *) (void *) (((uint8_t *) mapping) + offset);
     numRefusjon = header->numRefusjon;
     offset += ((size_t) numRefusjon) * sizeof(*refusjon);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    stringList = (const PString *) (void *) (((uint8_t *) mapping) + offset);
+    numStringList = header->numStringList;
+    offset += ((size_t) numStringList) * sizeof(*stringList);
     stringblock = (const char *) (void *) (((uint8_t *) mapping) + offset);
     if (offset < size) {
         stringblocksize = size - offset;
@@ -249,6 +259,15 @@ std::vector<PRefusjon> FestDeserializer::GetRefusjon() const {
         refusjon.emplace_back(this->refusjon[i]);
     }
     return refusjon;
+}
+
+std::vector<PString> FestDeserializer::GetStringList() const {
+    std::vector<PString> strings{};
+    strings.reserve(numStringList);
+    for (std::remove_const<typeof(numStringList)>::type i = 0; i < numStringList; i++) {
+        strings.emplace_back(this->stringList[i]);
+    }
+    return strings;
 }
 
 void FestDeserializer::ForEachMerkevare(const std::function<void(const POppfLegemiddelMerkevare &)> &func) {
@@ -536,9 +555,9 @@ Markedsforingsinfo FestDeserializer::Unpack(const PMarkedsforingsinfo &pmarkedsf
 Refusjon FestDeserializer::Unpack(const PRefusjon &pRefusjon) const {
     std::vector<std::string> refRefusjonsgruppe{};
     {
-        auto list = Unpack(festUuidList, numFestUuidList, pRefusjon.refRefusjonsgruppe);
+        auto list = Unpack(stringList, numStringList, pRefusjon.refRefusjonsgruppe);
         for (const auto &id : list) {
-            refRefusjonsgruppe.push_back(Unpack(id).ToString());
+            refRefusjonsgruppe.push_back(Unpack(id));
         }
     }
     return {

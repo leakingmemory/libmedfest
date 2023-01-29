@@ -40,6 +40,7 @@ private:
     const PPakningsinfo *pakningsinfoList;
     const PPrisVare *prisVareList;
     const PRefusjon *refusjon;
+    const PString *stringList;
     const char *stringblock;
     size_t numMerkevare;
     size_t numPakning;
@@ -52,6 +53,7 @@ private:
     size_t numPakningsinfo;
     size_t numPrisVare;
     size_t numRefusjon;
+    size_t numStringList;
     size_t stringblocksize;
 public:
     FestDeserializer(const std::string &filename);
@@ -65,6 +67,7 @@ public:
     [[nodiscard]] std::vector<FestUuid> GetFestIds() const;
     [[nodiscard]] std::vector<PFestId> GetFestIdLists() const;
     [[nodiscard]] std::vector<PRefusjon> GetRefusjon() const;
+    [[nodiscard]] std::vector<PString> GetStringList() const;
     void ForEachMerkevare(const std::function<void (const POppfLegemiddelMerkevare &)> &);
     void ForEachPakning(const std::function<void (const POppfLegemiddelpakning &)> &);
     void ForEachLegemiddelVirkestoff(const std::function<void (const POppfLegemiddelVirkestoff &)> &);

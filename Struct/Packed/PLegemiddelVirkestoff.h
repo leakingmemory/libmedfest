@@ -11,6 +11,7 @@
 class FestDeserializer;
 class LegemiddelVirkestoff;
 class RefusjonList;
+class StringList;
 
 class PLegemiddelVirkestoff : public PLegemiddel {
     friend FestDeserializer;
@@ -22,7 +23,7 @@ private:
     GenericListItems refPakning;
 public:
     PLegemiddelVirkestoff(const LegemiddelVirkestoff &legemiddelVirkestoff, std::string &strblock,
-                          std::vector<FestUuid> uuidlist, FestUuidList &festUuidList,
+                          std::vector<FestUuid> uuidlist, StringList &, FestUuidList &,
                           ValueWithCodesetList &valueWithCodesetList, RefusjonList &refusjonList);
 };
 

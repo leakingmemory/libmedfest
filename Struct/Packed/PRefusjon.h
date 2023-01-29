@@ -10,7 +10,7 @@
 
 class FestDeserializer;
 class Refusjon;
-class FestUuidList;
+class StringList;
 
 class PRefusjon {
     friend FestDeserializer;
@@ -20,7 +20,7 @@ private:
     PString forskrivesTilDato;
     PString utleveresTilDato;
 public:
-    PRefusjon(const Refusjon &, FestUuidList &uuidlist, std::string &strblock);
+    PRefusjon(const Refusjon &, StringList &stringList, std::string &strblock);
     bool operator ==(const PRefusjon &) const;
 };
 

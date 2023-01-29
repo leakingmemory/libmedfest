@@ -167,6 +167,11 @@ bool Fest::Accept(FestVisitor &visitor) const {
             return false;
         }
     }
+    for (auto &medForbrMatr : oppfMedForbrVare) {
+        if (!visitor.Visit(medForbrMatr)) {
+            return false;
+        }
+    }
     return true;
 }
 

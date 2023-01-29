@@ -18,6 +18,7 @@ class PakningskomponentList;
 class PakningsinfoList;
 class PrisVareList;
 class FestUuidList;
+class StringList;
 
 class PLegemiddelpakning : public PLegemiddelCore {
     friend FestDeserializer;
@@ -36,7 +37,7 @@ private:
     bool ikkeKonservering : 1;
 public:
     PLegemiddelpakning(const Legemiddelpakning &, PakningskomponentList &pakningskomponentList,
-                       PakningsinfoList &pakningsinfoList, PrisVareList &prisVareList, FestUuidList &festUuidList,
+                       PakningsinfoList &pakningsinfoList, PrisVareList &prisVareList, StringList &, FestUuidList &,
                        std::vector<FestUuid> &uuidblock, std::string &strblock);
 };
 

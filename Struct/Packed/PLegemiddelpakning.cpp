@@ -11,7 +11,7 @@
 
 PLegemiddelpakning::PLegemiddelpakning(const Legemiddelpakning &legemiddelpakning,
                                        PakningskomponentList &pakningskomponentList, PakningsinfoList &pakningsinfoList,
-                                       PrisVareList &prisVareList, FestUuidList &festUuidList,
+                                       PrisVareList &prisVareList, StringList &stringList, FestUuidList &festUuidList,
                                        std::vector<FestUuid> &uuidblock, std::string &strblock) :
         PLegemiddelCore(legemiddelpakning, strblock, festUuidList),
         id(legemiddelpakning.GetId(), uuidblock),
@@ -21,7 +21,7 @@ PLegemiddelpakning::PLegemiddelpakning(const Legemiddelpakning &legemiddelpaknin
         pakningsinfo(),
         prisVare(),
         markedsforingsinfo(legemiddelpakning.GetMarkedsforingsinfo(), strblock),
-        refusjon(legemiddelpakning.GetRefusjon(), festUuidList, strblock),
+        refusjon(legemiddelpakning.GetRefusjon(), stringList, strblock),
         pakningByttegruppe(legemiddelpakning.GetPakningByttegruppe(), uuidblock, strblock),
         preparatomtaleavsnitt(legemiddelpakning.GetPreparatomtaleavsnitt(), strblock),
         ikkeKonservering(legemiddelpakning.GetIkkeKonservering())

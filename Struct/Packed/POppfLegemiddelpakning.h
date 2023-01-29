@@ -14,13 +14,14 @@ class OppfLegemiddelpakning;
 class PakningsinfoList;
 class PrisVareList;
 class FestUuidList;
+class StringList;
 
 class POppfLegemiddelpakning : public POppf, public PLegemiddelpakning {
     friend FestDeserializer;
 public:
     POppfLegemiddelpakning(const OppfLegemiddelpakning &, PakningskomponentList &pakningskomponentList,
                            PakningsinfoList &pakningsinfoList,
-                           PrisVareList &prisVareList, FestUuidList &festUuidList, std::vector<FestUuid> &uuidblock,
+                           PrisVareList &prisVareList, StringList &, FestUuidList &, std::vector<FestUuid> &uuidblock,
                            std::string &strblock);
 };
 

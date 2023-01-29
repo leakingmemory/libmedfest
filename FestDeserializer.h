@@ -24,6 +24,7 @@
 #include "Struct/Packed/PPrisVare.h"
 #include "Struct/Packed/POppfLegemiddelpakning.h"
 #include "Struct/Packed/POppfLegemiddelVirkestoff.h"
+#include "Struct/Packed/POppfHandelsvare.h"
 
 class FestDeserializer {
 private:
@@ -32,6 +33,7 @@ private:
     const POppfLegemiddelMerkevare *merkevare;
     const POppfLegemiddelpakning *pakning;
     const POppfLegemiddelVirkestoff *legemiddelVirkestoff;
+    const POppfMedForbrMatr *medForbrMatr;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -45,6 +47,7 @@ private:
     size_t numMerkevare;
     size_t numPakning;
     size_t numLegemiddelVirkestoff;
+    size_t numMedForbrMatr;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;

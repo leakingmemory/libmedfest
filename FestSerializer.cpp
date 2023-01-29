@@ -7,7 +7,7 @@
 #include <iostream>
 
 FestSerializer::FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename)
-: fest(fest), output(filename, std::ios::binary | std::ios::out | std::ios::trunc) {
+: fest(fest), output(filename, std::ios::binary | std::ios::out | std::ios::trunc), percentDone(0) {
 }
 
 bool FestSerializer::Serialize() {
@@ -15,7 +15,13 @@ bool FestSerializer::Serialize() {
         std::cerr << "Error: Output file is not opened, or writeable\n";
         return false;
     }
-    return fest->Accept(*this);
+    bool result = fest->Accept(*this);
+    if (result) {
+        std::cout << "\rGenerating output: 100% done.\n";
+    } else {
+        std::cout << "\n";
+    }
+    return result;
 }
 
 bool FestSerializer::Write() {
@@ -56,6 +62,9 @@ bool FestSerializer::Write() {
     if (stringList.size() >= (1 << 16)) {
         throw PackException("Max size string-list");
     }
+    if (medForbrMatr.size() >= (1 << 16)) {
+        throw PackException("Max med-forbr-matr list size");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -68,7 +77,8 @@ bool FestSerializer::Write() {
         .numPakning = (uint16_t) legemiddelpakning.size(),
         .numRefusjon = (uint16_t) refusjonList.size(),
         .numLegemiddelVirkestoff = (uint16_t) legemiddelVirkestoff.size(),
-        .numStringList = (uint16_t) stringList.size()
+        .numStringList = (uint16_t) stringList.size(),
+        .numMedForbrMatr = (uint16_t) medForbrMatr.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -111,6 +121,20 @@ bool FestSerializer::Write() {
     {
         auto *ptr = legemiddelVirkestoff.data();
         auto size = legemiddelVirkestoff.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = medForbrMatr.data();
+        auto size = medForbrMatr.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -251,6 +275,14 @@ bool FestSerializer::Write() {
     output.write(stringblock.c_str(), stringblock.size());
     output.close();
     return true;
+}
+
+void FestSerializer::Progress(int done, int total) {
+    int pcnt = (100 * done) / total;
+    if (pcnt != percentDone) {
+        percentDone = pcnt;
+        std::cout << "\rGenerating output: " << percentDone << "% done." << std::flush;
+    }
 }
 
 bool FestSerializer::Visit(const OppfLegemiddelMerkevare &merkevare) {

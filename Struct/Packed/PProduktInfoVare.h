@@ -7,9 +7,11 @@
 
 #include "PValueWithCodeset.h"
 
+class FestDeserializer;
 class ProduktInfoVare;
 
 class PProduktInfoVare {
+    friend FestDeserializer;
 private:
     PValueWithCodeset enhetStorrelse;
     PString produktNr;

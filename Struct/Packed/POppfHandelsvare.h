@@ -19,7 +19,7 @@ public:
             P(handelsvare, prisVareList, stringList, strblock) {}
 };
 
-class POppfMedForbrMatr : POppfHandelsvare<MedForbrMatr, PMedForbrMatr> {
+class POppfMedForbrMatr : public POppfHandelsvare<MedForbrMatr, PMedForbrMatr> {
 public:
     POppfMedForbrMatr(const OppfMedForbrMatr &oppfMedForbrMatr, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock);
 };

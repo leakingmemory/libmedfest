@@ -16,6 +16,7 @@ class POppfBrystprotese;
 class OppfHandelsvare : public Oppf {
 public:
     OppfHandelsvare() : Oppf() {}
+    OppfHandelsvare(const Oppf &oppf) : Oppf(oppf) {}
     OppfHandelsvare(const std::string &id, const std::string &tidspunkt, const Status &status) :
             Oppf(id, tidspunkt, status) {}
 };
@@ -26,6 +27,8 @@ private:
     MedForbrMatr medForbrMatr;
 public:
     OppfMedForbrMatr() : OppfHandelsvare(), medForbrMatr() {}
+    OppfMedForbrMatr(const Oppf &oppf, const MedForbrMatr &medForbrMatr) :
+            OppfHandelsvare(oppf), medForbrMatr(medForbrMatr) {}
     OppfMedForbrMatr(const std::string &id, const std::string &tidspunkt, const Status &status,
                      const MedForbrMatr &medForbrMatr) :
             OppfHandelsvare(id, tidspunkt, status), medForbrMatr(medForbrMatr) {}

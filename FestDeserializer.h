@@ -71,9 +71,10 @@ public:
     [[nodiscard]] std::vector<PFestId> GetFestIdLists() const;
     [[nodiscard]] std::vector<PRefusjon> GetRefusjon() const;
     [[nodiscard]] std::vector<PString> GetStringList() const;
-    void ForEachMerkevare(const std::function<void (const POppfLegemiddelMerkevare &)> &);
-    void ForEachPakning(const std::function<void (const POppfLegemiddelpakning &)> &);
-    void ForEachLegemiddelVirkestoff(const std::function<void (const POppfLegemiddelVirkestoff &)> &);
+    void ForEachMerkevare(const std::function<void (const POppfLegemiddelMerkevare &)> &) const;
+    void ForEachPakning(const std::function<void (const POppfLegemiddelpakning &)> &) const;
+    void ForEachLegemiddelVirkestoff(const std::function<void (const POppfLegemiddelVirkestoff &)> &) const;
+    void ForEachMedForbrMatr(const std::function<void (const POppfMedForbrMatr &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -83,10 +84,12 @@ public:
     [[nodiscard]] OppfLegemiddelMerkevare Unpack(const POppfLegemiddelMerkevare &poppf) const;
     [[nodiscard]] OppfLegemiddelpakning Unpack(const POppfLegemiddelpakning &poppf) const;
     [[nodiscard]] OppfLegemiddelVirkestoff Unpack(const POppfLegemiddelVirkestoff &poppf) const;
+    [[nodiscard]] OppfMedForbrMatr Unpack(const POppfMedForbrMatr &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
     [[nodiscard]] LegemiddelVirkestoff Unpack(const PLegemiddelVirkestoff &pvirkestoff) const;
+    [[nodiscard]] Handelsvare Unpack(const PHandelsvare &pHandelsvare) const;
     [[nodiscard]] Legemiddel Unpack(const PLegemiddel &pLegemiddel) const;
     [[nodiscard]] LegemiddelCore Unpack(const PLegemiddelCore &pLegemiddelCore) const;
     [[nodiscard]] AdministreringLegemiddel Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const;
@@ -98,6 +101,8 @@ public:
     [[nodiscard]] Markedsforingsinfo Unpack(const PMarkedsforingsinfo &pmarkedsforingsinfo) const;
     [[nodiscard]] Refusjon Unpack(const PRefusjon &pRefusjon) const;
     [[nodiscard]] PakningByttegruppe Unpack(const PPakningByttegruppe &pPakningByttegruppe) const;
+    [[nodiscard]] ProduktInfoVare Unpack(const PProduktInfoVare &pProduktInfoVare) const;
+    [[nodiscard]] Leverandor Unpack(const PLeverandor &pLeverandor) const;
     template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, GenericListItems items) const {
         if (items.start < size) {
             std::vector<T> output{};

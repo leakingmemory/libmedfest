@@ -7,6 +7,7 @@
 #include "Struct/Decoded/OppfLegemiddelMerkevare.h"
 #include "Struct/Decoded/OppfLegemiddelpakning.h"
 #include "Struct/Decoded/OppfLegemiddelVirkestoff.h"
+#include "Struct/Decoded/OppfHandelsvare.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -117,6 +118,16 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
                   << legemiddel.GetId() << "\n";
         std::cout << " " << legemiddel.GetNavnFormStyrke() << " (" << legemiddel.GetReseptgruppe().GetValue() << ")\n";
+    });
+    std::cout << "Med forbr matr:\n";
+    festDeserializer.ForEachMedForbrMatr([&festDeserializer] (const POppfMedForbrMatr &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto handelsvare = oppf.GetMedForbrMatr();
+        std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << handelsvare.GetNr() << " " << handelsvare.GetNavn() << "\n";
+        for (const auto &refId : handelsvare.GetRefusjon().GetRefRefusjonsgruppe()) {
+            std::cout << " - " << refId << "\n";
+        }
     });
     return 0;
 }

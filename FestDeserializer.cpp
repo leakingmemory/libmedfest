@@ -280,21 +280,27 @@ std::vector<PString> FestDeserializer::GetStringList() const {
     return strings;
 }
 
-void FestDeserializer::ForEachMerkevare(const std::function<void(const POppfLegemiddelMerkevare &)> &func) {
+void FestDeserializer::ForEachMerkevare(const std::function<void(const POppfLegemiddelMerkevare &)> &func) const {
     for (std::remove_const<typeof(numMerkevare)>::type i = 0; i < numMerkevare; i++) {
         func(this->merkevare[i]);
     }
 }
 
-void FestDeserializer::ForEachPakning(const std::function<void(const POppfLegemiddelpakning &)> &func) {
+void FestDeserializer::ForEachPakning(const std::function<void(const POppfLegemiddelpakning &)> &func) const {
     for (std::remove_const<typeof(numPakning)>::type i = 0; i < numPakning; i++) {
         func(this->pakning[i]);
     }
 }
 
-void FestDeserializer::ForEachLegemiddelVirkestoff(const std::function<void(const POppfLegemiddelVirkestoff &)> &func) {
+void FestDeserializer::ForEachLegemiddelVirkestoff(const std::function<void(const POppfLegemiddelVirkestoff &)> &func) const {
     for (std::remove_const<typeof(numLegemiddelVirkestoff)>::type i = 0; i < numLegemiddelVirkestoff; i++) {
         func(this->legemiddelVirkestoff[i]);
+    }
+}
+
+void FestDeserializer::ForEachMedForbrMatr(const std::function<void(const POppfMedForbrMatr &)> &func) const {
+    for (std::remove_const<typeof(numMedForbrMatr)>::type i = 0; i < numMedForbrMatr; i++) {
+        func(this->medForbrMatr[i]);
     }
 }
 
@@ -344,6 +350,10 @@ OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning &pop
 
 OppfLegemiddelVirkestoff FestDeserializer::Unpack(const POppfLegemiddelVirkestoff &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PLegemiddelVirkestoff>(poppf))};
+}
+
+OppfMedForbrMatr FestDeserializer::Unpack(const POppfMedForbrMatr &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PMedForbrMatr>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -446,6 +456,24 @@ LegemiddelVirkestoff FestDeserializer::Unpack(const PLegemiddelVirkestoff &pvirk
         refLegemiddelMerkevare,
         refPakning,
         {Unpack(pvirkestoff.forskrivningsenhetResept)}
+    };
+}
+
+Handelsvare FestDeserializer::Unpack(const PHandelsvare &pHandelsvare) const {
+    std::vector<PrisVare> prisVare{};
+    {
+        auto list = Unpack(prisVareList, numPrisVare, pHandelsvare.prisVare);
+        for (const auto &item : list) {
+            prisVare.emplace_back(Unpack(item));
+        }
+    }
+    return {
+        Unpack(pHandelsvare.nr),
+        Unpack(pHandelsvare.navn),
+        Unpack(pHandelsvare.produktInfoVare),
+        Unpack(pHandelsvare.leverandor),
+        prisVare,
+        Unpack(pHandelsvare.refusjon)
     };
 }
 
@@ -582,6 +610,24 @@ PakningByttegruppe FestDeserializer::Unpack(const PPakningByttegruppe &pPakningB
     return {
         Unpack(pPakningByttegruppe.refByttegruppe).ToString(),
         Unpack(pPakningByttegruppe.gyldigFraDato)
+    };
+}
+
+ProduktInfoVare FestDeserializer::Unpack(const PProduktInfoVare &pProduktInfoVare) const {
+    return {
+        Unpack(pProduktInfoVare.produktNr),
+        Unpack(pProduktInfoVare.volum),
+        {Unpack(pProduktInfoVare.enhetStorrelse)},
+        pProduktInfoVare.antPerPakning,
+        FromRaw(pProduktInfoVare.tillattMerMakspris)
+    };
+}
+
+Leverandor FestDeserializer::Unpack(const PLeverandor &pLeverandor) const {
+    return {
+        Unpack(pLeverandor.navn),
+        Unpack(pLeverandor.adresse),
+        Unpack(pLeverandor.telefon)
     };
 }
 

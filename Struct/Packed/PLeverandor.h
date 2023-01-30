@@ -7,9 +7,11 @@
 
 #include "PString.h"
 
+class FestDeserializer;
 class Leverandor;
 
 class PLeverandor {
+    friend FestDeserializer;
 private:
     PString navn;
     PString adresse;

@@ -34,6 +34,7 @@ private:
     const POppfLegemiddelpakning *pakning;
     const POppfLegemiddelVirkestoff *legemiddelVirkestoff;
     const POppfMedForbrMatr *medForbrMatr;
+    const POppfNaringsmiddel *naringsmiddel;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -48,6 +49,7 @@ private:
     size_t numPakning;
     size_t numLegemiddelVirkestoff;
     size_t numMedForbrMatr;
+    size_t numNaringsmiddel;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;

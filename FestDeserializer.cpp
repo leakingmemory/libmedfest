@@ -85,6 +85,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    naringsmiddel = (POppfNaringsmiddel *) (void *) (((uint8_t *) mapping) + offset);
+    numNaringsmiddel = header->numNaringsmiddel;
+    offset += ((size_t) numNaringsmiddel) * sizeof(*naringsmiddel);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);

@@ -41,6 +41,8 @@ private:
     Naringsmiddel naringsmiddel;
 public:
     OppfNaringsmiddel() : OppfHandelsvare(), naringsmiddel() {}
+    OppfNaringsmiddel(const Oppf &oppf, const Handelsvare &handelsvare) :
+            OppfHandelsvare(oppf), naringsmiddel(handelsvare) {}
     OppfNaringsmiddel(const std::string &id, const std::string &tidspunkt, const Status &status,
                      const Naringsmiddel &naringsmiddel) :
             OppfHandelsvare(id, tidspunkt, status), naringsmiddel(naringsmiddel) {}

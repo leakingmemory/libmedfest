@@ -314,6 +314,12 @@ void FestDeserializer::ForEachMedForbrMatr(const std::function<void(const POppfM
     }
 }
 
+void FestDeserializer::ForEachNaringsmiddel(const std::function<void(const POppfNaringsmiddel &)> &func) const {
+    for (std::remove_const<typeof(numNaringsmiddel)>::type i = 0; i < numNaringsmiddel; i++) {
+        func(this->naringsmiddel[i]);
+    }
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -364,6 +370,10 @@ OppfLegemiddelVirkestoff FestDeserializer::Unpack(const POppfLegemiddelVirkestof
 
 OppfMedForbrMatr FestDeserializer::Unpack(const POppfMedForbrMatr &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PMedForbrMatr>(poppf))};
+}
+
+OppfNaringsmiddel FestDeserializer::Unpack(const POppfNaringsmiddel &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PNaringsmiddel>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {

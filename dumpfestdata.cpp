@@ -129,5 +129,15 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
             std::cout << " - " << refId << "\n";
         }
     });
+    std::cout << "Naringsmiddel:\n";
+    festDeserializer.ForEachNaringsmiddel([&festDeserializer] (const POppfNaringsmiddel &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto handelsvare = oppf.GetNaringsmiddel();
+        std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << handelsvare.GetNr() << " " << handelsvare.GetNavn() << "\n";
+        for (const auto &refId : handelsvare.GetRefusjon().GetRefRefusjonsgruppe()) {
+            std::cout << " - " << refId << "\n";
+        }
+    });
     return 0;
 }

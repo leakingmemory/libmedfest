@@ -77,6 +77,7 @@ public:
     void ForEachPakning(const std::function<void (const POppfLegemiddelpakning &)> &) const;
     void ForEachLegemiddelVirkestoff(const std::function<void (const POppfLegemiddelVirkestoff &)> &) const;
     void ForEachMedForbrMatr(const std::function<void (const POppfMedForbrMatr &)> &) const;
+    void ForEachNaringsmiddel(const std::function<void (const POppfNaringsmiddel &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -87,6 +88,7 @@ public:
     [[nodiscard]] OppfLegemiddelpakning Unpack(const POppfLegemiddelpakning &poppf) const;
     [[nodiscard]] OppfLegemiddelVirkestoff Unpack(const POppfLegemiddelVirkestoff &poppf) const;
     [[nodiscard]] OppfMedForbrMatr Unpack(const POppfMedForbrMatr &poppf) const;
+    [[nodiscard]] OppfNaringsmiddel Unpack(const POppfNaringsmiddel &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;

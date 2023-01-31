@@ -95,6 +95,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    brystprotese = (POppfBrystprotese *) (void *) (((uint8_t *) mapping) + offset);
+    numBrystprotese = header->numBrystprotese;
+    offset += ((size_t) numBrystprotese) * sizeof(*brystprotese);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -320,6 +330,12 @@ void FestDeserializer::ForEachNaringsmiddel(const std::function<void(const POppf
     }
 }
 
+void FestDeserializer::ForEachBrystprotese(const std::function<void(const POppfBrystprotese &)> &func) const {
+    for (std::remove_const<typeof(numBrystprotese)>::type i = 0; i < numBrystprotese; i++) {
+        func(this->brystprotese[i]);
+    }
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -374,6 +390,10 @@ OppfMedForbrMatr FestDeserializer::Unpack(const POppfMedForbrMatr &poppf) const 
 
 OppfNaringsmiddel FestDeserializer::Unpack(const POppfNaringsmiddel &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PNaringsmiddel>(poppf))};
+}
+
+OppfBrystprotese FestDeserializer::Unpack(const POppfBrystprotese &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PBrystprotese>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {

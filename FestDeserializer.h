@@ -35,6 +35,7 @@ private:
     const POppfLegemiddelVirkestoff *legemiddelVirkestoff;
     const POppfMedForbrMatr *medForbrMatr;
     const POppfNaringsmiddel *naringsmiddel;
+    const POppfBrystprotese *brystprotese;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -50,6 +51,7 @@ private:
     size_t numLegemiddelVirkestoff;
     size_t numMedForbrMatr;
     size_t numNaringsmiddel;
+    size_t numBrystprotese;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
@@ -78,6 +80,7 @@ public:
     void ForEachLegemiddelVirkestoff(const std::function<void (const POppfLegemiddelVirkestoff &)> &) const;
     void ForEachMedForbrMatr(const std::function<void (const POppfMedForbrMatr &)> &) const;
     void ForEachNaringsmiddel(const std::function<void (const POppfNaringsmiddel &)> &) const;
+    void ForEachBrystprotese(const std::function<void (const POppfBrystprotese &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -89,6 +92,7 @@ public:
     [[nodiscard]] OppfLegemiddelVirkestoff Unpack(const POppfLegemiddelVirkestoff &poppf) const;
     [[nodiscard]] OppfMedForbrMatr Unpack(const POppfMedForbrMatr &poppf) const;
     [[nodiscard]] OppfNaringsmiddel Unpack(const POppfNaringsmiddel &poppf) const;
+    [[nodiscard]] OppfBrystprotese Unpack(const POppfBrystprotese &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;

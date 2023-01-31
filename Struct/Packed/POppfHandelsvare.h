@@ -12,6 +12,7 @@ class PrisVareList;
 class FestUuidList;
 class OppfMedForbrMatr;
 class OppfNaringsmiddel;
+class OppfBrystprotese;
 
 template <class T, class P> class POppfHandelsvare : public POppf, public P {
 public:
@@ -28,6 +29,11 @@ public:
 class POppfNaringsmiddel : public POppfHandelsvare<Naringsmiddel, PNaringsmiddel> {
 public:
     POppfNaringsmiddel(const OppfNaringsmiddel &naringsmiddel, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock);
+};
+
+class POppfBrystprotese : public POppfHandelsvare<Brystprotese, PBrystprotese> {
+public:
+    POppfBrystprotese(const OppfBrystprotese &brystprotese, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock);
 };
 
 #endif //LEGEMFEST_POPPFHANDELSVARE_H

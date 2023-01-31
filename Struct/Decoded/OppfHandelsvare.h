@@ -55,6 +55,8 @@ private:
     Brystprotese brystprotese;
 public:
     OppfBrystprotese() : OppfHandelsvare(), brystprotese() {}
+    OppfBrystprotese(const Oppf &oppf, const Handelsvare &handelsvare) :
+            OppfHandelsvare(oppf), brystprotese(handelsvare) {}
     OppfBrystprotese(const std::string &id, const std::string &tidspunkt, const Status &status,
                       const Brystprotese &brystprotese) :
             OppfHandelsvare(id, tidspunkt, status), brystprotese(brystprotese) {}

@@ -40,6 +40,7 @@ struct FestFirstHeader {
     uint16_t numStringList;
     uint16_t numMedForbrMatr;
     uint16_t numNaringsmiddel;
+    uint16_t numBrystprotese;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -61,6 +62,7 @@ private:
     std::vector<POppfLegemiddelVirkestoff> legemiddelVirkestoff{};
     std::vector<POppfMedForbrMatr> medForbrMatr{};
     std::vector<POppfNaringsmiddel> naringsmiddel{};
+    std::vector<POppfBrystprotese> brystprotese{};
     int percentDone;
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
@@ -80,6 +82,7 @@ private:
     bool Visit(const OppfLegemiddelVirkestoff &virkestoff) override;
     bool Visit(const OppfMedForbrMatr &medForbrMatr) override;
     bool Visit(const OppfNaringsmiddel &naringsmiddel) override;
+    bool Visit(const OppfBrystprotese &brystprotese) override;
 };
 
 

@@ -139,5 +139,15 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
             std::cout << " - " << refId << "\n";
         }
     });
+    std::cout << "Brystprotese:\n";
+    festDeserializer.ForEachBrystprotese([&festDeserializer] (const POppfBrystprotese &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto handelsvare = oppf.GetBrystprotese();
+        std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << handelsvare.GetNr() << " " << handelsvare.GetNavn() << "\n";
+        for (const auto &refId : handelsvare.GetRefusjon().GetRefRefusjonsgruppe()) {
+            std::cout << " - " << refId << "\n";
+        }
+    });
     return 0;
 }

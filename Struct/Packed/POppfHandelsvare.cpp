@@ -10,3 +10,6 @@ POppfMedForbrMatr::POppfMedForbrMatr(const OppfMedForbrMatr &oppfMedForbrMatr, P
 
 POppfNaringsmiddel::POppfNaringsmiddel(const OppfNaringsmiddel &oppfNaringsmiddel, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock) :
         POppfHandelsvare<Naringsmiddel, PNaringsmiddel>(oppfNaringsmiddel, oppfNaringsmiddel.naringsmiddel, prisVareList, stringList, uuidblock, strblock) {}
+
+POppfBrystprotese::POppfBrystprotese(const OppfBrystprotese &oppfBrystprotese, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock) :
+        POppfHandelsvare<Brystprotese, PBrystprotese>(oppfBrystprotese, oppfBrystprotese.brystprotese, prisVareList, stringList, uuidblock, strblock) {}

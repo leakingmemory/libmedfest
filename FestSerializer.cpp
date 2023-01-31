@@ -68,6 +68,9 @@ bool FestSerializer::Write() {
     if (naringsmiddel.size() >= (1 << 16)) {
         throw PackException("Max naringsmiddel list size");
     }
+    if (brystprotese.size() >= (1 << 16)) {
+        throw PackException("Max brystprotese list size");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -82,7 +85,8 @@ bool FestSerializer::Write() {
         .numLegemiddelVirkestoff = (uint16_t) legemiddelVirkestoff.size(),
         .numStringList = (uint16_t) stringList.size(),
         .numMedForbrMatr = (uint16_t) medForbrMatr.size(),
-        .numNaringsmiddel = (uint16_t) naringsmiddel.size()
+        .numNaringsmiddel = (uint16_t) naringsmiddel.size(),
+        .numBrystprotese = (uint16_t) brystprotese.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -153,6 +157,20 @@ bool FestSerializer::Write() {
     {
         auto *ptr = naringsmiddel.data();
         auto size = naringsmiddel.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = brystprotese.data();
+        auto size = brystprotese.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -325,5 +343,10 @@ bool FestSerializer::Visit(const OppfMedForbrMatr &medForbrMatr) {
 
 bool FestSerializer::Visit(const OppfNaringsmiddel &naringsmiddel) {
     this->naringsmiddel.emplace_back(naringsmiddel, prisVareList, stringList, festidblock, stringblock);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfBrystprotese &brystprotese) {
+    this->brystprotese.emplace_back(brystprotese, prisVareList, stringList, festidblock, stringblock);
     return true;
 }

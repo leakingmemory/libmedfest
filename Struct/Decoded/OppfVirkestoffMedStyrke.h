@@ -6,22 +6,21 @@
 #define LEGEMFEST_OPPFVIRKESTOFFMEDSTYRKE_H
 
 #include "VirkestoffMedStyrke.h"
-#include "Status.h"
+#include "Oppf.h"
 
-class OppfVirkestoffMedStyrke {
+class POppfVirkestoffMedStyrke;
+
+class OppfVirkestoffMedStyrke : public Oppf {
+    friend POppfVirkestoffMedStyrke;
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     VirkestoffMedStyrke virkestoffMedStyrke;
 public:
-    OppfVirkestoffMedStyrke() : id(), tidspunkt(), status(), virkestoffMedStyrke() {}
+    OppfVirkestoffMedStyrke() : Oppf(), virkestoffMedStyrke() {}
+    OppfVirkestoffMedStyrke(const Oppf &oppf, const VirkestoffMedStyrke &virkestoffMedStyrke) :
+            Oppf(oppf), virkestoffMedStyrke(virkestoffMedStyrke) {}
     OppfVirkestoffMedStyrke(const std::string &id, const std::string &tidspunkt, const Status &status,
                             const VirkestoffMedStyrke &virkestoffMedStyrke) :
-            id(id), tidspunkt(tidspunkt), status(status), virkestoffMedStyrke(virkestoffMedStyrke) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), virkestoffMedStyrke(virkestoffMedStyrke) {}
     [[nodiscard]] VirkestoffMedStyrke GetVirkestoffMedStyrke() const;
 };
 

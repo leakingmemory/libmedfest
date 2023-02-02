@@ -77,6 +77,9 @@ bool FestSerializer::Write() {
     if (legemiddeldose.size() >= (1 << 16)) {
         throw PackException("Max legemiddeldose list size");
     }
+    if (virkestoffMedStyrke.size() >= (1 << 16)) {
+        throw PackException("Max virkestoff med styrke list size");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -94,7 +97,8 @@ bool FestSerializer::Write() {
         .numMedForbrMatr = (uint16_t) medForbrMatr.size(),
         .numNaringsmiddel = (uint16_t) naringsmiddel.size(),
         .numBrystprotese = (uint16_t) brystprotese.size(),
-        .numLegemiddeldose = (uint16_t) legemiddeldose.size()
+        .numLegemiddeldose = (uint16_t) legemiddeldose.size(),
+        .numVirkestoffMedStyrke = (uint16_t) virkestoffMedStyrke.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -193,6 +197,20 @@ bool FestSerializer::Write() {
     {
         auto *ptr = legemiddeldose.data();
         auto size = legemiddeldose.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = virkestoffMedStyrke.data();
+        auto size = virkestoffMedStyrke.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -390,5 +408,10 @@ bool FestSerializer::Visit(const OppfBrystprotese &brystprotese) {
 
 bool FestSerializer::Visit(const OppfLegemiddeldose &legemiddeldose) {
     this->legemiddeldose.emplace_back(legemiddeldose, pakningskomponentInfoList, festUuidList, festidblock, stringblock);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfVirkestoffMedStyrke &virkestoffMedStyrke) {
+    this->virkestoffMedStyrke.emplace_back(virkestoffMedStyrke, festidblock, stringblock);
     return true;
 }

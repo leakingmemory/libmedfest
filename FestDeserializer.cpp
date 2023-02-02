@@ -115,6 +115,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    virkestoffMedStyrke = (POppfVirkestoffMedStyrke *) (void *) (((uint8_t *) mapping) + offset);
+    numVirkestoffMedStyrke = header->numVirkestoffMedStyrke;
+    offset += ((size_t) numVirkestoffMedStyrke) * sizeof(*virkestoffMedStyrke);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -371,6 +381,12 @@ void FestDeserializer::ForEachLegemiddeldose(const std::function<void(const POpp
     }
 }
 
+void FestDeserializer::ForEachVirkestoffMedStyrke(const std::function<void(const POppfVirkestoffMedStyrke &)> &func) const {
+    for (std::remove_const<typeof(numVirkestoffMedStyrke)>::type i = 0; i < numVirkestoffMedStyrke; i++) {
+        func(this->virkestoffMedStyrke[i]);
+    }
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -433,6 +449,10 @@ OppfBrystprotese FestDeserializer::Unpack(const POppfBrystprotese &poppf) const 
 
 OppfLegemiddeldose FestDeserializer::Unpack(const POppfLegemiddeldose &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PLegemiddeldose>(poppf))};
+}
+
+OppfVirkestoffMedStyrke FestDeserializer::Unpack(const POppfVirkestoffMedStyrke &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVirkestoffMedStyrke>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -588,6 +608,20 @@ Legemiddeldose FestDeserializer::Unpack(const PLegemiddeldose &pLegemiddeldose) 
         refPakning,
         pakningskomponent,
         Unpack(pLegemiddeldose.pakningstype)
+    };
+}
+
+VirkestoffMedStyrke FestDeserializer::Unpack(const PVirkestoffMedStyrke &pVirkestoffMedStyrke) const {
+    return {
+        Unpack(pVirkestoffMedStyrke.id).ToString(),
+        Unpack(pVirkestoffMedStyrke.refVirkestoff).ToString(),
+        {Unpack(pVirkestoffMedStyrke.styrke)},
+        {Unpack(pVirkestoffMedStyrke.styrkenevner)},
+        {Unpack(pVirkestoffMedStyrke.styrkeoperator)},
+        {Unpack(pVirkestoffMedStyrke.alternativStyrke)},
+        {Unpack(pVirkestoffMedStyrke.alternativStyrkenevner)},
+        {Unpack(pVirkestoffMedStyrke.atcKombipreparat)},
+        pVirkestoffMedStyrke.styrkeOvreVerdi
     };
 }
 

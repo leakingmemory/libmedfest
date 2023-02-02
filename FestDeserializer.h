@@ -25,6 +25,7 @@
 #include "Struct/Packed/POppfLegemiddelpakning.h"
 #include "Struct/Packed/POppfLegemiddelVirkestoff.h"
 #include "Struct/Packed/POppfHandelsvare.h"
+#include "Struct/Packed/POppfLegemiddeldose.h"
 
 class FestDeserializer {
 private:
@@ -36,11 +37,13 @@ private:
     const POppfMedForbrMatr *medForbrMatr;
     const POppfNaringsmiddel *naringsmiddel;
     const POppfBrystprotese *brystprotese;
+    const POppfLegemiddeldose *legemiddeldose;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
     const PReseptgyldighet *reseptgyldighetList;
     const PPakningskomponent *pakningskomponentList;
+    const PPakningskomponentInfo *pakningskomponentInfoList;
     const PPakningsinfo *pakningsinfoList;
     const PPrisVare *prisVareList;
     const PRefusjon *refusjon;
@@ -52,11 +55,13 @@ private:
     size_t numMedForbrMatr;
     size_t numNaringsmiddel;
     size_t numBrystprotese;
+    size_t numLegemiddeldose;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
     size_t numReseptgyldighet;
     size_t numPakningskomponent;
+    size_t numPakningskomponentInfo;
     size_t numPakningsinfo;
     size_t numPrisVare;
     size_t numRefusjon;
@@ -69,6 +74,7 @@ public:
     [[nodiscard]] std::vector<PPrisVare> GetPrisVare() const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfo() const;
     [[nodiscard]] std::vector<PPakningskomponent> GetPakningskomponent() const;
+    [[nodiscard]] std::vector<PPakningskomponentInfo> GetPakningskomponentInfo() const;
     [[nodiscard]] std::vector<PReseptgyldighet> GetReseptgyldighet() const;
     [[nodiscard]] std::vector<PValueWithCodeset> GetValueWithCodeset() const;
     [[nodiscard]] std::vector<FestUuid> GetFestIds() const;
@@ -81,6 +87,7 @@ public:
     void ForEachMedForbrMatr(const std::function<void (const POppfMedForbrMatr &)> &) const;
     void ForEachNaringsmiddel(const std::function<void (const POppfNaringsmiddel &)> &) const;
     void ForEachBrystprotese(const std::function<void (const POppfBrystprotese &)> &) const;
+    void ForEachLegemiddeldose(const std::function<void (const POppfLegemiddeldose &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -93,17 +100,20 @@ public:
     [[nodiscard]] OppfMedForbrMatr Unpack(const POppfMedForbrMatr &poppf) const;
     [[nodiscard]] OppfNaringsmiddel Unpack(const POppfNaringsmiddel &poppf) const;
     [[nodiscard]] OppfBrystprotese Unpack(const POppfBrystprotese &poppf) const;
+    [[nodiscard]] OppfLegemiddeldose Unpack(const POppfLegemiddeldose &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
     [[nodiscard]] LegemiddelVirkestoff Unpack(const PLegemiddelVirkestoff &pvirkestoff) const;
     [[nodiscard]] Handelsvare Unpack(const PHandelsvare &pHandelsvare) const;
+    [[nodiscard]] Legemiddeldose Unpack(const PLegemiddeldose &pLegemiddeldose) const;
     [[nodiscard]] Legemiddel Unpack(const PLegemiddel &pLegemiddel) const;
     [[nodiscard]] LegemiddelCore Unpack(const PLegemiddelCore &pLegemiddelCore) const;
     [[nodiscard]] AdministreringLegemiddel Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const;
     [[nodiscard]] Preparatomtaleavsnitt Unpack(const PPreparatomtaleavsnitt &pPreparatomtaleavsnitt) const;
     [[nodiscard]] Lenke Unpack(const PLenke &lenke) const;
     [[nodiscard]] Pakningskomponent Unpack(const PPakningskomponent &pPakningskomponent) const;
+    [[nodiscard]] PakningskomponentInfo Unpack(const PPakningskomponentInfo &pPakningskomponentInfo) const;
     [[nodiscard]] Pakningsinfo Unpack(const PPakningsinfo &pakningsinfo) const;
     [[nodiscard]] PrisVare Unpack(const PPrisVare &prisVare) const;
     [[nodiscard]] Markedsforingsinfo Unpack(const PMarkedsforingsinfo &pmarkedsforingsinfo) const;

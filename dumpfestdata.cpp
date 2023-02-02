@@ -8,6 +8,7 @@
 #include "Struct/Decoded/OppfLegemiddelpakning.h"
 #include "Struct/Decoded/OppfLegemiddelVirkestoff.h"
 #include "Struct/Decoded/OppfHandelsvare.h"
+#include "Struct/Decoded/OppfLegemiddeldose.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -52,6 +53,12 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         }
         auto mengde = p.GetMengde();
         std::cout << mengde.GetValue() << " " << mengde.GetUnit() << " " << p.GetPakningstype().GetValue() << "\n";
+    }
+    std::cout << "Pakningskomponent info lists storage dump:\n";
+    for (const auto &pp : festDeserializer.GetPakningskomponentInfo()) {
+        auto p = festDeserializer.Unpack(pp);
+        auto mengde = p.GetMengde();
+        std::cout << " " << mengde.GetValue() << " " << mengde.GetUnit() << " " << p.GetPakningstype().GetValue() << "\n";
     }
     std::cout << "Pakningsinfo lists storage dump:\n";
     for (const auto &ppi : festDeserializer.GetPakningsinfo()) {
@@ -148,6 +155,28 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         for (const auto &refId : handelsvare.GetRefusjon().GetRefRefusjonsgruppe()) {
             std::cout << " - " << refId << "\n";
         }
+    });
+    std::cout << "Legemiddeldose:\n";
+    festDeserializer.ForEachLegemiddeldose([&festDeserializer] (const POppfLegemiddeldose &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto legemiddeldose = oppf.GetLegemiddeldose();
+        std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << legemiddeldose.GetId() << " " << legemiddeldose.GetLmrLopenr() << " "
+                  << legemiddeldose.GetMengde().GetValue() << legemiddeldose.GetMengde().GetUnit()
+                  << "\n - Merkevare:";
+        for (const auto &merkevareId : legemiddeldose.GetRefLegemiddelMerkevare()) {
+            std::cout << " " << merkevareId;
+        }
+        std::cout << "\n - Pakning:";
+        for (const auto &pakningId : legemiddeldose.GetRefPakning()) {
+            std::cout << " " << pakningId;
+        }
+        std::cout << "\n - Pakningskomponent:";
+        for (const auto &pakningskomponent : legemiddeldose.GetPakningskomponent()) {
+            std::cout << " <" << pakningskomponent.GetMengde().GetValue() << " " << pakningskomponent.GetMengde().GetUnit()
+                      << " " << pakningskomponent.GetPakningstype().GetDistinguishedName() << ">";
+        }
+        std::cout << "\n";
     });
     return 0;
 }

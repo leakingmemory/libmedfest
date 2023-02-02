@@ -7,21 +7,21 @@
 
 #include "Status.h"
 #include "Legemiddeldose.h"
+#include "Oppf.h"
 
-class OppfLegemiddeldose {
+class POppfLegemiddeldose;
+
+class OppfLegemiddeldose : public Oppf {
+    friend POppfLegemiddeldose;
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     Legemiddeldose legemiddeldose;
 public:
-    OppfLegemiddeldose() : id(), tidspunkt(), status(), legemiddeldose() {}
+    OppfLegemiddeldose() : Oppf(), legemiddeldose() {}
+    OppfLegemiddeldose(const Oppf &oppf, const Legemiddeldose &legemiddeldose) :
+            Oppf(oppf), legemiddeldose(legemiddeldose) {}
     OppfLegemiddeldose(const std::string &id, const std::string &tidspunkt, const Status &status,
                        const Legemiddeldose &legemiddeldose) :
-            id(id), tidspunkt(tidspunkt), status(status), legemiddeldose(legemiddeldose) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), legemiddeldose(legemiddeldose) {}
     [[nodiscard]] Legemiddeldose GetLegemiddeldose() const;
 };
 

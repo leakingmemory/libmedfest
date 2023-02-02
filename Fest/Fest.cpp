@@ -157,40 +157,47 @@ bool Fest::Accept(FestVisitor &visitor) const {
             + oppfLegemiddelVirkestoff.size()
             + oppfMedForbrVare.size()
             + oppfNaringsmiddel.size()
-            + oppfBrystprotese.size();
+            + oppfBrystprotese.size()
+            + oppfLegemiddeldose.size();
     typeof(total) done = 0;
-    for (auto &merkevare : oppfLegemiddelMerkevare) {
+    for (const auto &merkevare : oppfLegemiddelMerkevare) {
         if (!visitor.Visit(merkevare)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
-    for (auto &pakning : oppfLegemiddelpakning) {
+    for (const auto &pakning : oppfLegemiddelpakning) {
         if (!visitor.Visit(pakning)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
-    for (auto &virkestoff : oppfLegemiddelVirkestoff) {
+    for (const auto &virkestoff : oppfLegemiddelVirkestoff) {
         if (!visitor.Visit(virkestoff)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
-    for (auto &medForbrMatr : oppfMedForbrVare) {
+    for (const auto &medForbrMatr : oppfMedForbrVare) {
         if (!visitor.Visit(medForbrMatr)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
-    for (auto &naringsmiddel : oppfNaringsmiddel) {
+    for (const auto &naringsmiddel : oppfNaringsmiddel) {
         if (!visitor.Visit(naringsmiddel)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
-    for (auto &brystprotese : oppfBrystprotese) {
+    for (const auto &brystprotese : oppfBrystprotese) {
         if (!visitor.Visit(brystprotese)) {
+            return false;
+        }
+        visitor.Progress(++done, total);
+    }
+    for (const auto &legemiddeldose : oppfLegemiddeldose) {
+        if (!visitor.Visit(legemiddeldose)) {
             return false;
         }
         visitor.Progress(++done, total);

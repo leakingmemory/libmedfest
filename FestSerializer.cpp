@@ -41,6 +41,9 @@ bool FestSerializer::Write() {
     if (pakningskomponentList.size() >= (1 << 16)) {
         throw PackException("Max pakningskomponent-list");
     }
+    if (pakningskomponentInfoList.size() >= (1 << 16)) {
+        throw PackException("Max pakningskomponent-info-list");
+    }
     if (pakningsinfoList.size() >= (1 << 16)) {
         throw PackException("Max pakningsinfo-list");
     }
@@ -71,12 +74,16 @@ bool FestSerializer::Write() {
     if (brystprotese.size() >= (1 << 16)) {
         throw PackException("Max brystprotese list size");
     }
+    if (legemiddeldose.size() >= (1 << 16)) {
+        throw PackException("Max legemiddeldose list size");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
         .numLegemiddelMerkevare = (uint16_t) legemiddelMerkevare.size(),
         .numValueCodeset = (uint16_t) valueWithCodesetList.size(),
         .numPakningskomponent = (uint16_t) pakningskomponentList.size(),
+        .numPakningskomponentInfo = (uint16_t) pakningskomponentInfoList.size(),
         .numPakningsinfo = (uint16_t) pakningsinfoList.size(),
         .numPrisVare = (uint16_t) prisVareList.size(),
         .numUuidLists = (uint16_t) festUuidList.size(),
@@ -86,7 +93,8 @@ bool FestSerializer::Write() {
         .numStringList = (uint16_t) stringList.size(),
         .numMedForbrMatr = (uint16_t) medForbrMatr.size(),
         .numNaringsmiddel = (uint16_t) naringsmiddel.size(),
-        .numBrystprotese = (uint16_t) brystprotese.size()
+        .numBrystprotese = (uint16_t) brystprotese.size(),
+        .numLegemiddeldose = (uint16_t) legemiddeldose.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -183,6 +191,20 @@ bool FestSerializer::Write() {
         }
     }
     {
+        auto *ptr = legemiddeldose.data();
+        auto size = legemiddeldose.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
         auto *ptr = festidblock.data();
         auto size = festidblock.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
@@ -243,6 +265,21 @@ bool FestSerializer::Write() {
     }
     {
         auto list = pakningskomponentList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto list = pakningskomponentInfoList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
@@ -348,5 +385,10 @@ bool FestSerializer::Visit(const OppfNaringsmiddel &naringsmiddel) {
 
 bool FestSerializer::Visit(const OppfBrystprotese &brystprotese) {
     this->brystprotese.emplace_back(brystprotese, prisVareList, stringList, festidblock, stringblock);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfLegemiddeldose &legemiddeldose) {
+    this->legemiddeldose.emplace_back(legemiddeldose, pakningskomponentInfoList, festUuidList, festidblock, stringblock);
     return true;
 }

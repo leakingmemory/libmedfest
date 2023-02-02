@@ -7,13 +7,13 @@
 #include "../Decoded/LegemiddelCore.h"
 
 PLegemiddelCore::PLegemiddelCore(const LegemiddelCore &legemiddelCore, std::string &strblock,
-                                 FestUuidList &festUuidList) :
-        atc(legemiddelCore.GetAtc(), strblock),
-        navnFormStyrke(legemiddelCore.GetNavnFormStyrke(), strblock),
-        reseptgruppe(legemiddelCore.GetReseptgruppe(), strblock),
-        legemiddelformKort(legemiddelCore.GetLegemiddelformKort(), strblock),
+                                 std::map<std::string,uint32_t> &cache, FestUuidList &festUuidList) :
+        atc(legemiddelCore.GetAtc(), strblock, cache),
+        navnFormStyrke(legemiddelCore.GetNavnFormStyrke(), strblock, cache),
+        reseptgruppe(legemiddelCore.GetReseptgruppe(), strblock, cache),
+        legemiddelformKort(legemiddelCore.GetLegemiddelformKort(), strblock, cache),
         refVilkar(festUuidList.StoreList(legemiddelCore.GetRefVilkar())),
-        typeSoknadSlv(legemiddelCore.GetTypeSoknadSlv(), strblock),
-        svartTrekant(legemiddelCore.GetSvartTrekant(), strblock),
+        typeSoknadSlv(legemiddelCore.GetTypeSoknadSlv(), strblock, cache),
+        svartTrekant(legemiddelCore.GetSvartTrekant(), strblock, cache),
         opioidsoknad(ToRaw(legemiddelCore.GetOpioidsoknad())) {
 }

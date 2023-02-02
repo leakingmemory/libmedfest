@@ -13,8 +13,8 @@ class OppfLegemiddelVirkestoff;
 class POppfLegemiddelVirkestoff : public POppf, public PLegemiddelVirkestoff {
 public:
     POppfLegemiddelVirkestoff(const OppfLegemiddelVirkestoff &oppf, std::string &strblock,
-                              std::vector<FestUuid> uuidlist, StringList &, FestUuidList &,
-                              ValueWithCodesetList &valueWithCodesetList, RefusjonList &refusjonList);
+                              std::map<std::string,uint32_t> &cache, std::vector<FestUuid> uuidlist, StringList &,
+                              FestUuidList &, ValueWithCodesetList &valueWithCodesetList, RefusjonList &refusjonList);
 };
 
 

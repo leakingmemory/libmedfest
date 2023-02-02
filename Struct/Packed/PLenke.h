@@ -16,7 +16,7 @@ private:
     PString beskrivelse;
     PString www;
 public:
-    PLenke(const Lenke &lenke, std::string &strblock);
+    PLenke(const Lenke &lenke, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 

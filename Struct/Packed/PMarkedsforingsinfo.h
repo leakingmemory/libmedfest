@@ -18,7 +18,7 @@ private:
     PString midlUtgattDato;
     PString avregDato;
 public:
-    PMarkedsforingsinfo(const Markedsforingsinfo &, std::string &strblock);
+    PMarkedsforingsinfo(const Markedsforingsinfo &, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 

@@ -5,7 +5,7 @@
 #include "PLenke.h"
 #include "../Decoded/Lenke.h"
 
-PLenke::PLenke(const Lenke &lenke, std::string &strblock) :
-        beskrivelse(lenke.GetBeskrivelse(), strblock),
-        www(lenke.GetWww(), strblock) {
+PLenke::PLenke(const Lenke &lenke, std::string &strblock, std::map<std::string,uint32_t> &cache) :
+        beskrivelse(lenke.GetBeskrivelse(), strblock, cache),
+        www(lenke.GetWww(), strblock, cache) {
 }

@@ -17,7 +17,7 @@ private:
     PValueWithCodeset pakningstype;
     PValueUnit mengde;
 public:
-    PPakningskomponentInfo(const PakningskomponentInfo &, std::string &strblock);
+    PPakningskomponentInfo(const PakningskomponentInfo &, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PPakningskomponentInfo &other) const;
 };
 

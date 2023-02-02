@@ -15,7 +15,7 @@ class PValueWithCodeset : public PValueWithDistinguishedName {
 private:
     PString codeSet;
 public:
-    PValueWithCodeset(const ValueWithCodeSet &valueWithCodeSet, std::string &strblock);
+    PValueWithCodeset(const ValueWithCodeSet &valueWithCodeSet, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PValueWithCodeset &other) const {
         return PValueWithDistinguishedName::operator==(other) && codeSet == other.codeSet;
     }

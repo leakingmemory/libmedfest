@@ -27,22 +27,22 @@ private:
     GenericListItems prisVare;
     PRefusjon refusjon;
 public:
-    PHandelsvare(const Handelsvare &handelsvare, PrisVareList &prisVareList, StringList &stringList, std::string &strblock);
+    PHandelsvare(const Handelsvare &handelsvare, PrisVareList &prisVareList, StringList &stringList, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 class PMedForbrMatr : public PHandelsvare {
 public:
-    PMedForbrMatr(const MedForbrMatr &medForbrMatr, PrisVareList &, StringList &, std::string &strblock);
+    PMedForbrMatr(const MedForbrMatr &medForbrMatr, PrisVareList &, StringList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 class PNaringsmiddel : public PHandelsvare {
 public:
-    PNaringsmiddel(const Naringsmiddel &naringsmiddel, PrisVareList &, StringList &, std::string &strblock);
+    PNaringsmiddel(const Naringsmiddel &naringsmiddel, PrisVareList &, StringList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 class PBrystprotese : public PHandelsvare {
 public:
-    PBrystprotese(const Brystprotese &brystprotese, PrisVareList &, StringList &, std::string &strblock);
+    PBrystprotese(const Brystprotese &brystprotese, PrisVareList &, StringList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 #endif //LEGEMFEST_PHANDELSVARE_H

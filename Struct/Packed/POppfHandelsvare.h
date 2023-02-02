@@ -16,24 +16,24 @@ class OppfBrystprotese;
 
 template <class T, class P> class POppfHandelsvare : public POppf, public P {
 public:
-    POppfHandelsvare(const Oppf &oppf, const T &handelsvare, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock) :
-            POppf(oppf, uuidblock, strblock),
-            P(handelsvare, prisVareList, stringList, strblock) {}
+    POppfHandelsvare(const Oppf &oppf, const T &handelsvare, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache) :
+            POppf(oppf, uuidblock, strblock, cache),
+            P(handelsvare, prisVareList, stringList, strblock, cache) {}
 };
 
 class POppfMedForbrMatr : public POppfHandelsvare<MedForbrMatr, PMedForbrMatr> {
 public:
-    POppfMedForbrMatr(const OppfMedForbrMatr &oppfMedForbrMatr, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock);
+    POppfMedForbrMatr(const OppfMedForbrMatr &oppfMedForbrMatr, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 class POppfNaringsmiddel : public POppfHandelsvare<Naringsmiddel, PNaringsmiddel> {
 public:
-    POppfNaringsmiddel(const OppfNaringsmiddel &naringsmiddel, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock);
+    POppfNaringsmiddel(const OppfNaringsmiddel &naringsmiddel, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 class POppfBrystprotese : public POppfHandelsvare<Brystprotese, PBrystprotese> {
 public:
-    POppfBrystprotese(const OppfBrystprotese &brystprotese, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock);
+    POppfBrystprotese(const OppfBrystprotese &brystprotese, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 #endif //LEGEMFEST_POPPFHANDELSVARE_H

@@ -9,18 +9,19 @@
 #include "../Decoded/LegemiddelMerkevare.h"
 
 PLegemiddelMerkevare::PLegemiddelMerkevare(const LegemiddelMerkevare &legemiddelMerkevare, std::string &strblock,
-                                           std::vector<FestUuid> &festidblock, FestUuidList &festUuidList,
-                                           ValueWithCodesetList &valueWithCodesetList, ReseptgyldighetList &reseptgyldighetList) :
-        PLegemiddel(legemiddelMerkevare, strblock, festUuidList, valueWithCodesetList),
-        vaksinestandard(legemiddelMerkevare.GetVaksinestandard(), strblock),
-        preparattype(legemiddelMerkevare.GetPreparattype(), strblock),
-        smak(legemiddelMerkevare.GetSmak(), strblock),
-        varenavn(legemiddelMerkevare.GetVarenavn(), strblock),
-        legemiddelformLang(legemiddelMerkevare.GetLegemiddelformLang(), strblock),
-        produsent(legemiddelMerkevare.GetProdusent(), strblock),
-        referanseprodukt(legemiddelMerkevare.GetReferanseprodukt(), strblock),
+                                           std::map<std::string,uint32_t> &cache, std::vector<FestUuid> &festidblock,
+                                           FestUuidList &festUuidList, ValueWithCodesetList &valueWithCodesetList,
+                                           ReseptgyldighetList &reseptgyldighetList) :
+        PLegemiddel(legemiddelMerkevare, strblock, cache, festUuidList, valueWithCodesetList),
+        vaksinestandard(legemiddelMerkevare.GetVaksinestandard(), strblock, cache),
+        preparattype(legemiddelMerkevare.GetPreparattype(), strblock, cache),
+        smak(legemiddelMerkevare.GetSmak(), strblock, cache),
+        varenavn(legemiddelMerkevare.GetVarenavn(), strblock, cache),
+        legemiddelformLang(legemiddelMerkevare.GetLegemiddelformLang(), strblock, cache),
+        produsent(legemiddelMerkevare.GetProdusent(), strblock, cache),
+        referanseprodukt(legemiddelMerkevare.GetReferanseprodukt(), strblock, cache),
         id(legemiddelMerkevare.GetId(), festidblock),
-        preparatomtaleavsnitt(legemiddelMerkevare.GetPreparatomtaleavsnitt(), strblock),
+        preparatomtaleavsnitt(legemiddelMerkevare.GetPreparatomtaleavsnitt(), strblock, cache),
         sortertVirkestoffUtenStyrke(festUuidList.StoreList(legemiddelMerkevare.GetSortertVirkestoffUtenStyrke())),
         reseptgyldighet(),
         varseltrekant(ToRaw(legemiddelMerkevare.GetVarseltrekant()))
@@ -29,7 +30,7 @@ PLegemiddelMerkevare::PLegemiddelMerkevare(const LegemiddelMerkevare &legemiddel
         std::vector<PReseptgyldighet> list{};
         auto reseptgyldighet = legemiddelMerkevare.GetReseptgyldighet();
         for (const auto &r : reseptgyldighet) {
-            list.emplace_back(r, strblock);
+            list.emplace_back(r, strblock, cache);
         }
         this->reseptgyldighet = reseptgyldighetList.StoreList(list);
     }

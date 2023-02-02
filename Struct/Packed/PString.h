@@ -7,13 +7,14 @@
 
 #include <cstdint>
 #include <string>
+#include <map>
 
 class PString {
 private:
     uint32_t offset;
 public:
     PString() : offset(0) {}
-    PString(const std::string &str, std::string &textblock);
+    PString(const std::string &str, std::string &textblock, std::map<std::string,uint32_t> &cache);
     explicit PString(uint32_t offset) : offset(offset) {}
     [[nodiscard]] std::string ToString(const char *textblock, size_t size) const;
     [[nodiscard]] std::string ToString(const std::string &textblock) const;

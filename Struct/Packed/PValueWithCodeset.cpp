@@ -5,7 +5,7 @@
 #include "PValueWithCodeset.h"
 #include "../Decoded/ValueWithCodeSet.h"
 
-PValueWithCodeset::PValueWithCodeset(const ValueWithCodeSet &valueWithCodeSet, std::string &strblock) :
-        PValueWithDistinguishedName(valueWithCodeSet, strblock),
-        codeSet(valueWithCodeSet.GetCodeSet(), strblock) {
+PValueWithCodeset::PValueWithCodeset(const ValueWithCodeSet &valueWithCodeSet, std::string &strblock, std::map<std::string,uint32_t> &cache) :
+        PValueWithDistinguishedName(valueWithCodeSet, strblock, cache),
+        codeSet(valueWithCodeSet.GetCodeSet(), strblock, cache) {
 }

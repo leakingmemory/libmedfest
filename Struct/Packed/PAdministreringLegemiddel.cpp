@@ -7,23 +7,24 @@
 #include "ValueWithCodesetList.h"
 
 PAdministreringLegemiddel::PAdministreringLegemiddel(const AdministreringLegemiddel &administreringLegemiddel,
-                                                     std::string &strblock, ValueWithCodesetList &valueWithCodesetList) :
-        administrasjonsvei(administreringLegemiddel.GetAdministrasjonsvei(), strblock),
-        enhetDosering(administreringLegemiddel.GetEnhetDosering(), strblock),
+                                                     std::string &strblock, std::map<std::string,uint32_t> &cache,
+                                                     ValueWithCodesetList &valueWithCodesetList) :
+        administrasjonsvei(administreringLegemiddel.GetAdministrasjonsvei(), strblock, cache),
+        enhetDosering(administreringLegemiddel.GetEnhetDosering(), strblock, cache),
         bruksomradeEtikett(),
         forhandsregelInntak(),
         kortdose(),
-        kanKnuses(administreringLegemiddel.GetKanKnuses(), strblock),
-        deling(administreringLegemiddel.GetDeling(), strblock),
-        kanApnes(administreringLegemiddel.GetKanApnes(), strblock),
-        bolus(administreringLegemiddel.GetBolus(), strblock),
-        injeksjonshastighetBolus(administreringLegemiddel.GetInjeksjonshastighetBolus(), strblock) {
+        kanKnuses(administreringLegemiddel.GetKanKnuses(), strblock, cache),
+        deling(administreringLegemiddel.GetDeling(), strblock, cache),
+        kanApnes(administreringLegemiddel.GetKanApnes(), strblock, cache),
+        bolus(administreringLegemiddel.GetBolus(), strblock, cache),
+        injeksjonshastighetBolus(administreringLegemiddel.GetInjeksjonshastighetBolus(), strblock, cache) {
     {
         std::vector<PValueWithCodeset> list{};
         {
             auto bruksomradeEtikett = administreringLegemiddel.GetBruksomradeEtikett();
             for (const auto &v: bruksomradeEtikett) {
-                list.emplace_back(v, strblock);
+                list.emplace_back(v, strblock, cache);
             }
         }
         bruksomradeEtikett = valueWithCodesetList.StoreList(list);
@@ -33,7 +34,7 @@ PAdministreringLegemiddel::PAdministreringLegemiddel(const AdministreringLegemid
         {
             auto forhandsregelInntak = administreringLegemiddel.GetForhandsregelInntak();
             for (const auto &v : forhandsregelInntak) {
-                list.emplace_back(v, strblock);
+                list.emplace_back(v, strblock, cache);
             }
         }
         forhandsregelInntak = valueWithCodesetList.StoreList(list);
@@ -43,7 +44,7 @@ PAdministreringLegemiddel::PAdministreringLegemiddel(const AdministreringLegemid
         {
             auto kortdose = administreringLegemiddel.GetKortdose();
             for (const auto &v : kortdose) {
-                list.emplace_back(v, strblock);
+                list.emplace_back(v, strblock, cache);
             }
         }
         kortdose = valueWithCodesetList.StoreList(list);

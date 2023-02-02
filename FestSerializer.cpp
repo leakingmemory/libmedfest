@@ -377,41 +377,41 @@ void FestSerializer::Progress(int done, int total) {
 }
 
 bool FestSerializer::Visit(const OppfLegemiddelMerkevare &merkevare) {
-    this->legemiddelMerkevare.emplace_back(merkevare, stringblock, festidblock, festUuidList, valueWithCodesetList, reseptgyldighetList);
+    this->legemiddelMerkevare.emplace_back(merkevare, stringblock, stringblockCache, festidblock, festUuidList, valueWithCodesetList, reseptgyldighetList);
     return true;
 }
 
 bool FestSerializer::Visit(const OppfLegemiddelpakning &pakning) {
-    this->legemiddelpakning.emplace_back(pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, festidblock, stringblock);
+    this->legemiddelpakning.emplace_back(pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, festidblock, stringblock, stringblockCache);
     return true;
 }
 
 bool FestSerializer::Visit(const OppfLegemiddelVirkestoff &virkestoff) {
-    this->legemiddelVirkestoff.emplace_back(virkestoff, stringblock, festidblock, stringList, festUuidList, valueWithCodesetList, refusjonList);
+    this->legemiddelVirkestoff.emplace_back(virkestoff, stringblock, stringblockCache, festidblock, stringList, festUuidList, valueWithCodesetList, refusjonList);
     return true;
 }
 
 bool FestSerializer::Visit(const OppfMedForbrMatr &medForbrMatr) {
-    this->medForbrMatr.emplace_back(medForbrMatr, prisVareList, stringList, festidblock, stringblock);
+    this->medForbrMatr.emplace_back(medForbrMatr, prisVareList, stringList, festidblock, stringblock, stringblockCache);
     return true;
 }
 
 bool FestSerializer::Visit(const OppfNaringsmiddel &naringsmiddel) {
-    this->naringsmiddel.emplace_back(naringsmiddel, prisVareList, stringList, festidblock, stringblock);
+    this->naringsmiddel.emplace_back(naringsmiddel, prisVareList, stringList, festidblock, stringblock, stringblockCache);
     return true;
 }
 
 bool FestSerializer::Visit(const OppfBrystprotese &brystprotese) {
-    this->brystprotese.emplace_back(brystprotese, prisVareList, stringList, festidblock, stringblock);
+    this->brystprotese.emplace_back(brystprotese, prisVareList, stringList, festidblock, stringblock, stringblockCache);
     return true;
 }
 
 bool FestSerializer::Visit(const OppfLegemiddeldose &legemiddeldose) {
-    this->legemiddeldose.emplace_back(legemiddeldose, pakningskomponentInfoList, festUuidList, festidblock, stringblock);
+    this->legemiddeldose.emplace_back(legemiddeldose, pakningskomponentInfoList, festUuidList, festidblock, stringblock, stringblockCache);
     return true;
 }
 
 bool FestSerializer::Visit(const OppfVirkestoffMedStyrke &virkestoffMedStyrke) {
-    this->virkestoffMedStyrke.emplace_back(virkestoffMedStyrke, festidblock, stringblock);
+    this->virkestoffMedStyrke.emplace_back(virkestoffMedStyrke, festidblock, stringblock, stringblockCache);
     return true;
 }

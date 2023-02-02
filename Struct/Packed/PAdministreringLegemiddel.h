@@ -29,7 +29,7 @@ private:
     uint8_t blandingsveske : 2;
 public:
     PAdministreringLegemiddel(const AdministreringLegemiddel &administreringLegemiddel, std::string &strblock,
-                              ValueWithCodesetList &valueWithCodesetList);
+                              std::map<std::string,uint32_t> &cache, ValueWithCodesetList &valueWithCodesetList);
 };
 
 

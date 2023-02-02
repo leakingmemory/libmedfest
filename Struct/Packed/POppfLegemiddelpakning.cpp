@@ -9,8 +9,9 @@ POppfLegemiddelpakning::POppfLegemiddelpakning(const OppfLegemiddelpakning &oppf
                                                PakningskomponentList &pakningskomponentList,
                                                PakningsinfoList &pakningsinfoList,
                                                PrisVareList &prisVareList, StringList &stringList, FestUuidList &festUuidList,
-                                               std::vector<FestUuid> &uuidblock, std::string &strblock) :
-        POppf(oppf, uuidblock, strblock),
-        PLegemiddelpakning(oppf.GetLegemiddelpakning(), pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, uuidblock, strblock)
+                                               std::vector<FestUuid> &uuidblock, std::string &strblock,
+                                               std::map<std::string,uint32_t> &cache) :
+        POppf(oppf, uuidblock, strblock, cache),
+        PLegemiddelpakning(oppf.GetLegemiddelpakning(), pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, uuidblock, strblock, cache)
 {
 }

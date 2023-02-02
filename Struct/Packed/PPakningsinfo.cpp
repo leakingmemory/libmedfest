@@ -6,13 +6,14 @@
 #include "../Decoded/Pakningsinfo.h"
 
 PPakningsinfo::PPakningsinfo(const Pakningsinfo &pakningsinfo, std::vector<FestUuid> &uuidblock,
-                             PakningskomponentList &pakningskomponentList, std::string &strblock) :
+                             PakningskomponentList &pakningskomponentList, std::string &strblock,
+                             std::map<std::string,uint32_t> &cache) :
         merkevareId(pakningsinfo.GetMerkevareId(), uuidblock),
-        pakningsstr(pakningsinfo.GetPakningsstr(), strblock),
-        enhetPakning(pakningsinfo.GetEnhetPakning(), strblock),
-        pakningstype(pakningsinfo.GetPakningstype(), strblock),
-        ddd(pakningsinfo.GetDDD(), strblock),
-        mengde(pakningsinfo.GetMengde(), strblock),
+        pakningsstr(pakningsinfo.GetPakningsstr(), strblock, cache),
+        enhetPakning(pakningsinfo.GetEnhetPakning(), strblock, cache),
+        pakningstype(pakningsinfo.GetPakningstype(), strblock, cache),
+        ddd(pakningsinfo.GetDDD(), strblock, cache),
+        mengde(pakningsinfo.GetMengde(), strblock, cache),
         pakningskomponent(),
         statistikkfaktor(pakningsinfo.GetStatistikkfaktor()),
         antall(pakningsinfo.GetAntall()),
@@ -20,7 +21,7 @@ PPakningsinfo::PPakningsinfo(const Pakningsinfo &pakningsinfo, std::vector<FestU
     {
         std::vector<PPakningskomponent> list{};
         for (const auto &p : pakningsinfo.GetPakningskomponent()) {
-            list.emplace_back(p, strblock);
+            list.emplace_back(p, strblock, cache);
         }
         pakningskomponent = pakningskomponentList.StoreList(list);
     }

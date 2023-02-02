@@ -6,7 +6,7 @@
 #include "../Decoded/ValueWithDistinguishedName.h"
 
 PValueWithDistinguishedName::PValueWithDistinguishedName(const ValueWithDistinguishedName &valueWithDistinguishedName,
-                                                         std::string &strblock) :
-        value(valueWithDistinguishedName.GetValue(), strblock),
-        distinguishedName(valueWithDistinguishedName.GetDistinguishedName(), strblock) {
+                                                         std::string &strblock, std::map<std::string,uint32_t> &cache) :
+        value(valueWithDistinguishedName.GetValue(), strblock, cache),
+        distinguishedName(valueWithDistinguishedName.GetDistinguishedName(), strblock, cache) {
 }

@@ -18,8 +18,8 @@ private:
     PAdministreringLegemiddel administreringLegemiddel;
     GenericListItems sortertVirkestoffMedStyrke;
 public:
-    PLegemiddel(const Legemiddel &legemiddel, std::string &strblock, FestUuidList &festUuidList,
-                ValueWithCodesetList &valueWithCodesetList);
+    PLegemiddel(const Legemiddel &legemiddel, std::string &strblock, std::map<std::string,uint32_t> &cache,
+                FestUuidList &festUuidList, ValueWithCodesetList &valueWithCodesetList);
 };
 
 

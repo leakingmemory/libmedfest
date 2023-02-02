@@ -25,6 +25,7 @@
 #include <memory>
 #include <string>
 #include <fstream>
+#include <map>
 
 constexpr uint8_t alignment = 16;
 
@@ -54,6 +55,7 @@ private:
     std::shared_ptr<Fest> fest;
     std::ofstream output;
     std::string stringblock{};
+    std::map<std::string,uint32_t> stringblockCache{};
     std::vector<FestUuid> festidblock{};
     FestUuidList festUuidList{festidblock};
     ValueWithCodesetList valueWithCodesetList{};

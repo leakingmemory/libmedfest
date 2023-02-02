@@ -18,7 +18,7 @@ private:
     PString distinguishedName;
 public:
     PValueWithDistinguishedName() : value(), distinguishedName() {}
-    PValueWithDistinguishedName(const ValueWithDistinguishedName &valueWithDistinguishedName, std::string &strblock);
+    PValueWithDistinguishedName(const ValueWithDistinguishedName &valueWithDistinguishedName, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PValueWithDistinguishedName &other) const {
         return value == other.value && distinguishedName == other.distinguishedName;
     }

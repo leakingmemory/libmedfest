@@ -19,7 +19,7 @@ private:
     PString gyldigTilDato;
     PValueUnit pris;
 public:
-    PPrisVare(const PrisVare &, std::string &strblock);
+    PPrisVare(const PrisVare &, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PPrisVare &) const;
 };
 

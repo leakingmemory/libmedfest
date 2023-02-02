@@ -27,7 +27,8 @@ private:
     PFestId id;
     PFestId refVirkestoff;
 public:
-    PVirkestoffMedStyrke(const VirkestoffMedStyrke &, std::vector<FestUuid> &uuidblock, std::string &strblock);
+    PVirkestoffMedStyrke(const VirkestoffMedStyrke &, std::vector<FestUuid> &uuidblock, std::string &strblock,
+                         std::map<std::string,uint32_t> &cache);
 };
 
 

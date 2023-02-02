@@ -18,7 +18,8 @@ private:
     PValueWithDistinguishedName avsnittoverskrift;
     PLenke lenke;
 public:
-    PPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt, std::string &strblock);
+    PPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt, std::string &strblock,
+                           std::map<std::string,uint32_t> &cache);
 };
 
 

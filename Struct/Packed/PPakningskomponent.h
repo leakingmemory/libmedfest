@@ -15,7 +15,7 @@ class PPakningskomponent : public PPakningskomponentInfo {
 private:
     uint16_t antall;
 public:
-    PPakningskomponent(const Pakningskomponent &, std::string &strblock);
+    PPakningskomponent(const Pakningskomponent &, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PPakningskomponent &other) const;
 };
 

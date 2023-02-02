@@ -16,7 +16,7 @@ private:
     PValueWithDistinguishedName kjonn;
     PString varighet;
 public:
-    PReseptgyldighet(const Reseptgyldighet &reseptgyldighet, std::string &strblock);
+    PReseptgyldighet(const Reseptgyldighet &reseptgyldighet, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PReseptgyldighet &other) const {
         return kjonn == other.kjonn && varighet == other.varighet;
     }

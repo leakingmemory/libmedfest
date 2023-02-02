@@ -13,7 +13,8 @@ class OppfVirkestoffMedStyrke;
 
 class POppfVirkestoffMedStyrke : public POppf, public PVirkestoffMedStyrke {
 public:
-    POppfVirkestoffMedStyrke(const OppfVirkestoffMedStyrke &, std::vector<FestUuid> &uuidblock, std::string &strblock);
+    POppfVirkestoffMedStyrke(const OppfVirkestoffMedStyrke &, std::vector<FestUuid> &uuidblock, std::string &strblock,
+                             std::map<std::string,uint32_t> &cache);
 };
 
 

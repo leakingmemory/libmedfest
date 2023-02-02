@@ -21,7 +21,7 @@ private:
     PString tidspunkt;
     PValueWithDistinguishedName status;
 public:
-    POppf(const Oppf &oppf, std::vector<FestUuid> &uuidblock, std::string &strblock);
+    POppf(const Oppf &oppf, std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
 #endif //LEGEMFEST_POPPF_H

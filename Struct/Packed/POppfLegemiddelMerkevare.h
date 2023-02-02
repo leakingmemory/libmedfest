@@ -13,7 +13,7 @@ class OppfLegemiddelMerkevare;
 class POppfLegemiddelMerkevare : public POppf, public PLegemiddelMerkevare {
 public:
     POppfLegemiddelMerkevare(const OppfLegemiddelMerkevare &oppf, std::string &strblock,
-                             std::vector<FestUuid> &festidblock,
+                             std::map<std::string,uint32_t> &cache, std::vector<FestUuid> &festidblock,
                              FestUuidList &festUuidList, ValueWithCodesetList &valueWithCodesetList,
                              ReseptgyldighetList &reseptgyldighetList);
 };

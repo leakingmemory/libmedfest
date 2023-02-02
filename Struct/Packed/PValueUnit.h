@@ -16,7 +16,7 @@ private:
     double value;
     PString unit;
 public:
-    PValueUnit(const ValueUnit &, std::string &strblock);
+    PValueUnit(const ValueUnit &, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PValueUnit &other) const;
 };
 

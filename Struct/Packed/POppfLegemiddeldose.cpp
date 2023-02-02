@@ -8,8 +8,8 @@
 POppfLegemiddeldose::POppfLegemiddeldose(const OppfLegemiddeldose &oppf,
                                          PakningskomponentInfoList &pakningskomponentInfoList,
                                          FestUuidList &festUuidList, std::vector<FestUuid> &uuidblock,
-                                         std::string &strblock) :
-        POppf(oppf, uuidblock, strblock),
-        PLegemiddeldose(oppf.legemiddeldose, pakningskomponentInfoList, festUuidList, uuidblock, strblock)
+                                         std::string &strblock, std::map<std::string,uint32_t> &cache) :
+        POppf(oppf, uuidblock, strblock, cache),
+        PLegemiddeldose(oppf.legemiddeldose, pakningskomponentInfoList, festUuidList, uuidblock, strblock, cache)
 {
 }

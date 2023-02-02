@@ -30,7 +30,7 @@ private:
     uint16_t multippel;
 public:
     PPakningsinfo(const Pakningsinfo &, std::vector<FestUuid> &uuidblock, PakningskomponentList &pakningskomponentList,
-                  std::string &strblock);
+                  std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PPakningsinfo &) const;
 };
 

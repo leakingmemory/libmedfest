@@ -19,7 +19,8 @@ private:
     uint16_t antPerPakning;
     uint8_t tillattMerMakspris;
 public:
-    PProduktInfoVare(const ProduktInfoVare &produktInfoVare, std::string &strblock);
+    PProduktInfoVare(const ProduktInfoVare &produktInfoVare, std::string &strblock,
+                     std::map<std::string,uint32_t> &cache);
 };
 
 

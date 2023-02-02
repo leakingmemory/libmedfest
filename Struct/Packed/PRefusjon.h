@@ -20,7 +20,7 @@ private:
     PString forskrivesTilDato;
     PString utleveresTilDato;
 public:
-    PRefusjon(const Refusjon &, StringList &stringList, std::string &strblock);
+    PRefusjon(const Refusjon &, StringList &stringList, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator ==(const PRefusjon &) const;
 };
 

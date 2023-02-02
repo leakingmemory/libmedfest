@@ -7,36 +7,38 @@
 
 int main() {
     std::string block{};
+    std::map<std::string,uint32_t> cache{};
     auto s0 = block.size();
-    PString n1{"Hello world!", block};
+    PString n1{"Hello world!", block, cache};
     if (n1.ToString(block) != "Hello world!") {
         std::cerr << "First read back 1\n";
         return 127;
     }
     auto s1 = block.size();
-    PString n2{"test", block};
+    PString n2{"test", block, cache};
     if (n2.ToString(block) != "test") {
         std::cerr << "First read back 2\n";
         return 127;
     }
     auto s2 = block.size();
-    PString n3{"test", block};
+    PString n3{"test", block, cache};
     if (n3.ToString(block) != "test") {
         std::cerr << "First read back 3\n";
         return 127;
     }
     auto s3 = block.size();
-    PString n4{"world!", block};
+    PString n4{"world!", block, cache};
     if (n4.ToString(block) != "world!") {
         std::cerr << "First read back 4\n";
         return 127;
     }
     auto s4 = block.size();
-    PString n5{"another text", block};
+    PString n5{"another text", block, cache};
     if (n5.ToString(block) != "another text") {
         std::cerr << "First read back 5\n";
         return 127;
     }
+    cache.clear();
     auto s5 = block.size();
     if (s0 != 0) {
         std::cerr << "Ref value: s0\n";

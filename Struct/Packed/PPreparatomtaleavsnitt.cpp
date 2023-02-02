@@ -6,7 +6,7 @@
 #include "../Decoded/Preparatomtaleavsnitt.h"
 
 PPreparatomtaleavsnitt::PPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt,
-                                               std::string &strblock) :
-        avsnittoverskrift(preparatomtaleavsnitt.GetAvsnittoverskrift(), strblock),
-        lenke(preparatomtaleavsnitt.GetLenke(), strblock){
+                                               std::string &strblock, std::map<std::string,uint32_t> &cache) :
+        avsnittoverskrift(preparatomtaleavsnitt.GetAvsnittoverskrift(), strblock, cache),
+        lenke(preparatomtaleavsnitt.GetLenke(), strblock, cache){
 }

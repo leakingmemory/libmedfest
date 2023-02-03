@@ -11,6 +11,7 @@
 
 template <typename T> concept FestSourceStream = requires (T source) {
     { source.read(std::declval<void *>(), std::declval<int>()) } -> std::convertible_to<int>;
+    { source.size() } -> std::convertible_to<size_t>;
 };
 
 class FestObjectStream;
@@ -20,6 +21,7 @@ class FestObjectStreamSource {
 public:
     virtual ~FestObjectStreamSource() = default;
     virtual int read(void *, int) = 0;
+    virtual size_t size() = 0;
 };
 
 template <FestSourceStream T> class FestObjectStreamSourceImpl : public FestObjectStreamSource {
@@ -31,6 +33,9 @@ public:
     int read(void *buf, int nbytes) override {
         return source->read(buf, nbytes);
     }
+    size_t size() override {
+        return source->size();
+    }
 };
 
 class Fest;
@@ -38,7 +43,7 @@ class Fest;
 class FestObjectStream {
 private:
     std::unique_ptr<FestObjectStreamSource> source;
-    int8_t buf[4096];
+    int8_t buf[16384];
 public:
     template <FestSourceStream Source> FestObjectStream(std::shared_ptr<Source> source) {
         this->source = std::make_unique<FestObjectStreamSourceImpl<Source>>(source);

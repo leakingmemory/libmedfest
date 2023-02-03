@@ -272,6 +272,8 @@ std::shared_ptr<Fest> FestObjectStream::read() {
     parser.AddHandler("FastDose", std::make_shared<XmlFastDoseHandler>());
     parser.AddHandler("DagerPa", std::make_shared<XmlDagerPaHandler>());
     parser.AddHandler("DagerAv", std::make_shared<XmlDagerAvHandler>());
+    const auto totalSize = source->size();
+    std::remove_const<typeof(totalSize)>::type countSize = 0;
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {
@@ -281,12 +283,15 @@ std::shared_ptr<Fest> FestObjectStream::read() {
         if (num == 0) {
             break;
         }
-        std::cout << "Read " << num << " bytes\n";
         if (!parser.ParseBuffer(&(buf[0]), num, false)) {
             std::cerr << "XML Parse error\n";
             return {};
         }
+        countSize += num;
+        auto pct = (countSize * 100) / totalSize;
+        std::cout << "\rDecoding XML data " << pct << "%..." << std::flush;
     } while (true);
+    std::cout << "\n";
     parser.ParseBuffer(nullptr, 0, true);
     return parser.GetRoot<Fest>();
 }

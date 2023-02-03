@@ -71,10 +71,14 @@ std::shared_ptr<libzip_file> libzip_zip::Open(const std::string &filename, bool 
     if (unchanged) {
         flags |= ZIP_FL_UNCHANGED;
     }
+    zip_stat_t st;
+    if (zip_stat(z, filename.c_str(), flags, &st) != 0) {
+        return {};
+    }
     zip_file_t *f = zip_fopen(z, filename.c_str(), flags);
     if (f == NULL) {
         return {};
     }
     std::shared_ptr<libzip_zip> ref = shared_from_this();
-    return std::shared_ptr<libzip_file>(new libzip_file(ref, exttype_zip_file::create(f)));
+    return std::shared_ptr<libzip_file>(new libzip_file(ref, exttype_zip_file::create(f), (size_t) st.size));
 }

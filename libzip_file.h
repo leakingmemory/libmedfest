@@ -15,9 +15,10 @@ class libzip_file {
 private:
     std::shared_ptr<libzip_zip> archive;
     exttype_zip_file *file;
+    size_t fsize;
 
     libzip_file();
-    libzip_file(const std::shared_ptr<libzip_zip> &archive, exttype_zip_file *file);
+    libzip_file(const std::shared_ptr<libzip_zip> &archive, exttype_zip_file *file, int size);
     static void swap(libzip_file &, libzip_file &);
 public:
     ~libzip_file();
@@ -26,6 +27,7 @@ public:
     libzip_file(libzip_file &&);
     libzip_file &operator =(libzip_file &&);
     int read(void *buf, int);
+    size_t size();
 };
 
 

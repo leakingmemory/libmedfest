@@ -27,6 +27,7 @@
 #include "Struct/Packed/POppfHandelsvare.h"
 #include "Struct/Packed/POppfLegemiddeldose.h"
 #include "Struct/Packed/POppfVirkestoffMedStyrke.h"
+#include "Struct/Packed/POppfVirkestoff.h"
 
 class FestDeserializer {
 private:
@@ -40,6 +41,7 @@ private:
     const POppfBrystprotese *brystprotese;
     const POppfLegemiddeldose *legemiddeldose;
     const POppfVirkestoffMedStyrke *virkestoffMedStyrke;
+    const POppfVirkestoff *virkestoff;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -59,6 +61,7 @@ private:
     size_t numBrystprotese;
     size_t numLegemiddeldose;
     size_t numVirkestoffMedStyrke;
+    size_t numVirkestoff;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
@@ -92,6 +95,7 @@ public:
     void ForEachBrystprotese(const std::function<void (const POppfBrystprotese &)> &) const;
     void ForEachLegemiddeldose(const std::function<void (const POppfLegemiddeldose &)> &) const;
     void ForEachVirkestoffMedStyrke(const std::function<void (const POppfVirkestoffMedStyrke &)> &) const;
+    void ForEachVirkestoff(const std::function<void (const POppfVirkestoff &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -106,6 +110,7 @@ public:
     [[nodiscard]] OppfBrystprotese Unpack(const POppfBrystprotese &poppf) const;
     [[nodiscard]] OppfLegemiddeldose Unpack(const POppfLegemiddeldose &poppf) const;
     [[nodiscard]] OppfVirkestoffMedStyrke Unpack(const POppfVirkestoffMedStyrke &poppf) const;
+    [[nodiscard]] OppfVirkestoff Unpack(const POppfVirkestoff &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
@@ -113,6 +118,7 @@ public:
     [[nodiscard]] Handelsvare Unpack(const PHandelsvare &pHandelsvare) const;
     [[nodiscard]] Legemiddeldose Unpack(const PLegemiddeldose &pLegemiddeldose) const;
     [[nodiscard]] VirkestoffMedStyrke Unpack(const PVirkestoffMedStyrke &pVirkestoffMedStyrke) const;
+    [[nodiscard]] Virkestoff Unpack(const PVirkestoff &pVirkestoff) const;
     [[nodiscard]] Legemiddel Unpack(const PLegemiddel &pLegemiddel) const;
     [[nodiscard]] LegemiddelCore Unpack(const PLegemiddelCore &pLegemiddelCore) const;
     [[nodiscard]] AdministreringLegemiddel Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const;

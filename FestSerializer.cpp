@@ -80,6 +80,9 @@ bool FestSerializer::Write() {
     if (virkestoffMedStyrke.size() >= (1 << 16)) {
         throw PackException("Max virkestoff med styrke list size");
     }
+    if (virkestoff.size() >= (1 << 16)) {
+        throw PackException("Max virkestoff list size");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -98,7 +101,8 @@ bool FestSerializer::Write() {
         .numNaringsmiddel = (uint16_t) naringsmiddel.size(),
         .numBrystprotese = (uint16_t) brystprotese.size(),
         .numLegemiddeldose = (uint16_t) legemiddeldose.size(),
-        .numVirkestoffMedStyrke = (uint16_t) virkestoffMedStyrke.size()
+        .numVirkestoffMedStyrke = (uint16_t) virkestoffMedStyrke.size(),
+        .numVirkestoff = (uint16_t) virkestoff.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -211,6 +215,20 @@ bool FestSerializer::Write() {
     {
         auto *ptr = virkestoffMedStyrke.data();
         auto size = virkestoffMedStyrke.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = virkestoff.data();
+        auto size = virkestoff.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -413,5 +431,10 @@ bool FestSerializer::Visit(const OppfLegemiddeldose &legemiddeldose) {
 
 bool FestSerializer::Visit(const OppfVirkestoffMedStyrke &virkestoffMedStyrke) {
     this->virkestoffMedStyrke.emplace_back(virkestoffMedStyrke, festidblock, stringblock, stringblockCache);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfVirkestoff &virkestoff) {
+    this->virkestoff.emplace_back(virkestoff, festUuidList, festidblock, stringblock, stringblockCache);
     return true;
 }

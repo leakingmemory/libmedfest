@@ -22,6 +22,7 @@
 #include "Struct/Packed/POppfHandelsvare.h"
 #include "Struct/Packed/POppfLegemiddeldose.h"
 #include "Struct/Packed/POppfVirkestoffMedStyrke.h"
+#include "Struct/Packed/POppfVirkestoff.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -48,6 +49,7 @@ struct FestFirstHeader {
     uint16_t numBrystprotese;
     uint16_t numLegemiddeldose;
     uint16_t numVirkestoffMedStyrke;
+    uint16_t numVirkestoff;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -74,6 +76,7 @@ private:
     std::vector<POppfBrystprotese> brystprotese{};
     std::vector<POppfLegemiddeldose> legemiddeldose{};
     std::vector<POppfVirkestoffMedStyrke> virkestoffMedStyrke{};
+    std::vector<POppfVirkestoff> virkestoff{};
     int percentDone;
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
@@ -96,6 +99,7 @@ private:
     bool Visit(const OppfBrystprotese &brystprotese) override;
     bool Visit(const OppfLegemiddeldose &legemiddeldose) override;
     bool Visit(const OppfVirkestoffMedStyrke &virkestoffMedStyrke) override;
+    bool Visit(const OppfVirkestoff &virkestoff) override;
 };
 
 

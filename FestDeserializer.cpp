@@ -125,6 +125,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    virkestoff = (POppfVirkestoff *) (void *) (((uint8_t *) mapping) + offset);
+    numVirkestoff = header->numVirkestoff;
+    offset += ((size_t) numVirkestoff) * sizeof(*virkestoff);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -387,6 +397,12 @@ void FestDeserializer::ForEachVirkestoffMedStyrke(const std::function<void(const
     }
 }
 
+void FestDeserializer::ForEachVirkestoff(const std::function<void(const POppfVirkestoff &)> &func) const {
+    for (std::remove_const<typeof(numVirkestoff)>::type i = 0; i < numVirkestoff; i++) {
+        func(this->virkestoff[i]);
+    }
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -453,6 +469,10 @@ OppfLegemiddeldose FestDeserializer::Unpack(const POppfLegemiddeldose &poppf) co
 
 OppfVirkestoffMedStyrke FestDeserializer::Unpack(const POppfVirkestoffMedStyrke &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVirkestoffMedStyrke>(poppf))};
+}
+
+OppfVirkestoff FestDeserializer::Unpack(const POppfVirkestoff &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVirkestoff>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -622,6 +642,22 @@ VirkestoffMedStyrke FestDeserializer::Unpack(const PVirkestoffMedStyrke &pVirkes
         {Unpack(pVirkestoffMedStyrke.alternativStyrkenevner)},
         {Unpack(pVirkestoffMedStyrke.atcKombipreparat)},
         pVirkestoffMedStyrke.styrkeOvreVerdi
+    };
+}
+
+Virkestoff FestDeserializer::Unpack(const PVirkestoff &pVirkestoff) const {
+    std::vector<std::string> refVirkestoff{};
+    {
+        auto list = Unpack(festUuidList, numFestUuidList, pVirkestoff.refVirkestoff);
+        for (const auto &id : list) {
+            refVirkestoff.emplace_back(Unpack(id).ToString());
+        }
+    }
+    return {
+        Unpack(pVirkestoff.id).ToString(),
+        Unpack(pVirkestoff.navn),
+        Unpack(pVirkestoff.navnEngelsk),
+        refVirkestoff
     };
 }
 

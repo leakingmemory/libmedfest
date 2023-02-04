@@ -7,20 +7,20 @@
 
 #include "Status.h"
 #include "Virkestoff.h"
+#include "Oppf.h"
 
-class OppfVirkestoff {
+class POppfVirkestoff;
+
+class OppfVirkestoff : public Oppf {
+    friend POppfVirkestoff;
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     Virkestoff virkestoff;
 public:
-    OppfVirkestoff() : id(), tidspunkt(), status(), virkestoff() {}
+    OppfVirkestoff() : Oppf(), virkestoff() {}
+    OppfVirkestoff(const Oppf &oppf, const Virkestoff &virkestoff) :
+            Oppf(oppf), virkestoff(virkestoff) {}
     OppfVirkestoff(const std::string &id, const std::string &tidspunkt, const Status &status, const Virkestoff &virkestoff) :
-            id(id), tidspunkt(tidspunkt), status(status), virkestoff(virkestoff) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), virkestoff(virkestoff) {}
     [[nodiscard]] Virkestoff GetVirkestoff() const;
 };
 

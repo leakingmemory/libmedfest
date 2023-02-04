@@ -10,6 +10,7 @@
 #include "Struct/Decoded/OppfHandelsvare.h"
 #include "Struct/Decoded/OppfLegemiddeldose.h"
 #include "Struct/Decoded/OppfVirkestoffMedStyrke.h"
+#include "Struct/Decoded/OppfVirkestoff.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -190,6 +191,16 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
                   << styrke.GetValue() << " " << styrke.GetUnit() << " / "  << styrkenevner.GetValue()
                   << styrkenevner.GetUnit() << " " << virkestoffMedStyrke.GetStyrkeoperator().GetDistinguishedName()
                   << " " << virkestoffMedStyrke.GetStyrkeOvreVerdi() << "\n";
+    });
+    std::cout << "Virkestoff:\n";
+    festDeserializer.ForEachVirkestoff([&festDeserializer] (const POppfVirkestoff &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto virkestoff = oppf.GetVirkestoff();
+        std::cout << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << virkestoff.GetId() << " " << virkestoff.GetNavn() << " " << virkestoff.GetNavnEngelsk() << "\n";
+        for (const auto &v : virkestoff.GetRefVirkestoff()) {
+            std::cout << " - " << v << "\n";
+        }
     });
     return 0;
 }

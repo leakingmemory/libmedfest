@@ -19,6 +19,7 @@ add_library(packed OBJECT PackException.cpp PackException.h PFestId.cpp PFestId.
         PHandelsvare.cpp PHandelsvare.h PProduktInfoVare.cpp PProduktInfoVare.h PLeverandor.cpp PLeverandor.h
         POppfHandelsvare.cpp POppfHandelsvare.h StringList.cpp StringList.h PLegemiddeldose.cpp PLegemiddeldose.h
         PakningskomponentInfoList.cpp PakningskomponentInfoList.h POppfLegemiddeldose.cpp POppfLegemiddeldose.h
-        PVirkestoffMedStyrke.cpp PVirkestoffMedStyrke.h POppfVirkestoffMedStyrke.cpp POppfVirkestoffMedStyrke.h)
+        PVirkestoffMedStyrke.cpp PVirkestoffMedStyrke.h POppfVirkestoffMedStyrke.cpp POppfVirkestoffMedStyrke.h
+        PVirkestoff.cpp PVirkestoff.h POppfVirkestoff.cpp POppfVirkestoff.h)
 
 include_directories(packed ${Boost_INCLUDE_DIRS} )

@@ -5,5 +5,5 @@
 #include "PackException.h"
 
 const char *PackException::what() const noexcept {
-    return message;
+    return message != nullptr ? message : "Packing error";
 }

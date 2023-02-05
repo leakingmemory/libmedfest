@@ -7,7 +7,10 @@
 
 #include "Sprak.h"
 
+class PTerm;
+
 class Term {
+    friend PTerm;
 private:
     std::string term;
     std::string beskrivelseTerm;

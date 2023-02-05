@@ -17,7 +17,7 @@ template <typename T> concept GenericListStorageObject = requires (T tp) {
 struct GenericListItems {
     typedef uint32_t int_type;
     constexpr static int total_bits = sizeof(int_type) * 8;
-    constexpr static int size_bits = 8;
+    constexpr static int size_bits = 14;
     constexpr static int addr_bits = total_bits - size_bits;
     constexpr static int_type max_address = (1 << addr_bits) - 1;
     constexpr static int_type max_size = (1 << size_bits) - 1;
@@ -70,6 +70,9 @@ public:
                         if (size > GenericListItems::max_size) {
                             std::cerr << "Error: List item max_size overshoot: " << size << "\n";
                             return {.start = 0, .size = 0};
+                        }
+                        if (index > GenericListItems::max_address) {
+                            std::cerr << "Error: List total size overshoot: " << index << "\n";
                         }
                         return {.start = (uint32_t) index, .size = (uint32_t) size};
                     }

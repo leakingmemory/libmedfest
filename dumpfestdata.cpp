@@ -11,6 +11,7 @@
 #include "Struct/Decoded/OppfLegemiddeldose.h"
 #include "Struct/Decoded/OppfVirkestoffMedStyrke.h"
 #include "Struct/Decoded/OppfVirkestoff.h"
+#include "Struct/Decoded/OppfKodeverk.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -100,6 +101,14 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         auto pv = festDeserializer.Unpack(ppv);
         std::cout << " " << pv.GetType().GetDistinguishedName() << ": " << pv.GetPris().GetValue() << " "
                   << pv.GetPris().GetUnit() << " " << pv.GetGyldigFraDato() << " " << pv.GetGyldigTilDato() << "\n";
+    }
+    std::cout << "Kodeverk element list storage dump:\n";
+    for (const auto &pelement : festDeserializer.GetElement()) {
+        auto element = festDeserializer.Unpack(pelement);
+        auto term = element.GetTerm();
+        auto sprak = term.GetSprak();
+        std::cout << " " << element.GetId() << " " << element.GetKode() << " " << sprak.GetDistinguishedName()
+                  << " " << term.GetTerm() << " " << term.GetBeskrivelseTerm() << "\n";
     }
     std::cout << "Merkevarer:\n";
     festDeserializer.ForEachMerkevare([&festDeserializer] (const POppfLegemiddelMerkevare &poppf) {
@@ -200,6 +209,20 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
                   << virkestoff.GetId() << " " << virkestoff.GetNavn() << " " << virkestoff.GetNavnEngelsk() << "\n";
         for (const auto &v : virkestoff.GetRefVirkestoff()) {
             std::cout << " - " << v << "\n";
+        }
+    });
+    std::cout << "Kodeverk:\n";
+    festDeserializer.ForEachKodeverk([&festDeserializer] (const POppfKodeverk &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto info = oppf.GetInfo();
+        std::cout << " " << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << info.GetId() << " " << info.GetKortnavn() << " " << info.GetBetegnelse() << " "
+                  << info.GetAnsvarligUtgiver() << "\n";
+        for (const auto &element : oppf.GetElement()) {
+            auto term = element.GetTerm();
+            auto sprak = term.GetSprak();
+            std::cout << "  - " << element.GetId() << " " << element.GetKode() << " " << sprak.GetDistinguishedName()
+                      << " " << term.GetTerm() << " " << term.GetBeskrivelseTerm() << "\n";
         }
     });
     return 0;

@@ -28,6 +28,8 @@
 #include "Struct/Packed/POppfLegemiddeldose.h"
 #include "Struct/Packed/POppfVirkestoffMedStyrke.h"
 #include "Struct/Packed/POppfVirkestoff.h"
+#include "Struct/Packed/POppfKodeverk.h"
+#include "Struct/Packed/PElement.h"
 
 class FestDeserializer {
 private:
@@ -42,6 +44,7 @@ private:
     const POppfLegemiddeldose *legemiddeldose;
     const POppfVirkestoffMedStyrke *virkestoffMedStyrke;
     const POppfVirkestoff *virkestoff;
+    const POppfKodeverk *kodeverk;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -51,6 +54,7 @@ private:
     const PPakningsinfo *pakningsinfoList;
     const PPrisVare *prisVareList;
     const PRefusjon *refusjon;
+    const PElement *elementList;
     const PString *stringList;
     const char *stringblock;
     size_t numMerkevare;
@@ -62,6 +66,7 @@ private:
     size_t numLegemiddeldose;
     size_t numVirkestoffMedStyrke;
     size_t numVirkestoff;
+    size_t numKodeverk;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
@@ -72,6 +77,7 @@ private:
     size_t numPrisVare;
     size_t numRefusjon;
     size_t numStringList;
+    size_t numElement;
     size_t stringblocksize;
 public:
     FestDeserializer(const std::string &filename);
@@ -86,6 +92,7 @@ public:
     [[nodiscard]] std::vector<FestUuid> GetFestIds() const;
     [[nodiscard]] std::vector<PFestId> GetFestIdLists() const;
     [[nodiscard]] std::vector<PRefusjon> GetRefusjon() const;
+    [[nodiscard]] std::vector<PElement> GetElement() const;
     [[nodiscard]] std::vector<PString> GetStringList() const;
     void ForEachMerkevare(const std::function<void (const POppfLegemiddelMerkevare &)> &) const;
     void ForEachPakning(const std::function<void (const POppfLegemiddelpakning &)> &) const;
@@ -96,6 +103,7 @@ public:
     void ForEachLegemiddeldose(const std::function<void (const POppfLegemiddeldose &)> &) const;
     void ForEachVirkestoffMedStyrke(const std::function<void (const POppfVirkestoffMedStyrke &)> &) const;
     void ForEachVirkestoff(const std::function<void (const POppfVirkestoff &)> &) const;
+    void ForEachKodeverk(const std::function<void (const POppfKodeverk &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -111,6 +119,7 @@ public:
     [[nodiscard]] OppfLegemiddeldose Unpack(const POppfLegemiddeldose &poppf) const;
     [[nodiscard]] OppfVirkestoffMedStyrke Unpack(const POppfVirkestoffMedStyrke &poppf) const;
     [[nodiscard]] OppfVirkestoff Unpack(const POppfVirkestoff &poppf) const;
+    [[nodiscard]] OppfKodeverk Unpack(const POppfKodeverk &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
@@ -119,6 +128,7 @@ public:
     [[nodiscard]] Legemiddeldose Unpack(const PLegemiddeldose &pLegemiddeldose) const;
     [[nodiscard]] VirkestoffMedStyrke Unpack(const PVirkestoffMedStyrke &pVirkestoffMedStyrke) const;
     [[nodiscard]] Virkestoff Unpack(const PVirkestoff &pVirkestoff) const;
+    [[nodiscard]] Info Unpack(const PInfo &pInfo) const;
     [[nodiscard]] Legemiddel Unpack(const PLegemiddel &pLegemiddel) const;
     [[nodiscard]] LegemiddelCore Unpack(const PLegemiddelCore &pLegemiddelCore) const;
     [[nodiscard]] AdministreringLegemiddel Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const;
@@ -133,6 +143,8 @@ public:
     [[nodiscard]] PakningByttegruppe Unpack(const PPakningByttegruppe &pPakningByttegruppe) const;
     [[nodiscard]] ProduktInfoVare Unpack(const PProduktInfoVare &pProduktInfoVare) const;
     [[nodiscard]] Leverandor Unpack(const PLeverandor &pLeverandor) const;
+    [[nodiscard]] Element Unpack(const PElement &pElement) const;
+    [[nodiscard]] Term Unpack(const PTerm &pTerm) const;
     template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, GenericListItems items) const {
         if (items.start < size) {
             std::vector<T> output{};

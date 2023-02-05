@@ -5,26 +5,25 @@
 #ifndef LEGEMFEST_OPPFKODEVERK_H
 #define LEGEMFEST_OPPFKODEVERK_H
 
-#include "Status.h"
+#include "Oppf.h"
 #include "Info.h"
 #include "Element.h"
 #include <vector>
 
-class OppfKodeverk {
+class POppfKodeverk;
+
+class OppfKodeverk : public Oppf {
+    friend POppfKodeverk;
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     Info info;
     std::vector<Element> element;
 public:
-    OppfKodeverk() : id(), tidspunkt(), status(), info(), element() {}
+    OppfKodeverk() : Oppf(), info(), element() {}
+    OppfKodeverk(const Oppf &oppf, const Info &info, const std::vector<Element> &element) :
+            Oppf(oppf), info(info), element(element) {}
     OppfKodeverk(const std::string &id, const std::string &tidspunkt, const Status &status, const Info &info,
                  const std::vector<Element> &element) :
-            id(id), tidspunkt(tidspunkt), status(status), info(info), element(element) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), info(info), element(element) {}
     [[nodiscard]] Info GetInfo() const;
     [[nodiscard]] std::vector<Element> GetElement() const;
 };

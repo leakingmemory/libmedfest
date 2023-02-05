@@ -4,18 +4,6 @@
 
 #include "OppfKodeverk.h"
 
-std::string OppfKodeverk::GetId() const {
-    return id;
-}
-
-std::string OppfKodeverk::GetTidspunkt() const {
-    return tidspunkt;
-}
-
-Status OppfKodeverk::GetStatus() const {
-    return status;
-}
-
 Info OppfKodeverk::GetInfo() const {
     return info;
 }

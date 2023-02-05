@@ -83,6 +83,12 @@ bool FestSerializer::Write() {
     if (virkestoff.size() >= (1 << 16)) {
         throw PackException("Max virkestoff list size");
     }
+    if (elementList.size() >= (1 << 16)) {
+        throw PackException("Max element list size");
+    }
+    if (kodeverk.size() >= (1 << 16)) {
+        throw PackException("Max kodeverk list size");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -102,7 +108,9 @@ bool FestSerializer::Write() {
         .numBrystprotese = (uint16_t) brystprotese.size(),
         .numLegemiddeldose = (uint16_t) legemiddeldose.size(),
         .numVirkestoffMedStyrke = (uint16_t) virkestoffMedStyrke.size(),
-        .numVirkestoff = (uint16_t) virkestoff.size()
+        .numVirkestoff = (uint16_t) virkestoff.size(),
+        .numElement = (uint16_t) elementList.size(),
+        .numKodeverk = (uint16_t) kodeverk.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -229,6 +237,20 @@ bool FestSerializer::Write() {
     {
         auto *ptr = virkestoff.data();
         auto size = virkestoff.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = kodeverk.data();
+        auto size = kodeverk.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -375,6 +397,21 @@ bool FestSerializer::Write() {
         }
     }
     {
+        auto list = elementList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
         auto list = stringList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
@@ -436,5 +473,10 @@ bool FestSerializer::Visit(const OppfVirkestoffMedStyrke &virkestoffMedStyrke) {
 
 bool FestSerializer::Visit(const OppfVirkestoff &virkestoff) {
     this->virkestoff.emplace_back(virkestoff, festUuidList, festidblock, stringblock, stringblockCache);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfKodeverk &kodeverk) {
+    this->kodeverk.emplace_back(kodeverk, elementList, festidblock, stringblock, stringblockCache);
     return true;
 }

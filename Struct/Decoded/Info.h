@@ -7,7 +7,10 @@
 
 #include <string>
 
+class PInfo;
+
 class Info {
+    friend PInfo;
 private:
     std::string id;
     std::string betegnelse;

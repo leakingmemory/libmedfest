@@ -135,6 +135,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    kodeverk = (POppfKodeverk *) (void *) (((uint8_t *) mapping) + offset);
+    numKodeverk = header->numKodeverk;
+    offset += ((size_t) numKodeverk) * sizeof(*kodeverk);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -218,6 +228,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     refusjon = (const PRefusjon *) (void *) (((uint8_t *) mapping) + offset);
     numRefusjon = header->numRefusjon;
     offset += ((size_t) numRefusjon) * sizeof(*refusjon);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    elementList = (const PElement *) (void *) (((uint8_t *) mapping) + offset);
+    numElement = header->numElement;
+    offset += ((size_t) numElement) * sizeof(*elementList);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -340,6 +360,15 @@ std::vector<PRefusjon> FestDeserializer::GetRefusjon() const {
     return refusjon;
 }
 
+std::vector<PElement> FestDeserializer::GetElement() const {
+    std::vector<PElement> element{};
+    element.reserve(numElement);
+    for (std::remove_const<typeof(numElement)>::type i = 0; i < numElement; i++) {
+        element.emplace_back(this->elementList[i]);
+    }
+    return element;
+}
+
 std::vector<PString> FestDeserializer::GetStringList() const {
     std::vector<PString> strings{};
     strings.reserve(numStringList);
@@ -400,6 +429,12 @@ void FestDeserializer::ForEachVirkestoffMedStyrke(const std::function<void(const
 void FestDeserializer::ForEachVirkestoff(const std::function<void(const POppfVirkestoff &)> &func) const {
     for (std::remove_const<typeof(numVirkestoff)>::type i = 0; i < numVirkestoff; i++) {
         func(this->virkestoff[i]);
+    }
+}
+
+void FestDeserializer::ForEachKodeverk(const std::function<void(const POppfKodeverk &)> &func) const {
+    for (std::remove_const<typeof(numKodeverk)>::type i = 0; i < numKodeverk; i++) {
+        func(this->kodeverk[i]);
     }
 }
 
@@ -473,6 +508,17 @@ OppfVirkestoffMedStyrke FestDeserializer::Unpack(const POppfVirkestoffMedStyrke 
 
 OppfVirkestoff FestDeserializer::Unpack(const POppfVirkestoff &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVirkestoff>(poppf))};
+}
+
+OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk &poppf) const {
+    std::vector<Element> element{};
+    {
+        auto list = Unpack(elementList, numElement, poppf.elements);
+        for (const auto &item : list) {
+            element.emplace_back(Unpack(item));
+        }
+    }
+    return {Unpack(static_cast<POppf>(poppf)), Unpack(static_cast<PInfo>(poppf)), element};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -661,6 +707,15 @@ Virkestoff FestDeserializer::Unpack(const PVirkestoff &pVirkestoff) const {
     };
 }
 
+Info FestDeserializer::Unpack(const PInfo &pInfo) const {
+    return {
+        Unpack(pInfo.id),
+        Unpack(pInfo.betegnelse),
+        Unpack(pInfo.kortnavn),
+        Unpack(pInfo.ansvarligUtgiver)
+    };
+}
+
 Legemiddel FestDeserializer::Unpack(const PLegemiddel &pLegemiddel) const {
     std::vector<std::string> sortertVirkestoffMedStyrke{};
     {
@@ -817,6 +872,22 @@ Leverandor FestDeserializer::Unpack(const PLeverandor &pLeverandor) const {
         Unpack(pLeverandor.adresse),
         Unpack(pLeverandor.telefon)
     };
+}
+
+Element FestDeserializer::Unpack(const PElement &pElement) const {
+    return {
+        Unpack(pElement.id),
+        Unpack(pElement.kode),
+        Unpack(static_cast<PTerm>(pElement))
+    };
+}
+
+Term FestDeserializer::Unpack(const PTerm &pTerm) const {
+   return {
+       Unpack(pTerm.term),
+       Unpack(pTerm.beskrivelseTerm),
+       {Unpack(pTerm.sprak)}
+   };
 }
 
 Lenke FestDeserializer::Unpack(const PLenke &lenke) const {

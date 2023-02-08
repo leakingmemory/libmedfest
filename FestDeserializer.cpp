@@ -145,6 +145,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    refusjon = (POppfRefusjon *) (void *) (((uint8_t *) mapping) + offset);
+    numRefusjon = header->numRefusjon;
+    offset += ((size_t) numRefusjon) * sizeof(*refusjon);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -225,9 +235,9 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
-    refusjon = (const PRefusjon *) (void *) (((uint8_t *) mapping) + offset);
-    numRefusjon = header->numRefusjon;
-    offset += ((size_t) numRefusjon) * sizeof(*refusjon);
+    refusjonList = (const PRefusjon *) (void *) (((uint8_t *) mapping) + offset);
+    numRefusjonList = header->numRefusjonList;
+    offset += ((size_t) numRefusjonList) * sizeof(*refusjonList);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -238,6 +248,26 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     elementList = (const PElement *) (void *) (((uint8_t *) mapping) + offset);
     numElement = header->numElement;
     offset += ((size_t) numElement) * sizeof(*elementList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    refRefusjonsvilkarList = (const PRefRefusjonsvilkar *) (void *) (((uint8_t *) mapping) + offset);
+    numRefRefusjonsvilkar = header->numRefRefusjonsvilkar;
+    offset += ((size_t) numRefRefusjonsvilkar) * sizeof(*refRefusjonsvilkarList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    refusjonskodeList = (const PRefusjonskode *) (void *) (((uint8_t *) mapping) + offset);
+    numRefusjonskode = header->numRefusjonskode;
+    offset += ((size_t) numRefusjonskode) * sizeof(*refusjonskodeList);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -353,9 +383,9 @@ std::vector<PFestId> FestDeserializer::GetFestIdLists() const {
 
 std::vector<PRefusjon> FestDeserializer::GetRefusjon() const {
     std::vector<PRefusjon> refusjon{};
-    refusjon.reserve(numRefusjon);
-    for (std::remove_const<typeof(numRefusjon)>::type i = 0; i < numRefusjon; i++) {
-        refusjon.emplace_back(this->refusjon[i]);
+    refusjon.reserve(numRefusjonList);
+    for (std::remove_const<typeof(numRefusjonList)>::type i = 0; i < numRefusjonList; i++) {
+        refusjon.emplace_back(this->refusjonList[i]);
     }
     return refusjon;
 }
@@ -367,6 +397,24 @@ std::vector<PElement> FestDeserializer::GetElement() const {
         element.emplace_back(this->elementList[i]);
     }
     return element;
+}
+
+std::vector<PRefRefusjonsvilkar> FestDeserializer::GetRefRefusjonsvilkar() const {
+    std::vector<PRefRefusjonsvilkar> refRefusjonsvilkar{};
+    refRefusjonsvilkar.reserve(numRefRefusjonsvilkar);
+    for (std::remove_const<typeof(numRefRefusjonsvilkar)>::type i = 0; i < numRefRefusjonsvilkar; i++) {
+        refRefusjonsvilkar.emplace_back(this->refRefusjonsvilkarList[i]);
+    }
+    return refRefusjonsvilkar;
+}
+
+std::vector<PRefusjonskode> FestDeserializer::GetRefusjonskode() const {
+    std::vector<PRefusjonskode> refusjonskode{};
+    refusjonskode.reserve(numRefusjonskode);
+    for (std::remove_const<typeof(numRefusjonskode)>::type i = 0; i < numRefusjonskode; i++) {
+        refusjonskode.emplace_back(this->refusjonskodeList[i]);
+    }
+    return refusjonskode;
 }
 
 std::vector<PString> FestDeserializer::GetStringList() const {
@@ -435,6 +483,12 @@ void FestDeserializer::ForEachVirkestoff(const std::function<void(const POppfVir
 void FestDeserializer::ForEachKodeverk(const std::function<void(const POppfKodeverk &)> &func) const {
     for (std::remove_const<typeof(numKodeverk)>::type i = 0; i < numKodeverk; i++) {
         func(this->kodeverk[i]);
+    }
+}
+
+void FestDeserializer::ForEachRefusjon(const std::function<void(const POppfRefusjon &)> &func) const {
+    for (std::remove_const<typeof(numRefusjon)>::type i = 0; i < numRefusjon; i++) {
+        func(this->refusjon[i]);
     }
 }
 
@@ -521,6 +575,10 @@ OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk &poppf) const {
     return {Unpack(static_cast<POppf>(poppf)), Unpack(static_cast<PInfo>(poppf)), element};
 }
 
+OppfRefusjon FestDeserializer::Unpack(const POppfRefusjon &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PRefusjonshjemmel>(poppf))};
+}
+
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
     Status status{Unpack(poppf.status)};
     return {Unpack(poppf.id).ToString(), Unpack(poppf.tidspunkt), status};
@@ -595,7 +653,7 @@ Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning &ppakning) c
 LegemiddelVirkestoff FestDeserializer::Unpack(const PLegemiddelVirkestoff &pvirkestoff) const {
     std::vector<Refusjon> refusjon{};
     {
-        auto list = Unpack(this->refusjon, numRefusjon, pvirkestoff.refusjon);
+        auto list = Unpack(this->refusjonList, numRefusjonList, pvirkestoff.refusjon);
         for (const auto &item : list) {
             refusjon.emplace_back(Unpack(item));
         }
@@ -713,6 +771,15 @@ Info FestDeserializer::Unpack(const PInfo &pInfo) const {
         Unpack(pInfo.betegnelse),
         Unpack(pInfo.kortnavn),
         Unpack(pInfo.ansvarligUtgiver)
+    };
+}
+
+Refusjonshjemmel FestDeserializer::Unpack(const PRefusjonshjemmel &pRefusjonshjemmel) const {
+    return {
+        Unpack(pRefusjonshjemmel.refusjonshjemmel),
+        pRefusjonshjemmel.kreverVarekobling,
+        pRefusjonshjemmel.kreverVedtak,
+        Unpack(static_cast<const PRefusjonsgruppe>(pRefusjonshjemmel))
     };
 }
 
@@ -888,6 +955,63 @@ Term FestDeserializer::Unpack(const PTerm &pTerm) const {
        Unpack(pTerm.beskrivelseTerm),
        {Unpack(pTerm.sprak)}
    };
+}
+
+RefRefusjonsvilkar FestDeserializer::Unpack(const PRefRefusjonsvilkar &pref) const {
+    return {
+        Unpack(pref.id).ToString(),
+        Unpack(pref.fraDato)
+    };
+}
+
+Refusjonskode FestDeserializer::Unpack(const PRefusjonskode &pref) const {
+    std::vector<std::string> underterm{};
+    {
+        auto list = Unpack(stringList, numStringList, pref.underterm);
+        for (const auto &put : list) {
+            underterm.emplace_back(Unpack(put));
+        }
+    }
+    std::vector<RefRefusjonsvilkar> refusjonsvilkar{};
+    {
+        auto list = Unpack(refRefusjonsvilkarList, numRefRefusjonsvilkar, pref.refusjonsvilkar);
+        for (const auto &pr : list) {
+            refusjonsvilkar.emplace_back(Unpack(pr));
+        }
+    }
+    return {
+        Unpack(pref.refusjonskode),
+        Unpack(pref.gyldigFraDato),
+        Unpack(pref.forskrivesTilDato),
+        underterm,
+        refusjonsvilkar
+    };
+}
+
+Refusjonsgruppe FestDeserializer::Unpack(const PRefusjonsgruppe &pRefusjonsgruppe) const {
+    std::vector<Refusjonskode> refusjonskode{};
+    {
+        auto list = Unpack(refusjonskodeList, numRefusjonskode, pRefusjonsgruppe.refusjonskode);
+        for (const auto &item : list) {
+            refusjonskode.emplace_back(Unpack(item));
+        }
+    }
+    std::vector<std::string> refVilkar{};
+    {
+        auto list = Unpack(stringList, numStringList, pRefusjonsgruppe.refVilkar);
+        for (const auto &item : list) {
+            refVilkar.emplace_back(Unpack(item));
+        }
+    }
+    return {
+        Unpack(pRefusjonsgruppe.id),
+        Unpack(pRefusjonsgruppe.gruppeNr),
+        Unpack(pRefusjonsgruppe.atc),
+        Unpack(pRefusjonsgruppe.refusjonsberettigetBruk),
+        refusjonskode,
+        refVilkar,
+        pRefusjonsgruppe.kreverRefusjonskode
+    };
 }
 
 Lenke FestDeserializer::Unpack(const PLenke &lenke) const {

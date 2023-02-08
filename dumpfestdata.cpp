@@ -12,6 +12,7 @@
 #include "Struct/Decoded/OppfVirkestoffMedStyrke.h"
 #include "Struct/Decoded/OppfVirkestoff.h"
 #include "Struct/Decoded/OppfKodeverk.h"
+#include "Struct/Decoded/OppfRefusjon.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -109,6 +110,23 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         auto sprak = term.GetSprak();
         std::cout << " " << element.GetId() << " " << element.GetKode() << " " << sprak.GetDistinguishedName()
                   << " " << term.GetTerm() << " " << term.GetBeskrivelseTerm() << "\n";
+    }
+    std::cout << "Ref refusjonsvilkar list storage dump:\n";
+    for (const auto &pref : festDeserializer.GetRefRefusjonsvilkar()) {
+        auto refRefusjonsvilkar = festDeserializer.Unpack(pref);
+        std::cout << " " << refRefusjonsvilkar.GetId() << " " << refRefusjonsvilkar.GetFraDato() << "\n";
+    }
+    std::cout << "Refusjonskode list storage dump:\n";
+    for (const auto &pref : festDeserializer.GetRefusjonskode()) {
+        auto refusjonskode = festDeserializer.Unpack(pref);
+        std::cout << " " << refusjonskode.GetGyldigFraDato() << " " << refusjonskode.GetForskrivesTilDato() << " "
+                  << refusjonskode.GetRefusjonskode().GetDistinguishedName() << "\n";
+        for (const auto &term : refusjonskode.GetUnderterm()) {
+            std::cout << "   - " << term << "\n";
+        }
+        for (const auto &refRefusjonsvilkar : refusjonskode.GetRefusjonsvilkar()) {
+            std::cout << "  - " << refRefusjonsvilkar.GetId() << " " << refRefusjonsvilkar.GetFraDato() << "\n";
+        }
     }
     std::cout << "Merkevarer:\n";
     festDeserializer.ForEachMerkevare([&festDeserializer] (const POppfLegemiddelMerkevare &poppf) {
@@ -223,6 +241,32 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
             auto sprak = term.GetSprak();
             std::cout << "  - " << element.GetId() << " " << element.GetKode() << " " << sprak.GetDistinguishedName()
                       << " " << term.GetTerm() << " " << term.GetBeskrivelseTerm() << "\n";
+        }
+    });
+    std::cout << "Refusjon:\n";
+    festDeserializer.ForEachRefusjon([&festDeserializer] (const POppfRefusjon &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto refusjonshjemmel = oppf.GetRefusjonshjemmel();
+        std::cout << " " << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << (refusjonshjemmel.GetKreverVedtak() ? " krever vedtak: " : "")
+                  << (refusjonshjemmel.GetKreverVarekobling() ? "krever varekobling: " : "")
+                  << refusjonshjemmel.GetRefusjonshjemmel().GetDistinguishedName() << "\n";
+        auto refusjonsgruppe = refusjonshjemmel.GetRefusjonsgruppe();
+        std::cout << "  " << refusjonsgruppe.GetAtc().GetValue() << " " << refusjonsgruppe.GetId() << " "
+                  << refusjonsgruppe.GetGruppeNr().GetValue() << ": " << refusjonsgruppe.GetRefusjonsberettigetBruk()
+                  << "\n";
+        for (const auto &refVilkar : refusjonsgruppe.GetRefVilkar()) {
+            std::cout << "    - " << refVilkar << "\n";
+        }
+        for (const auto &refusjonskode : refusjonsgruppe.GetRefusjonskode()) {
+            std::cout << "  * " << refusjonskode.GetGyldigFraDato() << " " << refusjonskode.GetForskrivesTilDato() << " "
+                      << refusjonskode.GetRefusjonskode().GetDistinguishedName() << "\n";
+            for (const auto &term : refusjonskode.GetUnderterm()) {
+                std::cout << "    - " << term << "\n";
+            }
+            for (const auto &refRefusjonsvilkar : refusjonskode.GetRefusjonsvilkar()) {
+                std::cout << "   - " << refRefusjonsvilkar.GetId() << " " << refRefusjonsvilkar.GetFraDato() << "\n";
+            }
         }
     });
     return 0;

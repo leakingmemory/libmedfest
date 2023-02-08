@@ -6,23 +6,22 @@
 #define LEGEMFEST_OPPFREFUSJON_H
 
 #include <string>
-#include "Status.h"
+#include "Oppf.h"
 #include "Refusjonshjemmel.h"
 
-class OppfRefusjon {
+class POppfRefusjon;
+
+class OppfRefusjon : public Oppf {
+    friend POppfRefusjon;
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     Refusjonshjemmel refusjonshjemmel;
 public:
-    OppfRefusjon() : id(), tidspunkt(), status(), refusjonshjemmel() {}
+    OppfRefusjon() : Oppf(), refusjonshjemmel() {}
+    OppfRefusjon(const Oppf &oppf, const Refusjonshjemmel &refusjonshjemmel) :
+            Oppf(oppf), refusjonshjemmel(refusjonshjemmel) {}
     OppfRefusjon(const std::string &id, const std::string &tidspunkt, const Status &status,
                  const Refusjonshjemmel &refusjonshjemmel) :
-            id(id), tidspunkt(tidspunkt), status(status), refusjonshjemmel(refusjonshjemmel) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), refusjonshjemmel(refusjonshjemmel) {}
     [[nodiscard]] Refusjonshjemmel GetRefusjonshjemmel() const;
 };
 

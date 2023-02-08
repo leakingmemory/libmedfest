@@ -161,7 +161,8 @@ bool Fest::Accept(FestVisitor &visitor) const {
             + oppfLegemiddeldose.size()
             + oppfVirkestoffMedStyrke.size()
             + oppfVirkestoff.size()
-            + oppfKodeverk.size();
+            + oppfKodeverk.size()
+            + oppfRefusjon.size();
     typeof(total) done = 0;
     for (const auto &merkevare : oppfLegemiddelMerkevare) {
         if (!visitor.Visit(merkevare)) {
@@ -219,6 +220,12 @@ bool Fest::Accept(FestVisitor &visitor) const {
     }
     for (const auto &kodeverk : oppfKodeverk) {
         if (!visitor.Visit(kodeverk)) {
+            return false;
+        }
+        visitor.Progress(++done, total);
+    }
+    for (const auto &refusjon : oppfRefusjon) {
+        if (!visitor.Visit(refusjon)) {
             return false;
         }
         visitor.Progress(++done, total);

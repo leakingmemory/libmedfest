@@ -19,12 +19,15 @@
 #include "Struct/Packed/PakningskomponentInfoList.h"
 #include "Struct/Packed/RefusjonList.h"
 #include "Struct/Packed/ElementList.h"
+#include "Struct/Packed/RefRefusjonsvilkarList.h"
+#include "Struct/Packed/RefusjonskodeList.h"
 #include "Struct/Packed/POppfLegemiddelVirkestoff.h"
 #include "Struct/Packed/POppfHandelsvare.h"
 #include "Struct/Packed/POppfLegemiddeldose.h"
 #include "Struct/Packed/POppfVirkestoffMedStyrke.h"
 #include "Struct/Packed/POppfVirkestoff.h"
 #include "Struct/Packed/POppfKodeverk.h"
+#include "Struct/Packed/POppfRefusjon.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -43,7 +46,7 @@ struct FestFirstHeader {
     uint16_t numPrisVare;
     uint16_t numUuidLists;
     uint16_t numPakning;
-    uint16_t numRefusjon;
+    uint16_t numRefusjonList;
     uint16_t numLegemiddelVirkestoff;
     uint16_t numStringList;
     uint16_t numMedForbrMatr;
@@ -54,6 +57,9 @@ struct FestFirstHeader {
     uint16_t numVirkestoff;
     uint16_t numElement;
     uint16_t numKodeverk;
+    uint16_t numRefRefusjonsvilkar;
+    uint16_t numRefusjonskode;
+    uint16_t numRefusjon;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -71,8 +77,10 @@ private:
     PakningsinfoList pakningsinfoList{};
     PrisVareList prisVareList{};
     RefusjonList refusjonList{};
-    StringList stringList{};
     ElementList elementList{};
+    RefRefusjonsvilkarList refRefusjonsvilkarList{};
+    RefusjonskodeList refusjonskodeList{};
+    StringList stringList{};
     std::vector<POppfLegemiddelMerkevare> legemiddelMerkevare{};
     std::vector<POppfLegemiddelpakning> legemiddelpakning{};
     std::vector<POppfLegemiddelVirkestoff> legemiddelVirkestoff{};
@@ -83,6 +91,7 @@ private:
     std::vector<POppfVirkestoffMedStyrke> virkestoffMedStyrke{};
     std::vector<POppfVirkestoff> virkestoff{};
     std::vector<POppfKodeverk> kodeverk{};
+    std::vector<POppfRefusjon> refusjon{};
     int percentDone;
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
@@ -107,6 +116,7 @@ private:
     bool Visit(const OppfVirkestoffMedStyrke &virkestoffMedStyrke) override;
     bool Visit(const OppfVirkestoff &virkestoff) override;
     bool Visit(const OppfKodeverk &kodeverk) override;
+    bool Visit(const OppfRefusjon &refusjon) override;
 };
 
 

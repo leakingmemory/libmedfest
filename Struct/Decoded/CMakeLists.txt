@@ -25,4 +25,4 @@ add_library(decoded OBJECT Status.h OppfLegemiddelMerkevare.cpp OppfLegemiddelMe
         Substans.cpp Substans.h InteraksjonIkkeVurdert.cpp InteraksjonIkkeVurdert.h
         OppfStrDosering.cpp OppfStrDosering.h Kortdose.cpp Kortdose.h Legemiddelforbruk.cpp Legemiddelforbruk.h
         DoseFastTidspunkt.cpp DoseFastTidspunkt.h Dosering.cpp Dosering.h FastDose.cpp FastDose.h Oppf.cpp Oppf.h
-        Info.cpp Info.h)
+        Info.cpp Info.h Refusjonskode.cpp Refusjonskode.h)

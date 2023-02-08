@@ -89,6 +89,15 @@ bool FestSerializer::Write() {
     if (kodeverk.size() >= (1 << 16)) {
         throw PackException("Max kodeverk list size");
     }
+    if (refRefusjonsvilkarList.size() >= (1 << 16)) {
+        throw PackException("Max ref refusjonsvilkar list");
+    }
+    if (refusjonskodeList.size() >= (1 << 16)) {
+        throw PackException("Max refusjonskode list");
+    }
+    if (refusjon.size() >= (1 << 16)) {
+        throw PackException("Max oppf refusjon size\n");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -100,7 +109,7 @@ bool FestSerializer::Write() {
         .numPrisVare = (uint16_t) prisVareList.size(),
         .numUuidLists = (uint16_t) festUuidList.size(),
         .numPakning = (uint16_t) legemiddelpakning.size(),
-        .numRefusjon = (uint16_t) refusjonList.size(),
+        .numRefusjonList = (uint16_t) refusjonList.size(),
         .numLegemiddelVirkestoff = (uint16_t) legemiddelVirkestoff.size(),
         .numStringList = (uint16_t) stringList.size(),
         .numMedForbrMatr = (uint16_t) medForbrMatr.size(),
@@ -110,7 +119,10 @@ bool FestSerializer::Write() {
         .numVirkestoffMedStyrke = (uint16_t) virkestoffMedStyrke.size(),
         .numVirkestoff = (uint16_t) virkestoff.size(),
         .numElement = (uint16_t) elementList.size(),
-        .numKodeverk = (uint16_t) kodeverk.size()
+        .numKodeverk = (uint16_t) kodeverk.size(),
+        .numRefRefusjonsvilkar = (uint16_t) refRefusjonsvilkarList.size(),
+        .numRefusjonskode = (uint16_t) refusjonskodeList.size(),
+        .numRefusjon = (uint16_t) refusjon.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -251,6 +263,20 @@ bool FestSerializer::Write() {
     {
         auto *ptr = kodeverk.data();
         auto size = kodeverk.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = refusjon.data();
+        auto size = refusjon.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -412,6 +438,36 @@ bool FestSerializer::Write() {
         }
     }
     {
+        auto list = refRefusjonsvilkarList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto list = refusjonskodeList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
         auto list = stringList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
@@ -478,5 +534,10 @@ bool FestSerializer::Visit(const OppfVirkestoff &virkestoff) {
 
 bool FestSerializer::Visit(const OppfKodeverk &kodeverk) {
     this->kodeverk.emplace_back(kodeverk, elementList, festidblock, stringblock, stringblockCache);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfRefusjon &refusjon) {
+    this->refusjon.emplace_back(refusjon, refusjonskodeList, refRefusjonsvilkarList, stringList, festidblock, stringblock, stringblockCache);
     return true;
 }

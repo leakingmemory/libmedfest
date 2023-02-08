@@ -8,7 +8,10 @@
 #include "ValueWithCodeSet.h"
 #include "Refusjonsgruppe.h"
 
+class PRefusjonshjemmel;
+
 class Refusjonshjemmel {
+    friend PRefusjonshjemmel;
 private:
     ValueWithCodeSet refusjonshjemmel;
     bool kreverVarekobling;

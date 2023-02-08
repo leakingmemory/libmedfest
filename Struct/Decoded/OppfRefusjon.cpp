@@ -4,18 +4,6 @@
 
 #include "OppfRefusjon.h"
 
-std::string OppfRefusjon::GetId() const {
-    return id;
-}
-
-std::string OppfRefusjon::GetTidspunkt() const {
-    return tidspunkt;
-}
-
-Status OppfRefusjon::GetStatus() const {
-    return status;
-}
-
 Refusjonshjemmel OppfRefusjon::GetRefusjonshjemmel() const {
     return refusjonshjemmel;
 }

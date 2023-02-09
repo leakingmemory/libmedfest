@@ -10,7 +10,10 @@
 #include "StrukturertVilkar.h"
 #include <string>
 
+class PVilkar;
+
 class Vilkar {
+    friend PVilkar;
 private:
     std::string id;
     std::string vilkarNr;

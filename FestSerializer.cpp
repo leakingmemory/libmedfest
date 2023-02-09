@@ -98,6 +98,9 @@ bool FestSerializer::Write() {
     if (refusjon.size() >= (1 << 16)) {
         throw PackException("Max oppf refusjon size\n");
     }
+    if (vilkar.size() >= (1 << 16)) {
+        throw PackException("Max oppf vilkar size\n");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -122,7 +125,8 @@ bool FestSerializer::Write() {
         .numKodeverk = (uint16_t) kodeverk.size(),
         .numRefRefusjonsvilkar = (uint16_t) refRefusjonsvilkarList.size(),
         .numRefusjonskode = (uint16_t) refusjonskodeList.size(),
-        .numRefusjon = (uint16_t) refusjon.size()
+        .numRefusjon = (uint16_t) refusjon.size(),
+        .numVilkar = (uint16_t) vilkar.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -277,6 +281,20 @@ bool FestSerializer::Write() {
     {
         auto *ptr = refusjon.data();
         auto size = refusjon.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = vilkar.data();
+        auto size = vilkar.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -539,5 +557,10 @@ bool FestSerializer::Visit(const OppfKodeverk &kodeverk) {
 
 bool FestSerializer::Visit(const OppfRefusjon &refusjon) {
     this->refusjon.emplace_back(refusjon, refusjonskodeList, refRefusjonsvilkarList, stringList, festidblock, stringblock, stringblockCache);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfVilkar &vilkar) {
+    this->vilkar.emplace_back(vilkar, festidblock, stringblock, stringblockCache);
     return true;
 }

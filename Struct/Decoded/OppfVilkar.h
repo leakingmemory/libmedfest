@@ -5,22 +5,21 @@
 #ifndef LEGEMFEST_OPPFVILKAR_H
 #define LEGEMFEST_OPPFVILKAR_H
 
-#include "Status.h"
+#include "Oppf.h"
 #include "Vilkar.h"
 
-class OppfVilkar {
+class POppfVilkar;
+
+class OppfVilkar : public Oppf {
+    friend POppfVilkar;
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     Vilkar vilkar;
 public:
-    OppfVilkar() : id(), tidspunkt(), status(), vilkar() {}
+    OppfVilkar() : Oppf(), vilkar() {}
+    OppfVilkar(const Oppf &oppf, const Vilkar &vilkar) :
+            Oppf(oppf), vilkar(vilkar) {}
     OppfVilkar(const std::string &id, const std::string &tidspunkt, const Status &status, const Vilkar &vilkar) :
-            id(id), tidspunkt(tidspunkt), status(status), vilkar(vilkar) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidpunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), vilkar(vilkar) {}
     [[nodiscard]] Vilkar GetVilkar() const;
 };
 

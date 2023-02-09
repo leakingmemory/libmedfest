@@ -155,6 +155,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    vilkar = (POppfVilkar *) (void *) (((uint8_t *) mapping) + offset);
+    numVilkar = header->numVilkar;
+    offset += ((size_t) numVilkar) * sizeof(*vilkar);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -492,6 +502,12 @@ void FestDeserializer::ForEachRefusjon(const std::function<void(const POppfRefus
     }
 }
 
+void FestDeserializer::ForEachVilkar(const std::function<void(const POppfVilkar &)> &func) const {
+    for (std::remove_const<typeof(numVilkar)>::type i = 0; i < numVilkar; i++) {
+        func(this->vilkar[i]);
+    }
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -577,6 +593,10 @@ OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk &poppf) const {
 
 OppfRefusjon FestDeserializer::Unpack(const POppfRefusjon &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PRefusjonshjemmel>(poppf))};
+}
+
+OppfVilkar FestDeserializer::Unpack(const POppfVilkar &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVilkar>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -780,6 +800,18 @@ Refusjonshjemmel FestDeserializer::Unpack(const PRefusjonshjemmel &pRefusjonshje
         pRefusjonshjemmel.kreverVarekobling,
         pRefusjonshjemmel.kreverVedtak,
         Unpack(static_cast<const PRefusjonsgruppe>(pRefusjonshjemmel))
+    };
+}
+
+Vilkar FestDeserializer::Unpack(const PVilkar &pVilkar) const {
+    return {
+        Unpack(pVilkar.id),
+        Unpack(pVilkar.vilkarNr),
+        Unpack(pVilkar.gruppe),
+        Unpack(pVilkar.gjelderFor),
+        Unpack(pVilkar.tekst),
+        Unpack(pVilkar.gyldigFraDato),
+        Unpack(static_cast<PStrukturertVilkar>(pVilkar))
     };
 }
 
@@ -1011,6 +1043,14 @@ Refusjonsgruppe FestDeserializer::Unpack(const PRefusjonsgruppe &pRefusjonsgrupp
         refusjonskode,
         refVilkar,
         pRefusjonsgruppe.kreverRefusjonskode
+    };
+}
+
+StrukturertVilkar FestDeserializer::Unpack(const PStrukturertVilkar &pStrukturertVilkar) const {
+    return {
+        Unpack(pStrukturertVilkar.type),
+        Unpack(pStrukturertVilkar.verdiKodet),
+        Unpack(pStrukturertVilkar.verdiTekst)
     };
 }
 

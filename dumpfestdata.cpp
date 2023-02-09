@@ -13,6 +13,7 @@
 #include "Struct/Decoded/OppfVirkestoff.h"
 #include "Struct/Decoded/OppfKodeverk.h"
 #include "Struct/Decoded/OppfRefusjon.h"
+#include "Struct/Decoded/OppfVilkar.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -268,6 +269,19 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
                 std::cout << "   - " << refRefusjonsvilkar.GetId() << " " << refRefusjonsvilkar.GetFraDato() << "\n";
             }
         }
+    });
+    std::cout << "Vilkar:\n";
+    festDeserializer.ForEachVilkar([&festDeserializer] (const POppfVilkar &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto vilkar = oppf.GetVilkar();
+        std::cout << " " << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << vilkar.GetId() << " " << vilkar.GetVilkarNr() << " " << vilkar.GetGyldigFraDato() << " "
+                  << vilkar.GetGjelderFor().GetDistinguishedName() << " " << vilkar.GetGruppe().GetDistinguishedName()
+                  << " " << vilkar.GetTekst() << "\n  ";
+        auto strukturertVilkar = vilkar.GetStrukturertVilkar();
+        std::cout << strukturertVilkar.GetType().GetDistinguishedName() << " "
+                  << strukturertVilkar.GetVerdiKodet().GetDistinguishedName() << " "
+                  << strukturertVilkar.GetVerdiTekst() << "\n";
     });
     return 0;
 }

@@ -14,6 +14,7 @@
 #include "Struct/Decoded/OppfKodeverk.h"
 #include "Struct/Decoded/OppfRefusjon.h"
 #include "Struct/Decoded/OppfVilkar.h"
+#include "Struct/Decoded/OppfVarselSlv.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -282,6 +283,20 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         std::cout << strukturertVilkar.GetType().GetDistinguishedName() << " "
                   << strukturertVilkar.GetVerdiKodet().GetDistinguishedName() << " "
                   << strukturertVilkar.GetVerdiTekst() << "\n";
+    });
+    festDeserializer.ForEachVarselSlv([&festDeserializer] (const POppfVarselSlv &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto varselSlv = oppf.GetVarselSlv();
+        std::cout << " " << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << varselSlv.GetType().GetDistinguishedName() << " " << varselSlv.GetFraDato() << " "
+                  << varselSlv.GetReferanseelement().GetKlasse().GetDistinguishedName() << "\n  "
+                  << varselSlv.GetOverskrift() << "\n  " << varselSlv.GetVarseltekst() << "\n";
+        for (const auto &vr : varselSlv.GetVisningsregel()) {
+            std::cout << "  - " << vr.GetDistinguishedName() << "\n";
+        }
+        for (const auto &ref : varselSlv.GetReferanseelement().GetRefs()) {
+            std::cout << "  * " << ref << "\n";
+        }
     });
     return 0;
 }

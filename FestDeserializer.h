@@ -34,6 +34,7 @@
 #include "Struct/Packed/POppfRefusjon.h"
 #include "Struct/Packed/POppfVilkar.h"
 #include "Struct/Packed/PElement.h"
+#include "Struct/Packed/POppfVarselSlv.h"
 
 class FestDeserializer {
 private:
@@ -51,6 +52,7 @@ private:
     const POppfKodeverk *kodeverk;
     const POppfRefusjon *refusjon;
     const POppfVilkar *vilkar;
+    const POppfVarselSlv *varselSlv;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -77,6 +79,7 @@ private:
     size_t numKodeverk;
     size_t numRefusjon;
     size_t numVilkar;
+    size_t numVarselSlv;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
@@ -120,6 +123,7 @@ public:
     void ForEachKodeverk(const std::function<void (const POppfKodeverk &)> &) const;
     void ForEachRefusjon(const std::function<void (const POppfRefusjon &)> &) const;
     void ForEachVilkar(const std::function<void (const POppfVilkar &)> &) const;
+    void ForEachVarselSlv(const std::function<void (const POppfVarselSlv &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -138,6 +142,7 @@ public:
     [[nodiscard]] OppfKodeverk Unpack(const POppfKodeverk &poppf) const;
     [[nodiscard]] OppfRefusjon Unpack(const POppfRefusjon &poppf) const;
     [[nodiscard]] OppfVilkar Unpack(const POppfVilkar &poppf) const;
+    [[nodiscard]] OppfVarselSlv Unpack(const POppfVarselSlv &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
@@ -149,6 +154,7 @@ public:
     [[nodiscard]] Info Unpack(const PInfo &pInfo) const;
     [[nodiscard]] Refusjonshjemmel Unpack(const PRefusjonshjemmel &pRefusjonshjemmel) const;
     [[nodiscard]] Vilkar Unpack(const PVilkar &pVilkar) const;
+    [[nodiscard]] VarselSlv Unpack(const PVarselSlv &pVarselSlv) const;
     [[nodiscard]] Legemiddel Unpack(const PLegemiddel &pLegemiddel) const;
     [[nodiscard]] LegemiddelCore Unpack(const PLegemiddelCore &pLegemiddelCore) const;
     [[nodiscard]] AdministreringLegemiddel Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const;
@@ -169,6 +175,7 @@ public:
     [[nodiscard]] Refusjonskode Unpack(const PRefusjonskode &pref) const;
     [[nodiscard]] Refusjonsgruppe Unpack(const PRefusjonsgruppe &pRefusjonsgruppe) const;
     [[nodiscard]] StrukturertVilkar Unpack(const PStrukturertVilkar &pStrukturertVilkar) const;
+    [[nodiscard]] Referanseelement Unpack(const PReferanseelement &pReferanseelement) const;
     template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, GenericListItems items) const {
         if (items.start < size) {
             std::vector<T> output{};

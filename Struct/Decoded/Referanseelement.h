@@ -8,7 +8,10 @@
 #include "Klasse.h"
 #include <vector>
 
+class PReferanseelement;
+
 class Referanseelement {
+    friend PReferanseelement;
 private:
     Klasse klasse;
     std::vector<std::string> refs;

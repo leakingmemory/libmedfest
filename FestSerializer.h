@@ -29,6 +29,7 @@
 #include "Struct/Packed/POppfKodeverk.h"
 #include "Struct/Packed/POppfRefusjon.h"
 #include "Struct/Packed/POppfVilkar.h"
+#include "Struct/Packed/POppfVarselSlv.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -62,6 +63,7 @@ struct FestFirstHeader {
     uint16_t numRefusjonskode;
     uint16_t numRefusjon;
     uint16_t numVilkar;
+    uint16_t numVarselSlv;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -95,6 +97,7 @@ private:
     std::vector<POppfKodeverk> kodeverk{};
     std::vector<POppfRefusjon> refusjon{};
     std::vector<POppfVilkar> vilkar{};
+    std::vector<POppfVarselSlv> varselSlv{};
     int percentDone;
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
@@ -121,6 +124,7 @@ private:
     bool Visit(const OppfKodeverk &kodeverk) override;
     bool Visit(const OppfRefusjon &refusjon) override;
     bool Visit(const OppfVilkar &vilkar) override;
+    bool Visit(const OppfVarselSlv &varselSlv) override;
 };
 
 

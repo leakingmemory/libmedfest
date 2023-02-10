@@ -25,6 +25,7 @@ add_library(packed OBJECT PackException.cpp PackException.h PFestId.cpp PFestId.
         PRefRefusjonsvilkar.cpp PRefRefusjonsvilkar.h PRefusjonsgruppe.cpp PRefusjonsgruppe.h
         RefRefusjonsvilkarList.cpp RefRefusjonsvilkarList.h PRefusjonshjemmel.cpp PRefusjonshjemmel.h
         POppfRefusjon.cpp POppfRefusjon.h PRefusjonskode.cpp PRefusjonskode.h RefusjonskodeList.cpp RefusjonskodeList.h
-        PStrukturertVilkar.cpp PStrukturertVilkar.h PVilkar.cpp PVilkar.h POppfVilkar.cpp POppfVilkar.h)
+        PStrukturertVilkar.cpp PStrukturertVilkar.h PVilkar.cpp PVilkar.h POppfVilkar.cpp POppfVilkar.h
+        PReferanseelement.cpp PReferanseelement.h PVarselSlv.cpp PVarselSlv.h POppfVarselSlv.cpp POppfVarselSlv.h)
 
 include_directories(packed ${Boost_INCLUDE_DIRS} )

@@ -11,7 +11,10 @@
 #include "Referanseelement.h"
 #include <vector>
 
+class PVarselSlv;
+
 class VarselSlv {
+    friend PVarselSlv;
 private:
     ValueWithCodeSet type;
     std::string overskrift;

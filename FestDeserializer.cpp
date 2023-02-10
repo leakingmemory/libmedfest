@@ -165,6 +165,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    varselSlv = (POppfVarselSlv *) (void *) (((uint8_t *) mapping) + offset);
+    numVarselSlv = header->numVarselSlv;
+    offset += ((size_t) numVarselSlv) * sizeof(*varselSlv);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -508,6 +518,12 @@ void FestDeserializer::ForEachVilkar(const std::function<void(const POppfVilkar 
     }
 }
 
+void FestDeserializer::ForEachVarselSlv(const std::function<void(const POppfVarselSlv &)> &func) const {
+    for (std::remove_const<typeof(numVarselSlv)>::type i = 0; i < numVarselSlv; i++) {
+        func(this->varselSlv[i]);
+    }
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -597,6 +613,10 @@ OppfRefusjon FestDeserializer::Unpack(const POppfRefusjon &poppf) const {
 
 OppfVilkar FestDeserializer::Unpack(const POppfVilkar &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVilkar>(poppf))};
+}
+
+OppfVarselSlv FestDeserializer::Unpack(const POppfVarselSlv &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVarselSlv>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -812,6 +832,25 @@ Vilkar FestDeserializer::Unpack(const PVilkar &pVilkar) const {
         Unpack(pVilkar.tekst),
         Unpack(pVilkar.gyldigFraDato),
         Unpack(static_cast<PStrukturertVilkar>(pVilkar))
+    };
+}
+
+VarselSlv FestDeserializer::Unpack(const PVarselSlv &pVarselSlv) const {
+    std::vector<Visningsregel> visningsregel{};
+    {
+        auto list = Unpack(valueWithCodesetList, numValueWithCodesetList, pVarselSlv.visningsregel);
+        for (const auto &item : list) {
+            visningsregel.emplace_back(Unpack(item));
+        }
+    }
+    return {
+        Unpack(pVarselSlv.type),
+        Unpack(pVarselSlv.overskrift),
+        Unpack(pVarselSlv.varseltekst),
+        visningsregel,
+        Unpack(pVarselSlv.fraDato),
+        Unpack(pVarselSlv.lenke),
+        Unpack(pVarselSlv.referanseelement)
     };
 }
 
@@ -1051,6 +1090,20 @@ StrukturertVilkar FestDeserializer::Unpack(const PStrukturertVilkar &pStrukturer
         Unpack(pStrukturertVilkar.type),
         Unpack(pStrukturertVilkar.verdiKodet),
         Unpack(pStrukturertVilkar.verdiTekst)
+    };
+}
+
+Referanseelement FestDeserializer::Unpack(const PReferanseelement &pReferanseelement) const {
+    std::vector<std::string> refs{};
+    {
+        auto list = Unpack(festUuidList, numFestUuidList, pReferanseelement.refs);
+        for (const auto &item : list) {
+            refs.emplace_back(Unpack(item).ToString());
+        }
+    }
+    return {
+        Unpack(pReferanseelement.klasse),
+        refs
     };
 }
 

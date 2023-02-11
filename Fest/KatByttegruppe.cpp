@@ -11,7 +11,7 @@ std::string KatByttegruppe::GetName() const {
 }
 
 void KatByttegruppe::Merge(XmlOppfByttegruppe &oppf) {
-
+    fest->Add(oppf);
 }
 
 std::string XmlOppfByttegruppe::GetName() const {

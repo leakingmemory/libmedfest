@@ -8,7 +8,10 @@
 #include "ValueWithDistinguishedName.h"
 #include <string>
 
+class PByttegruppe;
+
 class Byttegruppe {
+    friend PByttegruppe;
 private:
     std::string id;
     ValueWithDistinguishedName kode;

@@ -15,6 +15,7 @@
 #include "Struct/Decoded/OppfRefusjon.h"
 #include "Struct/Decoded/OppfVilkar.h"
 #include "Struct/Decoded/OppfVarselSlv.h"
+#include "Struct/Decoded/OppfByttegruppe.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -284,6 +285,7 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
                   << strukturertVilkar.GetVerdiKodet().GetDistinguishedName() << " "
                   << strukturertVilkar.GetVerdiTekst() << "\n";
     });
+    std::cout << "Varsel SLV:\n";
     festDeserializer.ForEachVarselSlv([&festDeserializer] (const POppfVarselSlv &poppf) {
         auto oppf = festDeserializer.Unpack(poppf);
         auto varselSlv = oppf.GetVarselSlv();
@@ -297,6 +299,15 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         for (const auto &ref : varselSlv.GetReferanseelement().GetRefs()) {
             std::cout << "  * " << ref << "\n";
         }
+    });
+    std::cout << "Byttegrupper:\n";
+    festDeserializer.ForEachByttegruppe([&festDeserializer] (const POppfByttegruppe &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto byttegruppe = oppf.GetByttegruppe();
+        std::cout << " " << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << byttegruppe.GetId() << " " << byttegruppe.GetGyldigFraDato() << " "
+                  << byttegruppe.GetKode().GetDistinguishedName() << " " << byttegruppe.GetBeskrivelseByttbarhet()
+                  << " " << (byttegruppe.GetMerknadTilByttbarhet() ? "true" : "false") << "\n";
     });
     return 0;
 }

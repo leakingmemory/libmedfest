@@ -5,23 +5,22 @@
 #ifndef LEGEMFEST_OPPFBYTTEGRUPPE_H
 #define LEGEMFEST_OPPFBYTTEGRUPPE_H
 
-#include "Status.h"
+#include "Oppf.h"
 #include "Byttegruppe.h"
 
-class OppfByttegruppe {
+class POppfByttegruppe;
+
+class OppfByttegruppe : public Oppf {
+    friend POppfByttegruppe;
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     Byttegruppe byttegruppe;
 public:
-    OppfByttegruppe() : id(), tidspunkt(), status() {}
+    OppfByttegruppe() : Oppf() {}
+    OppfByttegruppe(const Oppf &oppf, const Byttegruppe &byttegruppe) :
+            Oppf(oppf), byttegruppe(byttegruppe) {}
     OppfByttegruppe(const std::string &id, const std::string &tidspunkt, const Status &status,
                     const Byttegruppe &byttegruppe) :
-            id(id), tidspunkt(tidspunkt), status(status), byttegruppe(byttegruppe) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), byttegruppe(byttegruppe) {}
     [[nodiscard]] Byttegruppe GetByttegruppe() const;
 };
 

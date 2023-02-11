@@ -175,6 +175,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    byttegruppe = (POppfByttegruppe *) (void *) (((uint8_t *) mapping) + offset);
+    numByttegruppe = header->numByttegruppe;
+    offset += ((size_t) numByttegruppe) * sizeof(*byttegruppe);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -524,6 +534,12 @@ void FestDeserializer::ForEachVarselSlv(const std::function<void(const POppfVars
     }
 }
 
+void FestDeserializer::ForEachByttegruppe(const std::function<void(const POppfByttegruppe &)> &func) const {
+    for (std::remove_const<typeof(numByttegruppe)>::type i = 0; i < numByttegruppe; i++) {
+        func(this->byttegruppe[i]);
+    }
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -617,6 +633,10 @@ OppfVilkar FestDeserializer::Unpack(const POppfVilkar &poppf) const {
 
 OppfVarselSlv FestDeserializer::Unpack(const POppfVarselSlv &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVarselSlv>(poppf))};
+}
+
+OppfByttegruppe FestDeserializer::Unpack(const POppfByttegruppe &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PByttegruppe>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -851,6 +871,16 @@ VarselSlv FestDeserializer::Unpack(const PVarselSlv &pVarselSlv) const {
         Unpack(pVarselSlv.fraDato),
         Unpack(pVarselSlv.lenke),
         Unpack(pVarselSlv.referanseelement)
+    };
+}
+
+Byttegruppe FestDeserializer::Unpack(const PByttegruppe &pByttegruppe) const {
+    return {
+        Unpack(pByttegruppe.id).ToString(),
+        Unpack(pByttegruppe.kode),
+        Unpack(pByttegruppe.gyldigFraDato),
+        Unpack(pByttegruppe.beskrivelseByttbarhet),
+        pByttegruppe.merknadTilByttbarhet
     };
 }
 

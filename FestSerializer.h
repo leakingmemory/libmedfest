@@ -30,6 +30,7 @@
 #include "Struct/Packed/POppfRefusjon.h"
 #include "Struct/Packed/POppfVilkar.h"
 #include "Struct/Packed/POppfVarselSlv.h"
+#include "Struct/Packed/POppfByttegruppe.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -64,6 +65,7 @@ struct FestFirstHeader {
     uint16_t numRefusjon;
     uint16_t numVilkar;
     uint16_t numVarselSlv;
+    uint16_t numByttegruppe;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -98,6 +100,7 @@ private:
     std::vector<POppfRefusjon> refusjon{};
     std::vector<POppfVilkar> vilkar{};
     std::vector<POppfVarselSlv> varselSlv{};
+    std::vector<POppfByttegruppe> byttegruppe{};
     int percentDone;
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
@@ -125,6 +128,7 @@ private:
     bool Visit(const OppfRefusjon &refusjon) override;
     bool Visit(const OppfVilkar &vilkar) override;
     bool Visit(const OppfVarselSlv &varselSlv) override;
+    bool Visit(const OppfByttegruppe &byttegruppe) override;
 };
 
 

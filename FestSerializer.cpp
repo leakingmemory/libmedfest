@@ -104,6 +104,9 @@ bool FestSerializer::Write() {
     if (varselSlv.size() >= (1 << 16)) {
         throw PackException("Max oppf varsel slv size\n");
     }
+    if (byttegruppe.size() >= (1 << 16)) {
+        throw PackException("Max oppf byttegruppe size\n");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -130,7 +133,8 @@ bool FestSerializer::Write() {
         .numRefusjonskode = (uint16_t) refusjonskodeList.size(),
         .numRefusjon = (uint16_t) refusjon.size(),
         .numVilkar = (uint16_t) vilkar.size(),
-        .numVarselSlv = (uint16_t) varselSlv.size()
+        .numVarselSlv = (uint16_t) varselSlv.size(),
+        .numByttegruppe = (uint16_t) byttegruppe.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -313,6 +317,20 @@ bool FestSerializer::Write() {
     {
         auto *ptr = varselSlv.data();
         auto size = varselSlv.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = byttegruppe.data();
+        auto size = byttegruppe.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -585,5 +603,10 @@ bool FestSerializer::Visit(const OppfVilkar &vilkar) {
 
 bool FestSerializer::Visit(const OppfVarselSlv &varselSlv) {
     this->varselSlv.emplace_back(varselSlv, valueWithCodesetList, festUuidList, festidblock, stringblock, stringblockCache);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfByttegruppe &byttegruppe) {
+    this->byttegruppe.emplace_back(byttegruppe, festidblock, stringblock, stringblockCache);
     return true;
 }

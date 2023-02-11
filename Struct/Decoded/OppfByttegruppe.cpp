@@ -4,18 +4,6 @@
 
 #include "OppfByttegruppe.h"
 
-std::string OppfByttegruppe::GetId() const {
-    return id;
-}
-
-std::string OppfByttegruppe::GetTidspunkt() const {
-    return tidspunkt;
-}
-
-Status OppfByttegruppe::GetStatus() const {
-    return status;
-}
-
 Byttegruppe OppfByttegruppe::GetByttegruppe() const {
     return byttegruppe;
 }

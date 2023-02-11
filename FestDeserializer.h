@@ -35,6 +35,7 @@
 #include "Struct/Packed/POppfVilkar.h"
 #include "Struct/Packed/PElement.h"
 #include "Struct/Packed/POppfVarselSlv.h"
+#include "Struct/Packed/POppfByttegruppe.h"
 
 class FestDeserializer {
 private:
@@ -53,6 +54,7 @@ private:
     const POppfRefusjon *refusjon;
     const POppfVilkar *vilkar;
     const POppfVarselSlv *varselSlv;
+    const POppfByttegruppe *byttegruppe;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -80,6 +82,7 @@ private:
     size_t numRefusjon;
     size_t numVilkar;
     size_t numVarselSlv;
+    size_t numByttegruppe;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
@@ -124,6 +127,7 @@ public:
     void ForEachRefusjon(const std::function<void (const POppfRefusjon &)> &) const;
     void ForEachVilkar(const std::function<void (const POppfVilkar &)> &) const;
     void ForEachVarselSlv(const std::function<void (const POppfVarselSlv &)> &) const;
+    void ForEachByttegruppe(const std::function<void (const POppfByttegruppe &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -143,6 +147,7 @@ public:
     [[nodiscard]] OppfRefusjon Unpack(const POppfRefusjon &poppf) const;
     [[nodiscard]] OppfVilkar Unpack(const POppfVilkar &poppf) const;
     [[nodiscard]] OppfVarselSlv Unpack(const POppfVarselSlv &poppf) const;
+    [[nodiscard]] OppfByttegruppe Unpack(const POppfByttegruppe &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
@@ -155,6 +160,7 @@ public:
     [[nodiscard]] Refusjonshjemmel Unpack(const PRefusjonshjemmel &pRefusjonshjemmel) const;
     [[nodiscard]] Vilkar Unpack(const PVilkar &pVilkar) const;
     [[nodiscard]] VarselSlv Unpack(const PVarselSlv &pVarselSlv) const;
+    [[nodiscard]] Byttegruppe Unpack(const PByttegruppe &pByttegruppe) const;
     [[nodiscard]] Legemiddel Unpack(const PLegemiddel &pLegemiddel) const;
     [[nodiscard]] LegemiddelCore Unpack(const PLegemiddelCore &pLegemiddelCore) const;
     [[nodiscard]] AdministreringLegemiddel Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const;

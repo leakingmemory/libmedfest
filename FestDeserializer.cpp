@@ -185,6 +185,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    interaksjon = (POppfInteraksjon *) (void *) (((uint8_t *) mapping) + offset);
+    numInteraksjon = header->numInteraksjon;
+    offset += ((size_t) numInteraksjon) * sizeof(*interaksjon);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -298,6 +308,36 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     refusjonskodeList = (const PRefusjonskode *) (void *) (((uint8_t *) mapping) + offset);
     numRefusjonskode = header->numRefusjonskode;
     offset += ((size_t) numRefusjonskode) * sizeof(*refusjonskodeList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    referanseList = (const PReferanse *) (void *) (((uint8_t *) mapping) + offset);
+    numReferanseList = header->numReferanseList;
+    offset += ((size_t) numReferanseList) * sizeof(*referanseList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    substansgruppeList = (const PSubstansgruppe *) (void *) (((uint8_t *) mapping) + offset);
+    numSubstansgruppeList = header->numSubstansgruppeList;
+    offset += ((size_t) numSubstansgruppeList) * sizeof(*substansgruppeList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    substansList = (const PSubstans *) (void *) (((uint8_t *) mapping) + offset);
+    numSubstansList = header->numSubstansList;
+    offset += ((size_t) numSubstansList) * sizeof(*substansList);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -447,6 +487,33 @@ std::vector<PRefusjonskode> FestDeserializer::GetRefusjonskode() const {
     return refusjonskode;
 }
 
+std::vector<PReferanse> FestDeserializer::GetReferanse() const {
+    std::vector<PReferanse> referanse{};
+    referanse.reserve(numReferanseList);
+    for (std::remove_const<typeof(numReferanseList)>::type i = 0; i < numReferanseList; i++) {
+        referanse.emplace_back(this->referanseList[i]);
+    }
+    return referanse;
+}
+
+std::vector<PSubstansgruppe> FestDeserializer::GetSubstansgruppe() const {
+    std::vector<PSubstansgruppe> substansgruppe{};
+    substansgruppe.reserve(numSubstansgruppeList);
+    for (std::remove_const<typeof(numSubstansgruppeList)>::type i = 0; i < numSubstansgruppeList; i++) {
+        substansgruppe.emplace_back(this->substansgruppeList[i]);
+    }
+    return substansgruppe;
+}
+
+std::vector<PSubstans> FestDeserializer::GetSubstans() const {
+    std::vector<PSubstans> substans{};
+    substans.reserve(numSubstansList);
+    for (std::remove_const<typeof(numSubstansList)>::type i = 0; i < numSubstansList; i++) {
+        substans.emplace_back(this->substansList[i]);
+    }
+    return substans;
+}
+
 std::vector<PString> FestDeserializer::GetStringList() const {
     std::vector<PString> strings{};
     strings.reserve(numStringList);
@@ -537,6 +604,12 @@ void FestDeserializer::ForEachVarselSlv(const std::function<void(const POppfVars
 void FestDeserializer::ForEachByttegruppe(const std::function<void(const POppfByttegruppe &)> &func) const {
     for (std::remove_const<typeof(numByttegruppe)>::type i = 0; i < numByttegruppe; i++) {
         func(this->byttegruppe[i]);
+    }
+}
+
+void FestDeserializer::ForEachInteraksjon(const std::function<void(const POppfInteraksjon &)> &func) const {
+    for (std::remove_const<typeof(numInteraksjon)>::type i = 0; i < numInteraksjon; i++) {
+        func(this->interaksjon[i]);
     }
 }
 
@@ -637,6 +710,10 @@ OppfVarselSlv FestDeserializer::Unpack(const POppfVarselSlv &poppf) const {
 
 OppfByttegruppe FestDeserializer::Unpack(const POppfByttegruppe &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PByttegruppe>(poppf))};
+}
+
+OppfInteraksjon FestDeserializer::Unpack(const POppfInteraksjon &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PInteraksjon>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -881,6 +958,42 @@ Byttegruppe FestDeserializer::Unpack(const PByttegruppe &pByttegruppe) const {
         Unpack(pByttegruppe.gyldigFraDato),
         Unpack(pByttegruppe.beskrivelseByttbarhet),
         pByttegruppe.merknadTilByttbarhet
+    };
+}
+
+Interaksjon FestDeserializer::Unpack(const PInteraksjon &pInteraksjon) const {
+    std::vector<Visningsregel> visningsregel{};
+    {
+        auto list = Unpack(valueWithCodesetList, numValueWithCodesetList, pInteraksjon.visningsregel);
+        for (const auto &item : list) {
+            visningsregel.emplace_back(Unpack(item));
+        }
+    }
+    std::vector<Referanse> referanse{};
+    {
+        auto list = Unpack(referanseList, numReferanseList, pInteraksjon.referanse);
+        for (const auto &item : list) {
+            referanse.emplace_back(Unpack(item));
+        }
+    }
+    std::vector<Substansgruppe> substansgruppe{};
+    {
+        auto list = Unpack(substansgruppeList, numSubstansgruppeList, pInteraksjon.substansgruppe);
+        for (const auto &item : list) {
+            substansgruppe.emplace_back(Unpack(item));
+        }
+    }
+    return {
+        Unpack(pInteraksjon.id).ToString(),
+        {Unpack(pInteraksjon.relevans)},
+        Unpack(pInteraksjon.kliniskKonsekvens),
+        Unpack(pInteraksjon.interaksjonsmekanisme),
+        Unpack(pInteraksjon.kildegrunnlag),
+        Unpack(pInteraksjon.handtering),
+        visningsregel,
+        referanse,
+        substansgruppe,
+        Unpack(pInteraksjon.situasjonskriterium)
     };
 }
 
@@ -1134,6 +1247,35 @@ Referanseelement FestDeserializer::Unpack(const PReferanseelement &pReferanseele
     return {
         Unpack(pReferanseelement.klasse),
         refs
+    };
+}
+
+Referanse FestDeserializer::Unpack(const PReferanse &pReferanse) const {
+    return {
+        Unpack(pReferanse.kilde),
+        Unpack(pReferanse.lenke)
+    };
+}
+
+Substansgruppe FestDeserializer::Unpack(const PSubstansgruppe &pSubstansgruppe) const {
+    std::vector<Substans> substans{};
+    {
+        auto list = Unpack(substansList, numSubstansList, pSubstansgruppe.substans);
+        for (const auto &item : list) {
+            substans.emplace_back(Unpack(item));
+        }
+    }
+    return {
+        substans,
+        Unpack(pSubstansgruppe.navn)
+    };
+}
+
+Substans FestDeserializer::Unpack(const PSubstans &pSubstans) const {
+    return {
+        Unpack(pSubstans.substans),
+        Unpack(pSubstans.atc),
+        Unpack(pSubstans.refVirkestoff).ToString()
     };
 }
 

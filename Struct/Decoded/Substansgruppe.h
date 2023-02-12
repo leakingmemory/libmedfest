@@ -8,7 +8,10 @@
 #include "Substans.h"
 #include <vector>
 
+class PSubstansgruppe;
+
 class Substansgruppe {
+    friend PSubstansgruppe;
 private:
     std::vector<Substans> substans;
     std::string navn{};

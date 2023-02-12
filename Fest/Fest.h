@@ -69,6 +69,7 @@ public:
     [[nodiscard]] virtual bool Visit(const OppfVilkar &vilkar) = 0;
     [[nodiscard]] virtual bool Visit(const OppfVarselSlv &varselSlv) = 0;
     [[nodiscard]] virtual bool Visit(const OppfByttegruppe &byttegruppe) = 0;
+    [[nodiscard]] virtual bool Visit(const OppfInteraksjon &interaksjon) = 0;
 };
 
 class Fest : public XMLObject {

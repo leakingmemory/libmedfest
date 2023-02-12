@@ -11,3 +11,7 @@ std::string Substans::GetSubstans() const {
 Atc Substans::GetAtc() const {
     return atc;
 }
+
+std::string Substans::GetRefVirkestoff() const {
+    return refVirkestoff;
+}

@@ -7,7 +7,10 @@
 
 #include "Atc.h"
 
+class PSubstans;
+
 class Substans {
+    friend PSubstans;
 private:
     std::string substans;
     Atc atc;

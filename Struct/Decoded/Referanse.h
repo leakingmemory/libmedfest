@@ -7,7 +7,10 @@
 
 #include <string>
 
+class PReferanse;
+
 class Referanse {
+    friend PReferanse;
 private:
     std::string kilde;
     std::string lenke;

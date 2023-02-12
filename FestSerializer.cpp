@@ -107,6 +107,18 @@ bool FestSerializer::Write() {
     if (byttegruppe.size() >= (1 << 16)) {
         throw PackException("Max oppf byttegruppe size\n");
     }
+    if (referanseList.size() >= (1 << 16)) {
+        throw PackException("Max referanse list storage size\n");
+    }
+    if (substansgruppeList.size() >= (1 << 16)) {
+        throw PackException("Max substansgruppe list storage size\n");
+    }
+    if (substansList.size() >= (1 << 16)) {
+        throw PackException("Max substans list storage size\n");
+    }
+    if (interaksjon.size() >= (1 << 16)) {
+        throw PackException("Max num interaksjon\n");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -134,7 +146,11 @@ bool FestSerializer::Write() {
         .numRefusjon = (uint16_t) refusjon.size(),
         .numVilkar = (uint16_t) vilkar.size(),
         .numVarselSlv = (uint16_t) varselSlv.size(),
-        .numByttegruppe = (uint16_t) byttegruppe.size()
+        .numByttegruppe = (uint16_t) byttegruppe.size(),
+        .numReferanseList = (uint16_t) referanseList.size(),
+        .numSubstansgruppeList = (uint16_t) substansgruppeList.size(),
+        .numSubstansList = (uint16_t) substansList.size(),
+        .numInteraksjon = (uint16_t) interaksjon.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -343,6 +359,20 @@ bool FestSerializer::Write() {
         }
     }
     {
+        auto *ptr = interaksjon.data();
+        auto size = interaksjon.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
         auto *ptr = festidblock.data();
         auto size = festidblock.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
@@ -522,6 +552,51 @@ bool FestSerializer::Write() {
         }
     }
     {
+        auto list = referanseList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto list = substansgruppeList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto list = substansList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
         auto list = stringList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
@@ -608,5 +683,10 @@ bool FestSerializer::Visit(const OppfVarselSlv &varselSlv) {
 
 bool FestSerializer::Visit(const OppfByttegruppe &byttegruppe) {
     this->byttegruppe.emplace_back(byttegruppe, festidblock, stringblock, stringblockCache);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfInteraksjon &interaksjon) {
+    this->interaksjon.emplace_back(interaksjon, referanseList, substansgruppeList, substansList, valueWithCodesetList, festidblock, stringblock, stringblockCache);
     return true;
 }

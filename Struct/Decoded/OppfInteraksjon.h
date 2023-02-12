@@ -8,7 +8,10 @@
 #include "OppfInteraksjonBase.h"
 #include "Interaksjon.h"
 
+class POppfInteraksjon;
+
 class OppfInteraksjon : public OppfInteraksjonBase {
+    friend POppfInteraksjon;
 private:
     Interaksjon interaksjon;
 public:

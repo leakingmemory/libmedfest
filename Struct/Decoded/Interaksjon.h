@@ -12,7 +12,10 @@
 #include "Substansgruppe.h"
 #include <vector>
 
+class PInteraksjon;
+
 class Interaksjon {
+    friend PInteraksjon;
 private:
     std::string id;
     Relevans relevans;

@@ -21,6 +21,9 @@
 #include "Struct/Packed/ElementList.h"
 #include "Struct/Packed/RefRefusjonsvilkarList.h"
 #include "Struct/Packed/RefusjonskodeList.h"
+#include "Struct/Packed/ReferanseList.h"
+#include "Struct/Packed/SubstansgruppeList.h"
+#include "Struct/Packed/SubstansList.h"
 #include "Struct/Packed/POppfLegemiddelVirkestoff.h"
 #include "Struct/Packed/POppfHandelsvare.h"
 #include "Struct/Packed/POppfLegemiddeldose.h"
@@ -31,6 +34,7 @@
 #include "Struct/Packed/POppfVilkar.h"
 #include "Struct/Packed/POppfVarselSlv.h"
 #include "Struct/Packed/POppfByttegruppe.h"
+#include "Struct/Packed/POppfInteraksjon.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -66,6 +70,10 @@ struct FestFirstHeader {
     uint16_t numVilkar;
     uint16_t numVarselSlv;
     uint16_t numByttegruppe;
+    uint16_t numReferanseList;
+    uint16_t numSubstansgruppeList;
+    uint16_t numSubstansList;
+    uint16_t numInteraksjon;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -86,6 +94,9 @@ private:
     ElementList elementList{};
     RefRefusjonsvilkarList refRefusjonsvilkarList{};
     RefusjonskodeList refusjonskodeList{};
+    ReferanseList referanseList{};
+    SubstansgruppeList substansgruppeList{};
+    SubstansList substansList{};
     StringList stringList{};
     std::vector<POppfLegemiddelMerkevare> legemiddelMerkevare{};
     std::vector<POppfLegemiddelpakning> legemiddelpakning{};
@@ -101,6 +112,7 @@ private:
     std::vector<POppfVilkar> vilkar{};
     std::vector<POppfVarselSlv> varselSlv{};
     std::vector<POppfByttegruppe> byttegruppe{};
+    std::vector<POppfInteraksjon> interaksjon{};
     int percentDone;
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
@@ -129,6 +141,7 @@ private:
     bool Visit(const OppfVilkar &vilkar) override;
     bool Visit(const OppfVarselSlv &varselSlv) override;
     bool Visit(const OppfByttegruppe &byttegruppe) override;
+    bool Visit(const OppfInteraksjon &interaksjon) override;
 };
 
 

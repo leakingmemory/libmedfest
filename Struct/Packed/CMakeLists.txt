@@ -27,6 +27,9 @@ add_library(packed OBJECT PackException.cpp PackException.h PFestId.cpp PFestId.
         POppfRefusjon.cpp POppfRefusjon.h PRefusjonskode.cpp PRefusjonskode.h RefusjonskodeList.cpp RefusjonskodeList.h
         PStrukturertVilkar.cpp PStrukturertVilkar.h PVilkar.cpp PVilkar.h POppfVilkar.cpp POppfVilkar.h
         PReferanseelement.cpp PReferanseelement.h PVarselSlv.cpp PVarselSlv.h POppfVarselSlv.cpp POppfVarselSlv.h
-        PByttegruppe.cpp PByttegruppe.h POppfByttegruppe.cpp POppfByttegruppe.h)
+        PByttegruppe.cpp PByttegruppe.h POppfByttegruppe.cpp POppfByttegruppe.h PInteraksjon.cpp PInteraksjon.h
+        PReferanse.cpp PReferanse.h ReferanseList.cpp ReferanseList.h PSubstans.cpp PSubstans.h
+        SubstansList.cpp SubstansList.h PSubstansgruppe.cpp PSubstansgruppe.h POppfInteraksjon.cpp POppfInteraksjon.h
+        SubstansgruppeList.cpp SubstansgruppeList.h)
 
 include_directories(packed ${Boost_INCLUDE_DIRS} )

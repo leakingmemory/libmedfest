@@ -16,6 +16,7 @@
 #include "Struct/Decoded/OppfVilkar.h"
 #include "Struct/Decoded/OppfVarselSlv.h"
 #include "Struct/Decoded/OppfByttegruppe.h"
+#include "Struct/Decoded/OppfInteraksjon.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -129,6 +130,26 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         }
         for (const auto &refRefusjonsvilkar : refusjonskode.GetRefusjonsvilkar()) {
             std::cout << "  - " << refRefusjonsvilkar.GetId() << " " << refRefusjonsvilkar.GetFraDato() << "\n";
+        }
+    }
+    std::cout << "Referanse list storage dump:\n";
+    for (const auto &pref : festDeserializer.GetReferanse()) {
+        auto referanse = festDeserializer.Unpack(pref);
+        std::cout << " " << referanse.GetKilde() << " " << referanse.GetLenke() << "\n";
+    }
+    std::cout << "Substans list storage dump:\n";
+    for (const auto &psub : festDeserializer.GetSubstans()) {
+        auto substans = festDeserializer.Unpack(psub);
+        std::cout << " " << substans.GetAtc().GetValue() << " " << substans.GetSubstans() << " "
+                  << substans.GetRefVirkestoff() << "\n";
+    }
+    std::cout << "Substansgruppe list storage dump:\n";
+    for (const auto &psub : festDeserializer.GetSubstansgruppe()) {
+        auto substansgruppe = festDeserializer.Unpack(psub);
+        std::cout << " " << substansgruppe.GetNavn() << "\n";
+        for (const auto &substans : substansgruppe.GetSubstans()) {
+            std::cout << "   " << substans.GetAtc().GetValue() << " " << substans.GetSubstans() << " "
+                      << substans.GetRefVirkestoff() << "\n";
         }
     }
     std::cout << "Merkevarer:\n";
@@ -308,6 +329,28 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
                   << byttegruppe.GetId() << " " << byttegruppe.GetGyldigFraDato() << " "
                   << byttegruppe.GetKode().GetDistinguishedName() << " " << byttegruppe.GetBeskrivelseByttbarhet()
                   << " " << (byttegruppe.GetMerknadTilByttbarhet() ? "true" : "false") << "\n";
+    });
+    std::cout << "Interaksjoner:\n";
+    festDeserializer.ForEachInteraksjon([&festDeserializer] (const POppfInteraksjon &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto interaksjon = oppf.GetInteraksjon();
+        std::cout << " " << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << interaksjon.GetId() << " " << interaksjon.GetRelevans().GetDistinguishedName() << " "
+                  << interaksjon.GetInteraksjonsmekanisme() << " " << interaksjon.GetKliniskKonsekvens() << " "
+                  << interaksjon.GetHandtering() << " " << interaksjon.GetKildegrunnlag().GetDistinguishedName() << "\n";
+        for (const auto &visningsregel : interaksjon.GetVisningsregel()) {
+            std::cout << " - " << visningsregel.GetDistinguishedName() << "\n";
+        }
+        for (const auto &referanse : interaksjon.GetReferanse()) {
+            std::cout << " * " << referanse.GetKilde() << " " << referanse.GetLenke() << "\n";
+        }
+        for (const auto &substansgruppe : interaksjon.GetSubstansgruppe()) {
+            std::cout << " - " << substansgruppe.GetNavn() << "\n";
+            for (const auto &substans : substansgruppe.GetSubstans()) {
+                std::cout << "    - " << substans.GetAtc().GetValue() << " " << substans.GetSubstans() << " "
+                          << substans.GetRefVirkestoff() << "\n";
+            }
+        }
     });
     return 0;
 }

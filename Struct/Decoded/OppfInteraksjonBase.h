@@ -5,20 +5,14 @@
 #ifndef LEGEMFEST_OPPFINTERAKSJONBASE_H
 #define LEGEMFEST_OPPFINTERAKSJONBASE_H
 
-#include "Status.h"
+#include "Oppf.h"
 
-class OppfInteraksjonBase {
-private:
-    std::string id;
-    std::string tidstempel;
-    Status status;
+class OppfInteraksjonBase : public Oppf {
 public:
-    OppfInteraksjonBase() : id(), tidstempel(), status() {}
+    OppfInteraksjonBase() : Oppf() {}
+    OppfInteraksjonBase(const Oppf &oppf) : Oppf(oppf) {}
     OppfInteraksjonBase(const std::string &id, const std::string &tidsstempel, const Status &status) :
-            id(id), tidstempel(tidsstempel), status(status) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidsstempel, status) {}
 };
 
 

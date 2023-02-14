@@ -35,6 +35,7 @@
 #include "Struct/Packed/POppfVarselSlv.h"
 #include "Struct/Packed/POppfByttegruppe.h"
 #include "Struct/Packed/POppfInteraksjon.h"
+#include "Struct/Packed/POppfInteraksjonIkkeVurdert.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -74,6 +75,7 @@ struct FestFirstHeader {
     uint16_t numSubstansgruppeList;
     uint16_t numSubstansList;
     uint16_t numInteraksjon;
+    uint16_t numInteraksjonIkkeVurdert;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -113,6 +115,7 @@ private:
     std::vector<POppfVarselSlv> varselSlv{};
     std::vector<POppfByttegruppe> byttegruppe{};
     std::vector<POppfInteraksjon> interaksjon{};
+    std::vector<POppfInteraksjonIkkeVurdert> interaksjonIkkeVurdert{};
     int percentDone;
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
@@ -142,6 +145,7 @@ private:
     bool Visit(const OppfVarselSlv &varselSlv) override;
     bool Visit(const OppfByttegruppe &byttegruppe) override;
     bool Visit(const OppfInteraksjon &interaksjon) override;
+    bool Visit(const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) override;
 };
 
 

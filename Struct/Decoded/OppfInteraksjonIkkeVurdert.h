@@ -8,7 +8,10 @@
 #include "OppfInteraksjonBase.h"
 #include "InteraksjonIkkeVurdert.h"
 
+class POppfInteraksjonIkkeVurdert;
+
 class OppfInteraksjonIkkeVurdert : public OppfInteraksjonBase {
+    friend POppfInteraksjonIkkeVurdert;
 private:
     InteraksjonIkkeVurdert interaksjonIkkeVurdert;
 public:

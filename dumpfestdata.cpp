@@ -17,6 +17,7 @@
 #include "Struct/Decoded/OppfVarselSlv.h"
 #include "Struct/Decoded/OppfByttegruppe.h"
 #include "Struct/Decoded/OppfInteraksjon.h"
+#include "Struct/Decoded/OppfInteraksjonIkkeVurdert.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -351,6 +352,13 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
                           << substans.GetRefVirkestoff() << "\n";
             }
         }
+    });
+    festDeserializer.ForEachInteraksjonIkkeVurdert([&festDeserializer] (const POppfInteraksjonIkkeVurdert &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto interaksjonIkkeVurdert = oppf.GetInteraksjonIkkeVurdert();
+        std::cout << " " << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << interaksjonIkkeVurdert.GetAtc().GetValue() << " "
+                  << interaksjonIkkeVurdert.GetAtc().GetDistinguishedName() << "\n";
     });
     return 0;
 }

@@ -7,7 +7,10 @@
 
 #include "Atc.h"
 
+class PInteraksjonIkkeVurdert;
+
 class InteraksjonIkkeVurdert {
+    friend PInteraksjonIkkeVurdert;
 private:
     Atc atc;
 public:

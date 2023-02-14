@@ -30,6 +30,7 @@ add_library(packed OBJECT PackException.cpp PackException.h PFestId.cpp PFestId.
         PByttegruppe.cpp PByttegruppe.h POppfByttegruppe.cpp POppfByttegruppe.h PInteraksjon.cpp PInteraksjon.h
         PReferanse.cpp PReferanse.h ReferanseList.cpp ReferanseList.h PSubstans.cpp PSubstans.h
         SubstansList.cpp SubstansList.h PSubstansgruppe.cpp PSubstansgruppe.h POppfInteraksjon.cpp POppfInteraksjon.h
-        SubstansgruppeList.cpp SubstansgruppeList.h)
+        SubstansgruppeList.cpp SubstansgruppeList.h PInteraksjonIkkeVurdert.cpp PInteraksjonIkkeVurdert.h
+        POppfInteraksjonIkkeVurdert.cpp POppfInteraksjonIkkeVurdert.h)
 
 include_directories(packed ${Boost_INCLUDE_DIRS} )

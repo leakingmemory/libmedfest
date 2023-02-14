@@ -119,6 +119,9 @@ bool FestSerializer::Write() {
     if (interaksjon.size() >= (1 << 16)) {
         throw PackException("Max num interaksjon\n");
     }
+    if (interaksjonIkkeVurdert.size() >= (1 << 16)) {
+        throw PackException("Max num interaksjon ikke vurdert\n");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -150,7 +153,8 @@ bool FestSerializer::Write() {
         .numReferanseList = (uint16_t) referanseList.size(),
         .numSubstansgruppeList = (uint16_t) substansgruppeList.size(),
         .numSubstansList = (uint16_t) substansList.size(),
-        .numInteraksjon = (uint16_t) interaksjon.size()
+        .numInteraksjon = (uint16_t) interaksjon.size(),
+        .numInteraksjonIkkeVurdert = (uint16_t) interaksjonIkkeVurdert.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -361,6 +365,20 @@ bool FestSerializer::Write() {
     {
         auto *ptr = interaksjon.data();
         auto size = interaksjon.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = interaksjonIkkeVurdert.data();
+        auto size = interaksjonIkkeVurdert.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -688,5 +706,10 @@ bool FestSerializer::Visit(const OppfByttegruppe &byttegruppe) {
 
 bool FestSerializer::Visit(const OppfInteraksjon &interaksjon) {
     this->interaksjon.emplace_back(interaksjon, referanseList, substansgruppeList, substansList, valueWithCodesetList, festidblock, stringblock, stringblockCache);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) {
+    this->interaksjonIkkeVurdert.emplace_back(interaksjonIkkeVurdert, festidblock, stringblock, stringblockCache);
     return true;
 }

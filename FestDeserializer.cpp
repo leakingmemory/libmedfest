@@ -195,6 +195,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    interaksjonIkkeVurdert = (POppfInteraksjonIkkeVurdert *) (void *) (((uint8_t *) mapping) + offset);
+    numInteraksjonIkkeVurdert = header->numInteraksjonIkkeVurdert;
+    offset += ((size_t) numInteraksjonIkkeVurdert) * sizeof(*interaksjonIkkeVurdert);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -613,6 +623,12 @@ void FestDeserializer::ForEachInteraksjon(const std::function<void(const POppfIn
     }
 }
 
+void FestDeserializer::ForEachInteraksjonIkkeVurdert(const std::function<void(const POppfInteraksjonIkkeVurdert &)> &func) const {
+    for (std::remove_const<typeof(numInteraksjonIkkeVurdert)>::type i = 0; i < numInteraksjonIkkeVurdert; i++) {
+        func(this->interaksjonIkkeVurdert[i]);
+    }
+}
+
 std::string FestDeserializer::Unpack(const PString &str) const {
     return str.ToString(stringblock, stringblocksize);
 }
@@ -714,6 +730,10 @@ OppfByttegruppe FestDeserializer::Unpack(const POppfByttegruppe &poppf) const {
 
 OppfInteraksjon FestDeserializer::Unpack(const POppfInteraksjon &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PInteraksjon>(poppf))};
+}
+
+OppfInteraksjonIkkeVurdert FestDeserializer::Unpack(const POppfInteraksjonIkkeVurdert &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PInteraksjonIkkeVurdert>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -995,6 +1015,10 @@ Interaksjon FestDeserializer::Unpack(const PInteraksjon &pInteraksjon) const {
         substansgruppe,
         Unpack(pInteraksjon.situasjonskriterium)
     };
+}
+
+InteraksjonIkkeVurdert FestDeserializer::Unpack(const PInteraksjonIkkeVurdert &pInteraksjonIkkeVurdert) const {
+    return {Unpack(pInteraksjonIkkeVurdert.atc)};
 }
 
 Legemiddel FestDeserializer::Unpack(const PLegemiddel &pLegemiddel) const {

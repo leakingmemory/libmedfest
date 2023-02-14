@@ -37,6 +37,7 @@
 #include "Struct/Packed/POppfVarselSlv.h"
 #include "Struct/Packed/POppfByttegruppe.h"
 #include "Struct/Packed/POppfInteraksjon.h"
+#include "Struct/Packed/POppfInteraksjonIkkeVurdert.h"
 #include "Struct/Packed/PReferanse.h"
 #include "Struct/Packed/PSubstansgruppe.h"
 #include "Struct/Packed/PSubstans.h"
@@ -60,6 +61,7 @@ private:
     const POppfVarselSlv *varselSlv;
     const POppfByttegruppe *byttegruppe;
     const POppfInteraksjon *interaksjon;
+    const POppfInteraksjonIkkeVurdert *interaksjonIkkeVurdert;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -92,6 +94,7 @@ private:
     size_t numVarselSlv;
     size_t numByttegruppe;
     size_t numInteraksjon;
+    size_t numInteraksjonIkkeVurdert;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
@@ -144,6 +147,7 @@ public:
     void ForEachVarselSlv(const std::function<void (const POppfVarselSlv &)> &) const;
     void ForEachByttegruppe(const std::function<void (const POppfByttegruppe &)> &) const;
     void ForEachInteraksjon(const std::function<void (const POppfInteraksjon &)> &) const;
+    void ForEachInteraksjonIkkeVurdert(const std::function<void (const POppfInteraksjonIkkeVurdert &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -165,6 +169,7 @@ public:
     [[nodiscard]] OppfVarselSlv Unpack(const POppfVarselSlv &poppf) const;
     [[nodiscard]] OppfByttegruppe Unpack(const POppfByttegruppe &poppf) const;
     [[nodiscard]] OppfInteraksjon Unpack(const POppfInteraksjon &poppf) const;
+    [[nodiscard]] OppfInteraksjonIkkeVurdert Unpack(const POppfInteraksjonIkkeVurdert &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
@@ -179,6 +184,7 @@ public:
     [[nodiscard]] VarselSlv Unpack(const PVarselSlv &pVarselSlv) const;
     [[nodiscard]] Byttegruppe Unpack(const PByttegruppe &pByttegruppe) const;
     [[nodiscard]] Interaksjon Unpack(const PInteraksjon &pInteraksjon) const;
+    [[nodiscard]] InteraksjonIkkeVurdert Unpack(const PInteraksjonIkkeVurdert &pInteraksjonIkkeVurdert) const;
     [[nodiscard]] Legemiddel Unpack(const PLegemiddel &pLegemiddel) const;
     [[nodiscard]] LegemiddelCore Unpack(const PLegemiddelCore &pLegemiddelCore) const;
     [[nodiscard]] AdministreringLegemiddel Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const;

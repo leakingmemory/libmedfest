@@ -4,12 +4,12 @@
 
 #include "PFestId.h"
 
-PFestId::PFestId(const std::string &id, std::vector<FestUuid> &uuidblock) {
+PFestId::PFestId(const std::string &id, std::vector<FestUuid> &uuidblock, bool caseSensitive) {
     if (id.empty()) {
         this->id = 0;
         return;
     }
-    FestUuid festId{id};
+    FestUuid festId{id, caseSensitive};
     for (typeof(uuidblock.size()) i = 0; i < uuidblock.size(); i++) {
         if (festId == uuidblock[i]) {
             this->id = i + 1;

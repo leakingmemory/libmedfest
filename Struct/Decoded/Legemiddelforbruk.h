@@ -7,7 +7,10 @@
 
 #include "Dosering.h"
 
+class PLegemiddelforbruk;
+
 class Legemiddelforbruk {
+    friend PLegemiddelforbruk;
 private:
     int lopenr;
     int iterasjoner;

@@ -122,6 +122,18 @@ bool FestSerializer::Write() {
     if (interaksjonIkkeVurdert.size() >= (1 << 16)) {
         throw PackException("Max num interaksjon ikke vurdert\n");
     }
+    if (doseFastTidspunktList.size() >= (1 << 16)) {
+        throw PackException("Max dose fast tidspunkt list storage size\n");
+    }
+    if (doseringList.size() >= (1 << 16)) {
+        throw PackException("Max dosering list storage size\n");
+    }
+    if (legemiddelforbrukList.size() >= (1 << 16)) {
+        throw PackException("Max legemiddelforbruk list storage size\n");
+    }
+    if (strDosering.size() >= (1 << 16)) {
+        throw PackException("Max str dosering size\n");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -154,7 +166,11 @@ bool FestSerializer::Write() {
         .numSubstansgruppeList = (uint16_t) substansgruppeList.size(),
         .numSubstansList = (uint16_t) substansList.size(),
         .numInteraksjon = (uint16_t) interaksjon.size(),
-        .numInteraksjonIkkeVurdert = (uint16_t) interaksjonIkkeVurdert.size()
+        .numInteraksjonIkkeVurdert = (uint16_t) interaksjonIkkeVurdert.size(),
+        .numDoseFastTidspunktList = (uint16_t) doseFastTidspunktList.size(),
+        .numDoseringList = (uint16_t) doseringList.size(),
+        .numLegemiddelforbrukList = (uint16_t) legemiddelforbrukList.size(),
+        .numStrDosering = (uint16_t) strDosering.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -391,6 +407,20 @@ bool FestSerializer::Write() {
         }
     }
     {
+        auto *ptr = strDosering.data();
+        auto size = strDosering.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
         auto *ptr = festidblock.data();
         auto size = festidblock.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
@@ -615,6 +645,51 @@ bool FestSerializer::Write() {
         }
     }
     {
+        auto list = doseFastTidspunktList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto list = doseringList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto list = legemiddelforbrukList.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
         auto list = stringList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
@@ -711,5 +786,11 @@ bool FestSerializer::Visit(const OppfInteraksjon &interaksjon) {
 
 bool FestSerializer::Visit(const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) {
     this->interaksjonIkkeVurdert.emplace_back(interaksjonIkkeVurdert, festidblock, stringblock, stringblockCache);
+    return true;
+}
+
+bool FestSerializer::Visit(const OppfStrDosering &strDosering) {
+    this->strDosering.emplace_back(strDosering, legemiddelforbrukList, doseringList, doseFastTidspunktList, festidblock,
+                                   stringblock, stringblockCache);
     return true;
 }

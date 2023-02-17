@@ -18,6 +18,7 @@
 #include "Struct/Decoded/OppfByttegruppe.h"
 #include "Struct/Decoded/OppfInteraksjon.h"
 #include "Struct/Decoded/OppfInteraksjonIkkeVurdert.h"
+#include "Struct/Decoded/OppfStrDosering.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -151,6 +152,40 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         for (const auto &substans : substansgruppe.GetSubstans()) {
             std::cout << "   " << substans.GetAtc().GetValue() << " " << substans.GetSubstans() << " "
                       << substans.GetRefVirkestoff() << "\n";
+        }
+    }
+    std::cout << "Dose fast tidspunkt list storage dump:\n";
+    for (const auto &pdos : festDeserializer.GetDoseFastTidspunkt()) {
+        auto doseFast = festDeserializer.Unpack(pdos);
+        std::cout << " " << doseFast.GetMengde().GetValue() << doseFast.GetMengde().GetUnit()
+                  << (doseFast.GetGisEksakt() ? " eksakt " : " ") << doseFast.GetTidsomrade().GetDistinguishedName()
+                  << " " << doseFast.GetIntervall().GetValue() << doseFast.GetIntervall().GetUnit() << " dager på "
+                  << doseFast.GetFastDose().GetDagerPa() << " dager av " << doseFast.GetFastDose().GetDagerAv() << "\n";
+    }
+    std::cout << "Dosering list storage dump:\n";
+    for (const auto &pdos : festDeserializer.GetDosering()) {
+        auto dosering = festDeserializer.Unpack(pdos);
+        std::cout << " Dosering:\n";
+        for (const auto &doseFast : dosering.GetDoseFastTidspunkt()) {
+            std::cout << "  " << doseFast.GetMengde().GetValue() << doseFast.GetMengde().GetUnit()
+                      << (doseFast.GetGisEksakt() ? " eksakt " : " ") << doseFast.GetTidsomrade().GetDistinguishedName()
+                      << " " << doseFast.GetIntervall().GetValue() << doseFast.GetIntervall().GetUnit() << " dager på "
+                      << doseFast.GetFastDose().GetDagerPa() << " dager av " << doseFast.GetFastDose().GetDagerAv() << "\n";
+        }
+    }
+    std::cout << "Legemiddelforbruk list storage dump:\n";
+    for (const auto &pleg : festDeserializer.GetLegemiddelforbruk()) {
+        auto legemiddelforbruk = festDeserializer.Unpack(pleg);
+        std::cout << " " << legemiddelforbruk.GetLopenr() << " " << legemiddelforbruk.GetMengde() << " "
+                  << legemiddelforbruk.GetPeriode() << " " << legemiddelforbruk.GetIterasjoner() << "\n";
+        for (const auto &dosering : legemiddelforbruk.GetDosering()) {
+            std::cout << "   Dosering:\n";
+            for (const auto &doseFast : dosering.GetDoseFastTidspunkt()) {
+                std::cout << "    " << doseFast.GetMengde().GetValue() << doseFast.GetMengde().GetUnit()
+                          << (doseFast.GetGisEksakt() ? " eksakt " : " ") << doseFast.GetTidsomrade().GetDistinguishedName()
+                          << " " << doseFast.GetIntervall().GetValue() << doseFast.GetIntervall().GetUnit() << " dager på "
+                          << doseFast.GetFastDose().GetDagerPa() << " dager av " << doseFast.GetFastDose().GetDagerAv() << "\n";
+            }
         }
     }
     std::cout << "Merkevarer:\n";
@@ -359,6 +394,26 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
         std::cout << " " << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
                   << interaksjonIkkeVurdert.GetAtc().GetValue() << " "
                   << interaksjonIkkeVurdert.GetAtc().GetDistinguishedName() << "\n";
+    });
+    festDeserializer.ForEachStrDosering([&festDeserializer] (const POppfStrDosering &poppf) {
+        auto oppf = festDeserializer.Unpack(poppf);
+        auto kortdose = oppf.GetKortdose();
+        std::cout << " " << oppf.GetId() << " " << oppf.GetTidspunkt() << " " << oppf.GetStatus().GetValue() << ": "
+                  << kortdose.GetKortdose().GetValue() << " " << kortdose.GetKortdose().GetDistinguishedName() << ": "
+                  << kortdose.GetBeskrivelseTerm() << "\n";
+        for (const auto &legemiddelforbruk : kortdose.GetLegemiddelforbruk()) {
+            std::cout << "   " << legemiddelforbruk.GetLopenr() << " " << legemiddelforbruk.GetMengde() << " "
+                      << legemiddelforbruk.GetPeriode() << " " << legemiddelforbruk.GetIterasjoner() << "\n";
+            for (const auto &dosering : legemiddelforbruk.GetDosering()) {
+                std::cout << "     Dosering:\n";
+                for (const auto &doseFast : dosering.GetDoseFastTidspunkt()) {
+                    std::cout << "      " << doseFast.GetMengde().GetValue() << doseFast.GetMengde().GetUnit()
+                              << (doseFast.GetGisEksakt() ? " eksakt " : " ") << doseFast.GetTidsomrade().GetDistinguishedName()
+                              << " " << doseFast.GetIntervall().GetValue() << doseFast.GetIntervall().GetUnit() << " dager på "
+                              << doseFast.GetFastDose().GetDagerPa() << " dager av " << doseFast.GetFastDose().GetDagerAv() << "\n";
+                }
+            }
+        }
     });
     return 0;
 }

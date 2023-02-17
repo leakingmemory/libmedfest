@@ -205,6 +205,16 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    strDosering = (POppfStrDosering *) (void *) (((uint8_t *) mapping) + offset);
+    numStrDosering = header->numStrDosering;
+    offset += ((size_t) numStrDosering) * sizeof(*strDosering);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     festUuid = (const FestUuid *) (void *) (((uint8_t *) mapping) + offset);
     numFestUuid = header->numUuids;
     offset += ((size_t) numFestUuid) * sizeof(*festUuid);
@@ -348,6 +358,36 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     substansList = (const PSubstans *) (void *) (((uint8_t *) mapping) + offset);
     numSubstansList = header->numSubstansList;
     offset += ((size_t) numSubstansList) * sizeof(*substansList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    doseFastTidspunktList = (const PDoseFastTidspunkt *) (void *) (((uint8_t *) mapping) + offset);
+    numDoseFastTidspunktList = header->numDoseFastTidspunktList;
+    offset += ((size_t) numDoseFastTidspunktList) * sizeof(*doseFastTidspunktList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    doseringList = (const PDosering *) (void *) (((uint8_t *) mapping) + offset);
+    numDoseringList = header->numDoseringList;
+    offset += ((size_t) numDoseringList) * sizeof(*doseringList);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    legemiddelforbrukList = (const PLegemiddelforbruk *) (void *) (((uint8_t *) mapping) + offset);
+    numLegemiddelforbrukList = header->numLegemiddelforbrukList;
+    offset += ((size_t) numLegemiddelforbrukList) * sizeof(*legemiddelforbrukList);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -524,6 +564,33 @@ std::vector<PSubstans> FestDeserializer::GetSubstans() const {
     return substans;
 }
 
+std::vector<PDoseFastTidspunkt> FestDeserializer::GetDoseFastTidspunkt() const {
+    std::vector<PDoseFastTidspunkt> doseFastTidspunkt{};
+    doseFastTidspunkt.reserve(numDoseFastTidspunktList);
+    for (std::remove_const<typeof(numDoseFastTidspunktList)>::type i = 0; i < numDoseFastTidspunktList; i++) {
+        doseFastTidspunkt.emplace_back(this->doseFastTidspunktList[i]);
+    }
+    return doseFastTidspunkt;
+}
+
+std::vector<PDosering> FestDeserializer::GetDosering() const {
+    std::vector<PDosering> dosering{};
+    dosering.reserve(numDoseringList);
+    for (std::remove_const<typeof(numDoseringList)>::type i = 0; i < numDoseringList; i++) {
+        dosering.emplace_back(this->doseringList[0]);
+    }
+    return dosering;
+}
+
+std::vector<PLegemiddelforbruk> FestDeserializer::GetLegemiddelforbruk() const {
+    std::vector<PLegemiddelforbruk> legemiddelforbruk{};
+    legemiddelforbruk.reserve(numLegemiddelforbrukList);
+    for (std::remove_const<typeof(numLegemiddelforbrukList)>::type i = 0; i < numLegemiddelforbrukList; i++) {
+        legemiddelforbruk.emplace_back(this->legemiddelforbrukList[i]);
+    }
+    return legemiddelforbruk;
+}
+
 std::vector<PString> FestDeserializer::GetStringList() const {
     std::vector<PString> strings{};
     strings.reserve(numStringList);
@@ -626,6 +693,12 @@ void FestDeserializer::ForEachInteraksjon(const std::function<void(const POppfIn
 void FestDeserializer::ForEachInteraksjonIkkeVurdert(const std::function<void(const POppfInteraksjonIkkeVurdert &)> &func) const {
     for (std::remove_const<typeof(numInteraksjonIkkeVurdert)>::type i = 0; i < numInteraksjonIkkeVurdert; i++) {
         func(this->interaksjonIkkeVurdert[i]);
+    }
+}
+
+void FestDeserializer::ForEachStrDosering(const std::function<void(const POppfStrDosering &)> &func) const {
+    for (std::remove_const<typeof(numStrDosering)>::type i = 0; i < numStrDosering; i++) {
+        func(this->strDosering[i]);
     }
 }
 
@@ -734,6 +807,10 @@ OppfInteraksjon FestDeserializer::Unpack(const POppfInteraksjon &poppf) const {
 
 OppfInteraksjonIkkeVurdert FestDeserializer::Unpack(const POppfInteraksjonIkkeVurdert &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PInteraksjonIkkeVurdert>(poppf))};
+}
+
+OppfStrDosering FestDeserializer::Unpack(const POppfStrDosering &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PKortdose>(poppf))};
 }
 
 Oppf FestDeserializer::Unpack(const POppf &poppf) const {
@@ -1021,6 +1098,21 @@ InteraksjonIkkeVurdert FestDeserializer::Unpack(const PInteraksjonIkkeVurdert &p
     return {Unpack(pInteraksjonIkkeVurdert.atc)};
 }
 
+Kortdose FestDeserializer::Unpack(const PKortdose &pKortdose) const {
+    std::vector<Legemiddelforbruk> legemiddelforbruk{};
+    {
+        auto list = Unpack(legemiddelforbrukList, numLegemiddelforbrukList, pKortdose.legemiddelforbruk);
+        for (const auto &item : list) {
+            legemiddelforbruk.emplace_back(Unpack(item));
+        }
+    }
+    return {
+        Unpack(pKortdose.kortdose),
+        Unpack(pKortdose.beskrivelseTerm),
+        legemiddelforbruk
+    };
+}
+
 Legemiddel FestDeserializer::Unpack(const PLegemiddel &pLegemiddel) const {
     std::vector<std::string> sortertVirkestoffMedStyrke{};
     {
@@ -1300,6 +1392,44 @@ Substans FestDeserializer::Unpack(const PSubstans &pSubstans) const {
         Unpack(pSubstans.substans),
         Unpack(pSubstans.atc),
         Unpack(pSubstans.refVirkestoff).ToString()
+    };
+}
+
+DoseFastTidspunkt FestDeserializer::Unpack(const PDoseFastTidspunkt &pDoseFastTidspunkt) const {
+    return {
+        Unpack(pDoseFastTidspunkt.mengde),
+        Unpack(pDoseFastTidspunkt.intervall),
+        Unpack(pDoseFastTidspunkt.tidsomrade),
+        pDoseFastTidspunkt.gisEksakt,
+        {pDoseFastTidspunkt.dagerPa, pDoseFastTidspunkt.dagerAv}
+    };
+}
+
+Dosering FestDeserializer::Unpack(const PDosering &pDosering) const {
+    std::vector<DoseFastTidspunkt> doseFastTidspunkt{};
+    {
+        auto list = Unpack(doseFastTidspunktList, numDoseFastTidspunktList, static_cast<const GenericListItems>(pDosering));
+        for (const auto &item : list) {
+            doseFastTidspunkt.emplace_back(Unpack(item));
+        }
+    }
+    return {doseFastTidspunkt};
+}
+
+Legemiddelforbruk FestDeserializer::Unpack(const PLegemiddelforbruk &pLegemiddelforbruk) const {
+    std::vector<Dosering> dosering{};
+    {
+        auto list = Unpack(doseringList, numDoseringList, pLegemiddelforbruk.dosering);
+        for (const auto &item : list) {
+            dosering.emplace_back(Unpack(item));
+        }
+    }
+    return {
+        (int) pLegemiddelforbruk.lopenr,
+        pLegemiddelforbruk.iterasjoner,
+        pLegemiddelforbruk.mengde,
+        Unpack(pLegemiddelforbruk.periode),
+        dosering
     };
 }
 

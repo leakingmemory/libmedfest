@@ -24,6 +24,9 @@
 #include "Struct/Packed/ReferanseList.h"
 #include "Struct/Packed/SubstansgruppeList.h"
 #include "Struct/Packed/SubstansList.h"
+#include "Struct/Packed/DoseFastTidspunktList.h"
+#include "Struct/Packed/DoseringList.h"
+#include "Struct/Packed/LegemiddelforbrukList.h"
 #include "Struct/Packed/POppfLegemiddelVirkestoff.h"
 #include "Struct/Packed/POppfHandelsvare.h"
 #include "Struct/Packed/POppfLegemiddeldose.h"
@@ -36,6 +39,7 @@
 #include "Struct/Packed/POppfByttegruppe.h"
 #include "Struct/Packed/POppfInteraksjon.h"
 #include "Struct/Packed/POppfInteraksjonIkkeVurdert.h"
+#include "Struct/Packed/POppfStrDosering.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -76,6 +80,10 @@ struct FestFirstHeader {
     uint16_t numSubstansList;
     uint16_t numInteraksjon;
     uint16_t numInteraksjonIkkeVurdert;
+    uint16_t numDoseFastTidspunktList;
+    uint16_t numDoseringList;
+    uint16_t numLegemiddelforbrukList;
+    uint16_t numStrDosering;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -99,6 +107,9 @@ private:
     ReferanseList referanseList{};
     SubstansgruppeList substansgruppeList{};
     SubstansList substansList{};
+    DoseFastTidspunktList doseFastTidspunktList{};
+    DoseringList doseringList{};
+    LegemiddelforbrukList legemiddelforbrukList{};
     StringList stringList{};
     std::vector<POppfLegemiddelMerkevare> legemiddelMerkevare{};
     std::vector<POppfLegemiddelpakning> legemiddelpakning{};
@@ -116,6 +127,7 @@ private:
     std::vector<POppfByttegruppe> byttegruppe{};
     std::vector<POppfInteraksjon> interaksjon{};
     std::vector<POppfInteraksjonIkkeVurdert> interaksjonIkkeVurdert{};
+    std::vector<POppfStrDosering> strDosering{};
     int percentDone;
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
@@ -146,6 +158,7 @@ private:
     bool Visit(const OppfByttegruppe &byttegruppe) override;
     bool Visit(const OppfInteraksjon &interaksjon) override;
     bool Visit(const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) override;
+    bool Visit(const OppfStrDosering &strDosering) override;
 };
 
 

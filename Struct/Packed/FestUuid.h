@@ -16,7 +16,7 @@ private:
     raw_type id;
 public:
     FestUuid() : id() {}
-    FestUuid(const std::string &id);
+    FestUuid(const std::string &id, bool caseSensitive = true);
     [[nodiscard]] std::string ToString() const;
     constexpr void ToBytes(raw_type &dst) const {
         static_assert(sizeof(dst) == sizeof(raw_type));

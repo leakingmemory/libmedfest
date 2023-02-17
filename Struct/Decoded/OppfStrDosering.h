@@ -5,22 +5,20 @@
 #ifndef LEGEMFEST_OPPFSTRDOSERING_H
 #define LEGEMFEST_OPPFSTRDOSERING_H
 
-#include "Status.h"
+#include "Oppf.h"
 #include "Kortdose.h"
 
-class OppfStrDosering {
+class POppfStrDosering;
+
+class OppfStrDosering : public Oppf {
+    friend POppfStrDosering;
 private:
-    std::string id;
-    std::string tidspunkt;
-    Status status;
     Kortdose kortdose;
 public:
-    OppfStrDosering() : id(), tidspunkt(), status(), kortdose() {}
+    OppfStrDosering() : Oppf(), kortdose() {}
+    OppfStrDosering(const Oppf &oppf, const Kortdose &kortdose) : Oppf(oppf), kortdose(kortdose) {}
     OppfStrDosering(const std::string &id, const std::string &tidspunkt, const Status &status, const Kortdose &kortdose) :
-            id(id), tidspunkt(tidspunkt), status(status), kortdose(kortdose) {}
-    [[nodiscard]] std::string GetId() const;
-    [[nodiscard]] std::string GetTidspunkt() const;
-    [[nodiscard]] Status GetStatus() const;
+            Oppf(id, tidspunkt, status), kortdose(kortdose) {}
     [[nodiscard]] Kortdose GetKortdose() const;
 };
 

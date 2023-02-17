@@ -41,6 +41,10 @@
 #include "Struct/Packed/PReferanse.h"
 #include "Struct/Packed/PSubstansgruppe.h"
 #include "Struct/Packed/PSubstans.h"
+#include "Struct/Packed/PDoseFastTidspunkt.h"
+#include "Struct/Packed/PDosering.h"
+#include "Struct/Packed/PLegemiddelforbruk.h"
+#include "Struct/Packed/POppfStrDosering.h"
 
 class FestDeserializer {
 private:
@@ -62,6 +66,7 @@ private:
     const POppfByttegruppe *byttegruppe;
     const POppfInteraksjon *interaksjon;
     const POppfInteraksjonIkkeVurdert *interaksjonIkkeVurdert;
+    const POppfStrDosering *strDosering;
     const FestUuid *festUuid;
     const PFestId *festUuidList;
     const PValueWithCodeset *valueWithCodesetList;
@@ -76,6 +81,9 @@ private:
     const PRefusjonskode *refusjonskodeList;
     const PReferanse *referanseList;
     const PSubstansgruppe *substansgruppeList;
+    const PDoseFastTidspunkt *doseFastTidspunktList;
+    const PDosering *doseringList;
+    const PLegemiddelforbruk *legemiddelforbrukList;
     const PSubstans *substansList;
     const PString *stringList;
     const char *stringblock;
@@ -95,6 +103,7 @@ private:
     size_t numByttegruppe;
     size_t numInteraksjon;
     size_t numInteraksjonIkkeVurdert;
+    size_t numStrDosering;
     size_t numFestUuid;
     size_t numFestUuidList;
     size_t numValueWithCodesetList;
@@ -110,6 +119,9 @@ private:
     size_t numReferanseList;
     size_t numSubstansgruppeList;
     size_t numSubstansList;
+    size_t numDoseFastTidspunktList;
+    size_t numDoseringList;
+    size_t numLegemiddelforbrukList;
     size_t numStringList;
     size_t stringblocksize;
 public:
@@ -131,6 +143,9 @@ public:
     [[nodiscard]] std::vector<PReferanse> GetReferanse() const;
     [[nodiscard]] std::vector<PSubstansgruppe> GetSubstansgruppe() const;
     [[nodiscard]] std::vector<PSubstans> GetSubstans() const;
+    [[nodiscard]] std::vector<PDoseFastTidspunkt> GetDoseFastTidspunkt() const;
+    [[nodiscard]] std::vector<PDosering> GetDosering() const;
+    [[nodiscard]] std::vector<PLegemiddelforbruk> GetLegemiddelforbruk() const;
     [[nodiscard]] std::vector<PString> GetStringList() const;
     void ForEachMerkevare(const std::function<void (const POppfLegemiddelMerkevare &)> &) const;
     void ForEachPakning(const std::function<void (const POppfLegemiddelpakning &)> &) const;
@@ -148,6 +163,7 @@ public:
     void ForEachByttegruppe(const std::function<void (const POppfByttegruppe &)> &) const;
     void ForEachInteraksjon(const std::function<void (const POppfInteraksjon &)> &) const;
     void ForEachInteraksjonIkkeVurdert(const std::function<void (const POppfInteraksjonIkkeVurdert &)> &) const;
+    void ForEachStrDosering(const std::function<void (const POppfStrDosering &)> &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;
@@ -170,6 +186,7 @@ public:
     [[nodiscard]] OppfByttegruppe Unpack(const POppfByttegruppe &poppf) const;
     [[nodiscard]] OppfInteraksjon Unpack(const POppfInteraksjon &poppf) const;
     [[nodiscard]] OppfInteraksjonIkkeVurdert Unpack(const POppfInteraksjonIkkeVurdert &poppf) const;
+    [[nodiscard]] OppfStrDosering Unpack(const POppfStrDosering &poppf) const;
     [[nodiscard]] Oppf Unpack(const POppf &poppf) const;
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
@@ -185,6 +202,7 @@ public:
     [[nodiscard]] Byttegruppe Unpack(const PByttegruppe &pByttegruppe) const;
     [[nodiscard]] Interaksjon Unpack(const PInteraksjon &pInteraksjon) const;
     [[nodiscard]] InteraksjonIkkeVurdert Unpack(const PInteraksjonIkkeVurdert &pInteraksjonIkkeVurdert) const;
+    [[nodiscard]] Kortdose Unpack(const PKortdose &pKortdose) const;
     [[nodiscard]] Legemiddel Unpack(const PLegemiddel &pLegemiddel) const;
     [[nodiscard]] LegemiddelCore Unpack(const PLegemiddelCore &pLegemiddelCore) const;
     [[nodiscard]] AdministreringLegemiddel Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const;
@@ -209,12 +227,15 @@ public:
     [[nodiscard]] Referanse Unpack(const PReferanse &pReferanse) const;
     [[nodiscard]] Substansgruppe Unpack(const PSubstansgruppe &pSubstansgruppe) const;
     [[nodiscard]] Substans Unpack(const PSubstans &pSubstans) const;
-    template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, GenericListItems items) const {
+    [[nodiscard]] DoseFastTidspunkt Unpack(const PDoseFastTidspunkt &pDoseFastTidspunkt) const;
+    [[nodiscard]] Dosering Unpack(const PDosering &pDosering) const;
+    [[nodiscard]] Legemiddelforbruk Unpack(const PLegemiddelforbruk &pLegemiddelforbruk) const;
+    template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, const GenericListItems &items) const {
         if (items.start < size) {
             std::vector<T> output{};
             S i = items.start;
-            typeof(items.size) N = items.size;
-            typeof(items.size) n = 0;
+            const std::remove_const<typeof(items.size)>::type N = items.size;
+            std::remove_const<typeof(items.size)>::type n = 0;
             while (i < size && n < N) {
                 output.emplace_back(list[i]);
                 ++i; ++n;

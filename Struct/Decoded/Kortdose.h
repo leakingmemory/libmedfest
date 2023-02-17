@@ -9,7 +9,10 @@
 #include "Legemiddelforbruk.h"
 #include <vector>
 
+class PKortdose;
+
 class Kortdose {
+    friend PKortdose;
 private:
     ValueWithCodeSet kortdose;
     std::string beskrivelseTerm;

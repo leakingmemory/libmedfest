@@ -10,7 +10,11 @@
 #include <boost/lexical_cast.hpp>
 #include <cctype>
 
-FestUuid::FestUuid(const std::string &id) {
+FestUuid::FestUuid(const std::string &c_id, bool caseSensitive) {
+    std::string id{c_id};
+    if (!caseSensitive) {
+        std::transform(id.begin(), id.end(), id.begin(), [](unsigned char c) { return std::toupper(c); });
+    }
     if (!id.starts_with("ID_")) {
         throw PackException("Id expected to start with ID_");
     }

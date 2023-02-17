@@ -5,8 +5,10 @@
 #ifndef LEGEMFEST_FASTDOSE_H
 #define LEGEMFEST_FASTDOSE_H
 
+class PDoseFastTidspunkt;
 
 class FastDose {
+    friend PDoseFastTidspunkt;
 private:
     int dagerPa;
     int dagerAv;

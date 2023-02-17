@@ -31,6 +31,9 @@ add_library(packed OBJECT PackException.cpp PackException.h PFestId.cpp PFestId.
         PReferanse.cpp PReferanse.h ReferanseList.cpp ReferanseList.h PSubstans.cpp PSubstans.h
         SubstansList.cpp SubstansList.h PSubstansgruppe.cpp PSubstansgruppe.h POppfInteraksjon.cpp POppfInteraksjon.h
         SubstansgruppeList.cpp SubstansgruppeList.h PInteraksjonIkkeVurdert.cpp PInteraksjonIkkeVurdert.h
-        POppfInteraksjonIkkeVurdert.cpp POppfInteraksjonIkkeVurdert.h)
+        POppfInteraksjonIkkeVurdert.cpp POppfInteraksjonIkkeVurdert.h PDoseFastTidspunkt.cpp PDoseFastTidspunkt.h
+        DoseFastTidspunktList.cpp DoseFastTidspunktList.h PDosering.cpp PDosering.h DoseringList.cpp DoseringList.h
+        PLegemiddelforbruk.cpp PLegemiddelforbruk.h LegemiddelforbrukList.cpp LegemiddelforbrukList.h
+        PKortdose.cpp PKortdose.h POppfStrDosering.cpp POppfStrDosering.h)
 
 include_directories(packed ${Boost_INCLUDE_DIRS} )

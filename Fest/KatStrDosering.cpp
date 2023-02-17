@@ -19,6 +19,7 @@ std::string XmlOppfStrDosering::GetName() const {
 }
 
 bool XmlOppfStrDosering::Merge() {
+    kat->Merge(*this);
     return true;
 }
 

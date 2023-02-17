@@ -15,7 +15,7 @@ class PFestId {
 private:
     uint32_t id;
 public:
-    PFestId(const std::string &id, std::vector<FestUuid> &uuidblock);
+    PFestId(const std::string &id, std::vector<FestUuid> &uuidblock, bool caseSensitive = true);
     [[nodiscard]] bool IsEmpty() const;
     [[nodiscard]] FestUuid GetFestId(const std::vector<FestUuid> &uuidblock) const;
     [[nodiscard]] std::string ToString(const std::vector<FestUuid> &uuidblock) const;

@@ -8,7 +8,10 @@
 #include "DoseFastTidspunkt.h"
 #include <vector>
 
+class PDosering;
+
 class Dosering {
+    friend PDosering;
 private:
     std::vector<DoseFastTidspunkt> doseFastTidspunkt;
 public:

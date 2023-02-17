@@ -6,7 +6,7 @@
 #include "../Decoded/Oppf.h"
 
 POppf::POppf(const Oppf &oppf, std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache) :
-        id(oppf.GetId(), uuidblock),
+        id(oppf.GetId(), uuidblock, false),
         tidspunkt(oppf.GetTidspunkt(), strblock, cache),
         status() {
     auto s = oppf.GetStatus();

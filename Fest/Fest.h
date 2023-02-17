@@ -71,6 +71,7 @@ public:
     [[nodiscard]] virtual bool Visit(const OppfByttegruppe &byttegruppe) = 0;
     [[nodiscard]] virtual bool Visit(const OppfInteraksjon &interaksjon) = 0;
     [[nodiscard]] virtual bool Visit(const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) = 0;
+    [[nodiscard]] virtual bool Visit(const OppfStrDosering &strDosering) = 0;
 };
 
 class Fest : public XMLObject {

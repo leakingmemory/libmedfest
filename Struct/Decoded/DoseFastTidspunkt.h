@@ -9,7 +9,10 @@
 #include "ValueWithDistinguishedName.h"
 #include "FastDose.h"
 
+class PDoseFastTidspunkt;
+
 class DoseFastTidspunkt {
+    friend PDoseFastTidspunkt;
 private:
     ValueUnit mengde;
     ValueUnit intervall;

@@ -41,3 +41,10 @@ add_executable(dumpfestdata cppmain.cpp cppmain.h dumpfestdata.cpp FestDeseriali
 
 target_link_libraries(dumpfestdata packed)
 target_link_libraries(dumpfestdata decoded)
+
+add_executable(copyfestdata copyfestdata.cpp cppmain.cpp cppmain.h FestDeserializer.cpp FestDeserializer.h
+        FestDeserializer_Preload.cpp FestSerializer.cpp FestSerializer.h FestVectors.cpp FestVectors.h)
+
+target_link_libraries(copyfestdata packed)
+target_link_libraries(copyfestdata decoded)
+target_link_libraries(copyfestdata fest)

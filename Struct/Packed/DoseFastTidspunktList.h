@@ -8,7 +8,10 @@
 #include "GenericListStorage.h"
 #include "PDoseFastTidspunkt.h"
 
+class FestDeserializerPreloader;
+
 class DoseFastTidspunktList : private GenericListStorage<PDoseFastTidspunkt> {
+    friend FestDeserializerPreloader;
 public:
     GenericListItems StoreList(const std::vector<PDoseFastTidspunkt> &);
     std::vector<PDoseFastTidspunkt> GetStorageList() const;

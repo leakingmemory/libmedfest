@@ -8,7 +8,10 @@
 #include "GenericListStorage.h"
 #include "PFestId.h"
 
+class FestDeserializerPreloader;
+
 class FestUuidList : private GenericListStorage<PFestId> {
+    friend FestDeserializerPreloader;
 private:
     std::vector<FestUuid> &uuidblock;
 public:

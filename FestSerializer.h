@@ -95,7 +95,10 @@ struct FestFirstHeader {
     uint16_t numFests : 10;
 } __attribute__((__packed__));
 
+class FestDeserializer;
+
 class FestSerializer : private FestVisitor {
+    friend FestDeserializer;
 private:
     std::shared_ptr<Fest> fest;
     std::ofstream output;

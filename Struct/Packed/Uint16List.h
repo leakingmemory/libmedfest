@@ -7,7 +7,10 @@
 
 #include "GenericListStorage.h"
 
+class FestDeserializerPreloader;
+
 class Uint16List : private GenericListStorage<uint16_t> {
+    friend FestDeserializerPreloader;
 public:
     GenericListItems StoreList(const std::vector<uint16_t> &);
     std::vector<uint16_t> GetStorageList() const;

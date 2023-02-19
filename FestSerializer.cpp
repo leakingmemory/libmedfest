@@ -31,6 +31,10 @@ bool FestSerializer::Serialize() {
 }
 
 bool FestSerializer::Write() {
+    if (!is_open()) {
+        std::cerr << "Error: Output file is not opened, or writeable\n";
+        throw PackException("File not writeable or open");
+    }
     char alignmentBlock[alignment] = {};
     if (festidblock.size() >= (1 << 24)) {
         throw PackException("Max size fest-id-block");

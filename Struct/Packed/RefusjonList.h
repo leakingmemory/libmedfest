@@ -8,7 +8,10 @@
 #include "PRefusjon.h"
 #include "GenericListStorage.h"
 
+class FestDeserializerPreloader;
+
 class RefusjonList : private GenericListStorage<PRefusjon> {
+    friend FestDeserializerPreloader;
 public:
     GenericListItems StoreList(const std::vector<PRefusjon> &);
     [[nodiscard]] std::vector<PRefusjon> GetStorageList() const;

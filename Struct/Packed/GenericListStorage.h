@@ -31,7 +31,10 @@ struct GenericListItems {
 } __attribute__((__packed__));
 static_assert(sizeof(GenericListItems) == sizeof(GenericListItems::int_type));
 
+class FestDeserializerPreloader;
+
 template <GenericListStorageObject T> class GenericListStorage {
+    friend FestDeserializerPreloader;
 private:
     std::vector<T> list;
 public:

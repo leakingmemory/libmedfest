@@ -47,6 +47,8 @@
 #include "Struct/Packed/POppfStrDosering.h"
 #include "Struct/Packed/PFest.h"
 
+class FestSerializer;
+
 class FestDeserializer {
 private:
     void *mapping;
@@ -256,6 +258,7 @@ public:
             return {};
         }
     }
+    void Preload(FestSerializer &);
 };
 
 

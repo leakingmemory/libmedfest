@@ -8,7 +8,10 @@
 #include "GenericListStorage.h"
 #include "PString.h"
 
+class FestDeserializerPreloader;
+
 class StringList : GenericListStorage<PString> {
+    friend FestDeserializerPreloader;
 public:
     GenericListItems StoreList(const std::vector<PString> &);
     GenericListItems StoreList(const std::vector<std::string> &, std::string &strblock, std::map<std::string,uint32_t> &cache);

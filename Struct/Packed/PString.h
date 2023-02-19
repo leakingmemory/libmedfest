@@ -9,7 +9,10 @@
 #include <string>
 #include <map>
 
+class FestDeserializer;
+
 class PString {
+    friend FestDeserializer;
 private:
     uint32_t offset;
 public:

@@ -8,7 +8,10 @@
 #include "GenericListStorage.h"
 #include "PPrisVare.h"
 
+class FestDeserializerPreloader;
+
 class PrisVareList : private GenericListStorage<PPrisVare> {
+    friend FestDeserializerPreloader;
 public:
     GenericListItems StoreList(const std::vector<PPrisVare> &);
     [[nodiscard]] std::vector<PPrisVare> GetStorageList() const;

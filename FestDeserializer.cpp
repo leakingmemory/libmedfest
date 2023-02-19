@@ -5,6 +5,7 @@
 #include "FestDeserializer.h"
 #include "FestSerializer.h"
 #include "FestVectors.h"
+#include "DbVersion.h"
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
@@ -17,7 +18,7 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     auto fd = open(filename.c_str(), O_RDONLY);
     if (fd < 0) {
         std::cerr << "Error: Open file: " << filename << ": " << strerror(errno) << "\n";
-        return;
+        throw PackException("Open file");
     }
     auto size = lseek(fd, 0, SEEK_END);
     if (lseek(fd, 0, SEEK_SET) != 0) {
@@ -25,14 +26,14 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
         if (close(fd) != 0) {
             std::cerr << "Error: Close file: " << strerror(errno )<< "\n";
         }
-        return;
+        throw PackException("Seek file");
     }
     mapsize = size;
     mapping = mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd, 0);
     if (mapping == MAP_FAILED) {
         std::cerr << "Error: Map failed: " << strerror(errno) << "\n";
         mapping = nullptr;
-        return;
+        throw PackException("Map failed");
     }
     if (close(fd) != 0) {
         std::cerr << "Error: Close file: " << strerror(errno )<< "\n";
@@ -45,6 +46,25 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             off = alignment - off;
             offset += off;
         }
+    }
+    if (offset > mapsize) {
+        std::cerr << "Error: Does not contain a header\n";
+        throw PackException("File size");
+    }
+    {
+        auto version = GetDbVersion(header->magic);
+        if (!version.valid) {
+            std::cerr << "Error: File is not a FEST db file\n";
+            throw PackException("Not a FEST file");
+        }
+        if (version.major != 0) {
+            std::cerr << "Error: Major version " << version.major << " can not be read\n";
+            throw PackException("Major version of file");
+        }
+        if (version.minor != 0) {
+            std::cerr << "Warning: Minor version " << version.minor << " contains unsupported data (ignored)\n";
+        }
+        std::cout << "Reading file V" << ((int) version.major) << "." << ((int) version.minor) << "." << ((int) version.patch) << "\n";
     }
     merkevare = (POppfLegemiddelMerkevare *) (void *) (((uint8_t *) mapping) + offset);
     numMerkevare = header->numLegemiddelMerkevare;
@@ -424,6 +444,10 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
         stringblocksize = size - offset;
     } else {
         stringblocksize = 0;
+        if (offset > size) {
+            std::cerr << "Error: File is truncated\n";
+            throw PackException("Truncated file");
+        }
     }
 }
 

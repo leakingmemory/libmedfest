@@ -147,6 +147,7 @@ bool FestSerializer::Write() {
         throw PackException("Max fests stroage size\n");
     }
     FestFirstHeader firstHeader{
+        .magic = GetMagicNumbber(),
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
         .numLegemiddelMerkevare = (uint16_t) legemiddelMerkevare.size(),

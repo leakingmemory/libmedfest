@@ -44,6 +44,7 @@
 #include "Struct/Packed/Uint16List.h"
 #include "Struct/Packed/PFest.h"
 #include "FestData.h"
+#include "DbVersion.h"
 #include <memory>
 #include <string>
 #include <fstream>
@@ -53,6 +54,7 @@
 constexpr uint8_t alignment = 16;
 
 struct FestFirstHeader {
+    uint64_t magic;
     uint32_t numUuids : 24;
     uint8_t numReseptgyldighet;
     uint16_t numLegemiddelMerkevare;

@@ -12,3 +12,8 @@ POppfInteraksjonIkkeVurdert::POppfInteraksjonIkkeVurdert(const OppfInteraksjonIk
         PInteraksjonIkkeVurdert(interaksjonIkkeVurdert.interaksjonIkkeVurdert, strblock, cache)
 {
 }
+
+bool POppfInteraksjonIkkeVurdert::operator==(const POppfInteraksjonIkkeVurdert &other) const {
+    return POppf::operator==(other) &&
+           PInteraksjonIkkeVurdert::operator==(other);
+}

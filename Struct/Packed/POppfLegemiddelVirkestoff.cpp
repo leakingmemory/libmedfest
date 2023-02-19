@@ -15,3 +15,8 @@ POppfLegemiddelVirkestoff::POppfLegemiddelVirkestoff(const OppfLegemiddelVirkest
         PLegemiddelVirkestoff(oppf.GetLegemiddelVirkestoff(), strblock, cache, uuidlist, stringList, festUuidList, valueWithCodesetList,
                               refusjonList) {
 }
+
+bool POppfLegemiddelVirkestoff::operator==(const POppfLegemiddelVirkestoff &other) const {
+    return static_cast<const POppf>(*this) == static_cast<const POppf>(other) &&
+           static_cast<const PLegemiddelVirkestoff>(*this) == static_cast<const PLegemiddelVirkestoff>(other);
+}

@@ -12,3 +12,10 @@ PMarkedsforingsinfo::PMarkedsforingsinfo(const Markedsforingsinfo &markedsforing
         midlUtgattDato(markedsforingsinfo.GetMidlUtgattDato(), strblock, cache),
         avregDato(markedsforingsinfo.GetAvregDato(), strblock, cache) {
 }
+
+bool PMarkedsforingsinfo::operator==(const PMarkedsforingsinfo &other) const {
+    return markedsforingsdato == other.markedsforingsdato &&
+           varenrUtgaende == other.varenrUtgaende &&
+           midlUtgattDato == other.midlUtgattDato &&
+           avregDato == other.avregDato;
+}

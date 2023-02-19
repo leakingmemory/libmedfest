@@ -28,6 +28,7 @@ private:
     PString fraDato;
 public:
     PVarselSlv(const VarselSlv &, ValueWithCodesetList &, FestUuidList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PVarselSlv &) const;
 };
 
 

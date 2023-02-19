@@ -13,3 +13,8 @@ POppfLegemiddelMerkevare::POppfLegemiddelMerkevare(const OppfLegemiddelMerkevare
         POppf(oppf, festidblock, strblock, cache),
         PLegemiddelMerkevare(oppf.GetLegemiddelMerkevare(), strblock, cache, festidblock, festUuidList, valueWithCodesetList,
                              reseptgyldighetList) {}
+
+bool POppfLegemiddelMerkevare::operator==(const POppfLegemiddelMerkevare &poppf) const {
+    return static_cast<const POppf>(*this) == static_cast<const POppf>(poppf) &&
+           static_cast<const PLegemiddelMerkevare>(*this) == static_cast<const PLegemiddelMerkevare>(poppf);
+}

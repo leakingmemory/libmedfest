@@ -20,6 +20,7 @@ class POppfStrDosering : public POppf, public PKortdose {
 public:
     POppfStrDosering(const OppfStrDosering &, LegemiddelforbrukList &, DoseringList &, DoseFastTidspunktList &,
                      std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfStrDosering &) const;
 };
 
 

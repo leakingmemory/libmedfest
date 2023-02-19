@@ -18,3 +18,15 @@ PVirkestoffMedStyrke::PVirkestoffMedStyrke(const VirkestoffMedStyrke &virkestoff
         refVirkestoff(virkestoffMedStyrke.GetRefVirkestoff(), uuidblock)
 {
 }
+
+bool PVirkestoffMedStyrke::operator==(const PVirkestoffMedStyrke &other) const {
+    return id == other.id &&
+           styrke == other.styrke &&
+           styrkenevner == other.styrkenevner &&
+           alternativStyrke == other.alternativStyrke &&
+           alternativStyrkenevner == other.alternativStyrkenevner &&
+           styrkeoperator == other.styrkeoperator &&
+           atcKombipreparat == other.atcKombipreparat &&
+           styrkeOvreVerdi == other.styrkeOvreVerdi &&
+           refVirkestoff == other.refVirkestoff;
+}

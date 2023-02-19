@@ -16,6 +16,7 @@ class POppfVilkar : public POppf, public PVilkar {
 public:
     POppfVilkar(const OppfVilkar &, std::vector<FestUuid> &idblock, std::string &strblock,
                 std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfVilkar &) const;
 };
 
 

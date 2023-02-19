@@ -16,6 +16,7 @@ class POppfRefusjon : public POppf, public PRefusjonshjemmel {
     friend FestDeserializer;
 public:
     POppfRefusjon(const OppfRefusjon &, RefusjonskodeList &, RefRefusjonsvilkarList &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfRefusjon &) const;
 };
 
 

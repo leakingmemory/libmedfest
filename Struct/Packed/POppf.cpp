@@ -12,3 +12,7 @@ POppf::POppf(const Oppf &oppf, std::vector<FestUuid> &uuidblock, std::string &st
     auto s = oppf.GetStatus();
     status = PValueWithDistinguishedName(s, strblock, cache);
 }
+
+bool POppf::operator==(const POppf &other) const {
+    return id == other.id && tidspunkt == other.tidspunkt && status == other.status;
+}

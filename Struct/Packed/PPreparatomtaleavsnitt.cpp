@@ -10,3 +10,8 @@ PPreparatomtaleavsnitt::PPreparatomtaleavsnitt(const Preparatomtaleavsnitt &prep
         avsnittoverskrift(preparatomtaleavsnitt.GetAvsnittoverskrift(), strblock, cache),
         lenke(preparatomtaleavsnitt.GetLenke(), strblock, cache){
 }
+
+bool PPreparatomtaleavsnitt::operator==(const PPreparatomtaleavsnitt &other) const {
+    return avsnittoverskrift == other.avsnittoverskrift &&
+           lenke == other.lenke;
+}

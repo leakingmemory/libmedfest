@@ -23,6 +23,7 @@ private:
 public:
     PKortdose(const Kortdose &, LegemiddelforbrukList &, DoseringList &, DoseFastTidspunktList &, std::string &strblock,
               std::map<std::string,uint32_t> &cache);
+    bool operator == (const PKortdose &) const;
 };
 
 

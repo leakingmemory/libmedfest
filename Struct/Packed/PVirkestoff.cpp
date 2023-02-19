@@ -14,3 +14,10 @@ PVirkestoff::PVirkestoff(const Virkestoff &virkestoff, FestUuidList &festUuidLis
         navnEngelsk(virkestoff.GetNavnEngelsk(), strblock, cache)
 {
 }
+
+bool PVirkestoff::operator==(const PVirkestoff &other) const {
+    return id == other.id &&
+           refVirkestoff == other.refVirkestoff &&
+           navn == other.navn &&
+           navnEngelsk == other.navnEngelsk;
+}

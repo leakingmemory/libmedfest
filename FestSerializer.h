@@ -40,10 +40,15 @@
 #include "Struct/Packed/POppfInteraksjon.h"
 #include "Struct/Packed/POppfInteraksjonIkkeVurdert.h"
 #include "Struct/Packed/POppfStrDosering.h"
+#include "Struct/Packed/PackException.h"
+#include "Struct/Packed/Uint16List.h"
+#include "Struct/Packed/PFest.h"
+#include "FestData.h"
 #include <memory>
 #include <string>
 #include <fstream>
 #include <map>
+#include <functional>
 
 constexpr uint8_t alignment = 16;
 
@@ -84,6 +89,8 @@ struct FestFirstHeader {
     uint16_t numDoseringList;
     uint16_t numLegemiddelforbrukList;
     uint16_t numStrDosering;
+    uint32_t numUint16List : 22;
+    uint16_t numFests : 10;
 } __attribute__((__packed__));
 
 class FestSerializer : private FestVisitor {
@@ -110,6 +117,7 @@ private:
     DoseFastTidspunktList doseFastTidspunktList{};
     DoseringList doseringList{};
     LegemiddelforbrukList legemiddelforbrukList{};
+    Uint16List uint16List{};
     StringList stringList{};
     std::vector<POppfLegemiddelMerkevare> legemiddelMerkevare{};
     std::vector<POppfLegemiddelpakning> legemiddelpakning{};
@@ -128,6 +136,8 @@ private:
     std::vector<POppfInteraksjon> interaksjon{};
     std::vector<POppfInteraksjonIkkeVurdert> interaksjonIkkeVurdert{};
     std::vector<POppfStrDosering> strDosering{};
+    std::vector<PFest> fests{};
+    std::map<std::string,std::shared_ptr<FestData>> festMap{};
     int percentDone;
 public:
     FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
@@ -141,24 +151,42 @@ public:
     bool Serialize();
     bool Write();
 private:
+    template <class T> uint16_t Add(std::vector<T> &list, const T &obj) {
+        for (typename std::remove_const<typeof(list.size())>::type i = 0; i < list.size(); i++) {
+            if (list[i] == obj) {
+                if (i >= (1 << 16)) {
+                    throw PackException("List size out of bounds");
+                }
+                return (uint16_t) i;
+            }
+        }
+        auto sz = list.size();
+        list.emplace_back(obj);
+        if (sz >= (1 << 16)) {
+            throw PackException("List size out of bounds");
+        }
+        return (uint16_t) sz;
+    }
+    void Add(const std::string &, const std::function<void (FestData &)> &);
+
     void Progress(int done, int total) override;
-    bool Visit(const OppfLegemiddelMerkevare &merkevare) override;
-    bool Visit(const OppfLegemiddelpakning &pakning) override;
-    bool Visit(const OppfLegemiddelVirkestoff &virkestoff) override;
-    bool Visit(const OppfMedForbrMatr &medForbrMatr) override;
-    bool Visit(const OppfNaringsmiddel &naringsmiddel) override;
-    bool Visit(const OppfBrystprotese &brystprotese) override;
-    bool Visit(const OppfLegemiddeldose &legemiddeldose) override;
-    bool Visit(const OppfVirkestoffMedStyrke &virkestoffMedStyrke) override;
-    bool Visit(const OppfVirkestoff &virkestoff) override;
-    bool Visit(const OppfKodeverk &kodeverk) override;
-    bool Visit(const OppfRefusjon &refusjon) override;
-    bool Visit(const OppfVilkar &vilkar) override;
-    bool Visit(const OppfVarselSlv &varselSlv) override;
-    bool Visit(const OppfByttegruppe &byttegruppe) override;
-    bool Visit(const OppfInteraksjon &interaksjon) override;
-    bool Visit(const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) override;
-    bool Visit(const OppfStrDosering &strDosering) override;
+    bool Visit(const std::string &fest, const OppfLegemiddelMerkevare &merkevare) override;
+    bool Visit(const std::string &fest, const OppfLegemiddelpakning &pakning) override;
+    bool Visit(const std::string &fest, const OppfLegemiddelVirkestoff &virkestoff) override;
+    bool Visit(const std::string &fest, const OppfMedForbrMatr &medForbrMatr) override;
+    bool Visit(const std::string &fest, const OppfNaringsmiddel &naringsmiddel) override;
+    bool Visit(const std::string &fest, const OppfBrystprotese &brystprotese) override;
+    bool Visit(const std::string &fest, const OppfLegemiddeldose &legemiddeldose) override;
+    bool Visit(const std::string &fest, const OppfVirkestoffMedStyrke &virkestoffMedStyrke) override;
+    bool Visit(const std::string &fest, const OppfVirkestoff &virkestoff) override;
+    bool Visit(const std::string &fest, const OppfKodeverk &kodeverk) override;
+    bool Visit(const std::string &fest, const OppfRefusjon &refusjon) override;
+    bool Visit(const std::string &fest, const OppfVilkar &vilkar) override;
+    bool Visit(const std::string &fest, const OppfVarselSlv &varselSlv) override;
+    bool Visit(const std::string &fest, const OppfByttegruppe &byttegruppe) override;
+    bool Visit(const std::string &fest, const OppfInteraksjon &interaksjon) override;
+    bool Visit(const std::string &fest, const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) override;
+    bool Visit(const std::string &fest, const OppfStrDosering &strDosering) override;
 };
 
 

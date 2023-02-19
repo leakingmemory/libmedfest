@@ -35,3 +35,19 @@ PLegemiddelMerkevare::PLegemiddelMerkevare(const LegemiddelMerkevare &legemiddel
         this->reseptgyldighet = reseptgyldighetList.StoreList(list);
     }
 }
+
+bool PLegemiddelMerkevare::operator==(const PLegemiddelMerkevare &other) const {
+    return id == other.id &&
+           static_cast<const PLegemiddel>(*this) == static_cast<const PLegemiddel>(other) &&
+           vaksinestandard == other.vaksinestandard &&
+           preparattype == other.preparattype &&
+           smak == other.smak &&
+           varenavn == other.varenavn &&
+           legemiddelformLang == other.legemiddelformLang &&
+           produsent == other.produsent &&
+           referanseprodukt == other.referanseprodukt &&
+           preparatomtaleavsnitt == other.preparatomtaleavsnitt &&
+           sortertVirkestoffUtenStyrke == other.sortertVirkestoffUtenStyrke &&
+           reseptgyldighet == other.reseptgyldighet &&
+           varseltrekant == other.varseltrekant;
+}

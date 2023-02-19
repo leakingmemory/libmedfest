@@ -20,7 +20,9 @@ add_subdirectory(Struct/Decoded)
 add_subdirectory(Struct/Packed)
 add_subdirectory(Test/Struct/Packed)
 
-add_executable(decodefest cppmain.cpp cppmain.h decodefest.cpp FestZip.cpp FestZip.h libzip_zip.cpp libzip_zip.h libzip_file.cpp libzip_file.h exttype_zip_file.h FestObjectStream.cpp FestObjectStream.h XMLParser.cpp XMLParser.h FestSerializer.cpp FestSerializer.h)
+add_executable(decodefest cppmain.cpp cppmain.h decodefest.cpp FestZip.cpp FestZip.h libzip_zip.cpp libzip_zip.h
+        libzip_file.cpp libzip_file.h exttype_zip_file.h FestObjectStream.cpp FestObjectStream.h
+        XMLParser.cpp XMLParser.h FestSerializer.cpp FestSerializer.h)
 
 include_directories(decodefest ${libzip_INCLUDE_DIRS} )
 
@@ -34,7 +36,8 @@ target_link_libraries(decodefest packed)
 target_link_libraries(decodefest -lexpat)
 target_link_libraries(decodefest ${libzip_LIBRARIES})
 
-add_executable(dumpfestdata cppmain.cpp cppmain.h dumpfestdata.cpp FestDeserializer.cpp FestDeserializer.h)
+add_executable(dumpfestdata cppmain.cpp cppmain.h dumpfestdata.cpp FestDeserializer.cpp FestDeserializer.h
+        FestVectors.cpp FestVectors.h)
 
 target_link_libraries(dumpfestdata packed)
 target_link_libraries(dumpfestdata decoded)

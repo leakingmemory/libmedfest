@@ -14,3 +14,10 @@ PRefusjonshjemmel::PRefusjonshjemmel(const Refusjonshjemmel &refusjonshjemmel, R
         kreverVarekobling(refusjonshjemmel.kreverVarekobling),
         kreverVedtak(refusjonshjemmel.kreverVedtak)
 {}
+
+bool PRefusjonshjemmel::operator==(const PRefusjonshjemmel &other) const {
+    return PRefusjonsgruppe::operator==(other) &&
+           refusjonshjemmel == other.refusjonshjemmel &&
+           kreverVarekobling == other.kreverVarekobling &&
+           kreverVedtak == other.kreverVedtak;
+}

@@ -12,3 +12,11 @@ PProduktInfoVare::PProduktInfoVare(const ProduktInfoVare &produktInfoVare, std::
         volum(produktInfoVare.GetVolum(), strblock, cache),
         antPerPakning(produktInfoVare.GetAntPerPakning()),
         tillattMerMakspris(ToRaw(produktInfoVare.GetTillattMerMakspris())) {}
+
+bool PProduktInfoVare::operator==(const PProduktInfoVare &other) const {
+    return enhetStorrelse == other.enhetStorrelse &&
+           produktNr == other.produktNr &&
+           volum == other.volum &&
+           antPerPakning == other.antPerPakning &&
+           tillattMerMakspris == other.tillattMerMakspris;
+}

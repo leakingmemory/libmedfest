@@ -18,6 +18,7 @@ class POppfVarselSlv : public POppf, public PVarselSlv {
     friend FestDeserializer;
 public:
     POppfVarselSlv(const OppfVarselSlv &, ValueWithCodesetList &, FestUuidList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfVarselSlv &) const;
 };
 
 

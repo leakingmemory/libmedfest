@@ -16,6 +16,7 @@ class POppfInteraksjonIkkeVurdert : public POppf, public PInteraksjonIkkeVurdert
 public:
     POppfInteraksjonIkkeVurdert(const OppfInteraksjonIkkeVurdert &, std::vector<FestUuid> &idblock, std::string &strblock,
                                 std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfInteraksjonIkkeVurdert &) const;
 };
 
 

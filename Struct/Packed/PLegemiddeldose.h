@@ -28,6 +28,7 @@ private:
 public:
     PLegemiddeldose(const Legemiddeldose &, PakningskomponentInfoList &, FestUuidList &, std::vector<FestUuid> &,
                     std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PLegemiddeldose &) const;
 };
 
 

@@ -23,6 +23,7 @@ private:
     PString id;
 public:
     PInfo(const Info &, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PInfo &) const;
 };
 
 

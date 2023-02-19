@@ -15,6 +15,7 @@ class POppfInteraksjon : public POppf, public PInteraksjon {
     friend FestDeserializer;
 public:
     POppfInteraksjon(const OppfInteraksjon &, ReferanseList &, SubstansgruppeList &, SubstansList &, ValueWithCodesetList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfInteraksjon &) const;
 };
 
 

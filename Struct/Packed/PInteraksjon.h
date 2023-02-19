@@ -32,6 +32,7 @@ private:
     PString situasjonskriterium;
 public:
     PInteraksjon(const Interaksjon &interaksjon, ReferanseList &, SubstansgruppeList &, SubstansList &, ValueWithCodesetList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PInteraksjon &) const;
 };
 
 

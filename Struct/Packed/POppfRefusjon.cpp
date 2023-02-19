@@ -13,3 +13,8 @@ POppfRefusjon::POppfRefusjon(const OppfRefusjon &oppf, RefusjonskodeList &refusj
         PRefusjonshjemmel(oppf.refusjonshjemmel, refusjonskodeList, refRefusjonsvilkarList, stringList, idblock, strblock, cache)
 {
 }
+
+bool POppfRefusjon::operator==(const POppfRefusjon &other) const {
+    return POppf::operator==(other) &&
+           PRefusjonshjemmel::operator==(other);
+}

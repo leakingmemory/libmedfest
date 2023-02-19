@@ -12,3 +12,8 @@ PReferanseelement::PReferanseelement(const Referanseelement &referanseelement, F
         refs(festUuidList.StoreList(referanseelement.refs))
 {
 }
+
+bool PReferanseelement::operator==(const PReferanseelement &other) const {
+    return klasse == other.klasse &&
+           refs == other.refs;
+}

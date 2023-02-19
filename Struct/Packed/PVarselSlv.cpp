@@ -22,3 +22,13 @@ PVarselSlv::PVarselSlv(const VarselSlv &varselSlv, ValueWithCodesetList &valueWi
     }
     this->visningsregel = valueWithCodesetList.StoreList(visningsregel);
 }
+
+bool PVarselSlv::operator==(const PVarselSlv &other) const {
+    return type == other.type &&
+           referanseelement == other.referanseelement &&
+           lenke == other.lenke &&
+           visningsregel == other.visningsregel &&
+           overskrift == other.overskrift &&
+           varseltekst == other.varseltekst &&
+           fraDato == other.fraDato;
+}

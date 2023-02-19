@@ -19,6 +19,7 @@ private:
     GenericListItems refs;
 public:
     PReferanseelement(const Referanseelement &, FestUuidList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PReferanseelement &) const;
 };
 
 

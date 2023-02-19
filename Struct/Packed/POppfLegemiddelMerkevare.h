@@ -16,6 +16,7 @@ public:
                              std::map<std::string,uint32_t> &cache, std::vector<FestUuid> &festidblock,
                              FestUuidList &festUuidList, ValueWithCodesetList &valueWithCodesetList,
                              ReseptgyldighetList &reseptgyldighetList);
+    bool operator == (const POppfLegemiddelMerkevare &) const;
 };
 
 

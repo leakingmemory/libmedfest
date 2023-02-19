@@ -29,6 +29,7 @@ private:
     bool kreverRefusjonskode : 1;
 public:
     PRefusjonsgruppe(const Refusjonsgruppe &, RefusjonskodeList &, RefRefusjonsvilkarList &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PRefusjonsgruppe &) const;
 };
 
 

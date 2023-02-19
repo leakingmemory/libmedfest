@@ -20,6 +20,7 @@ private:
 public:
     PPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt, std::string &strblock,
                            std::map<std::string,uint32_t> &cache);
+    bool operator == (const PPreparatomtaleavsnitt &) const;
 };
 
 

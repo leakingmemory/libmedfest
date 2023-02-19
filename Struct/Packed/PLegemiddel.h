@@ -20,6 +20,7 @@ private:
 public:
     PLegemiddel(const Legemiddel &legemiddel, std::string &strblock, std::map<std::string,uint32_t> &cache,
                 FestUuidList &festUuidList, ValueWithCodesetList &valueWithCodesetList);
+    bool operator == (const PLegemiddel &) const;
 };
 
 

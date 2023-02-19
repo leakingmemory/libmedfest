@@ -14,3 +14,11 @@ PByttegruppe::PByttegruppe(const Byttegruppe &byttegruppe, std::vector<FestUuid>
         merknadTilByttbarhet(byttegruppe.merknadTilByttbarhet)
 {
 }
+
+bool PByttegruppe::operator==(const PByttegruppe &other) const {
+    return id == other.id &&
+           kode == other.kode &&
+           gyldigFraDato == other.gyldigFraDato &&
+           beskrivelseByttbarhet == other.beskrivelseByttbarhet &&
+           merknadTilByttbarhet == other.merknadTilByttbarhet;
+}

@@ -11,3 +11,8 @@ POppfVilkar::POppfVilkar(const OppfVilkar &oppf, std::vector<FestUuid> &idblock,
         PVilkar(oppf.vilkar, strblock, cache)
 {
 }
+
+bool POppfVilkar::operator==(const POppfVilkar &other) const {
+    return POppf::operator==(other) &&
+           PVilkar::operator==(other);
+}

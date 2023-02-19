@@ -55,23 +55,23 @@ class XmlOppfStrDosering;
 class FestVisitor {
 public:
     virtual void Progress(int done, int total) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfLegemiddelMerkevare &merkevare) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfLegemiddelpakning &pakning) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfLegemiddelVirkestoff &virkestoff) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfMedForbrMatr &medForbrMatr) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfNaringsmiddel &naringsmiddel) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfBrystprotese &brystprotese) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfLegemiddeldose &legemiddeldose) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfVirkestoffMedStyrke &virkestoffMedStyrke) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfVirkestoff &virkestoff) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfKodeverk &kodeverk) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfRefusjon &refusjon) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfVilkar &vilkar) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfVarselSlv &varselSlv) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfByttegruppe &byttegruppe) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfInteraksjon &interaksjon) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) = 0;
-    [[nodiscard]] virtual bool Visit(const OppfStrDosering &strDosering) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfLegemiddelMerkevare &merkevare) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfLegemiddelpakning &pakning) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfLegemiddelVirkestoff &virkestoff) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfMedForbrMatr &medForbrMatr) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfNaringsmiddel &naringsmiddel) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfBrystprotese &brystprotese) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfLegemiddeldose &legemiddeldose) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfVirkestoffMedStyrke &virkestoffMedStyrke) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfVirkestoff &virkestoff) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfKodeverk &kodeverk) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfRefusjon &refusjon) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfVilkar &vilkar) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfVarselSlv &varselSlv) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfByttegruppe &byttegruppe) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfInteraksjon &interaksjon) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) = 0;
+    [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfStrDosering &strDosering) = 0;
 };
 
 class Fest : public XMLObject {

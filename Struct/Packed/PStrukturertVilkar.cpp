@@ -11,3 +11,9 @@ PStrukturertVilkar::PStrukturertVilkar(const StrukturertVilkar &strukturertVilka
         verdiKodet(strukturertVilkar.GetVerdiKodet(), strblock, cache),
         verdiTekst(strukturertVilkar.GetVerdiTekst(), strblock, cache)
 {}
+
+bool PStrukturertVilkar::operator==(const PStrukturertVilkar &other) const {
+    return type == other.type &&
+           verdiKodet == other.verdiKodet &&
+           verdiTekst == other.verdiTekst;
+}

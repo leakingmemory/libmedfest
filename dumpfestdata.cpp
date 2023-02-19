@@ -19,6 +19,7 @@
 #include "Struct/Decoded/OppfInteraksjon.h"
 #include "Struct/Decoded/OppfInteraksjonIkkeVurdert.h"
 #include "Struct/Decoded/OppfStrDosering.h"
+#include "FestVectors.h"
 
 int usage(const std::string &cmd) {
     std::cerr << "Usage:\n " << cmd << " <fest.bin>\n";
@@ -414,6 +415,11 @@ int cppmain(const std::string &cmd, const std::vector<std::string> &args) {
                 }
             }
         }
+    });
+    std::cout << "FEST databases:\n";
+    festDeserializer.ForEachFests([&festDeserializer] (const PFest &pFest) {
+        auto festVectors = festDeserializer.Unpack(pFest);
+        std::cout << festVectors.GetDato() << "\n";
     });
     return 0;
 }

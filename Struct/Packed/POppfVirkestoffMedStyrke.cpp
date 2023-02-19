@@ -11,3 +11,8 @@ POppfVirkestoffMedStyrke::POppfVirkestoffMedStyrke(const OppfVirkestoffMedStyrke
         PVirkestoffMedStyrke(oppfVirkestoffMedStyrke.virkestoffMedStyrke, uuidblock, strblock, cache)
 {
 }
+
+bool POppfVirkestoffMedStyrke::operator==(const POppfVirkestoffMedStyrke &other) const {
+    return POppf::operator==(other) &&
+           PVirkestoffMedStyrke::operator==(other);
+}

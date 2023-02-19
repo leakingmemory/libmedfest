@@ -46,3 +46,16 @@ PInteraksjon::PInteraksjon(const Interaksjon &interaksjon, ReferanseList &refera
         this->substansgruppe = substansgruppeList.StoreList(substansgruppe);
     }
 }
+
+bool PInteraksjon::operator==(const PInteraksjon &other) const {
+    return id == other.id &&
+           relevans == other.relevans &&
+           kildegrunnlag == other.kildegrunnlag &&
+           visningsregel == other.visningsregel &&
+           referanse == other.referanse &&
+           substansgruppe == other.substansgruppe &&
+           kliniskKonsekvens == other.kliniskKonsekvens &&
+           interaksjonsmekanisme == other.interaksjonsmekanisme &&
+           handtering == other.handtering &&
+           situasjonskriterium == other.situasjonskriterium;
+}

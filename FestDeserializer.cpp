@@ -4,6 +4,7 @@
 
 #include "FestDeserializer.h"
 #include "FestSerializer.h"
+#include "FestVectors.h"
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
@@ -395,6 +396,26 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
+    uint16List = (const uint16_t *) (void *) (((uint8_t *) mapping) + offset);
+    numUint16List = header->numUint16List;
+    offset += ((size_t) numUint16List) * sizeof(*uint16List);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
+    fests = (const PFest *) (void *) (((uint8_t *) mapping) + offset);
+    numFests = header->numFests;
+    offset += ((size_t) numFests) * sizeof(*fests);
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            offset += off;
+        }
+    }
     stringList = (const PString *) (void *) (((uint8_t *) mapping) + offset);
     numStringList = header->numStringList;
     offset += ((size_t) numStringList) * sizeof(*stringList);
@@ -700,6 +721,16 @@ void FestDeserializer::ForEachStrDosering(const std::function<void(const POppfSt
     for (std::remove_const<typeof(numStrDosering)>::type i = 0; i < numStrDosering; i++) {
         func(this->strDosering[i]);
     }
+}
+
+void FestDeserializer::ForEachFests(const std::function<void(const PFest &)> &func) const {
+    for (std::remove_const<typeof(numFests)>::type i = 0; i < numFests; i++) {
+        func(this->fests[i]);
+    }
+}
+
+FestVectors FestDeserializer::Unpack(const PFest &pFest) const {
+    return {pFest, Unpack(pFest.dato), uint16List, numUint16List};
 }
 
 std::string FestDeserializer::Unpack(const PString &str) const {

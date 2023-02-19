@@ -28,3 +28,15 @@ PLegemiddeldose::PLegemiddeldose(const Legemiddeldose &legemiddeldose,
     }
     this->pakningskomponent = pakningskomponentInfoList.StoreList(pakningskomponent);
 }
+
+bool PLegemiddeldose::operator==(const PLegemiddeldose &other) const {
+    return id == other.id &&
+           PLegemiddelCore::operator==(other) &&
+           preparattype == other.preparattype &&
+           mengde == other.mengde &&
+           lmrLopenr == other.lmrLopenr &&
+           refLegemiddelMerkevare == other.refLegemiddelMerkevare &&
+           refPakning == other.refPakning &&
+           pakningstype == other.pakningstype &&
+           pakningskomponent == other.pakningskomponent;
+}

@@ -14,6 +14,7 @@ class POppfVirkestoff : public POppf, public PVirkestoff {
 public:
     POppfVirkestoff(const OppfVirkestoff &, FestUuidList &festUuidList, std::vector<FestUuid> &idblock,
                     std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfVirkestoff &) const;
 };
 
 

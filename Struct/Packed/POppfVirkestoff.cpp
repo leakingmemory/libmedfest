@@ -11,3 +11,8 @@ POppfVirkestoff::POppfVirkestoff(const OppfVirkestoff &oppf, FestUuidList &festU
         PVirkestoff(oppf.virkestoff, festUuidList, idblock, strblock, cache)
 {
 }
+
+bool POppfVirkestoff::operator==(const POppfVirkestoff &other) const {
+    return POppf::operator==(other) &&
+           PVirkestoff::operator==(other);
+}

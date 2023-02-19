@@ -42,3 +42,19 @@ PLegemiddelpakning::PLegemiddelpakning(const Legemiddelpakning &legemiddelpaknin
         prisVare = prisVareList.StoreList(list);
     }
 }
+
+bool PLegemiddelpakning::operator==(const PLegemiddelpakning &other) const {
+    return id == other.id &&
+        static_cast<PLegemiddelCore>(*this) == static_cast<PLegemiddelCore>(other) &&
+        preparattype == other.preparattype &&
+        varenr == other.varenr &&
+        ean == other.ean &&
+        oppbevaring == other.oppbevaring &&
+        pakningsinfo == other.pakningsinfo &&
+        prisVare == other.prisVare &&
+        markedsforingsinfo == other.markedsforingsinfo &&
+        refusjon == other.refusjon &&
+        pakningByttegruppe == other.pakningByttegruppe &&
+        preparatomtaleavsnitt == other.preparatomtaleavsnitt &&
+        ikkeKonservering == other.ikkeKonservering;
+}

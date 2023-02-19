@@ -39,6 +39,7 @@ public:
     PLegemiddelpakning(const Legemiddelpakning &, PakningskomponentList &pakningskomponentList,
                        PakningsinfoList &pakningsinfoList, PrisVareList &prisVareList, StringList &, FestUuidList &,
                        std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PLegemiddelpakning &) const;
 };
 
 

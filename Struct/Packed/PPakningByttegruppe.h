@@ -20,6 +20,7 @@ private:
 public:
     PPakningByttegruppe(const PakningByttegruppe &, std::vector<FestUuid> &uuidblock, std::string &strblock,
                         std::map<std::string,uint32_t> &cache);
+    bool operator == (const PPakningByttegruppe &) const;
 };
 
 

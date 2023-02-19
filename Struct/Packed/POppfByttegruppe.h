@@ -15,6 +15,7 @@ class POppfByttegruppe : public POppf, public PByttegruppe {
     friend FestDeserializer;
 public:
     POppfByttegruppe(const OppfByttegruppe &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfByttegruppe &) const;
 };
 
 

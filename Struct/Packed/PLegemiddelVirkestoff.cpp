@@ -23,3 +23,12 @@ PLegemiddelVirkestoff::PLegemiddelVirkestoff(const LegemiddelVirkestoff &legemid
     }
     this->refusjon = refusjonList.StoreList(refusjon);
 }
+
+bool PLegemiddelVirkestoff::operator==(const PLegemiddelVirkestoff &other) const {
+    return id == other.id &&
+           static_cast<const PLegemiddel>(*this) == static_cast<const PLegemiddel>(other) &&
+           forskrivningsenhetResept == other.forskrivningsenhetResept &&
+           refusjon == other.refusjon &&
+           refLegemiddelMerkevare == other.refLegemiddelMerkevare &&
+           refPakning == other.refPakning;
+}

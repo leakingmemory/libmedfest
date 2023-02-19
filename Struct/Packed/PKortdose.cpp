@@ -20,3 +20,9 @@ PKortdose::PKortdose(const Kortdose &kortdose, LegemiddelforbrukList &legemiddel
     }
     this->legemiddelforbruk = legemiddelforbrukList.StoreList(legemiddelforbruk);
 }
+
+bool PKortdose::operator==(const PKortdose &other) const {
+    return kortdose == other.kortdose &&
+           beskrivelseTerm == other.beskrivelseTerm &&
+           legemiddelforbruk == other.legemiddelforbruk;
+}

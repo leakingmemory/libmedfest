@@ -12,3 +12,9 @@ PLegemiddel::PLegemiddel(const Legemiddel &legemiddel, std::string &strblock, st
         administreringLegemiddel(legemiddel.GetAdministreringLegemiddel(), strblock, cache, valueWithCodesetList),
         sortertVirkestoffMedStyrke(festUuidList.StoreList(legemiddel.GetSortertVirkestoffMedStyrke())) {
 }
+
+bool PLegemiddel::operator==(const PLegemiddel &other) const {
+    return static_cast<const PLegemiddelCore>(*this) == static_cast<const PLegemiddelCore>(other) &&
+           administreringLegemiddel == other.administreringLegemiddel &&
+           sortertVirkestoffMedStyrke == other.sortertVirkestoffMedStyrke;
+}

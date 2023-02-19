@@ -45,6 +45,7 @@
 #include "Struct/Packed/PDosering.h"
 #include "Struct/Packed/PLegemiddelforbruk.h"
 #include "Struct/Packed/POppfStrDosering.h"
+#include "Struct/Packed/PFest.h"
 
 class FestDeserializer {
 private:
@@ -85,6 +86,8 @@ private:
     const PDosering *doseringList;
     const PLegemiddelforbruk *legemiddelforbrukList;
     const PSubstans *substansList;
+    const uint16_t *uint16List;
+    const PFest *fests;
     const PString *stringList;
     const char *stringblock;
     size_t numMerkevare;
@@ -122,6 +125,8 @@ private:
     size_t numDoseFastTidspunktList;
     size_t numDoseringList;
     size_t numLegemiddelforbrukList;
+    size_t numUint16List;
+    size_t numFests;
     size_t numStringList;
     size_t stringblocksize;
 public:
@@ -164,6 +169,8 @@ public:
     void ForEachInteraksjon(const std::function<void (const POppfInteraksjon &)> &) const;
     void ForEachInteraksjonIkkeVurdert(const std::function<void (const POppfInteraksjonIkkeVurdert &)> &) const;
     void ForEachStrDosering(const std::function<void (const POppfStrDosering &)> &) const;
+    void ForEachFests(const std::function<void (const PFest &)> &) const;
+    [[nodiscard]] FestVectors Unpack(const PFest &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
     [[nodiscard]] ValueWithDistinguishedName Unpack(const PValueWithDistinguishedName &valueWithDistinguishedName) const;

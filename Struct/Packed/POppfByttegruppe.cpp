@@ -11,3 +11,8 @@ POppfByttegruppe::POppfByttegruppe(const OppfByttegruppe &oppf, std::vector<Fest
         PByttegruppe(oppf.byttegruppe, idblock, strblock, cache)
 {
 }
+
+bool POppfByttegruppe::operator==(const POppfByttegruppe &other) const {
+    return POppf::operator==(other) &&
+           PByttegruppe::operator==(other);
+}

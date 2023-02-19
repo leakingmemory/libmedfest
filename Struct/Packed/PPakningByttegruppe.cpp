@@ -9,3 +9,7 @@ PPakningByttegruppe::PPakningByttegruppe(const PakningByttegruppe &pakningBytteg
                                          std::string &strblock, std::map<std::string,uint32_t> &cache) :
         refByttegruppe(pakningByttegruppe.GetRefByttegruppe(), uuidblock),
         gyldigFraDato(pakningByttegruppe.GetGyldigFraDato(), strblock, cache) {}
+
+bool PPakningByttegruppe::operator==(const PPakningByttegruppe &other) const {
+    return refByttegruppe == other.refByttegruppe && gyldigFraDato == other.gyldigFraDato;
+}

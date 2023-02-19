@@ -10,3 +10,8 @@ PLeverandor::PLeverandor(const Leverandor &leverandor, std::string &strblock, st
         adresse(leverandor.GetAdresse(), strblock, cache),
         telefon(leverandor.GetTelefon(), strblock, cache) {}
 
+bool PLeverandor::operator==(const PLeverandor &other) const {
+    return navn == other.navn &&
+           adresse == other.adresse &&
+           telefon == other.telefon;
+}

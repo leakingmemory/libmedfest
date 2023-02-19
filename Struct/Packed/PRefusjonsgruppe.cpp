@@ -35,3 +35,13 @@ PRefusjonsgruppe::PRefusjonsgruppe(const Refusjonsgruppe &refusjonsgruppe, Refus
         this->refVilkar = stringList.StoreList(refVilkar);
     }
 }
+
+bool PRefusjonsgruppe::operator==(const PRefusjonsgruppe &other) const {
+    return id == other.id &&
+           gruppeNr == other.gruppeNr &&
+           refusjonsberettigetBruk == other.refusjonsberettigetBruk &&
+           refusjonskode == other.refusjonskode &&
+           refVilkar == other.refVilkar &&
+           atc == other.atc &&
+           kreverRefusjonskode == other.kreverRefusjonskode;
+}

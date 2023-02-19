@@ -21,6 +21,7 @@ private:
     bool merknadTilByttbarhet;
 public:
     PByttegruppe(const Byttegruppe &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PByttegruppe &) const;
 };
 
 

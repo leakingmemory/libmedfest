@@ -14,3 +14,13 @@ PVilkar::PVilkar(const Vilkar &vilkar, std::string &strblock, std::map<std::stri
         tekst(vilkar.tekst, strblock, cache),
         gyldigFraDato(vilkar.gyldigFraDato, strblock, cache)
 {}
+
+bool PVilkar::operator==(const PVilkar &other) const {
+    return id == other.id &&
+           PStrukturertVilkar::operator==(other) &&
+           gjelderFor == other.gjelderFor &&
+           gruppe == other.gruppe &&
+           vilkarNr == other.vilkarNr &&
+           tekst == other.tekst &&
+           gyldigFraDato == other.gyldigFraDato;
+}

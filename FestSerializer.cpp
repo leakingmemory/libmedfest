@@ -6,6 +6,8 @@
 #include "Struct/Packed/PackException.h"
 #include <iostream>
 
+FestData::FestData(const std::string &dato) : dato(dato) {}
+
 FestSerializer::FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename)
 : fest(fest), output(filename, std::ios::binary | std::ios::out | std::ios::trunc), percentDone(0) {
 }
@@ -20,6 +22,10 @@ bool FestSerializer::Serialize() {
         std::cout << "\rGenerating output: 100% done.\n";
     } else {
         std::cout << "\n";
+    }
+    for (const auto &festPair : this->festMap) {
+        const auto &fest = *(festPair.second);
+        fests.emplace_back(fest, uint16List, stringblock, stringblockCache);
     }
     return result;
 }
@@ -134,6 +140,12 @@ bool FestSerializer::Write() {
     if (strDosering.size() >= (1 << 16)) {
         throw PackException("Max str dosering size\n");
     }
+    if (uint16List.size() >= (1 << 22)) {
+        throw PackException("Max uint16 list storage size\n");
+    }
+    if (fests.size() >= (1 << 10)) {
+        throw PackException("Max fests stroage size\n");
+    }
     FestFirstHeader firstHeader{
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
@@ -170,7 +182,9 @@ bool FestSerializer::Write() {
         .numDoseFastTidspunktList = (uint16_t) doseFastTidspunktList.size(),
         .numDoseringList = (uint16_t) doseringList.size(),
         .numLegemiddelforbrukList = (uint16_t) legemiddelforbrukList.size(),
-        .numStrDosering = (uint16_t) strDosering.size()
+        .numStrDosering = (uint16_t) strDosering.size(),
+        .numUint16List = (uint32_t) uint16List.size(),
+        .numFests = (uint16_t) fests.size()
     };
     size_t offset = sizeof(firstHeader);
     output.write((char *) (void *) &firstHeader, offset);
@@ -690,6 +704,35 @@ bool FestSerializer::Write() {
         }
     }
     {
+        auto list = uint16List.GetStorageList();
+        auto *ptr = list.data();
+        auto size = list.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
+        auto *ptr = fests.data();
+        auto size = fests.size() * sizeof(*ptr);
+        output.write((char *) (void *) ptr, size);
+        offset += size;
+    }
+    {
+        auto off = offset % alignment;
+        if (off != 0) {
+            off = alignment - off;
+            output.write(&(alignmentBlock[0]), off);
+            offset += off;
+        }
+    }
+    {
         auto list = stringList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
@@ -701,6 +744,19 @@ bool FestSerializer::Write() {
     return true;
 }
 
+void FestSerializer::Add(const std::string &dato, const std::function<void(FestData &)> &func) {
+    {
+        auto iterator = festMap.find(dato);
+        if (iterator != festMap.end()) {
+            func(*(iterator->second));
+            return;
+        }
+    }
+    std::shared_ptr<FestData> festData = std::make_shared<FestData>(dato);
+    func(*festData);
+    festMap.insert_or_assign(dato, festData);
+}
+
 void FestSerializer::Progress(int done, int total) {
     int pcnt = (100 * done) / total;
     if (pcnt != percentDone) {
@@ -709,88 +765,105 @@ void FestSerializer::Progress(int done, int total) {
     }
 }
 
-bool FestSerializer::Visit(const OppfLegemiddelMerkevare &merkevare) {
-    this->legemiddelMerkevare.emplace_back(merkevare, stringblock, stringblockCache, festidblock, festUuidList, valueWithCodesetList, reseptgyldighetList);
+bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelMerkevare &merkevare) {
+    auto index = Add(this->legemiddelMerkevare, {merkevare, stringblock, stringblockCache, festidblock, festUuidList, valueWithCodesetList, reseptgyldighetList});
+    Add(fest, [index] (FestData &f) { f.legemiddelMerkevare.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfLegemiddelpakning &pakning) {
-    this->legemiddelpakning.emplace_back(pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelpakning &pakning) {
+    auto index = Add(this->legemiddelpakning, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.legemiddelpakning.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfLegemiddelVirkestoff &virkestoff) {
-    this->legemiddelVirkestoff.emplace_back(virkestoff, stringblock, stringblockCache, festidblock, stringList, festUuidList, valueWithCodesetList, refusjonList);
+bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelVirkestoff &virkestoff) {
+    auto index = Add(this->legemiddelVirkestoff, {virkestoff, stringblock, stringblockCache, festidblock, stringList, festUuidList, valueWithCodesetList, refusjonList});
+    Add(fest, [index] (FestData &f) { f.legemiddelVirkestoff.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfMedForbrMatr &medForbrMatr) {
-    this->medForbrMatr.emplace_back(medForbrMatr, prisVareList, stringList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfMedForbrMatr &medForbrMatr) {
+    auto index = Add(this->medForbrMatr, {medForbrMatr, prisVareList, stringList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.medForbrMatr.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfNaringsmiddel &naringsmiddel) {
-    this->naringsmiddel.emplace_back(naringsmiddel, prisVareList, stringList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfNaringsmiddel &naringsmiddel) {
+    auto index = Add(this->naringsmiddel, {naringsmiddel, prisVareList, stringList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.naringsmiddel.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfBrystprotese &brystprotese) {
-    this->brystprotese.emplace_back(brystprotese, prisVareList, stringList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfBrystprotese &brystprotese) {
+    auto index = Add(this->brystprotese, {brystprotese, prisVareList, stringList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.brystprotese.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfLegemiddeldose &legemiddeldose) {
-    this->legemiddeldose.emplace_back(legemiddeldose, pakningskomponentInfoList, festUuidList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddeldose &legemiddeldose) {
+    auto index = Add(this->legemiddeldose, {legemiddeldose, pakningskomponentInfoList, festUuidList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.legemiddeldose.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfVirkestoffMedStyrke &virkestoffMedStyrke) {
-    this->virkestoffMedStyrke.emplace_back(virkestoffMedStyrke, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfVirkestoffMedStyrke &virkestoffMedStyrke) {
+    auto index = Add(this->virkestoffMedStyrke, {virkestoffMedStyrke, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.virkestoffMedStyrke.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfVirkestoff &virkestoff) {
-    this->virkestoff.emplace_back(virkestoff, festUuidList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfVirkestoff &virkestoff) {
+    auto index = Add(this->virkestoff, {virkestoff, festUuidList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.virkestoff.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfKodeverk &kodeverk) {
-    this->kodeverk.emplace_back(kodeverk, elementList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfKodeverk &kodeverk) {
+    auto index = Add(this->kodeverk, {kodeverk, elementList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.kodeverk.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfRefusjon &refusjon) {
-    this->refusjon.emplace_back(refusjon, refusjonskodeList, refRefusjonsvilkarList, stringList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfRefusjon &refusjon) {
+    auto index = Add(this->refusjon, {refusjon, refusjonskodeList, refRefusjonsvilkarList, stringList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.refusjon.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfVilkar &vilkar) {
-    this->vilkar.emplace_back(vilkar, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfVilkar &vilkar) {
+    auto index = Add(this->vilkar, {vilkar, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.vilkar.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfVarselSlv &varselSlv) {
-    this->varselSlv.emplace_back(varselSlv, valueWithCodesetList, festUuidList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfVarselSlv &varselSlv) {
+    auto index = Add(this->varselSlv, {varselSlv, valueWithCodesetList, festUuidList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.varselSlv.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfByttegruppe &byttegruppe) {
-    this->byttegruppe.emplace_back(byttegruppe, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfByttegruppe &byttegruppe) {
+    auto index = Add(this->byttegruppe, {byttegruppe, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.byttegruppe.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfInteraksjon &interaksjon) {
-    this->interaksjon.emplace_back(interaksjon, referanseList, substansgruppeList, substansList, valueWithCodesetList, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfInteraksjon &interaksjon) {
+    auto index = Add(this->interaksjon, {interaksjon, referanseList, substansgruppeList, substansList, valueWithCodesetList, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.interaksjon.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) {
-    this->interaksjonIkkeVurdert.emplace_back(interaksjonIkkeVurdert, festidblock, stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) {
+    auto index = Add(this->interaksjonIkkeVurdert, {interaksjonIkkeVurdert, festidblock, stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.interaksjonIkkeVurdert.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const OppfStrDosering &strDosering) {
-    this->strDosering.emplace_back(strDosering, legemiddelforbrukList, doseringList, doseFastTidspunktList, festidblock,
-                                   stringblock, stringblockCache);
+bool FestSerializer::Visit(const std::string &fest, const OppfStrDosering &strDosering) {
+    auto index = Add(this->strDosering, {strDosering, legemiddelforbrukList, doseringList, doseFastTidspunktList, festidblock,
+                                   stringblock, stringblockCache});
+    Add(fest, [index] (FestData &f) { f.strDosering.emplace_back(index); });
     return true;
 }

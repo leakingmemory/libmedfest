@@ -17,3 +17,14 @@ PLegemiddelCore::PLegemiddelCore(const LegemiddelCore &legemiddelCore, std::stri
         svartTrekant(legemiddelCore.GetSvartTrekant(), strblock, cache),
         opioidsoknad(ToRaw(legemiddelCore.GetOpioidsoknad())) {
 }
+
+bool PLegemiddelCore::operator==(const PLegemiddelCore &other) const {
+    return atc == other.atc &&
+           navnFormStyrke == other.navnFormStyrke &&
+           reseptgruppe == other.reseptgruppe &&
+           legemiddelformKort == other.legemiddelformKort &&
+           refVilkar == other.refVilkar &&
+           typeSoknadSlv == other.typeSoknadSlv &&
+           svartTrekant == other.svartTrekant &&
+           opioidsoknad == other.opioidsoknad;
+}

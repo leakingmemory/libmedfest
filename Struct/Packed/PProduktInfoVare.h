@@ -21,6 +21,7 @@ private:
 public:
     PProduktInfoVare(const ProduktInfoVare &produktInfoVare, std::string &strblock,
                      std::map<std::string,uint32_t> &cache);
+    bool operator == (const PProduktInfoVare &) const;
 };
 
 

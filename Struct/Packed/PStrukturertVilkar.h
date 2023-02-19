@@ -18,6 +18,7 @@ private:
     PString verdiTekst;
 public:
     PStrukturertVilkar(const StrukturertVilkar &, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PStrukturertVilkar &) const;
 };
 
 

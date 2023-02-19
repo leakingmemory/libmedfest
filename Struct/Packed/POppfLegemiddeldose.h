@@ -14,6 +14,7 @@ class POppfLegemiddeldose : public POppf, public PLegemiddeldose {
 public:
     POppfLegemiddeldose(const OppfLegemiddeldose &, PakningskomponentInfoList &, FestUuidList &,
                         std::vector<FestUuid> &, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfLegemiddeldose &) const;
 };
 
 

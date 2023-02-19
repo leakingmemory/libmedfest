@@ -50,3 +50,17 @@ PAdministreringLegemiddel::PAdministreringLegemiddel(const AdministreringLegemid
         kortdose = valueWithCodesetList.StoreList(list);
     }
 }
+
+bool PAdministreringLegemiddel::operator==(const PAdministreringLegemiddel &other) const {
+    return administrasjonsvei == other.administrasjonsvei &&
+           enhetDosering == other.enhetDosering &&
+           bruksomradeEtikett == other.bruksomradeEtikett &&
+           forhandsregelInntak == other.forhandsregelInntak &&
+           kortdose == other.kortdose &&
+           kanKnuses == other.kanKnuses &&
+           deling == other.deling &&
+           kanApnes == other.kanApnes &&
+           bolus == other.bolus &&
+           injeksjonshastighetBolus == other.injeksjonshastighetBolus &&
+           blandingsveske == other.blandingsveske;
+}

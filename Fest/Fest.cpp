@@ -171,103 +171,103 @@ bool Fest::Accept(FestVisitor &visitor) const {
             + oppfStrDosering.size();
     typeof(total) done = 0;
     for (const auto &merkevare : oppfLegemiddelMerkevare) {
-        if (!visitor.Visit(merkevare)) {
+        if (!visitor.Visit(hentetDato, merkevare)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &pakning : oppfLegemiddelpakning) {
-        if (!visitor.Visit(pakning)) {
+        if (!visitor.Visit(hentetDato, pakning)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &virkestoff : oppfLegemiddelVirkestoff) {
-        if (!visitor.Visit(virkestoff)) {
+        if (!visitor.Visit(hentetDato, virkestoff)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &medForbrMatr : oppfMedForbrVare) {
-        if (!visitor.Visit(medForbrMatr)) {
+        if (!visitor.Visit(hentetDato, medForbrMatr)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &naringsmiddel : oppfNaringsmiddel) {
-        if (!visitor.Visit(naringsmiddel)) {
+        if (!visitor.Visit(hentetDato, naringsmiddel)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &brystprotese : oppfBrystprotese) {
-        if (!visitor.Visit(brystprotese)) {
+        if (!visitor.Visit(hentetDato, brystprotese)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &legemiddeldose : oppfLegemiddeldose) {
-        if (!visitor.Visit(legemiddeldose)) {
+        if (!visitor.Visit(hentetDato, legemiddeldose)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &virkestoffMedStyrke : oppfVirkestoffMedStyrke) {
-        if (!visitor.Visit(virkestoffMedStyrke)) {
+        if (!visitor.Visit(hentetDato, virkestoffMedStyrke)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &virkestoff : oppfVirkestoff) {
-        if (!visitor.Visit(virkestoff)) {
+        if (!visitor.Visit(hentetDato, virkestoff)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &kodeverk : oppfKodeverk) {
-        if (!visitor.Visit(kodeverk)) {
+        if (!visitor.Visit(hentetDato, kodeverk)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &refusjon : oppfRefusjon) {
-        if (!visitor.Visit(refusjon)) {
+        if (!visitor.Visit(hentetDato, refusjon)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &vilkar : oppfVilkar) {
-        if (!visitor.Visit(vilkar)) {
+        if (!visitor.Visit(hentetDato, vilkar)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &varselSlv : oppfVarselSlv) {
-        if (!visitor.Visit(varselSlv)) {
+        if (!visitor.Visit(hentetDato, varselSlv)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &byttegruppe : oppfByttegruppe) {
-        if (!visitor.Visit(byttegruppe)) {
+        if (!visitor.Visit(hentetDato, byttegruppe)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &interaksjon : oppfInteraksjon) {
-        if (!visitor.Visit(interaksjon)) {
+        if (!visitor.Visit(hentetDato, interaksjon)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &interaksjonIkkeVurdert : oppfInteraksjonIkkeVurdert) {
-        if (!visitor.Visit(interaksjonIkkeVurdert)) {
+        if (!visitor.Visit(hentetDato, interaksjonIkkeVurdert)) {
             return false;
         }
         visitor.Progress(++done, total);
     }
     for (const auto &strDosering : oppfStrDosering) {
-        if (!visitor.Visit(strDosering)) {
+        if (!visitor.Visit(hentetDato, strDosering)) {
             return false;
         }
         visitor.Progress(++done, total);

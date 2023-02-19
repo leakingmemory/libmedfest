@@ -25,6 +25,7 @@ private:
     uint8_t opioidsoknad : 2;
 public:
     PLegemiddelCore(const LegemiddelCore &legemiddelCore, std::string &strblock, std::map<std::string,uint32_t> &cache, FestUuidList &festUuidList);
+    bool operator == (const PLegemiddelCore &) const;
 };
 
 

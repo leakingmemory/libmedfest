@@ -19,3 +19,9 @@ POppfKodeverk::POppfKodeverk(const OppfKodeverk &oppf, ElementList &elementList,
     }
     this->elements = elementList.StoreList(elements);
 }
+
+bool POppfKodeverk::operator==(const POppfKodeverk &other) const {
+    return POppf::operator==(other) &&
+           PInfo::operator==(other) &&
+           elements == other.elements;
+}

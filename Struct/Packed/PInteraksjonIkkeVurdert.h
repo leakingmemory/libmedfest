@@ -16,6 +16,9 @@ private:
     PValueWithCodeset atc;
 public:
     PInteraksjonIkkeVurdert(const InteraksjonIkkeVurdert &, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const PInteraksjonIkkeVurdert &other) const {
+        return atc == other.atc;
+    }
 };
 
 

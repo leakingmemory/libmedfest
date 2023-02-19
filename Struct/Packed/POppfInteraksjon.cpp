@@ -13,3 +13,8 @@ POppfInteraksjon::POppfInteraksjon(const OppfInteraksjon &oppf, ReferanseList &r
         PInteraksjon(oppf.interaksjon, referanseList, substansgruppeList, substansList, valueWithCodesetList, idblock, strblock, cache)
 {
 }
+
+bool POppfInteraksjon::operator==(const POppfInteraksjon &other) const {
+    return POppf::operator==(other) &&
+           PInteraksjon::operator==(other);
+}

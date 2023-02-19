@@ -11,3 +11,8 @@ POppfVarselSlv::POppfVarselSlv(const OppfVarselSlv &oppf, ValueWithCodesetList &
         POppf(oppf, idblock, strblock, cache),
         PVarselSlv(oppf.varselSlv, valueWithCodesetList, festUuidList, strblock, cache)
 {}
+
+bool POppfVarselSlv::operator==(const POppfVarselSlv &other) const {
+    return POppf::operator==(other) &&
+           PVarselSlv::operator==(other);
+}

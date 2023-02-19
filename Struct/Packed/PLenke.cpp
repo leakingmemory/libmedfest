@@ -9,3 +9,7 @@ PLenke::PLenke(const Lenke &lenke, std::string &strblock, std::map<std::string,u
         beskrivelse(lenke.GetBeskrivelse(), strblock, cache),
         www(lenke.GetWww(), strblock, cache) {
 }
+
+bool PLenke::operator==(const PLenke &other) const {
+    return beskrivelse == other.beskrivelse && www == other.www;
+}

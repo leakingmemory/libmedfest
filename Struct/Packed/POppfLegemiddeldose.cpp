@@ -13,3 +13,8 @@ POppfLegemiddeldose::POppfLegemiddeldose(const OppfLegemiddeldose &oppf,
         PLegemiddeldose(oppf.legemiddeldose, pakningskomponentInfoList, festUuidList, uuidblock, strblock, cache)
 {
 }
+
+bool POppfLegemiddeldose::operator==(const POppfLegemiddeldose &other) const {
+    return POppf::operator==(other) &&
+           PLegemiddeldose::operator==(other);
+}

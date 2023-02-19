@@ -22,6 +22,7 @@ private:
     PValueWithDistinguishedName status;
 public:
     POppf(const Oppf &oppf, std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppf &) const;
 };
 
 #endif //LEGEMFEST_POPPF_H

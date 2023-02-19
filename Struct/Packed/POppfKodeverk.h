@@ -19,6 +19,7 @@ private:
     GenericListItems elements;
 public:
     POppfKodeverk(const OppfKodeverk &, ElementList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator == (const POppfKodeverk &) const;
 };
 
 

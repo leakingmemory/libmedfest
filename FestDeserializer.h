@@ -258,7 +258,7 @@ public:
             return {};
         }
     }
-    void Preload(FestSerializer &);
+    void Preload(FestSerializer &) const;
 };
 
 

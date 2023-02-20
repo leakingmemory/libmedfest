@@ -8,24 +8,24 @@
 
 FestData::FestData(const std::string &dato) : dato(dato) {}
 
-FestSerializer::FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename)
-: fest(fest), output(filename, std::ios::binary | std::ios::out | std::ios::trunc), percentDone(0) {
+FestSerializer::FestSerializer(const std::string &filename)
+: output(filename, std::ios::binary | std::ios::out | std::ios::trunc), percentDone(0) {
 }
 
-bool FestSerializer::Serialize() {
+bool FestSerializer::Serialize(const Fest &fest) {
     if (!is_open()) {
         std::cerr << "Error: Output file is not opened, or writeable\n";
         return false;
     }
-    bool result = fest->Accept(*this);
+    bool result = fest.Accept(*this);
     if (result) {
         std::cout << "\rGenerating output: 100% done.\n";
     } else {
         std::cout << "\n";
     }
     for (const auto &festPair : this->festMap) {
-        const auto &fest = *(festPair.second);
-        fests.emplace_back(fest, uint16List, stringblock, stringblockCache);
+        const auto &festInst = *(festPair.second);
+        fests.emplace_back(festInst, uint16List, stringblock, stringblockCache);
     }
     return result;
 }

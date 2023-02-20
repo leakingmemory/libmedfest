@@ -21,7 +21,7 @@ public:
     }
 };
 
-void FestDeserializer::Preload(FestSerializer &festSerializer) {
+void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     festSerializer.stringblock.clear();
     festSerializer.stringblock.append(stringblock, stringblocksize);
     PL(festSerializer.festidblock, festUuid, numFestUuid);

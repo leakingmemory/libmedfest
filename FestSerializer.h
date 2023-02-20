@@ -100,7 +100,6 @@ class FestDeserializer;
 class FestSerializer : private FestVisitor {
     friend FestDeserializer;
 private:
-    std::shared_ptr<Fest> fest;
     std::ofstream output;
     std::string stringblock{};
     std::map<std::string,uint32_t> stringblockCache{};
@@ -145,7 +144,7 @@ private:
     std::map<std::string,std::shared_ptr<FestData>> festMap{};
     int percentDone;
 public:
-    FestSerializer(std::shared_ptr<Fest> fest, const std::string &filename);
+    FestSerializer(const std::string &filename);
     FestSerializer(const FestSerializer &) = delete;
     FestSerializer(FestSerializer &&) = delete;
     FestSerializer &operator =(const FestSerializer &) = delete;
@@ -153,7 +152,7 @@ public:
     bool is_open() {
         return output.is_open();
     }
-    bool Serialize();
+    bool Serialize(const Fest &fest);
     bool Write();
 private:
     template <class T> uint16_t Add(std::vector<T> &list, const T &obj) {

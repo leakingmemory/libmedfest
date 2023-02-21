@@ -11,8 +11,8 @@ int DecodeFest(const std::string &zipname, const std::string &outputFile) {
     FestZip festzip{zipname};
     auto fest = festzip.Decode();
     if (fest) {
-        FestSerializer serializer{fest, outputFile};
-        if (serializer.is_open() && serializer.Serialize()) {
+        FestSerializer serializer{outputFile};
+        if (serializer.is_open() && serializer.Serialize(*fest)) {
             if (serializer.Write()) {
                 return 0;
             } else {

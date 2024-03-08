@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_TIDSPUNKTOBJECT_H
 #define LEGEMFEST_TIDSPUNKTOBJECT_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include <memory>
 #include <map>
 

@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/16/22.
 //
 
-#include "OppfVirkestoff.h"
+#include <Struct/Decoded/OppfVirkestoff.h>
 
 Virkestoff OppfVirkestoff::GetVirkestoff() const {
     return virkestoff;

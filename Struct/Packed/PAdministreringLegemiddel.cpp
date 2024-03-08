@@ -2,9 +2,9 @@
 // Created by sigsegv on 1/10/23.
 //
 
-#include "PAdministreringLegemiddel.h"
-#include "../Decoded/AdministreringLegemiddel.h"
-#include "ValueWithCodesetList.h"
+#include <Struct/Packed/PAdministreringLegemiddel.h>
+#include <Struct/Decoded/AdministreringLegemiddel.h>
+#include <Struct/Packed/ValueWithCodesetList.h>
 
 PAdministreringLegemiddel::PAdministreringLegemiddel(const AdministreringLegemiddel &administreringLegemiddel,
                                                      std::string &strblock, std::map<std::string,uint32_t> &cache,

@@ -2,11 +2,11 @@
 // Created by sigsegv on 1/31/23.
 //
 
-#include "PLegemiddeldose.h"
-#include "FestUuidList.h"
-#include "PPakningskomponentInfo.h"
-#include "PakningskomponentInfoList.h"
-#include "../Decoded/Legemiddeldose.h"
+#include <Struct/Packed/PLegemiddeldose.h>
+#include <Struct/Packed/FestUuidList.h>
+#include <Struct/Packed/PPakningskomponentInfo.h>
+#include <Struct/Packed/PakningskomponentInfoList.h>
+#include <Struct/Decoded/Legemiddeldose.h>
 
 PLegemiddeldose::PLegemiddeldose(const Legemiddeldose &legemiddeldose,
                                  PakningskomponentInfoList &pakningskomponentInfoList, FestUuidList &festUuidList,

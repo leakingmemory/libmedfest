@@ -5,15 +5,15 @@
 #ifndef LEGEMFEST_XMLVIRKESTOFFMEDSTYRKE_H
 #define LEGEMFEST_XMLVIRKESTOFFMEDSTYRKE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
-#include "../Struct/Decoded/Styrke.h"
-#include "../Struct/Decoded/Styrkenevner.h"
-#include "../Struct/Decoded/Styrkeoperator.h"
+#include <Struct/Decoded/Styrke.h>
+#include <Struct/Decoded/Styrkenevner.h>
+#include <Struct/Decoded/Styrkeoperator.h>
 #include "XmlRefVirkestoff.h"
 #include "XmlValueUnit.h"
 #include "XmlValueWithCodeSet.h"
-#include "../Struct/Decoded/Atc.h"
+#include <Struct/Decoded/Atc.h>
 #include <memory>
 #include <map>
 

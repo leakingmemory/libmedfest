@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.24)
-project(Legemfest)
+project(Libmedfest)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_compile_options(-fPIC)
 
 find_package(PkgConfig)
 
@@ -20,42 +22,27 @@ add_subdirectory(Struct/Decoded)
 add_subdirectory(Struct/Packed)
 add_subdirectory(Test/Struct/Packed)
 
-add_executable(decodefest cppmain.cpp cppmain.h decodefest.cpp FestZip.cpp FestZip.h libzip_zip.cpp libzip_zip.h
-        libzip_file.cpp libzip_file.h exttype_zip_file.h FestObjectStream.cpp FestObjectStream.h
-        XMLParser.cpp XMLParser.h FestSerializer.cpp FestSerializer.h)
-
-include_directories(decodefest ${libzip_INCLUDE_DIRS} )
+add_library(medfest SHARED FestZip.cpp libzip_zip.cpp libzip_file.cpp FestObjectStream.cpp XMLParser.cpp
+        FestSerializer.cpp FestDeserializer.cpp FestVectors.cpp FestDeserializer_Preload.cpp)
+set_target_properties(medfest PROPERTIES SOVERSION 1 VERSION 1.0.0)
+include_directories(medfest include)
+include_directories(medfest ${libzip_INCLUDE_DIRS} )
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-   target_link_libraries(decodefest -L/usr/local/lib)
+   target_link_libraries(medfest -L/usr/local/lib)
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
-target_link_libraries(decodefest fest)
-target_link_libraries(decodefest decoded)
-target_link_libraries(decodefest packed)
-target_link_libraries(decodefest -lexpat)
-target_link_libraries(decodefest ${libzip_LIBRARIES})
+target_link_libraries(medfest fest)
+target_link_libraries(medfest decoded)
+target_link_libraries(medfest packed)
+target_link_libraries(medfest -lexpat)
+target_link_libraries(medfest ${libzip_LIBRARIES})
 
-add_executable(dumpfestdata cppmain.cpp cppmain.h dumpfestdata.cpp FestDeserializer.cpp FestDeserializer.h
-        FestVectors.cpp FestVectors.h)
+install(TARGETS medfest
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+)
 
-target_link_libraries(dumpfestdata packed)
-target_link_libraries(dumpfestdata decoded)
+install(DIRECTORY include/ DESTINATION include/medfest)
 
-add_executable(copyfestdata copyfestdata.cpp cppmain.cpp cppmain.h FestDeserializer.cpp FestDeserializer.h
-        FestDeserializer_Preload.cpp FestSerializer.cpp FestSerializer.h FestVectors.cpp FestVectors.h)
-
-target_link_libraries(copyfestdata packed)
-target_link_libraries(copyfestdata decoded)
-target_link_libraries(copyfestdata fest)
-
-add_executable(addtofest addtofest.cpp cppmain.cpp cppmain.h FestDeserializer.cpp FestDeserializer.h
-        FestDeserializer_Preload.cpp FestSerializer.cpp FestSerializer.h FestVectors.cpp FestVectors.h
-        FestZip.cpp FestZip.h libzip_zip.cpp libzip_zip.h libzip_file.cpp libzip_file.h exttype_zip_file.h
-        FestObjectStream.cpp FestObjectStream.h XMLParser.cpp XMLParser.h)
-
-target_link_libraries(addtofest packed)
-target_link_libraries(addtofest decoded)
-target_link_libraries(addtofest fest)
-target_link_libraries(addtofest -lexpat)
-target_link_libraries(addtofest ${libzip_LIBRARIES})

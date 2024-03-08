@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/10/23.
 //
 
-#include "PLenke.h"
-#include "../Decoded/Lenke.h"
+#include <Struct/Packed/PLenke.h>
+#include <Struct/Decoded/Lenke.h>
 
 PLenke::PLenke(const Lenke &lenke, std::string &strblock, std::map<std::string,uint32_t> &cache) :
         beskrivelse(lenke.GetBeskrivelse(), strblock, cache),

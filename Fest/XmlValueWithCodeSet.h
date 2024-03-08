@@ -7,7 +7,7 @@
 
 
 #include "XmlValueWithDistinguishedName.h"
-#include "../Struct/Decoded/ValueWithCodeSet.h"
+#include <Struct/Decoded/ValueWithCodeSet.h>
 
 template <typename ParentType> class XmlValueWithCodeSet : public XmlValueWithDistinguishedName<ParentType> {
 private:

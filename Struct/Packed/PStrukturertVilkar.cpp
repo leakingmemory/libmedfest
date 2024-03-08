@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/8/23.
 //
 
-#include "PStrukturertVilkar.h"
-#include "../Decoded/StrukturertVilkar.h"
+#include <Struct/Packed/PStrukturertVilkar.h>
+#include <Struct/Decoded/StrukturertVilkar.h>
 
 PStrukturertVilkar::PStrukturertVilkar(const StrukturertVilkar &strukturertVilkar, std::string &strblock,
                                        std::map<std::string, uint32_t> &cache) :

@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLINTERAKSJONIKKEVURDERT_H
 #define LEGEMFEST_XMLINTERAKSJONIKKEVURDERT_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlAtc.h"
 #include <memory>
 #include <map>

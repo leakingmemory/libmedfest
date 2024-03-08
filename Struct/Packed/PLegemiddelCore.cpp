@@ -2,9 +2,9 @@
 // Created by sigsegv on 1/11/23.
 //
 
-#include "PLegemiddelCore.h"
-#include "FestUuidList.h"
-#include "../Decoded/LegemiddelCore.h"
+#include <Struct/Packed/PLegemiddelCore.h>
+#include <Struct/Packed/FestUuidList.h>
+#include <Struct/Decoded/LegemiddelCore.h>
 
 PLegemiddelCore::PLegemiddelCore(const LegemiddelCore &legemiddelCore, std::string &strblock,
                                  std::map<std::string,uint32_t> &cache, FestUuidList &festUuidList) :

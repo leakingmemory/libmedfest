@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/20/22.
 //
 
-#include "Leverandor.h"
+#include <Struct/Decoded/Leverandor.h>
 
 std::string Leverandor::GetNavn() const {
     return navn;

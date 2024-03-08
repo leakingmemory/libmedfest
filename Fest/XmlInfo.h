@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLINFO_H
 #define LEGEMFEST_XMLINFO_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "XmlContentElement.h"
 #include <memory>

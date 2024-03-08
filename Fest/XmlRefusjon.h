@@ -5,8 +5,8 @@
 #ifndef LEGEMFEST_XMLREFUSJON_H
 #define LEGEMFEST_XMLREFUSJON_H
 
-#include "../Struct/Decoded/Refusjon.h"
-#include "XMLObject.h"
+#include <Struct/Decoded/Refusjon.h>
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include "XmlGyldigFraDato.h"
 #include "XmlForskrivesTilDato.h"

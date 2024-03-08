@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/3/23.
 //
 
-#include "../../../Struct/Packed/PString.h"
+#include <Struct/Packed/PString.h>
 #include <iostream>
 
 int main() {

@@ -5,10 +5,10 @@
 #ifndef LEGEMFEST_XMLREFUSJONSVILKAR_H
 #define LEGEMFEST_XMLREFUSJONSVILKAR_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlRefVilkar.h"
 #include "XmlFraDato.h"
-#include "../Struct/Decoded/RefRefusjonsvilkar.h"
+#include <Struct/Decoded/RefRefusjonsvilkar.h>
 #include <vector>
 #include <memory>
 #include <map>

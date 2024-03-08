@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLPRODUKTINFO_H
 #define LEGEMFEST_XMLPRODUKTINFO_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlLegemiddelMerkevare.h"
 #include <memory>
 #include <map>

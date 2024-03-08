@@ -5,24 +5,22 @@
 #ifndef LEGEMFEST_FEST_H
 #define LEGEMFEST_FEST_H
 
-#include "../Struct/Decoded/OppfLegemiddelMerkevare.h"
-#include "../Struct/Decoded/OppfLegemiddelpakning.h"
+#include "Struct/Decoded/OppfLegemiddelMerkevare.h"
+#include "Struct/Decoded/OppfLegemiddelpakning.h"
 #include "XMLObject.h"
-#include "KatLegemiddelpakning.h"
-#include "../Struct/Decoded/OppfVirkestoff.h"
-#include "KatVirkestoff.h"
-#include "../Struct/Decoded/OppfVirkestoffMedStyrke.h"
-#include "../Struct/Decoded/OppfLegemiddelVirkestoff.h"
-#include "../Struct/Decoded/OppfHandelsvare.h"
-#include "../Struct/Decoded/OppfRefusjon.h"
-#include "../Struct/Decoded/OppfVilkar.h"
-#include "../Struct/Decoded/OppfVarselSlv.h"
-#include "../Struct/Decoded/OppfKodeverk.h"
-#include "../Struct/Decoded/OppfByttegruppe.h"
-#include "../Struct/Decoded/OppfLegemiddeldose.h"
-#include "../Struct/Decoded/OppfInteraksjon.h"
-#include "../Struct/Decoded/OppfInteraksjonIkkeVurdert.h"
-#include "../Struct/Decoded/OppfStrDosering.h"
+#include "Struct/Decoded/OppfVirkestoff.h"
+#include "Struct/Decoded/OppfVirkestoffMedStyrke.h"
+#include "Struct/Decoded/OppfLegemiddelVirkestoff.h"
+#include "Struct/Decoded/OppfHandelsvare.h"
+#include "Struct/Decoded/OppfRefusjon.h"
+#include "Struct/Decoded/OppfVilkar.h"
+#include "Struct/Decoded/OppfVarselSlv.h"
+#include "Struct/Decoded/OppfKodeverk.h"
+#include "Struct/Decoded/OppfByttegruppe.h"
+#include "Struct/Decoded/OppfLegemiddeldose.h"
+#include "Struct/Decoded/OppfInteraksjon.h"
+#include "Struct/Decoded/OppfInteraksjonIkkeVurdert.h"
+#include "Struct/Decoded/OppfStrDosering.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -73,6 +71,9 @@ public:
     [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) = 0;
     [[nodiscard]] virtual bool Visit(const std::string &fest, const OppfStrDosering &strDosering) = 0;
 };
+
+class XmlOppfLegemiddelpakning;
+class XmlOppfVirkestoff;
 
 class Fest : public XMLObject {
 private:

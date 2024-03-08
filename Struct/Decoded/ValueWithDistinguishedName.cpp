@@ -2,7 +2,7 @@
 // Created by jeo on 12/9/22.
 //
 
-#include "ValueWithDistinguishedName.h"
+#include <Struct/Decoded/ValueWithDistinguishedName.h>
 
 std::string ValueWithDistinguishedName::GetValue() const {
     return value;

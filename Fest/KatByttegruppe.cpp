@@ -3,7 +3,7 @@
 //
 
 #include "KatByttegruppe.h"
-#include "Fest.h"
+#include <Fest/Fest.h>
 #include <iostream>
 
 std::string KatByttegruppe::GetName() const {

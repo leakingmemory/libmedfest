@@ -5,11 +5,11 @@
 #ifndef LEGEMFEST_XMLPREPARATOMTALEAVSNITT_H
 #define LEGEMFEST_XMLPREPARATOMTALEAVSNITT_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlValue.h"
 #include "XmlValueWithDistinguishedName.h"
 #include "XmlLenke.h"
-#include "../Struct/Decoded/Preparatomtaleavsnitt.h"
+#include <Struct/Decoded/Preparatomtaleavsnitt.h>
 
 class XmlPreparatomtaleavsnitt {
 private:

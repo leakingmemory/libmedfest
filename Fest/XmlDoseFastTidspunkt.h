@@ -5,15 +5,15 @@
 #ifndef LEGEMFEST_XMLDOSEFASTTIDSPUNKT_H
 #define LEGEMFEST_XMLDOSEFASTTIDSPUNKT_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlMengde.h"
 #include "XmlValueUnit.h"
 #include "XmlValueWithDistinguishedName.h"
 #include "XmlContentElement.h"
-#include "../Struct/Decoded/ValueUnit.h"
-#include "../Struct/Decoded/ValueWithDistinguishedName.h"
-#include "../Struct/Decoded/MaybeBoolean.h"
-#include "../Struct/Decoded/FastDose.h"
+#include <Struct/Decoded/ValueUnit.h>
+#include <Struct/Decoded/ValueWithDistinguishedName.h>
+#include <Struct/Decoded/MaybeBoolean.h>
+#include <Struct/Decoded/FastDose.h>
 #include <memory>
 #include <map>
 

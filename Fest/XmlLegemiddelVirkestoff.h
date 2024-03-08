@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLLEGEMIDDELVIRKESTOFF_H
 #define LEGEMFEST_XMLLEGEMIDDELVIRKESTOFF_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "KatLegemiddelVirkestoff.h"
 #include "XmlLegemiddel.h"
 #include "XmlRefusjon.h"

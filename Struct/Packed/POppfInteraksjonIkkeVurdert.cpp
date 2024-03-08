@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/13/23.
 //
 
-#include "POppfInteraksjonIkkeVurdert.h"
-#include "../Decoded/OppfInteraksjonIkkeVurdert.h"
+#include <Struct/Packed/POppfInteraksjonIkkeVurdert.h>
+#include <Struct/Decoded/OppfInteraksjonIkkeVurdert.h>
 
 POppfInteraksjonIkkeVurdert::POppfInteraksjonIkkeVurdert(const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert,
                                                          std::vector<FestUuid> &idblock, std::string &strblock,

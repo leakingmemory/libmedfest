@@ -5,14 +5,14 @@
 #ifndef LEGEMFEST_XMLELEMENT_H
 #define LEGEMFEST_XMLELEMENT_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include "XmlValueWithDistinguishedName.h"
 #include "FestIdObject.h"
 #include "XmlKode.h"
 #include "XmlBeskrivelseTerm.h"
-#include "../Struct/Decoded/Sprak.h"
-#include "../Struct/Decoded/Term.h"
+#include <Struct/Decoded/Sprak.h>
+#include <Struct/Decoded/Term.h>
 #include <memory>
 #include <map>
 

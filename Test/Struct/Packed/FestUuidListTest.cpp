@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/6/23.
 //
 
-#include "../../../Struct/Packed/FestUuidList.h"
+#include <Struct/Packed/FestUuidList.h>
 #include <iostream>
 
 void PrintMismatch(const std::vector<std::string> &l1, const std::vector<std::string> &l2) {

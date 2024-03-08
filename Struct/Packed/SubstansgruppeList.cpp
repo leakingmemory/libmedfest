@@ -2,7 +2,7 @@
 // Created by sigsegv on 2/11/23.
 //
 
-#include "SubstansgruppeList.h"
+#include <Struct/Packed/SubstansgruppeList.h>
 
 GenericListItems SubstansgruppeList::StoreList(const std::vector<PSubstansgruppe> &list) {
     return GenericListStorage<PSubstansgruppe>::StoreList(list);

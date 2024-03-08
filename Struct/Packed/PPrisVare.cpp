@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/19/23.
 //
 
-#include "PPrisVare.h"
-#include "../Decoded/PrisVare.h"
+#include <Struct/Packed/PPrisVare.h>
+#include <Struct/Decoded/PrisVare.h>
 
 PPrisVare::PPrisVare(const PrisVare &prisVare, std::string &strblock, std::map<std::string,uint32_t> &cache) :
         type(prisVare.GetType(), strblock, cache),

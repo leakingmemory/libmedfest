@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLLEGEMIDDELMERKEVARE_H
 #define LEGEMFEST_XMLLEGEMIDDELMERKEVARE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "KatLegemiddelMerkevare.h"
 #include "XmlLegemiddel.h"

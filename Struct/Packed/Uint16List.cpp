@@ -2,7 +2,7 @@
 // Created by sigsegv on 2/19/23.
 //
 
-#include "Uint16List.h"
+#include <Struct/Packed/Uint16List.h>
 
 GenericListItems Uint16List::StoreList(const std::vector<uint16_t> &list) {
     return GenericListStorage<uint16_t>::StoreList(list);

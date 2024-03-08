@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/25/22.
 //
 
-#include "Refusjonskode.h"
+#include <Struct/Decoded/Refusjonskode.h>
 
 ValueWithCodeSet Refusjonskode::GetRefusjonskode() const {
     return refusjonskode;

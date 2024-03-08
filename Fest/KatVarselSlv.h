@@ -5,12 +5,12 @@
 #ifndef LEGEMFEST_KATVARSELSLV_H
 #define LEGEMFEST_KATVARSELSLV_H
 
-#include "XMLObject.h"
-#include "Fest.h"
+#include <Fest/XMLObject.h>
+#include <Fest/Fest.h>
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
 #include "StatusObject.h"
-#include "../Struct/Decoded/VarselSlv.h"
+#include <Struct/Decoded/VarselSlv.h>
 #include <map>
 
 class XmlOppfVarselSlv;

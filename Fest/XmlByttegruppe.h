@@ -5,12 +5,12 @@
 #ifndef LEGEMFEST_XMLBYTTEGRUPPE_H
 #define LEGEMFEST_XMLBYTTEGRUPPE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "XmlKode.h"
 #include "XmlContentElement.h"
 #include "XmlGyldigFraDato.h"
-#include "../Struct/Decoded/MaybeBoolean.h"
+#include <Struct/Decoded/MaybeBoolean.h>
 #include <memory>
 #include <map>
 

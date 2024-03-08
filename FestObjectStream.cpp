@@ -2,8 +2,8 @@
 // Created by jeo on 12/8/22.
 //
 
-#include "FestObjectStream.h"
-#include "XMLParser.h"
+#include <FestObjectStream.h>
+#include <XMLParser.h>
 #include "Fest/Fest.h"
 #include "Fest/FestIdObject.h"
 #include "Fest/KatLegemiddelMerkevare.h"

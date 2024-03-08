@@ -2,10 +2,10 @@
 // Created by sigsegv on 2/5/23.
 //
 
-#include "POppfKodeverk.h"
-#include "ElementList.h"
-#include "PElement.h"
-#include "../Decoded/OppfKodeverk.h"
+#include <Struct/Packed/POppfKodeverk.h>
+#include <Struct/Packed/ElementList.h>
+#include <Struct/Packed/PElement.h>
+#include <Struct/Decoded/OppfKodeverk.h>
 
 POppfKodeverk::POppfKodeverk(const OppfKodeverk &oppf, ElementList &elementList, std::vector<FestUuid> &idblock,
                              std::string &strblock, std::map<std::string, uint32_t> &cache) :

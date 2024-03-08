@@ -5,11 +5,11 @@
 #ifndef LEGEMFEST_XMLLENKE_H
 #define LEGEMFEST_XMLLENKE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlValue.h"
 #include "XmlContentElement.h"
 #include "XmlValue.h"
-#include "../Struct/Decoded/Lenke.h"
+#include <Struct/Decoded/Lenke.h>
 #include <memory>
 
 class XmlLenke {

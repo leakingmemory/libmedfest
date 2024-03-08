@@ -5,10 +5,10 @@
 #ifndef LEGEMFEST_XMLLEGEMIDDELFORBRUK_H
 #define LEGEMFEST_XMLLEGEMIDDELFORBRUK_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include "XmlMengde.h"
-#include "../Struct/Decoded/Dosering.h"
+#include <Struct/Decoded/Dosering.h>
 #include <memory>
 #include <map>
 

@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/30/22.
 //
 
-#include "Kortdose.h"
+#include <Struct/Decoded/Kortdose.h>
 
 ValueWithCodeSet Kortdose::GetKortdose() const {
     return kortdose;

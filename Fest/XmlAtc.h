@@ -6,7 +6,7 @@
 #define LEGEMFEST_XMLATC_H
 
 #include "XmlValueWithCodeSet.h"
-#include "../Struct/Decoded/Atc.h"
+#include <Struct/Decoded/Atc.h>
 
 class XmlAtc {
 private:

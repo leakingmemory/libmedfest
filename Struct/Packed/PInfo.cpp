@@ -2,9 +2,9 @@
 // Created by sigsegv on 2/4/23.
 //
 
-#include "PInfo.h"
-#include "FestUuid.h"
-#include "../Decoded/Info.h"
+#include <Struct/Packed/PInfo.h>
+#include <Struct/Packed/FestUuid.h>
+#include <Struct/Decoded/Info.h>
 
 PInfo::PInfo(const Info &info, std::string &strblock, std::map<std::string, uint32_t> &cache) :
         betegnelse(info.betegnelse, strblock, cache),

@@ -5,11 +5,11 @@
 #ifndef LEGEMFEST_KATLEGEMIDDELPAKNING_H
 #define LEGEMFEST_KATLEGEMIDDELPAKNING_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
 #include "StatusObject.h"
-#include "../Struct/Decoded/Legemiddelpakning.h"
+#include <Struct/Decoded/Legemiddelpakning.h>
 #include <memory>
 #include <map>
 

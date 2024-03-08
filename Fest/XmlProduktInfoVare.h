@@ -5,11 +5,11 @@
 #ifndef LEGEMFEST_XMLPRODUKTINFOVARE_H
 #define LEGEMFEST_XMLPRODUKTINFOVARE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include "XmlValueWithCodeSet.h"
-#include "../Struct/Decoded/EnhetStorrelse.h"
-#include "../Struct/Decoded/MaybeBoolean.h"
+#include <Struct/Decoded/EnhetStorrelse.h>
+#include <Struct/Decoded/MaybeBoolean.h>
 #include <memory>
 #include <map>
 

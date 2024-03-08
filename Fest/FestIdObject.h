@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_FESTIDOBJECT_H
 #define LEGEMFEST_FESTIDOBJECT_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include <string>
 #include <memory>
 #include <map>

@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/18/22.
 //
 
-#include "LegemiddelVirkestoff.h"
+#include <Struct/Decoded/LegemiddelVirkestoff.h>
 
 std::string LegemiddelVirkestoff::GetId() const {
     return id;

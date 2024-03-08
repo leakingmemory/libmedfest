@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/9/22.
 //
 
-#include "AdministreringLegemiddel.h"
+#include <Struct/Decoded/AdministreringLegemiddel.h>
 
 Administrasjonsvei AdministreringLegemiddel::GetAdministrasjonsvei() const {
     return administrasjonsvei;

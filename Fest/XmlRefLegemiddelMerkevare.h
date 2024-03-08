@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLREFLEGEMIDDELMERKEVARE_H
 #define LEGEMFEST_XMLREFLEGEMIDDELMERKEVARE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include <vector>
 

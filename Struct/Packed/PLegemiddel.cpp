@@ -2,9 +2,9 @@
 // Created by sigsegv on 1/10/23.
 //
 
-#include "PLegemiddel.h"
-#include "FestUuidList.h"
-#include "../Decoded/Legemiddel.h"
+#include <Struct/Packed/PLegemiddel.h>
+#include <Struct/Packed/FestUuidList.h>
+#include <Struct/Decoded/Legemiddel.h>
 
 PLegemiddel::PLegemiddel(const Legemiddel &legemiddel, std::string &strblock, std::map<std::string,uint32_t> &cache,
                          FestUuidList &festUuidList, ValueWithCodesetList &valueWithCodesetList) :

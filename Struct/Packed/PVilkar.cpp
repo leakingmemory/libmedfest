@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/8/23.
 //
 
-#include "PVilkar.h"
-#include "../Decoded/Vilkar.h"
+#include <Struct/Packed/PVilkar.h>
+#include <Struct/Decoded/Vilkar.h>
 
 PVilkar::PVilkar(const Vilkar &vilkar, std::string &strblock, std::map<std::string,uint32_t> &cache) :
         PStrukturertVilkar(vilkar.strukturertVilkar, strblock, cache),

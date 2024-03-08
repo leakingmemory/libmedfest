@@ -5,8 +5,8 @@
 #ifndef LEGEMFEST_KATLEGEMIDDELMERKEVARE_H
 #define LEGEMFEST_KATLEGEMIDDELMERKEVARE_H
 
-#include "../Struct/Decoded/LegemiddelMerkevare.h"
-#include "XMLObject.h"
+#include <Struct/Decoded/LegemiddelMerkevare.h>
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
 #include "StatusObject.h"

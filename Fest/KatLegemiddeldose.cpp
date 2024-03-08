@@ -3,7 +3,7 @@
 //
 
 #include "KatLegemiddeldose.h"
-#include "Fest.h"
+#include <Fest/Fest.h>
 #include <iostream>
 
 std::string KatLegemiddeldose::GetName() const {

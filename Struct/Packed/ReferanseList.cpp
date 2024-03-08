@@ -2,7 +2,7 @@
 // Created by sigsegv on 2/11/23.
 //
 
-#include "ReferanseList.h"
+#include <Struct/Packed/ReferanseList.h>
 
 GenericListItems ReferanseList::StoreList(const std::vector<PReferanse> &list) {
     return GenericListStorage<PReferanse>::StoreList(list);

@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/25/22.
 //
 
-#include "Refusjonsgruppe.h"
+#include <Struct/Decoded/Refusjonsgruppe.h>
 
 std::string Refusjonsgruppe::GetId() const {
     return id;

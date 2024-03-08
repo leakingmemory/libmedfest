@@ -5,12 +5,12 @@
 #ifndef LEGEMFEST_XMLHANDELSVARE_H
 #define LEGEMFEST_XMLHANDELSVARE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlNavn.h"
 #include "XmlPrisVare.h"
 #include "XmlRefusjon.h"
-#include "../Struct/Decoded/ProduktInfoVare.h"
-#include "../Struct/Decoded/Leverandor.h"
+#include <Struct/Decoded/ProduktInfoVare.h>
+#include <Struct/Decoded/Leverandor.h>
 #include <memory>
 
 class XmlOppfHandelsvare;

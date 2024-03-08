@@ -5,15 +5,15 @@
 #ifndef LEGEMFEST_XMLREFUSJONSGRUPPE_H
 #define LEGEMFEST_XMLREFUSJONSGRUPPE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "XmlValueWithCodeSet.h"
 #include "XmlAtc.h"
 #include "XmlContentElement.h"
 #include "XmlRefVilkar.h"
-#include "../Struct/Decoded/GruppeNr.h"
-#include "../Struct/Decoded/MaybeBoolean.h"
-#include "../Struct/Decoded/Refusjonskode.h"
+#include <Struct/Decoded/GruppeNr.h>
+#include <Struct/Decoded/MaybeBoolean.h>
+#include <Struct/Decoded/Refusjonskode.h>
 #include <memory>
 #include <map>
 #include <vector>

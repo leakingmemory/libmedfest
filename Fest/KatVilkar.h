@@ -5,11 +5,11 @@
 #ifndef LEGEMFEST_KATVILKAR_H
 #define LEGEMFEST_KATVILKAR_H
 
-#include "Fest.h"
+#include <Fest/Fest.h>
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
 #include "StatusObject.h"
-#include "../Struct/Decoded/Vilkar.h"
+#include <Struct/Decoded/Vilkar.h>
 
 class XmlOppfVilkar;
 

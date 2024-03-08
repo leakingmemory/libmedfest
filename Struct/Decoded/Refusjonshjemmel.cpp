@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/24/22.
 //
 
-#include "Refusjonshjemmel.h"
+#include <Struct/Decoded/Refusjonshjemmel.h>
 
 ValueWithCodeSet Refusjonshjemmel::GetRefusjonshjemmel() const {
     return refusjonshjemmel;

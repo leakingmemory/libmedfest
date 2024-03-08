@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/6/23.
 //
 
-#include "PRefusjonshjemmel.h"
-#include "../Decoded/Refusjonshjemmel.h"
+#include <Struct/Packed/PRefusjonshjemmel.h>
+#include <Struct/Decoded/Refusjonshjemmel.h>
 
 PRefusjonshjemmel::PRefusjonshjemmel(const Refusjonshjemmel &refusjonshjemmel, RefusjonskodeList &refusjonskodeList,
                                      RefRefusjonsvilkarList &refRefusjonsvilkarList, StringList &stringList,

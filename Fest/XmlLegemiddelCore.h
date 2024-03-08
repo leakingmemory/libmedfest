@@ -6,18 +6,18 @@
 #define LEGEMFEST_XMLLEGEMIDDELCORE_H
 
 
-#include "../Struct/Decoded/Atc.h"
-#include "../Struct/Decoded/Reseptgruppe.h"
-#include "XMLObject.h"
+#include <Struct/Decoded/Atc.h>
+#include <Struct/Decoded/Reseptgruppe.h>
+#include <Fest/XMLObject.h>
 #include "XmlValueWithDistinguishedName.h"
 #include "XmlValueWithCodeSet.h"
 #include "XmlAtc.h"
-#include "../Struct/Decoded/LegemiddelformKort.h"
+#include <Struct/Decoded/LegemiddelformKort.h>
 #include "XmlContentElement.h"
-#include "../Struct/Decoded/TypeSoknadSlv.h"
-#include "../Struct/Decoded/AdministreringLegemiddel.h"
-#include "../Struct/Decoded/MaybeBoolean.h"
-#include "../Struct/Decoded/SvartTrekant.h"
+#include <Struct/Decoded/TypeSoknadSlv.h>
+#include <Struct/Decoded/AdministreringLegemiddel.h>
+#include <Struct/Decoded/MaybeBoolean.h>
+#include <Struct/Decoded/SvartTrekant.h>
 #include "XmlSortertVirkestoffMedStyrke.h"
 #include "XmlRefVilkar.h"
 #include <memory>

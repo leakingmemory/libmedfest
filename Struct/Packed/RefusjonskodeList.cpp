@@ -2,7 +2,7 @@
 // Created by sigsegv on 2/6/23.
 //
 
-#include "RefusjonskodeList.h"
+#include <Struct/Packed/RefusjonskodeList.h>
 
 GenericListItems RefusjonskodeList::StoreList(const std::vector<PRefusjonskode> &list) {
     return GenericListStorage<PRefusjonskode>::StoreList(list);

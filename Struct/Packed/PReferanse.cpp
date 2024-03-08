@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/11/23.
 //
 
-#include "PReferanse.h"
-#include "../Decoded/Referanse.h"
+#include <Struct/Packed/PReferanse.h>
+#include <Struct/Decoded/Referanse.h>
 
 PReferanse::PReferanse(const Referanse &referanse, std::string &strblock, std::map<std::string, uint32_t> &cache) :
         kilde(referanse.kilde, strblock, cache),

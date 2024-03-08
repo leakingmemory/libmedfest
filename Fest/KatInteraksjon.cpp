@@ -3,7 +3,7 @@
 //
 
 #include "KatInteraksjon.h"
-#include "Fest.h"
+#include <Fest/Fest.h>
 #include <iostream>
 
 std::string KatInteraksjon::GetName() const {

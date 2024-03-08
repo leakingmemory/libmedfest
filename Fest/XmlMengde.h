@@ -5,8 +5,8 @@
 #ifndef LEGEMFEST_XMLMENGDE_H
 #define LEGEMFEST_XMLMENGDE_H
 
-#include "../Struct/Decoded/ValueUnit.h"
-#include "XMLObject.h"
+#include <Struct/Decoded/ValueUnit.h>
+#include <Fest/XMLObject.h>
 #include <memory>
 #include <map>
 

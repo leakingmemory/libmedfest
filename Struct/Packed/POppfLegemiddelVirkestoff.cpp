@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/24/23.
 //
 
-#include "POppfLegemiddelVirkestoff.h"
-#include "../Decoded/OppfLegemiddelVirkestoff.h"
+#include <Struct/Packed/POppfLegemiddelVirkestoff.h>
+#include <Struct/Decoded/OppfLegemiddelVirkestoff.h>
 
 POppfLegemiddelVirkestoff::POppfLegemiddelVirkestoff(const OppfLegemiddelVirkestoff &oppf, std::string &strblock,
                                                      std::map<std::string,uint32_t> &cache,

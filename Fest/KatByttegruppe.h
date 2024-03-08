@@ -5,11 +5,11 @@
 #ifndef LEGEMFEST_KATBYTTEGRUPPE_H
 #define LEGEMFEST_KATBYTTEGRUPPE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
 #include "StatusObject.h"
-#include "../Struct/Decoded/Byttegruppe.h"
+#include <Struct/Decoded/Byttegruppe.h>
 #include <memory>
 #include <map>
 

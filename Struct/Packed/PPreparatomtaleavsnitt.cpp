@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/10/23.
 //
 
-#include "PPreparatomtaleavsnitt.h"
-#include "../Decoded/Preparatomtaleavsnitt.h"
+#include <Struct/Packed/PPreparatomtaleavsnitt.h>
+#include <Struct/Decoded/Preparatomtaleavsnitt.h>
 
 PPreparatomtaleavsnitt::PPreparatomtaleavsnitt(const Preparatomtaleavsnitt &preparatomtaleavsnitt,
                                                std::string &strblock, std::map<std::string,uint32_t> &cache) :

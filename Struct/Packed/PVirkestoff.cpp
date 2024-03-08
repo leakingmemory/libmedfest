@@ -2,9 +2,9 @@
 // Created by sigsegv on 2/4/23.
 //
 
-#include "PVirkestoff.h"
-#include "FestUuidList.h"
-#include "../Decoded/Virkestoff.h"
+#include <Struct/Packed/PVirkestoff.h>
+#include <Struct/Packed/FestUuidList.h>
+#include <Struct/Decoded/Virkestoff.h>
 
 PVirkestoff::PVirkestoff(const Virkestoff &virkestoff, FestUuidList &festUuidList, std::vector<FestUuid> &idblock,
                          std::string &strblock, std::map<std::string,uint32_t> &cache) :

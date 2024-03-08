@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/11/22.
 //
 
-#include "Legemiddelpakning.h"
+#include <Struct/Decoded/Legemiddelpakning.h>
 
 Preparattype Legemiddelpakning::GetPreparattype() const {
     return preparattype;

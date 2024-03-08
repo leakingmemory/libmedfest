@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/29/22.
 //
 
-#include "PakningskomponentInfo.h"
+#include <Struct/Decoded/PakningskomponentInfo.h>
 
 Pakningstype PakningskomponentInfo::GetPakningstype() const {
     return pakningstype;

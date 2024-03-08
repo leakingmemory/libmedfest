@@ -5,12 +5,12 @@
 #ifndef LEGEMFEST_KATKODEVERK_H
 #define LEGEMFEST_KATKODEVERK_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
 #include "StatusObject.h"
-#include "../Struct/Decoded/Info.h"
-#include "../Struct/Decoded/Element.h"
+#include <Struct/Decoded/Info.h>
+#include <Struct/Decoded/Element.h>
 #include <memory>
 #include <map>
 #include <vector>

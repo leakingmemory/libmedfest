@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLCONTENTELEMENT_H
 #define LEGEMFEST_XMLCONTENTELEMENT_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include <memory>
 #include <map>
 #include <iostream>

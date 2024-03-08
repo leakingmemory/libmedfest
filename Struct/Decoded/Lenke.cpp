@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/27/22.
 //
 
-#include "Lenke.h"
+#include <Struct/Decoded/Lenke.h>
 
 std::string Lenke::GetBeskrivelse() const {
     return beskrivelse;

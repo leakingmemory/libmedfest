@@ -3,7 +3,7 @@
 //
 
 #include "KatVirkestoff.h"
-#include "Fest.h"
+#include <Fest/Fest.h>
 #include <iostream>
 
 std::string KatVirkestoff::GetName() const {

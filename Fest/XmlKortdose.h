@@ -7,7 +7,7 @@
 
 #include "XmlValueWithCodeSet.h"
 #include "XmlBeskrivelseTerm.h"
-#include "../Struct/Decoded/Kortdose.h"
+#include <Struct/Decoded/Kortdose.h>
 #include <vector>
 
 class XmlKortdose {

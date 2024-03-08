@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/30/22.
 //
 
-#include "Legemiddelforbruk.h"
+#include <Struct/Decoded/Legemiddelforbruk.h>
 
 int Legemiddelforbruk::GetLopenr() const {
     return lopenr;

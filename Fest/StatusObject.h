@@ -5,8 +5,8 @@
 #ifndef LEGEMFEST_STATUSOBJECT_H
 #define LEGEMFEST_STATUSOBJECT_H
 
-#include "../Struct/Decoded/Status.h"
-#include "XMLObject.h"
+#include <Struct/Decoded/Status.h>
+#include <Fest/XMLObject.h>
 #include <string>
 #include <memory>
 #include <map>

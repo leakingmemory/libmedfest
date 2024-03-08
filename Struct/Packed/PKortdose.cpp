@@ -2,10 +2,10 @@
 // Created by sigsegv on 2/15/23.
 //
 
-#include "PKortdose.h"
-#include "PLegemiddelforbruk.h"
-#include "LegemiddelforbrukList.h"
-#include "../Decoded/Kortdose.h"
+#include <Struct/Packed/PKortdose.h>
+#include <Struct/Packed/PLegemiddelforbruk.h>
+#include <Struct/Packed/LegemiddelforbrukList.h>
+#include <Struct/Decoded/Kortdose.h>
 
 PKortdose::PKortdose(const Kortdose &kortdose, LegemiddelforbrukList &legemiddelforbrukList, DoseringList &doseringList,
                      DoseFastTidspunktList &doseFastTidspunktList, std::string &strblock,

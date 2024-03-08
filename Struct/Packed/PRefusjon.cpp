@@ -2,9 +2,9 @@
 // Created by sigsegv on 1/19/23.
 //
 
-#include "PRefusjon.h"
-#include "../Decoded/Refusjon.h"
-#include "StringList.h"
+#include <Struct/Packed/PRefusjon.h>
+#include <Struct/Decoded/Refusjon.h>
+#include <Struct/Packed/StringList.h>
 
 PRefusjon::PRefusjon(const Refusjon &refusjon, StringList &stringList, std::string &strblock,
                      std::map<std::string,uint32_t> &cache) :

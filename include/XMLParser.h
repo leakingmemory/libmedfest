@@ -11,7 +11,7 @@
 #include <memory>
 #include <map>
 #include <iostream>
-#include "Fest/XMLObject.h"
+#include <Fest/XMLObject.h>
 
 template <typename T> concept XMLObjectHandler = requires (T handler) {
     { handler.StartElement(std::declval<std::shared_ptr<XMLObject>>(), std::declval<const std::map<std::string,std::string>>()) } -> std::convertible_to<std::shared_ptr<XMLObject>>;

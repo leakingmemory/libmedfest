@@ -3,7 +3,7 @@
 //
 
 #include "KatKodeverk.h"
-#include "Fest.h"
+#include <Fest/Fest.h>
 #include <iostream>
 
 std::string KatKodeverk::GetName() const {

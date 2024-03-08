@@ -2,9 +2,9 @@
 // Created by sigsegv on 2/14/23.
 //
 
-#include "PLegemiddelforbruk.h"
-#include "DoseringList.h"
-#include "../Decoded/Legemiddelforbruk.h"
+#include <Struct/Packed/PLegemiddelforbruk.h>
+#include <Struct/Packed/DoseringList.h>
+#include <Struct/Decoded/Legemiddelforbruk.h>
 #include <math.h>
 
 PLegemiddelforbruk::PLegemiddelforbruk(const Legemiddelforbruk &legemiddelforbruk, DoseringList &doseringList,

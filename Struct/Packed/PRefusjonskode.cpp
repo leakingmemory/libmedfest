@@ -2,11 +2,11 @@
 // Created by sigsegv on 2/6/23.
 //
 
-#include "PRefusjonskode.h"
-#include "StringList.h"
-#include "PRefRefusjonsvilkar.h"
-#include "RefRefusjonsvilkarList.h"
-#include "../Decoded/Refusjonskode.h"
+#include <Struct/Packed/PRefusjonskode.h>
+#include <Struct/Packed/StringList.h>
+#include <Struct/Packed/PRefRefusjonsvilkar.h>
+#include <Struct/Packed/RefRefusjonsvilkarList.h>
+#include <Struct/Decoded/Refusjonskode.h>
 
 PRefusjonskode::PRefusjonskode(const Refusjonskode &refusjonskode, RefRefusjonsvilkarList &refRefusjonsvilkarList,
                                StringList &stringList, std::vector<FestUuid> &idblock, std::string &strblock,

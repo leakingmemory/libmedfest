@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/19/23.
 //
 
-#include "PMarkedsforingsinfo.h"
-#include "../Decoded/Markedsforingsinfo.h"
+#include <Struct/Packed/PMarkedsforingsinfo.h>
+#include <Struct/Decoded/Markedsforingsinfo.h>
 
 PMarkedsforingsinfo::PMarkedsforingsinfo(const Markedsforingsinfo &markedsforingsinfo,
                                          std::string &strblock, std::map<std::string,uint32_t> &cache) :

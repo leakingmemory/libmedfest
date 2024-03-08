@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLFASTDOSE_H
 #define LEGEMFEST_XMLFASTDOSE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include <memory>
 #include <map>

@@ -2,9 +2,9 @@
 // Created by sigsegv on 2/14/23.
 //
 
-#include "PDosering.h"
-#include "DoseFastTidspunktList.h"
-#include "../Decoded/Dosering.h"
+#include <Struct/Packed/PDosering.h>
+#include <Struct/Packed/DoseFastTidspunktList.h>
+#include <Struct/Decoded/Dosering.h>
 
 static GenericListItems CreateDoseFastTidspunktList(const std::vector<DoseFastTidspunkt> &items,
                                                     DoseFastTidspunktList &doseFastTidspunktList, std::string &strblock,

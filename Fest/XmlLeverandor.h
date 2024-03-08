@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLLEVERANDOR_H
 #define LEGEMFEST_XMLLEVERANDOR_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlNavn.h"
 #include "XmlContentElement.h"
 #include <memory>

@@ -5,10 +5,10 @@
 #ifndef LEGEMFEST_XMLPAKNINGSINFO_H
 #define LEGEMFEST_XMLPAKNINGSINFO_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include "XmlValueWithCodeSet.h"
-#include "../Struct/Decoded/Pakningsinfo.h"
+#include <Struct/Decoded/Pakningsinfo.h>
 #include "XmlRefLegemiddelMerkevare.h"
 #include "XmlValueUnit.h"
 #include "XmlPakningstype.h"

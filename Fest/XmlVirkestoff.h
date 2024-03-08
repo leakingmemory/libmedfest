@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLVIRKESTOFF_H
 #define LEGEMFEST_XMLVIRKESTOFF_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "KatVirkestoff.h"
 #include "FestIdObject.h"
 #include "XmlNavn.h"

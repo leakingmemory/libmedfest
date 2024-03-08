@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/19/22.
 //
 
-#include "ProduktInfoVare.h"
+#include <Struct/Decoded/ProduktInfoVare.h>
 
 std::string ProduktInfoVare::GetProduktNr() const {
     return produktNr;

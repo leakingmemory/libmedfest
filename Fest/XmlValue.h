@@ -5,8 +5,8 @@
 #ifndef LEGEMFEST_XMLVALUE_H
 #define LEGEMFEST_XMLVALUE_H
 
-#include "../Struct/Decoded/ValueWithDistinguishedName.h"
-#include "XMLObject.h"
+#include <Struct/Decoded/ValueWithDistinguishedName.h>
+#include <Fest/XMLObject.h>
 #include <memory>
 #include <map>
 #include <iostream>

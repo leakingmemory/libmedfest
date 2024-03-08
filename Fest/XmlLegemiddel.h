@@ -7,7 +7,7 @@
 
 
 #include "XmlLegemiddelCore.h"
-#include "../Struct/Decoded/AdministreringLegemiddel.h"
+#include <Struct/Decoded/AdministreringLegemiddel.h>
 
 class XmlLegemiddel : public XmlLegemiddelCore, public XmlSortertVirkestoffMedStyrke {
 private:

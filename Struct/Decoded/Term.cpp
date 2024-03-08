@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/28/22.
 //
 
-#include "Term.h"
+#include <Struct/Decoded/Term.h>
 
 std::string Term::GetTerm() const {
     return term;

@@ -5,12 +5,12 @@
 #ifndef LEGEMFEST_KATINTERAKSJON_H
 #define LEGEMFEST_KATINTERAKSJON_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
 #include "StatusObject.h"
-#include "../Struct/Decoded/Interaksjon.h"
-#include "../Struct/Decoded/InteraksjonIkkeVurdert.h"
+#include <Struct/Decoded/Interaksjon.h>
+#include <Struct/Decoded/InteraksjonIkkeVurdert.h>
 #include <memory>
 #include <map>
 

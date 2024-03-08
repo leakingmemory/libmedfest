@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/19/22.
 //
 
-#include "OppfHandelsvare.h"
+#include <Struct/Decoded/OppfHandelsvare.h>
 
 MedForbrMatr OppfMedForbrMatr::GetMedForbrMatr() const {
     return medForbrMatr;

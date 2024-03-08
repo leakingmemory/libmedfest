@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_KATSTRDOSERING_H
 #define LEGEMFEST_KATSTRDOSERING_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
 #include "StatusObject.h"

@@ -2,7 +2,7 @@
 // Created by jeo on 12/9/22.
 //
 
-#include "Legemiddel.h"
+#include <Struct/Decoded/Legemiddel.h>
 
 AdministreringLegemiddel Legemiddel::GetAdministreringLegemiddel() const {
     return administreringLegemiddel;

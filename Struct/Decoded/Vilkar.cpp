@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/26/22.
 //
 
-#include "Vilkar.h"
+#include <Struct/Decoded/Vilkar.h>
 
 std::string Vilkar::GetId() const {
     return id;

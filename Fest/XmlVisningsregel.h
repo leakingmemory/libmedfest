@@ -6,7 +6,7 @@
 #define LEGEMFEST_XMLVISNINGSREGEL_H
 
 #include "XmlValueWithCodeSet.h"
-#include "../Struct/Decoded/Visningsregel.h"
+#include <Struct/Decoded/Visningsregel.h>
 #include <vector>
 
 class XmlVisningsregel {

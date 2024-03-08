@@ -6,7 +6,7 @@
 #define LEGEMFEST_XMLTYPE_H
 
 #include "XmlValueWithCodeSet.h"
-#include "../Struct/Decoded/ValueWithCodeSet.h"
+#include <Struct/Decoded/ValueWithCodeSet.h>
 
 class XmlTypeObject {
 private:

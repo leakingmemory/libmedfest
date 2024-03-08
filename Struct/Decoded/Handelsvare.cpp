@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/19/22.
 //
 
-#include "Handelsvare.h"
+#include <Struct/Decoded/Handelsvare.h>
 
 std::string Handelsvare::GetNr() const {
     return nr;

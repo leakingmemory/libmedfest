@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/31/22.
 //
 
-#include "DoseFastTidspunkt.h"
+#include <Struct/Decoded/DoseFastTidspunkt.h>
 
 ValueUnit DoseFastTidspunkt::GetMengde() const {
     return mengde;

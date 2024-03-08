@@ -5,13 +5,13 @@
 #ifndef LEGEMFEST_XMLPRISVARE_H
 #define LEGEMFEST_XMLPRISVARE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlGyldigFraDato.h"
 #include "XmlGyldigTilDato.h"
 #include "XmlValueWithCodeSet.h"
 #include "XmlValueUnit.h"
 #include "XmlType.h"
-#include "../Struct/Decoded/PrisVare.h"
+#include <Struct/Decoded/PrisVare.h>
 #include <vector>
 
 class XmlPrisVare {

@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/19/23.
 //
 
-#include "PrisVareList.h"
+#include <Struct/Packed/PrisVareList.h>
 
 GenericListItems PrisVareList::StoreList(const std::vector<PPrisVare> &list) {
     return GenericListStorage<PPrisVare>::StoreList(list);

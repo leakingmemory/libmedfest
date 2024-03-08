@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/12/22.
 //
 
-#include "Markedsforingsinfo.h"
+#include <Struct/Decoded/Markedsforingsinfo.h>
 
 std::string Markedsforingsinfo::GetMarkedsforingsdato() const {
     return markedsforingsdato;

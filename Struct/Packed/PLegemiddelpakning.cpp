@@ -2,12 +2,12 @@
 // Created by sigsegv on 1/18/23.
 //
 
-#include "PLegemiddelpakning.h"
-#include "PPakningsinfo.h"
-#include "PPrisVare.h"
-#include "PakningsinfoList.h"
-#include "PrisVareList.h"
-#include "../Decoded/Legemiddelpakning.h"
+#include <Struct/Packed/PLegemiddelpakning.h>
+#include <Struct/Packed/PPakningsinfo.h>
+#include <Struct/Packed/PPrisVare.h>
+#include <Struct/Packed/PakningsinfoList.h>
+#include <Struct/Packed/PrisVareList.h>
+#include <Struct/Decoded/Legemiddelpakning.h>
 
 PLegemiddelpakning::PLegemiddelpakning(const Legemiddelpakning &legemiddelpakning,
                                        PakningskomponentList &pakningskomponentList, PakningsinfoList &pakningsinfoList,

@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/18/23.
 //
 
-#include "PPakningsinfo.h"
-#include "../Decoded/Pakningsinfo.h"
+#include <Struct/Packed/PPakningsinfo.h>
+#include <Struct/Decoded/Pakningsinfo.h>
 
 PPakningsinfo::PPakningsinfo(const Pakningsinfo &pakningsinfo, std::vector<FestUuid> &uuidblock,
                              PakningskomponentList &pakningskomponentList, std::string &strblock,

@@ -2,9 +2,9 @@
 // Created by sigsegv on 1/29/23.
 //
 
-#include "PHandelsvare.h"
-#include "PrisVareList.h"
-#include "../Decoded/Handelsvare.h"
+#include <Struct/Packed/PHandelsvare.h>
+#include <Struct/Packed/PrisVareList.h>
+#include <Struct/Decoded/Handelsvare.h>
 
 PHandelsvare::PHandelsvare(const Handelsvare &handelsvare, PrisVareList &prisVareList, StringList &stringList,
                            std::string &strblock, std::map<std::string,uint32_t> &cache) :

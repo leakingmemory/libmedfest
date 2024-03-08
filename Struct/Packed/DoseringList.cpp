@@ -2,7 +2,7 @@
 // Created by sigsegv on 2/14/23.
 //
 
-#include "DoseringList.h"
+#include <Struct/Packed/DoseringList.h>
 
 GenericListItems DoseringList::StoreList(std::vector<PDosering> &list) {
     return GenericListStorage<PDosering>::StoreList(list);

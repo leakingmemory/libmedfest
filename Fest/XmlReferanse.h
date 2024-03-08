@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLREFERANSE_H
 #define LEGEMFEST_XMLREFERANSE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include "XmlLenke.h"
 #include <memory>

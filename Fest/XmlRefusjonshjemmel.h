@@ -5,11 +5,11 @@
 #ifndef LEGEMFEST_XMLREFUSJONSHJEMMEL_H
 #define LEGEMFEST_XMLREFUSJONSHJEMMEL_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "KatRefusjon.h"
 #include "XmlValueWithCodeSet.h"
 #include "XmlContentElement.h"
-#include "../Struct/Decoded/Refusjonsgruppe.h"
+#include <Struct/Decoded/Refusjonsgruppe.h>
 #include <memory>
 #include <map>
 

@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/29/23.
 //
 
-#include "POppfHandelsvare.h"
-#include "../Decoded/OppfHandelsvare.h"
+#include <Struct/Packed/POppfHandelsvare.h>
+#include <Struct/Decoded/OppfHandelsvare.h>
 
 POppfMedForbrMatr::POppfMedForbrMatr(const OppfMedForbrMatr &oppfMedForbrMatr, PrisVareList &prisVareList, StringList &stringList, std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache) :
         POppfHandelsvare<MedForbrMatr, PMedForbrMatr>(oppfMedForbrMatr, oppfMedForbrMatr.medForbrMatr, prisVareList, stringList, uuidblock, strblock, cache) {}

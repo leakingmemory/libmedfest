@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/11/22.
 //
 
-#include "LegemiddelCore.h"
+#include <Struct/Decoded/LegemiddelCore.h>
 
 Atc LegemiddelCore::GetAtc() const {
     return atc;

@@ -5,8 +5,8 @@
 #ifndef LEGEMFEST_XMLDOSERING_H
 #define LEGEMFEST_XMLDOSERING_H
 
-#include "XMLObject.h"
-#include "../Struct/Decoded/DoseFastTidspunkt.h"
+#include <Fest/XMLObject.h>
+#include <Struct/Decoded/DoseFastTidspunkt.h>
 #include <memory>
 #include <map>
 #include <vector>

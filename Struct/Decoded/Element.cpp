@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/28/22.
 //
 
-#include "Element.h"
+#include <Struct/Decoded/Element.h>
 
 std::string Element::GetId() const {
     return id;

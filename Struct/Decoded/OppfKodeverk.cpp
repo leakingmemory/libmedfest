@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/28/22.
 //
 
-#include "OppfKodeverk.h"
+#include <Struct/Decoded/OppfKodeverk.h>
 
 Info OppfKodeverk::GetInfo() const {
     return info;

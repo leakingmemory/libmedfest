@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/5/23.
 //
 
-#include "PRefRefusjonsvilkar.h"
-#include "../Decoded/RefRefusjonsvilkar.h"
+#include <Struct/Packed/PRefRefusjonsvilkar.h>
+#include <Struct/Decoded/RefRefusjonsvilkar.h>
 
 PRefRefusjonsvilkar::PRefRefusjonsvilkar(const RefRefusjonsvilkar &refRefusjonsvilkar, std::vector<FestUuid> &idblock,
                                          std::string &strblock, std::map<std::string, uint32_t> &cache) :

@@ -5,10 +5,10 @@
 #ifndef LEGEMFEST_XMLREFERANSEELEMENT_H
 #define LEGEMFEST_XMLREFERANSEELEMENT_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlValueWithDistinguishedName.h"
 #include "XmlContentElement.h"
-#include "../Struct/Decoded/Referanseelement.h"
+#include <Struct/Decoded/Referanseelement.h>
 #include <memory>
 #include <map>
 

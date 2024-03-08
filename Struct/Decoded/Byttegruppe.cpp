@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/29/22.
 //
 
-#include "Byttegruppe.h"
+#include <Struct/Decoded/Byttegruppe.h>
 
 std::string Byttegruppe::GetId() const {
     return id;

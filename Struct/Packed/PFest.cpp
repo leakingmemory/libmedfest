@@ -2,9 +2,9 @@
 // Created by sigsegv on 2/18/23.
 //
 
-#include "PFest.h"
-#include "Uint16List.h"
-#include "../../FestSerializer.h"
+#include <Struct/Packed/PFest.h>
+#include <Struct/Packed/Uint16List.h>
+#include <FestSerializer.h>
 
 PFest::PFest(const FestData &festData, Uint16List &uint16List, std::string &strblock, std::map<std::string, uint32_t> &cache) :
         dato(festData.dato, strblock, cache),

@@ -2,9 +2,9 @@
 // Created by sigsegv on 2/5/23.
 //
 
-#include "PElement.h"
-#include "FestUuid.h"
-#include "../Decoded/Element.h"
+#include <Struct/Packed/PElement.h>
+#include <Struct/Packed/FestUuid.h>
+#include <Struct/Decoded/Element.h>
 
 PElement::PElement(const Element &element, std::string &strblock, std::map<std::string, uint32_t> &cache) :
         PTerm(element.GetTerm(), strblock, cache),

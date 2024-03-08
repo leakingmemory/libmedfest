@@ -5,9 +5,12 @@
 #ifndef LEGEMFEST_KATHANDELSVARE_H
 #define LEGEMFEST_KATHANDELSVARE_H
 
-#include "XMLObject.h"
-#include "Fest.h"
-#include "../Struct/Decoded/Handelsvare.h"
+#include <Fest/XMLObject.h>
+#include <Fest/Fest.h>
+#include <Struct/Decoded/Handelsvare.h>
+#include "FestIdObject.h"
+#include "TidspunktObject.h"
+#include "StatusObject.h"
 
 class XmlOppfHandelsvare;
 

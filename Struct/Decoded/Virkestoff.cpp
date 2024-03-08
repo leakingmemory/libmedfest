@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/16/22.
 //
 
-#include "Virkestoff.h"
+#include <Struct/Decoded/Virkestoff.h>
 
 std::string Virkestoff::GetId() const {
     return id;

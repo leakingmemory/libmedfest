@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLRESEPTGYLDIGHET_H
 #define LEGEMFEST_XMLRESEPTGYLDIGHET_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlLegemiddelMerkevare.h"
 #include "XmlVarighet.h"
 #include "XmlKjonn.h"

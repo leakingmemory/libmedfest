@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/29/22.
 //
 
-#include "Legemiddeldose.h"
+#include <Struct/Decoded/Legemiddeldose.h>
 
 Preparattype Legemiddeldose::GetPreparattype() const {
     return preparattype;

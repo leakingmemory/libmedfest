@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/2/23.
 //
 
-#include "PFestId.h"
+#include <Struct/Packed/PFestId.h>
 
 PFestId::PFestId(const std::string &id, std::vector<FestUuid> &uuidblock, bool caseSensitive) {
     if (id.empty()) {

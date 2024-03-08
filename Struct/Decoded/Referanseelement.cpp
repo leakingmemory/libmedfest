@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/27/22.
 //
 
-#include "Referanseelement.h"
+#include <Struct/Decoded/Referanseelement.h>
 
 Klasse Referanseelement::GetKlasse() const {
     return klasse;

@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/17/22.
 //
 
-#include "VirkestoffMedStyrke.h"
+#include <Struct/Decoded/VirkestoffMedStyrke.h>
 
 std::string VirkestoffMedStyrke::GetId() const {
     return id;

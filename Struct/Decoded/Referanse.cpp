@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/30/22.
 //
 
-#include "Referanse.h"
+#include <Struct/Decoded/Referanse.h>
 
 std::string Referanse::GetKilde() const {
     return kilde;

@@ -2,11 +2,11 @@
 // Created by sigsegv on 1/10/23.
 //
 
-#include "PLegemiddelMerkevare.h"
-#include "FestUuidList.h"
-#include "ValueWithCodesetList.h"
-#include "ReseptgyldighetList.h"
-#include "../Decoded/LegemiddelMerkevare.h"
+#include <Struct/Packed/PLegemiddelMerkevare.h>
+#include <Struct/Packed/FestUuidList.h>
+#include <Struct/Packed/ValueWithCodesetList.h>
+#include <Struct/Packed/ReseptgyldighetList.h>
+#include <Struct/Decoded/LegemiddelMerkevare.h>
 
 PLegemiddelMerkevare::PLegemiddelMerkevare(const LegemiddelMerkevare &legemiddelMerkevare, std::string &strblock,
                                            std::map<std::string,uint32_t> &cache, std::vector<FestUuid> &festidblock,

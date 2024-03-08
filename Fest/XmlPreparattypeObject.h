@@ -6,7 +6,7 @@
 #define LEGEMFEST_XMLPREPARATTYPEOBJECT_H
 
 
-#include "../Struct/Decoded/Preparattype.h"
+#include <Struct/Decoded/Preparattype.h>
 #include "XmlValueWithDistinguishedName.h"
 
 class XmlPreparattypeObject {

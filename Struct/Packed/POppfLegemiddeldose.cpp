@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/1/23.
 //
 
-#include "POppfLegemiddeldose.h"
-#include "../Decoded/OppfLegemiddeldose.h"
+#include <Struct/Packed/POppfLegemiddeldose.h>
+#include <Struct/Decoded/OppfLegemiddeldose.h>
 
 POppfLegemiddeldose::POppfLegemiddeldose(const OppfLegemiddeldose &oppf,
                                          PakningskomponentInfoList &pakningskomponentInfoList,

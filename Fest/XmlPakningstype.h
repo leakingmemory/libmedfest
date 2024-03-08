@@ -6,7 +6,7 @@
 #define LEGEMFEST_XMLPAKNINGSTYPE_H
 
 #include "XmlValueWithCodeSet.h"
-#include "../Struct/Decoded/Pakningstype.h"
+#include <Struct/Decoded/Pakningstype.h>
 #include <memory>
 
 class XmlPakningstype {

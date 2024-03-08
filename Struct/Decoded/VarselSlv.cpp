@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/27/22.
 //
 
-#include "VarselSlv.h"
+#include <Struct/Decoded/VarselSlv.h>
 
 ValueWithCodeSet VarselSlv::GetType() const {
     return type;

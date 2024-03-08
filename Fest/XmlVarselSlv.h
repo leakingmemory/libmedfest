@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLVARSELSLV_H
 #define LEGEMFEST_XMLVARSELSLV_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlType.h"
 #include "XmlContentElement.h"
 #include "XmlValueWithCodeSet.h"

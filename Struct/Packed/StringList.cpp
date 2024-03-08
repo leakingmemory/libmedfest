@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/29/23.
 //
 
-#include "StringList.h"
+#include <Struct/Packed/StringList.h>
 
 GenericListItems StringList::StoreList(const std::vector<PString> &list) {
     return GenericListStorage<PString>::StoreList(list);

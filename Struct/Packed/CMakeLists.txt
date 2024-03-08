@@ -1,39 +1,23 @@
 set(CMAKE_CXX_STANDARD 20)
 
-add_library(packed OBJECT PackException.cpp PackException.h PFestId.cpp PFestId.h PString.cpp PString.h
-        FestUuid.cpp FestUuid.h FestUuidList.cpp FestUuidList.h GenericListStorage.h POppf.cpp POppf.h
-        PValueWithDistinguishedName.cpp PValueWithDistinguishedName.h PLegemiddelMerkevare.cpp PLegemiddelMerkevare.h
-        PValueWithCodeset.cpp PValueWithCodeset.h PPreparatomtaleavsnitt.cpp PPreparatomtaleavsnitt.h
-        PReseptgyldighet.cpp PReseptgyldighet.h ReseptgyldighetList.cpp ReseptgyldighetList.h PLenke.cpp PLenke.h
-        PLegemiddel.cpp PLegemiddel.h PAdministreringLegemiddel.cpp PAdministreringLegemiddel.h
-        ValueWithCodesetList.cpp ValueWithCodesetList.h PLegemiddelCore.cpp PLegemiddelCore.h
-        ValueWithDistinguishedNameList.cpp ValueWithDistinguishedNameList.h
-        POppfLegemiddelMerkevare.cpp POppfLegemiddelMerkevare.h POppfLegemiddelpakning.cpp POppfLegemiddelpakning.h
-        PLegemiddelpakning.cpp PLegemiddelpakning.h PPakningsinfo.cpp PPakningsinfo.h PValueUnit.cpp PValueUnit.h
-        PPakningskomponentInfo.cpp PPakningskomponentInfo.h PakningsinfoList.cpp PakningsinfoList.h
-        PPrisVare.cpp PPrisVare.h PrisVareList.cpp PrisVareList.h PMarkedsforingsinfo.cpp PMarkedsforingsinfo.h
-        PRefusjon.cpp PRefusjon.h PPakningByttegruppe.cpp PPakningByttegruppe.h
-        PPakningskomponent.cpp PPakningskomponent.h PPakningsinfo.cpp PPakningsinfo.h
-        PakningskomponentList.cpp PakningskomponentList.h PLegemiddelVirkestoff.cpp PLegemiddelVirkestoff.h
-        POppfLegemiddelVirkestoff.cpp POppfLegemiddelVirkestoff.h RefusjonList.cpp RefusjonList.h
-        PHandelsvare.cpp PHandelsvare.h PProduktInfoVare.cpp PProduktInfoVare.h PLeverandor.cpp PLeverandor.h
-        POppfHandelsvare.cpp POppfHandelsvare.h StringList.cpp StringList.h PLegemiddeldose.cpp PLegemiddeldose.h
-        PakningskomponentInfoList.cpp PakningskomponentInfoList.h POppfLegemiddeldose.cpp POppfLegemiddeldose.h
-        PVirkestoffMedStyrke.cpp PVirkestoffMedStyrke.h POppfVirkestoffMedStyrke.cpp POppfVirkestoffMedStyrke.h
-        PVirkestoff.cpp PVirkestoff.h POppfVirkestoff.cpp POppfVirkestoff.h PInfo.cpp PInfo.h PTerm.cpp PTerm.h
-        POppfKodeverk.cpp POppfKodeverk.h PElement.cpp PElement.h ElementList.cpp ElementList.h
-        PRefRefusjonsvilkar.cpp PRefRefusjonsvilkar.h PRefusjonsgruppe.cpp PRefusjonsgruppe.h
-        RefRefusjonsvilkarList.cpp RefRefusjonsvilkarList.h PRefusjonshjemmel.cpp PRefusjonshjemmel.h
-        POppfRefusjon.cpp POppfRefusjon.h PRefusjonskode.cpp PRefusjonskode.h RefusjonskodeList.cpp RefusjonskodeList.h
-        PStrukturertVilkar.cpp PStrukturertVilkar.h PVilkar.cpp PVilkar.h POppfVilkar.cpp POppfVilkar.h
-        PReferanseelement.cpp PReferanseelement.h PVarselSlv.cpp PVarselSlv.h POppfVarselSlv.cpp POppfVarselSlv.h
-        PByttegruppe.cpp PByttegruppe.h POppfByttegruppe.cpp POppfByttegruppe.h PInteraksjon.cpp PInteraksjon.h
-        PReferanse.cpp PReferanse.h ReferanseList.cpp ReferanseList.h PSubstans.cpp PSubstans.h
-        SubstansList.cpp SubstansList.h PSubstansgruppe.cpp PSubstansgruppe.h POppfInteraksjon.cpp POppfInteraksjon.h
-        SubstansgruppeList.cpp SubstansgruppeList.h PInteraksjonIkkeVurdert.cpp PInteraksjonIkkeVurdert.h
-        POppfInteraksjonIkkeVurdert.cpp POppfInteraksjonIkkeVurdert.h PDoseFastTidspunkt.cpp PDoseFastTidspunkt.h
-        DoseFastTidspunktList.cpp DoseFastTidspunktList.h PDosering.cpp PDosering.h DoseringList.cpp DoseringList.h
-        PLegemiddelforbruk.cpp PLegemiddelforbruk.h LegemiddelforbrukList.cpp LegemiddelforbrukList.h
-        PKortdose.cpp PKortdose.h POppfStrDosering.cpp POppfStrDosering.h PFest.cpp PFest.h Uint16List.cpp Uint16List.h)
+add_library(packed OBJECT PackException.cpp PFestId.cpp PString.cpp FestUuid.cpp FestUuidList.cpp POppf.cpp
+        PValueWithDistinguishedName.cpp PLegemiddelMerkevare.cpp PValueWithCodeset.cpp PPreparatomtaleavsnitt.cpp
+        PReseptgyldighet.cpp ReseptgyldighetList.cpp PLenke.cpp PLegemiddel.cpp PAdministreringLegemiddel.cpp
+        ValueWithCodesetList.cpp PLegemiddelCore.cpp ValueWithDistinguishedNameList.cpp POppfLegemiddelMerkevare.cpp
+        POppfLegemiddelpakning.cpp PLegemiddelpakning.cpp PPakningsinfo.cpp PValueUnit.cpp PPakningskomponentInfo.cpp
+        PakningsinfoList.cpp PPrisVare.cpp PrisVareList.cpp PMarkedsforingsinfo.cpp PRefusjon.cpp
+        PPakningByttegruppe.cpp PPakningskomponent.cpp PPakningsinfo.cpp PakningskomponentList.cpp
+        PLegemiddelVirkestoff.cpp POppfLegemiddelVirkestoff.cpp RefusjonList.cpp PHandelsvare.cpp PProduktInfoVare.cpp
+        PLeverandor.cpp POppfHandelsvare.cpp StringList.cpp PLegemiddeldose.cpp PakningskomponentInfoList.cpp
+        POppfLegemiddeldose.cpp PVirkestoffMedStyrke.cpp POppfVirkestoffMedStyrke.cpp PVirkestoff.cpp
+        POppfVirkestoff.cpp PInfo.cpp PTerm.cpp POppfKodeverk.cpp PElement.cpp ElementList.cpp PRefRefusjonsvilkar.cpp
+        PRefusjonsgruppe.cpp RefRefusjonsvilkarList.cpp PRefusjonshjemmel.cpp POppfRefusjon.cpp PRefusjonskode.cpp
+        RefusjonskodeList.cpp PStrukturertVilkar.cpp PVilkar.cpp POppfVilkar.cpp PReferanseelement.cpp PVarselSlv.cpp
+        POppfVarselSlv.cpp PByttegruppe.cpp POppfByttegruppe.cpp PInteraksjon.cpp PReferanse.cpp ReferanseList.cpp
+        PSubstans.cpp SubstansList.cpp PSubstansgruppe.cpp POppfInteraksjon.cpp SubstansgruppeList.cpp
+        PInteraksjonIkkeVurdert.cpp POppfInteraksjonIkkeVurdert.cpp PDoseFastTidspunkt.cpp DoseFastTidspunktList.cpp
+        PDosering.cpp DoseringList.cpp PLegemiddelforbruk.cpp LegemiddelforbrukList.cpp PKortdose.cpp
+        POppfStrDosering.cpp PFest.cpp Uint16List.cpp)
 
 include_directories(packed ${Boost_INCLUDE_DIRS} )
+include_directories(packed ../../include)

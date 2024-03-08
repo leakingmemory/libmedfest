@@ -2,7 +2,7 @@
 // Created by sigsegv on 2/5/23.
 //
 
-#include "RefRefusjonsvilkarList.h"
+#include <Struct/Packed/RefRefusjonsvilkarList.h>
 
 GenericListItems RefRefusjonsvilkarList::StoreList(std::vector<PRefRefusjonsvilkar> &list) {
     return GenericListStorage<PRefRefusjonsvilkar>::StoreList(list);

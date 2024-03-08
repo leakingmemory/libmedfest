@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/11/22.
 //
 
-#include "Preparatomtaleavsnitt.h"
+#include <Struct/Decoded/Preparatomtaleavsnitt.h>
 
 ValueWithDistinguishedName Preparatomtaleavsnitt::GetAvsnittoverskrift() const {
     return avsnittoverskrift;

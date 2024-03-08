@@ -6,15 +6,15 @@
 #define LEGEMFEST_XMLADMINISTRERINGLEGEMIDDEL_H
 
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlValueWithCodeSet.h"
 #include "XmlContentElement.h"
 #include "XmlKortdose.h"
-#include "../Struct/Decoded/AdministreringLegemiddel.h"
-#include "../Struct/Decoded/EnhetDosering.h"
-#include "../Struct/Decoded/ForhandsregelInntak.h"
-#include "../Struct/Decoded/Kortdose.h"
-#include "../Struct/Decoded/Deling.h"
+#include <Struct/Decoded/AdministreringLegemiddel.h>
+#include <Struct/Decoded/EnhetDosering.h>
+#include <Struct/Decoded/ForhandsregelInntak.h>
+#include <Struct/Decoded/Kortdose.h>
+#include <Struct/Decoded/Deling.h>
 #include <memory>
 #include <map>
 

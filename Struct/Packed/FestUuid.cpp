@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/3/23.
 //
 
-#include "FestUuid.h"
-#include "PackException.h"
+#include <Struct/Packed/FestUuid.h>
+#include <Struct/Packed/PackException.h>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>

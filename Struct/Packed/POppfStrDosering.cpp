@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/15/23.
 //
 
-#include "POppfStrDosering.h"
-#include "../Decoded/OppfStrDosering.h"
+#include <Struct/Packed/POppfStrDosering.h>
+#include <Struct/Decoded/OppfStrDosering.h>
 
 POppfStrDosering::POppfStrDosering(const OppfStrDosering &oppfStrDosering, LegemiddelforbrukList &legemiddelforbrukList,
                                    DoseringList &doseringList, DoseFastTidspunktList &doseFastTidspunktList,

@@ -5,16 +5,16 @@
 #ifndef LEGEMFEST_XMLVILKAR_H
 #define LEGEMFEST_XMLVILKAR_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include "XmlValueWithDistinguishedName.h"
 #include "XmlValueWithCodeSet.h"
 #include "FestIdObject.h"
 #include "XmlGyldigFraDato.h"
 #include "XmlType.h"
-#include "../Struct/Decoded/Gruppe.h"
-#include "../Struct/Decoded/GjelderFor.h"
-#include "../Struct/Decoded/StrukturertVilkar.h"
+#include <Struct/Decoded/Gruppe.h>
+#include <Struct/Decoded/GjelderFor.h>
+#include <Struct/Decoded/StrukturertVilkar.h>
 #include <memory>
 #include <map>
 

@@ -5,15 +5,15 @@
 #ifndef LEGEMFEST_XMLINTERAKSJON_H
 #define LEGEMFEST_XMLINTERAKSJON_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "XmlValueWithDistinguishedName.h"
 #include "XmlContentElement.h"
 #include "XmlVisningsregel.h"
-#include "../Struct/Decoded/Relevans.h"
-#include "../Struct/Decoded/Kildegrunnlag.h"
-#include "../Struct/Decoded/Referanse.h"
-#include "../Struct/Decoded/Substansgruppe.h"
+#include <Struct/Decoded/Relevans.h>
+#include <Struct/Decoded/Kildegrunnlag.h>
+#include <Struct/Decoded/Referanse.h>
+#include <Struct/Decoded/Substansgruppe.h>
 #include <memory>
 #include <map>
 

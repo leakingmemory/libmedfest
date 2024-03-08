@@ -2,9 +2,9 @@
 // Created by sigsegv on 2/9/23.
 //
 
-#include "PVarselSlv.h"
-#include "ValueWithCodesetList.h"
-#include "../Decoded/VarselSlv.h"
+#include <Struct/Packed/PVarselSlv.h>
+#include <Struct/Packed/ValueWithCodesetList.h>
+#include <Struct/Decoded/VarselSlv.h>
 
 PVarselSlv::PVarselSlv(const VarselSlv &varselSlv, ValueWithCodesetList &valueWithCodesetList,
                        FestUuidList &festUuidList, std::string &strblock, std::map<std::string, uint32_t> &cache) :

@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/10/23.
 //
 
-#include "PByttegruppe.h"
-#include "../Decoded/Byttegruppe.h"
+#include <Struct/Packed/PByttegruppe.h>
+#include <Struct/Decoded/Byttegruppe.h>
 
 PByttegruppe::PByttegruppe(const Byttegruppe &byttegruppe, std::vector<FestUuid> &idblock, std::string &strblock,
                            std::map<std::string, uint32_t> &cache) :

@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLSUBSTANS_H
 #define LEGEMFEST_XMLSUBSTANS_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlContentElement.h"
 #include "XmlAtc.h"
 #include "XmlRefVirkestoff.h"

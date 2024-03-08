@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/30/22.
 //
 
-#include "OppfInteraksjonIkkeVurdert.h"
+#include <Struct/Decoded/OppfInteraksjonIkkeVurdert.h>
 
 InteraksjonIkkeVurdert OppfInteraksjonIkkeVurdert::GetInteraksjonIkkeVurdert() const {
     return interaksjonIkkeVurdert;

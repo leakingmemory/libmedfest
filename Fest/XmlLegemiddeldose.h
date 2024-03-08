@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLLEGEMIDDELDOSE_H
 #define LEGEMFEST_XMLLEGEMIDDELDOSE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlLegemiddelCore.h"
 #include "XmlPreparattypeObject.h"
 #include "FestIdObject.h"
@@ -14,7 +14,7 @@
 #include "XmlRefLegemiddelMerkevare.h"
 #include "XmlRefPakning.h"
 #include "XmlPakningskomponent.h"
-#include "../Struct/Decoded/ValueUnit.h"
+#include <Struct/Decoded/ValueUnit.h>
 #include <memory>
 #include <map>
 

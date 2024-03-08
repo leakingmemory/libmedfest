@@ -2,12 +2,12 @@
 // Created by sigsegv on 2/11/23.
 //
 
-#include "PInteraksjon.h"
-#include "PValueWithCodeset.h"
-#include "ReferanseList.h"
-#include "SubstansgruppeList.h"
-#include "ValueWithCodesetList.h"
-#include "../Decoded/Interaksjon.h"
+#include <Struct/Packed/PInteraksjon.h>
+#include <Struct/Packed/PValueWithCodeset.h>
+#include <Struct/Packed/ReferanseList.h>
+#include <Struct/Packed/SubstansgruppeList.h>
+#include <Struct/Packed/ValueWithCodesetList.h>
+#include <Struct/Decoded/Interaksjon.h>
 
 PInteraksjon::PInteraksjon(const Interaksjon &interaksjon, ReferanseList &referanseList,
                            SubstansgruppeList &substansgruppeList, SubstansList &substansList,

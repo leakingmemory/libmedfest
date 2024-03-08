@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLLEGEMIDDELPAKNING_H
 #define LEGEMFEST_XMLLEGEMIDDELPAKNING_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "KatLegemiddelpakning.h"
 #include "XmlLegemiddelCore.h"
 #include "XmlPreparattypeObject.h"

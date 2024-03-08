@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/12/22.
 //
 
-#include "Pakningsinfo.h"
+#include <Struct/Decoded/Pakningsinfo.h>
 
 std::string Pakningsinfo::GetMerkevareId() const {
     return merkevareId;

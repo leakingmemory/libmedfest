@@ -2,10 +2,10 @@
 // Created by sigsegv on 1/24/23.
 //
 
-#include "PLegemiddelVirkestoff.h"
-#include "../Decoded/LegemiddelVirkestoff.h"
-#include "RefusjonList.h"
-#include "FestUuidList.h"
+#include "Struct/Packed/PLegemiddelVirkestoff.h"
+#include "Struct/Decoded/LegemiddelVirkestoff.h"
+#include "Struct/Packed/RefusjonList.h"
+#include "Struct/Packed/FestUuidList.h"
 
 PLegemiddelVirkestoff::PLegemiddelVirkestoff(const LegemiddelVirkestoff &legemiddelVirkestoff, std::string &strblock,
                                              std::map<std::string,uint32_t> &cache, std::vector<FestUuid> uuidlist,

@@ -5,12 +5,12 @@
 #ifndef LEGEMFEST_KATVIRKESTOFF_H
 #define LEGEMFEST_KATVIRKESTOFF_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "FestIdObject.h"
 #include "TidspunktObject.h"
 #include "StatusObject.h"
-#include "../Struct/Decoded/Virkestoff.h"
-#include "../Struct/Decoded/VirkestoffMedStyrke.h"
+#include <Struct/Decoded/Virkestoff.h>
+#include <Struct/Decoded/VirkestoffMedStyrke.h>
 #include <memory>
 #include <map>
 

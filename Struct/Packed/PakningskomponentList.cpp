@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/18/23.
 //
 
-#include "PakningskomponentList.h"
+#include <Struct/Packed/PakningskomponentList.h>
 
 GenericListItems PakningskomponentList::StoreList(const std::vector<PPakningskomponent> &list) {
     return GenericListStorage<PPakningskomponent>::StoreList(list);

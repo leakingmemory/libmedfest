@@ -5,9 +5,9 @@
 #ifndef LEGEMFEST_XMLSUBSTANSGRUPPE_H
 #define LEGEMFEST_XMLSUBSTANSGRUPPE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlNavn.h"
-#include "../Struct/Decoded/Substans.h"
+#include <Struct/Decoded/Substans.h>
 #include <memory>
 #include <map>
 #include <vector>

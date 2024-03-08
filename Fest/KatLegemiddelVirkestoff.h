@@ -5,9 +5,12 @@
 #ifndef LEGEMFEST_KATLEGEMIDDELVIRKESTOFF_H
 #define LEGEMFEST_KATLEGEMIDDELVIRKESTOFF_H
 
-#include "XMLObject.h"
-#include "Fest.h"
-#include "../Struct/Decoded/LegemiddelVirkestoff.h"
+#include <Fest/XMLObject.h>
+#include <Fest/Fest.h>
+#include <Struct/Decoded/LegemiddelVirkestoff.h>
+#include "FestIdObject.h"
+#include "TidspunktObject.h"
+#include "StatusObject.h"
 
 class XmlOppfLegemiddelVirkestoff;
 

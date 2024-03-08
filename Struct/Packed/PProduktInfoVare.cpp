@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/29/23.
 //
 
-#include "PProduktInfoVare.h"
-#include "../Decoded/ProduktInfoVare.h"
+#include <Struct/Packed/PProduktInfoVare.h>
+#include <Struct/Decoded/ProduktInfoVare.h>
 
 PProduktInfoVare::PProduktInfoVare(const ProduktInfoVare &produktInfoVare, std::string &strblock,
                                    std::map<std::string,uint32_t> &cache) :

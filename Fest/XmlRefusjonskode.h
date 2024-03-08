@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLREFUSJONSKODE_H
 #define LEGEMFEST_XMLREFUSJONSKODE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlRefusjonsgruppe.h"
 #include "XmlGyldigFraDato.h"
 #include "XmlContentElement.h"

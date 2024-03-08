@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/2/23.
 //
 
-#include "PString.h"
+#include <Struct/Packed/PString.h>
 
 constexpr int endMatchSizeLim = 48;
 

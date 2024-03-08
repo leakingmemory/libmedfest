@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/6/23.
 //
 
-#include "POppfRefusjon.h"
-#include "../Decoded/OppfRefusjon.h"
+#include <Struct/Packed/POppfRefusjon.h>
+#include <Struct/Decoded/OppfRefusjon.h>
 
 POppfRefusjon::POppfRefusjon(const OppfRefusjon &oppf, RefusjonskodeList &refusjonskodeList,
                              RefRefusjonsvilkarList &refRefusjonsvilkarList, StringList &stringList,

@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/9/23.
 //
 
-#include "Oppf.h"
+#include <Struct/Decoded/Oppf.h>
 
 std::string Oppf::GetId() const {
     return id;

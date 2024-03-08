@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/2/23.
 //
 
-#include "POppfVirkestoffMedStyrke.h"
-#include "../Decoded/OppfVirkestoffMedStyrke.h"
+#include <Struct/Packed/POppfVirkestoffMedStyrke.h>
+#include <Struct/Decoded/OppfVirkestoffMedStyrke.h>
 
 POppfVirkestoffMedStyrke::POppfVirkestoffMedStyrke(const OppfVirkestoffMedStyrke &oppfVirkestoffMedStyrke, std::vector<FestUuid> &uuidblock,
                                                    std::string &strblock, std::map<std::string,uint32_t> &cache) :

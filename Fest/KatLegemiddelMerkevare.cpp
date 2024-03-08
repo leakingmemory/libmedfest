@@ -3,7 +3,7 @@
 //
 
 #include "KatLegemiddelMerkevare.h"
-#include "Fest.h"
+#include <Fest/Fest.h>
 #include <iostream>
 
 std::string KatLegemiddelMerkevare::GetName() const {

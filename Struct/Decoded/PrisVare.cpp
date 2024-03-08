@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/12/22.
 //
 
-#include "PrisVare.h"
+#include <Struct/Decoded/PrisVare.h>
 
 ValueWithCodeSet PrisVare::GetType() const {
     return type;

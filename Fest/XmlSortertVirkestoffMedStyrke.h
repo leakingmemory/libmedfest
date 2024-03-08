@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLSORTERTVIRKESTOFFMEDSTYRKE_H
 #define LEGEMFEST_XMLSORTERTVIRKESTOFFMEDSTYRKE_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlSortering.h"
 #include "XmlRefVirkestoffMedStyrke.h"
 #include <memory>

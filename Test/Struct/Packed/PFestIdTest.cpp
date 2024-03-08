@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/4/23.
 //
 
-#include "../../../Struct/Packed/PFestId.h"
+#include <Struct/Packed/PFestId.h>
 #include <iostream>
 
 int main() {

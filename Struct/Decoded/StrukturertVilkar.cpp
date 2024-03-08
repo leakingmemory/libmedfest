@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/26/22.
 //
 
-#include "StrukturertVilkar.h"
+#include <Struct/Decoded/StrukturertVilkar.h>
 
 ValueWithCodeSet StrukturertVilkar::GetType() const {
     return type;

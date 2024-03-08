@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/13/23.
 //
 
-#include "POppfLegemiddelMerkevare.h"
-#include "../Decoded/OppfLegemiddelMerkevare.h"
+#include <Struct/Packed/POppfLegemiddelMerkevare.h>
+#include <Struct/Decoded/OppfLegemiddelMerkevare.h>
 
 POppfLegemiddelMerkevare::POppfLegemiddelMerkevare(const OppfLegemiddelMerkevare &oppf, std::string &strblock,
                                                    std::map<std::string,uint32_t> &cache,

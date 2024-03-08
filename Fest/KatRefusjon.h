@@ -5,8 +5,8 @@
 #ifndef LEGEMFEST_KATREFUSJON_H
 #define LEGEMFEST_KATREFUSJON_H
 
-#include "XMLObject.h"
-#include "Fest.h"
+#include <Fest/XMLObject.h>
+#include <Fest/Fest.h>
 #include "FestIdObject.h"
 #include "StatusObject.h"
 #include "TidspunktObject.h"

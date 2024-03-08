@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/2/23.
 //
 
-#include "PVirkestoffMedStyrke.h"
-#include "../Decoded/VirkestoffMedStyrke.h"
+#include <Struct/Packed/PVirkestoffMedStyrke.h>
+#include <Struct/Decoded/VirkestoffMedStyrke.h>
 
 PVirkestoffMedStyrke::PVirkestoffMedStyrke(const VirkestoffMedStyrke &virkestoffMedStyrke, std::vector<FestUuid> &uuidblock,
                                            std::string &strblock, std::map<std::string,uint32_t> &cache) :

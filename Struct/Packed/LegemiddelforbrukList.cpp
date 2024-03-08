@@ -2,7 +2,7 @@
 // Created by sigsegv on 2/14/23.
 //
 
-#include "LegemiddelforbrukList.h"
+#include <Struct/Packed/LegemiddelforbrukList.h>
 
 GenericListItems LegemiddelforbrukList::StoreList(std::vector<PLegemiddelforbruk> &list) {
     return GenericListStorage<PLegemiddelforbruk>::StoreList(list);

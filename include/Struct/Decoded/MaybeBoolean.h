@@ -5,6 +5,8 @@
 #ifndef LEGEMFEST_MAYBEBOOLEAN_H
 #define LEGEMFEST_MAYBEBOOLEAN_H
 
+#include <cstdint>
+
 enum class MaybeBoolean {
     FALSE = 0,
     TRUE = 1,

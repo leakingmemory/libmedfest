@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/29/22.
 //
 
-#include "Interaksjon.h"
+#include <Struct/Decoded/Interaksjon.h>
 
 std::string Interaksjon::GetId() const {
     return id;

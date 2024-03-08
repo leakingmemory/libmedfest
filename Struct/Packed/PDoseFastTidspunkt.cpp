@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/14/23.
 //
 
-#include "PDoseFastTidspunkt.h"
-#include "../Decoded/DoseFastTidspunkt.h"
+#include <Struct/Packed/PDoseFastTidspunkt.h>
+#include <Struct/Decoded/DoseFastTidspunkt.h>
 
 PDoseFastTidspunkt::PDoseFastTidspunkt(const DoseFastTidspunkt &doseFastTidspunkt, std::string &strblock,
                                        std::map<std::string, uint32_t> &cache) :

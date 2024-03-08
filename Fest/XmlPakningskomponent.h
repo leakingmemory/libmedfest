@@ -5,10 +5,10 @@
 #ifndef LEGEMFEST_XMLPAKNINGSKOMPONENT_H
 #define LEGEMFEST_XMLPAKNINGSKOMPONENT_H
 
-#include "XMLObject.h"
+#include <Fest/XMLObject.h>
 #include "XmlPakningsinfo.h"
 #include "XmlMengde.h"
-#include "../Struct/Decoded/PakningskomponentInfo.h"
+#include <Struct/Decoded/PakningskomponentInfo.h>
 
 class XmlPakningskomponentInfo {
 public:

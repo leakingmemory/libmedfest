@@ -2,12 +2,12 @@
 // Created by sigsegv on 2/5/23.
 //
 
-#include "PRefusjonsgruppe.h"
-#include "RefusjonskodeList.h"
-#include "RefRefusjonsvilkarList.h"
-#include "FestUuid.h"
-#include "StringList.h"
-#include "../Decoded/Refusjonsgruppe.h"
+#include <Struct/Packed/PRefusjonsgruppe.h>
+#include <Struct/Packed/RefusjonskodeList.h>
+#include <Struct/Packed/RefRefusjonsvilkarList.h>
+#include <Struct/Packed/FestUuid.h>
+#include <Struct/Packed/StringList.h>
+#include <Struct/Decoded/Refusjonsgruppe.h>
 
 PRefusjonsgruppe::PRefusjonsgruppe(const Refusjonsgruppe &refusjonsgruppe, RefusjonskodeList &refusjonskodeList, RefRefusjonsvilkarList &refRefusjonsvilkarList,
                                    StringList &stringList, std::vector<FestUuid> &idblock, std::string &strblock,

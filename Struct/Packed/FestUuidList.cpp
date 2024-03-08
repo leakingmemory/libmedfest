@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/6/23.
 //
 
-#include "FestUuidList.h"
+#include <Struct/Packed/FestUuidList.h>
 
 GenericListItems FestUuidList::StoreList(const std::vector<std::string> &ids) {
     if (ids.size() <= 0) {

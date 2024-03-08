@@ -2,7 +2,7 @@
 // Created by sigsegv on 1/24/23.
 //
 
-#include "RefusjonList.h"
+#include <Struct/Packed/RefusjonList.h>
 
 GenericListItems RefusjonList::StoreList(const std::vector<PRefusjon> &list) {
     return GenericListStorage<PRefusjon>::StoreList(list);

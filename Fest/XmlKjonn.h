@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_XMLKJONN_H
 #define LEGEMFEST_XMLKJONN_H
 
-#include "../Struct/Decoded/ValueWithDistinguishedName.h"
+#include <Struct/Decoded/ValueWithDistinguishedName.h>
 #include "XmlValueWithDistinguishedName.h"
 
 class XmlKjonn {

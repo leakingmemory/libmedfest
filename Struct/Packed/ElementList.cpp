@@ -2,7 +2,7 @@
 // Created by sigsegv on 2/5/23.
 //
 
-#include "ElementList.h"
+#include <Struct/Packed/ElementList.h>
 
 GenericListItems ElementList::StoreList(const std::vector<PElement> &elements) {
     return GenericListStorage<PElement>::StoreList(elements);

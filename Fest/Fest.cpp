@@ -2,7 +2,7 @@
 // Created by sigsegv on 12/8/22.
 //
 
-#include "Fest.h"
+#include <Fest/Fest.h>
 #include "KatLegemiddelMerkevare.h"
 #include "KatLegemiddelVirkestoff.h"
 #include "KatHandelsvare.h"
@@ -14,6 +14,8 @@
 #include "KatLegemiddeldose.h"
 #include "KatInteraksjon.h"
 #include "KatStrDosering.h"
+#include "KatLegemiddelpakning.h"
+#include "KatVirkestoff.h"
 #include <iostream>
 #include <map>
 

@@ -2,8 +2,8 @@
 // Created by sigsegv on 2/5/23.
 //
 
-#include "PTerm.h"
-#include "../Decoded/Term.h"
+#include <Struct/Packed/PTerm.h>
+#include <Struct/Decoded/Term.h>
 
 PTerm::PTerm(const Term &term, std::string &strblock, std::map<std::string, uint32_t> &cache) :
     sprak(term.sprak, strblock, cache),

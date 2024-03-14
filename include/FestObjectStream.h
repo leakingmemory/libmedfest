@@ -48,6 +48,7 @@ public:
     template <FestSourceStream Source> FestObjectStream(std::shared_ptr<Source> source) {
         this->source = std::make_unique<FestObjectStreamSourceImpl<Source>>(source);
     }
+    virtual void progress(size_t count, size_t total);
     std::shared_ptr<Fest> read();
 };
 

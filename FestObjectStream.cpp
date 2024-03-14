@@ -73,6 +73,11 @@
 #include "Fest/XmlFastDose.h"
 #include <iostream>
 
+void FestObjectStream::progress(size_t count, size_t total) {
+    auto pct = (count * 100) / total;
+    std::cout << "\rDecoding XML data " << pct << "%..." << std::flush;
+}
+
 std::shared_ptr<Fest> FestObjectStream::read() {
     XMLParser parser{};
     parser.AddHandler("FEST", std::make_shared<FestHandler>());
@@ -288,8 +293,7 @@ std::shared_ptr<Fest> FestObjectStream::read() {
             return {};
         }
         countSize += num;
-        auto pct = (countSize * 100) / totalSize;
-        std::cout << "\rDecoding XML data " << pct << "%..." << std::flush;
+        progress(countSize, totalSize);
     } while (true);
     std::cout << "\n";
     parser.ParseBuffer(nullptr, 0, true);

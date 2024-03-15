@@ -42,7 +42,7 @@ MaybeBoolean XmlLegemiddelCore::GetOpioidsoknad() const {
 }
 
 void XmlLegemiddelCore::SetOpioidsoknad(bool opioidsoknad) {
-    this->opioidsoknad = opioidsoknad ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
+    this->opioidsoknad = opioidsoknad ? MaybeBoolean::MTRUE : MaybeBoolean::MFALSE;
 }
 
 SvartTrekant XmlLegemiddelCore::GetSvartTrekant() const {

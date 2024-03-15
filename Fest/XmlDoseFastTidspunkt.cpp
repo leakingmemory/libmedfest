@@ -24,7 +24,7 @@ void XmlDoseFastTidspunkt::SetTidsomrade(const ValueWithDistinguishedName &tidso
 }
 
 void XmlDoseFastTidspunkt::SetGisEksakt(bool gisEksakt) {
-    this->gisEksakt = gisEksakt ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
+    this->gisEksakt = gisEksakt ? MaybeBoolean::MTRUE : MaybeBoolean::MFALSE;
 }
 
 bool XmlDoseFastTidspunkt::SetFastDose(const FastDose &fastDose) {
@@ -40,10 +40,10 @@ bool XmlDoseFastTidspunkt::Merge() {
     bool gisEksakt;
     {
         switch (this->gisEksakt) {
-            case MaybeBoolean::FALSE:
+            case MaybeBoolean::MFALSE:
                 gisEksakt = false;
                 break;
-            case MaybeBoolean::TRUE:
+            case MaybeBoolean::MTRUE:
                 gisEksakt = true;
                 break;
             default:

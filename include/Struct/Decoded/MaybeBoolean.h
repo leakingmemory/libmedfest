@@ -8,15 +8,15 @@
 #include <cstdint>
 
 enum class MaybeBoolean {
-    FALSE = 0,
-    TRUE = 1,
+    MFALSE = 0,
+    MTRUE = 1,
     UNSPECIFIED = -1
 };
 
 constexpr uint8_t ToRaw(MaybeBoolean maybeBoolean) {
-    if (maybeBoolean == MaybeBoolean::FALSE) {
+    if (maybeBoolean == MaybeBoolean::MFALSE) {
         return 0;
-    } else if (maybeBoolean == MaybeBoolean::TRUE) {
+    } else if (maybeBoolean == MaybeBoolean::MTRUE) {
         return 1;
     } else {
         return 3;
@@ -26,9 +26,9 @@ constexpr uint8_t ToRaw(MaybeBoolean maybeBoolean) {
 constexpr MaybeBoolean FromRaw(uint8_t raw) {
     switch (raw) {
         case 0:
-            return MaybeBoolean::FALSE;
+            return MaybeBoolean::MFALSE;
         case 1:
-            return MaybeBoolean::TRUE;
+            return MaybeBoolean::MTRUE;
         default:
             return MaybeBoolean::UNSPECIFIED;
     }

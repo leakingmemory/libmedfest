@@ -15,7 +15,7 @@ void XmlRefusjonsgruppe::SetGruppeNr(const GruppeNr &gruppeNr) {
 }
 
 void XmlRefusjonsgruppe::SetKreverRefusjonskode(bool kreverRefusjonskode) {
-    this->kreverRefusjonskode = kreverRefusjonskode ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
+    this->kreverRefusjonskode = kreverRefusjonskode ? MaybeBoolean::MTRUE : MaybeBoolean::MFALSE;
 }
 
 void XmlRefusjonsgruppe::SetRefusjonsberettigetBruk(const std::string &refusjonsberettigetBruk) {
@@ -29,10 +29,10 @@ void XmlRefusjonsgruppe::AddRefusjonskode(const Refusjonskode &refusjonskode) {
 bool XmlRefusjonsgruppe::Merge() {
     bool kreverRefusjonskode;
     switch (this->kreverRefusjonskode) {
-        case MaybeBoolean::FALSE:
+        case MaybeBoolean::MFALSE:
             kreverRefusjonskode = false;
             break;
-        case MaybeBoolean::TRUE:
+        case MaybeBoolean::MTRUE:
             kreverRefusjonskode = true;
             break;
         default:

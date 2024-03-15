@@ -59,10 +59,10 @@ bool XmlProdusentHandler::Merge(std::shared_ptr<XmlProduktInfo> parent, const st
 
 bool XmlVarseltrekantHandler::Merge(std::shared_ptr<XmlProduktInfo> parent, const std::string &content) {
     if (content == "true") {
-        parent->SetVarseltrekant(MaybeBoolean::TRUE);
+        parent->SetVarseltrekant(MaybeBoolean::MTRUE);
         return true;
     } else if (content == "false") {
-        parent->SetVarseltrekant(MaybeBoolean::FALSE);
+        parent->SetVarseltrekant(MaybeBoolean::MFALSE);
         return true;
     }
     std::cerr << "Error: Invalid Varseltrekant value: " << content << "\n";

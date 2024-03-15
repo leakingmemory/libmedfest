@@ -26,7 +26,7 @@ void XmlProduktInfoVare::SetAntPerPakning(int antPerPakning) {
 }
 
 void XmlProduktInfoVare::SetTillattMerMakspris(bool tillattMerMakspris) {
-    this->tillattMerMakspris = tillattMerMakspris ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
+    this->tillattMerMakspris = tillattMerMakspris ? MaybeBoolean::MTRUE : MaybeBoolean::MFALSE;
 }
 
 bool XmlProduktInfoVare::Merge() {

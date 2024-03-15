@@ -14,11 +14,11 @@ void XmlRefusjonshjemmel::SetRefusjonshjemmel(const ValueWithCodeSet &refusjonsh
 }
 
 void XmlRefusjonshjemmel::SetKreverVarekobling(bool kreverVarekobling) {
-    this->kreverVarekobling = kreverVarekobling ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
+    this->kreverVarekobling = kreverVarekobling ? MaybeBoolean::MTRUE : MaybeBoolean::MFALSE;
 }
 
 void XmlRefusjonshjemmel::SetKreverVedtak(bool kreverVedtak) {
-    this->kreverVedtak = kreverVedtak ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
+    this->kreverVedtak = kreverVedtak ? MaybeBoolean::MTRUE : MaybeBoolean::MFALSE;
 }
 
 void XmlRefusjonshjemmel::SetRefusjonsgruppe(const Refusjonsgruppe &refusjonsgruppe) {
@@ -28,10 +28,10 @@ void XmlRefusjonshjemmel::SetRefusjonsgruppe(const Refusjonsgruppe &refusjonsgru
 bool XmlRefusjonshjemmel::Merge() {
     bool kreverVarekobling;
     switch (this->kreverVarekobling) {
-        case MaybeBoolean::FALSE:
+        case MaybeBoolean::MFALSE:
             kreverVarekobling = false;
             break;
-        case MaybeBoolean::TRUE:
+        case MaybeBoolean::MTRUE:
             kreverVarekobling = true;
             break;
         default:
@@ -40,10 +40,10 @@ bool XmlRefusjonshjemmel::Merge() {
     }
     bool kreverVedtak;
     switch (this->kreverVedtak) {
-        case MaybeBoolean::FALSE:
+        case MaybeBoolean::MFALSE:
             kreverVedtak = false;
             break;
-        case MaybeBoolean::TRUE:
+        case MaybeBoolean::MTRUE:
             kreverVedtak = true;
             break;
         default:

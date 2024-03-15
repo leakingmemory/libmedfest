@@ -15,17 +15,17 @@ void XmlByttegruppe::SetBeskrivelseByttbarhet(const std::string &beskrivelseBytt
 }
 
 void XmlByttegruppe::SetMerknadTilByttbarhet(bool merknadTilByttbarhet) {
-    this->merknadTilByttbarhet = merknadTilByttbarhet ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
+    this->merknadTilByttbarhet = merknadTilByttbarhet ? MaybeBoolean::MTRUE : MaybeBoolean::MFALSE;
 }
 
 bool XmlByttegruppe::Merge() {
     bool merknadTilByttbarhet;
     {
         switch (this->merknadTilByttbarhet) {
-            case MaybeBoolean::FALSE:
+            case MaybeBoolean::MFALSE:
                 merknadTilByttbarhet = false;
                 break;
-            case MaybeBoolean::TRUE:
+            case MaybeBoolean::MTRUE:
                 merknadTilByttbarhet = true;
                 break;
             default:

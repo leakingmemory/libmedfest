@@ -46,7 +46,7 @@ void XmlAdministreringLegemiddel::SetInjeksjonshastighetBolus(const Injeksjonsha
 }
 
 void XmlAdministreringLegemiddel::SetBlandingsveske(bool blandingsveske) {
-    this->blandingsveske = blandingsveske ? MaybeBoolean::TRUE : MaybeBoolean::FALSE;
+    this->blandingsveske = blandingsveske ? MaybeBoolean::MTRUE : MaybeBoolean::MFALSE;
 }
 
 void XmlAdministreringLegemiddel::Merge() {

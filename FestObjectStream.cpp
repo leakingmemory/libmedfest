@@ -78,6 +78,10 @@ void FestObjectStream::progress(size_t count, size_t total) {
     std::cout << "\rDecoding XML data " << pct << "%..." << std::flush;
 }
 
+void FestObjectStream::progress_finished() {
+    std::cout << "\n";
+}
+
 std::shared_ptr<Fest> FestObjectStream::read() {
     XMLParser parser{};
     parser.AddHandler("FEST", std::make_shared<FestHandler>());
@@ -295,7 +299,7 @@ std::shared_ptr<Fest> FestObjectStream::read() {
         countSize += num;
         progress(countSize, totalSize);
     } while (true);
-    std::cout << "\n";
+    progress_finished();
     parser.ParseBuffer(nullptr, 0, true);
     return parser.GetRoot<Fest>();
 }

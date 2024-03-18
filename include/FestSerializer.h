@@ -174,6 +174,7 @@ private:
     void Add(const std::string &, const std::function<void (FestData &)> &);
 
     void Progress(int done, int total) override;
+    virtual void ProgressFinished(bool success);
     bool Visit(const std::string &fest, const OppfLegemiddelMerkevare &merkevare) override;
     bool Visit(const std::string &fest, const OppfLegemiddelpakning &pakning) override;
     bool Visit(const std::string &fest, const OppfLegemiddelVirkestoff &virkestoff) override;

@@ -49,6 +49,7 @@ public:
         this->source = std::make_unique<FestObjectStreamSourceImpl<Source>>(source);
     }
     virtual void progress(size_t count, size_t total);
+    virtual void progress_finished();
     std::shared_ptr<Fest> read();
 };
 

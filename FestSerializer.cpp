@@ -18,11 +18,7 @@ bool FestSerializer::Serialize(const Fest &fest) {
         return false;
     }
     bool result = fest.Accept(*this);
-    if (result) {
-        std::cout << "\rGenerating output: 100% done.\n";
-    } else {
-        std::cout << "\n";
-    }
+    ProgressFinished(result);
     for (const auto &festPair : this->festMap) {
         const auto &festInst = *(festPair.second);
         fests.emplace_back(festInst, uint16List, stringblock, stringblockCache);
@@ -767,6 +763,14 @@ void FestSerializer::Progress(int done, int total) {
     if (pcnt != percentDone) {
         percentDone = pcnt;
         std::cout << "\rGenerating output: " << percentDone << "% done." << std::flush;
+    }
+}
+
+void FestSerializer::ProgressFinished(bool success) {
+    if (success) {
+        std::cout << "\rGenerating output: 100% done.\n";
+    } else {
+        std::cout << "\n";
     }
 }
 

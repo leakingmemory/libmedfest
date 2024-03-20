@@ -64,7 +64,6 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
         if (version.minor != 0) {
             std::cerr << "Warning: Minor version " << version.minor << " contains unsupported data (ignored)\n";
         }
-        std::cout << "Reading file V" << ((int) version.major) << "." << ((int) version.minor) << "." << ((int) version.patch) << "\n";
     }
     merkevare = (POppfLegemiddelMerkevare *) (void *) (((uint8_t *) mapping) + offset);
     numMerkevare = header->numLegemiddelMerkevare;

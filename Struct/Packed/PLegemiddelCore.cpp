@@ -28,3 +28,25 @@ bool PLegemiddelCore::operator==(const PLegemiddelCore &other) const {
            svartTrekant == other.svartTrekant &&
            opioidsoknad == other.opioidsoknad;
 }
+
+PString PLegemiddelCore::GetNavnFormStyrke() const {
+    return navnFormStyrke;
+}
+PValueWithDistinguishedName PLegemiddelCore::GetReseptgruppe() const {
+    return reseptgruppe;
+}
+PValueWithCodeset PLegemiddelCore::GetLegemiddelformKort() const {
+    return legemiddelformKort;
+}
+GenericListItems PLegemiddelCore::GetRefVilkar() const {
+    return refVilkar;
+}
+PValueWithDistinguishedName PLegemiddelCore::GetTypeSoknadSlv() const {
+    return typeSoknadSlv;
+}
+PValueWithCodeset PLegemiddelCore::GetSvartTrekant() const {
+    return svartTrekant;
+}
+uint8_t PLegemiddelCore::GetOpioidsoknad() const {
+    return opioidsoknad;
+}

@@ -19,6 +19,7 @@ public:
     bool operator == (const PValueWithCodeset &other) const {
         return PValueWithDistinguishedName::operator==(other) && codeSet == other.codeSet;
     }
+    [[nodiscard]] PString GetCodeSet() const;
 };
 
 

@@ -26,6 +26,13 @@ private:
 public:
     PLegemiddelCore(const LegemiddelCore &legemiddelCore, std::string &strblock, std::map<std::string,uint32_t> &cache, FestUuidList &festUuidList);
     bool operator == (const PLegemiddelCore &) const;
+    [[nodiscard]] PString GetNavnFormStyrke() const;
+    [[nodiscard]] PValueWithDistinguishedName GetReseptgruppe() const;
+    [[nodiscard]] PValueWithCodeset GetLegemiddelformKort() const;
+    [[nodiscard]] GenericListItems GetRefVilkar() const;
+    [[nodiscard]] PValueWithDistinguishedName GetTypeSoknadSlv() const;
+    [[nodiscard]] PValueWithCodeset GetSvartTrekant() const;
+    uint8_t GetOpioidsoknad() const;
 };
 
 

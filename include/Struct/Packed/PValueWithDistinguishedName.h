@@ -22,6 +22,8 @@ public:
     bool operator == (const PValueWithDistinguishedName &other) const {
         return value == other.value && distinguishedName == other.distinguishedName;
     }
+    [[nodiscard]] PString GetValue() const;
+    [[nodiscard]] PString GetDistinguishedName() const;
 };
 
 

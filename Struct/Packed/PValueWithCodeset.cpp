@@ -9,3 +9,7 @@ PValueWithCodeset::PValueWithCodeset(const ValueWithCodeSet &valueWithCodeSet, s
         PValueWithDistinguishedName(valueWithCodeSet, strblock, cache),
         codeSet(valueWithCodeSet.GetCodeSet(), strblock, cache) {
 }
+
+PString PValueWithCodeset::GetCodeSet() const {
+    return codeSet;
+}

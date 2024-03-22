@@ -10,3 +10,10 @@ PValueWithDistinguishedName::PValueWithDistinguishedName(const ValueWithDistingu
         value(valueWithDistinguishedName.GetValue(), strblock, cache),
         distinguishedName(valueWithDistinguishedName.GetDistinguishedName(), strblock, cache) {
 }
+
+PString PValueWithDistinguishedName::GetValue() const {
+    return value;
+}
+PString PValueWithDistinguishedName::GetDistinguishedName() const {
+    return distinguishedName;
+}

@@ -456,6 +456,30 @@ FestDeserializer::~FestDeserializer() {
     }
 }
 
+std::vector<POppfLegemiddelMerkevare> FestDeserializer::GetLegemiddelMerkevare() const {
+    std::vector<POppfLegemiddelMerkevare> result{};
+    ForEachMerkevare([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfLegemiddelpakning> FestDeserializer::GetLegemiddelPakning() const {
+    std::vector<POppfLegemiddelpakning> result{};
+    ForEachPakning([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfLegemiddelVirkestoff> FestDeserializer::GetLegemiddelVirkestoff() const {
+    std::vector<POppfLegemiddelVirkestoff> result{};
+    ForEachLegemiddelVirkestoff([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
 std::vector<PString> FestDeserializer::GetStrings() const {
     std::vector<PString> strings{};
     size_t idx{0};

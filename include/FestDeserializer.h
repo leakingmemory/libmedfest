@@ -134,6 +134,9 @@ private:
 public:
     FestDeserializer(const std::string &filename);
     ~FestDeserializer();
+    [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare() const;
+    [[nodiscard]] std::vector<POppfLegemiddelpakning> GetLegemiddelPakning() const;
+    [[nodiscard]] std::vector<POppfLegemiddelVirkestoff> GetLegemiddelVirkestoff() const;
     [[nodiscard]] std::vector<PString> GetStrings() const;
     [[nodiscard]] std::vector<PPrisVare> GetPrisVare() const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfo() const;

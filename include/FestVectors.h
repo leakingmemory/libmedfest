@@ -8,10 +8,14 @@
 #include <string>
 #include "Struct/Packed/PFest.h"
 
+class POppfLegemiddelMerkevare;
+class POppfLegemiddelpakning;
+class POppfLegemiddelVirkestoff;
+
 class FestVectors {
 private:
     std::string dato;
-    const PFest &fest;
+    const PFest fest;
     const uint16_t* legemiddelMerkevare;
     const uint16_t* legemiddelpakning;
     const uint16_t* legemiddelVirkestoff;
@@ -32,6 +36,9 @@ private:
 public:
     FestVectors(const PFest &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List);
     [[nodiscard]] std::string GetDato() const;
+    [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfLegemiddelpakning> GetLegemiddelPakning(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfLegemiddelVirkestoff> GetLegemiddelVirkestoff(const FestDeserializer &) const;
 };
 
 

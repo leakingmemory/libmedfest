@@ -4,6 +4,7 @@
 
 #include "FestVectors.h"
 #include "Struct/Packed/PackException.h"
+#include "FestDeserializer.h"
 
 constexpr bool CheckRange(size_t start, size_t size, size_t sizeUuint16List) {
     return start >= sizeUuint16List || size > sizeUuint16List || (start + size) > sizeUuint16List;
@@ -57,4 +58,41 @@ FestVectors::FestVectors(const PFest &fest, const std::string &dato, const uint1
 
 std::string FestVectors::GetDato() const {
     return dato;
+}
+
+template <typename T> std::vector<T> AsVector(const T *ptr, const GenericListItems &items) {
+    std::vector<T> result{};
+    for (int i = 0; i < items.size; i++) {
+        result.push_back(ptr[i]);
+    }
+    return result;
+}
+
+template <typename T, typename I> std::vector<T> AsVector(const std::vector<T> &objects, const std::vector<I> &indices) {
+    std::vector<T> result{};
+    for (const I &index : indices) {
+        if (index < 0 || index >= objects.size()) {
+            throw PackException("Index out of range");
+        }
+        result.push_back(objects[index]);
+    }
+    return result;
+}
+
+#define AsVector(name, listFunc) { \
+    auto indices = AsVector(name, fest.name); \
+    auto objects = festDeserializer.listFunc(); \
+    return AsVector(objects, indices); \
+}
+
+std::vector<POppfLegemiddelMerkevare> FestVectors::GetLegemiddelMerkevare(const FestDeserializer &festDeserializer) const {
+    AsVector(legemiddelMerkevare, GetLegemiddelMerkevare);
+}
+
+std::vector<POppfLegemiddelpakning> FestVectors::GetLegemiddelPakning(const FestDeserializer &festDeserializer) const {
+    AsVector(legemiddelpakning, GetLegemiddelPakning);
+}
+
+std::vector<POppfLegemiddelVirkestoff> FestVectors::GetLegemiddelVirkestoff(const FestDeserializer &festDeserializer) const {
+    AsVector(legemiddelVirkestoff, GetLegemiddelVirkestoff);
 }

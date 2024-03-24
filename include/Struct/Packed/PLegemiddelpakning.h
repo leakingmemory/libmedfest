@@ -40,6 +40,18 @@ public:
                        PakningsinfoList &pakningsinfoList, PrisVareList &prisVareList, StringList &, FestUuidList &,
                        std::vector<FestUuid> &uuidblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PLegemiddelpakning &) const;
+    PValueWithDistinguishedName GetPreparattype() const;
+    PFestId GetId() const;
+    PString GetVarenr() const;
+    PString GetEan() const;
+    PValueWithDistinguishedName GetOppbevaring() const;
+    GenericListItems GetPakningsinfo() const;
+    GenericListItems GetPrisVare() const;
+    PMarkedsforingsinfo GetMarkedsforingsinfo() const;
+    PRefusjon GetRefusjon() const;
+    PPakningByttegruppe GetPakningByttegruppe() const;
+    PPreparatomtaleavsnitt GetPreparatomtaleavsnitt() const;
+    bool GetIkkeKonservering() const;
 };
 
 

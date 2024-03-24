@@ -51,3 +51,40 @@ bool PLegemiddelMerkevare::operator==(const PLegemiddelMerkevare &other) const {
            reseptgyldighet == other.reseptgyldighet &&
            varseltrekant == other.varseltrekant;
 }
+
+PValueWithCodeset PLegemiddelMerkevare::GetVaksinestandard() const {
+    return vaksinestandard;
+}
+PValueWithDistinguishedName PLegemiddelMerkevare::GetPreparattype() const {
+    return preparattype;
+}
+PValueWithDistinguishedName PLegemiddelMerkevare::GetSmak() const {
+    return smak;
+}
+PString PLegemiddelMerkevare::GetVarenavn() const {
+    return varenavn;
+}
+PString PLegemiddelMerkevare::GetLegemiddelformLang() const {
+    return legemiddelformLang;
+}
+PString PLegemiddelMerkevare::GetProdusent() const {
+    return produsent;
+}
+PString PLegemiddelMerkevare::GetReferanseprodukt() const {
+    return referanseprodukt;
+}
+PFestId PLegemiddelMerkevare::GetId() const {
+    return id;
+}
+PPreparatomtaleavsnitt PLegemiddelMerkevare::GetPreparatomtaleavsnitt() const {
+    return preparatomtaleavsnitt;
+}
+GenericListItems PLegemiddelMerkevare::GetSortertVirkestoffUtenStyrke() const {
+    return sortertVirkestoffUtenStyrke;
+}
+GenericListItems PLegemiddelMerkevare::GetReseptgyldighet() const {
+    return reseptgyldighet;
+}
+uint8_t PLegemiddelMerkevare::GetVarseltrekant() const {
+    return varseltrekant;
+}

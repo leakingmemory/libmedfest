@@ -32,3 +32,23 @@ bool PLegemiddelVirkestoff::operator==(const PLegemiddelVirkestoff &other) const
            refLegemiddelMerkevare == other.refLegemiddelMerkevare &&
            refPakning == other.refPakning;
 }
+
+PValueWithCodeset PLegemiddelVirkestoff::GetForskrivningsenhetResept() const {
+    return forskrivningsenhetResept;
+}
+
+PFestId PLegemiddelVirkestoff::GetId() const {
+    return id;
+}
+
+GenericListItems PLegemiddelVirkestoff::GetRefusjon() const {
+    return refusjon;
+}
+
+GenericListItems PLegemiddelVirkestoff::GetRefLegemiddelMerkevare() const {
+    return refLegemiddelMerkevare;
+}
+
+GenericListItems PLegemiddelVirkestoff::GetRefPakning() const {
+    return refPakning;
+}

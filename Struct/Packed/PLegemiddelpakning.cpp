@@ -58,3 +58,40 @@ bool PLegemiddelpakning::operator==(const PLegemiddelpakning &other) const {
         preparatomtaleavsnitt == other.preparatomtaleavsnitt &&
         ikkeKonservering == other.ikkeKonservering;
 }
+
+PValueWithDistinguishedName PLegemiddelpakning::GetPreparattype() const {
+    return preparattype;
+}
+PFestId PLegemiddelpakning::GetId() const {
+    return id;
+}
+PString PLegemiddelpakning::GetVarenr() const {
+    return varenr;
+}
+PString PLegemiddelpakning::GetEan() const {
+    return ean;
+}
+PValueWithDistinguishedName PLegemiddelpakning::GetOppbevaring() const {
+    return oppbevaring;
+}
+GenericListItems PLegemiddelpakning::GetPakningsinfo() const {
+    return pakningsinfo;
+}
+GenericListItems PLegemiddelpakning::GetPrisVare() const {
+    return prisVare;
+}
+PMarkedsforingsinfo PLegemiddelpakning::GetMarkedsforingsinfo() const {
+    return markedsforingsinfo;
+}
+PRefusjon PLegemiddelpakning::GetRefusjon() const {
+    return refusjon;
+}
+PPakningByttegruppe PLegemiddelpakning::GetPakningByttegruppe() const {
+    return pakningByttegruppe;
+}
+PPreparatomtaleavsnitt PLegemiddelpakning::GetPreparatomtaleavsnitt() const {
+    return preparatomtaleavsnitt;
+}
+bool PLegemiddelpakning::GetIkkeKonservering() const {
+    return ikkeKonservering;
+}

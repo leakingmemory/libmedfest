@@ -37,6 +37,18 @@ public:
                          std::vector<FestUuid> &festidblock, FestUuidList &festUuidList,
                          ValueWithCodesetList &valueWithCodesetList, ReseptgyldighetList &reseptgyldighetList);
     bool operator == (const PLegemiddelMerkevare &) const;
+    PValueWithCodeset GetVaksinestandard() const;
+    PValueWithDistinguishedName GetPreparattype() const;
+    PValueWithDistinguishedName GetSmak() const;
+    PString GetVarenavn() const;
+    PString GetLegemiddelformLang() const;
+    PString GetProdusent() const;
+    PString GetReferanseprodukt() const;
+    PFestId GetId() const;
+    PPreparatomtaleavsnitt GetPreparatomtaleavsnitt() const;
+    GenericListItems GetSortertVirkestoffUtenStyrke() const;
+    GenericListItems GetReseptgyldighet() const;
+    uint8_t GetVarseltrekant() const;
 };
 
 

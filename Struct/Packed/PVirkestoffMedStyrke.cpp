@@ -30,3 +30,31 @@ bool PVirkestoffMedStyrke::operator==(const PVirkestoffMedStyrke &other) const {
            styrkeOvreVerdi == other.styrkeOvreVerdi &&
            refVirkestoff == other.refVirkestoff;
 }
+
+PValueUnit PVirkestoffMedStyrke::GetStyrke() const {
+    return styrke;
+}
+PValueUnit PVirkestoffMedStyrke::GetStyrkenevner() const {
+    return styrkenevner;
+}
+PValueUnit PVirkestoffMedStyrke::GetAlternativStyrke() const {
+    return alternativStyrke;
+}
+PValueUnit PVirkestoffMedStyrke::GetAlternativStyrkenevner() const {
+    return alternativStyrkenevner;
+}
+PValueWithCodeset PVirkestoffMedStyrke::GetStyrkeoperator() const {
+    return styrkeoperator;
+}
+PValueWithCodeset PVirkestoffMedStyrke::GetAtcKombipreparat() const {
+    return atcKombipreparat;
+}
+double PVirkestoffMedStyrke::GetStyrkeOvreVerdi() const {
+    return styrkeOvreVerdi;
+}
+PFestId PVirkestoffMedStyrke::GetId() const {
+    return id;
+}
+PFestId PVirkestoffMedStyrke::GetRefVirkestoff() const {
+    return refVirkestoff;
+}

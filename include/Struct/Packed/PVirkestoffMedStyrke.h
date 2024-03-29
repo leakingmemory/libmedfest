@@ -30,6 +30,15 @@ public:
     PVirkestoffMedStyrke(const VirkestoffMedStyrke &, std::vector<FestUuid> &uuidblock, std::string &strblock,
                          std::map<std::string,uint32_t> &cache);
     bool operator == (const PVirkestoffMedStyrke &) const;
+    PValueUnit GetStyrke() const;
+    PValueUnit GetStyrkenevner() const;
+    PValueUnit GetAlternativStyrke() const;
+    PValueUnit GetAlternativStyrkenevner() const;
+    PValueWithCodeset GetStyrkeoperator() const;
+    PValueWithCodeset GetAtcKombipreparat() const;
+    double GetStyrkeOvreVerdi() const;
+    PFestId GetId() const;
+    PFestId GetRefVirkestoff() const;
 };
 
 

@@ -96,3 +96,27 @@ std::vector<POppfLegemiddelpakning> FestVectors::GetLegemiddelPakning(const Fest
 std::vector<POppfLegemiddelVirkestoff> FestVectors::GetLegemiddelVirkestoff(const FestDeserializer &festDeserializer) const {
     AsVector(legemiddelVirkestoff, GetLegemiddelVirkestoff);
 }
+
+std::vector<POppfMedForbrMatr> FestVectors::GetMedForbrMatr(const FestDeserializer &festDeserializer) const {
+    AsVector(medForbrMatr, GetMedForbrMatr);
+}
+
+std::vector<POppfNaringsmiddel> FestVectors::GetNaringsmiddel(const FestDeserializer &festDeserializer) const {
+    AsVector(naringsmiddel, GetNaringsmiddel);
+}
+
+std::vector<POppfBrystprotese> FestVectors::GetBrystprotese(const FestDeserializer &festDeserializer) const {
+    AsVector(brystprotese, GetBrystprotese);
+}
+
+std::vector<POppfLegemiddeldose> FestVectors::GetLegemiddeldose(const FestDeserializer &festDeserializer) const {
+    AsVector(legemiddeldose, GetLegemiddeldose);
+}
+
+std::vector<POppfVirkestoffMedStyrke> FestVectors::GetVirkestoffMedStyrke(const FestDeserializer &festDeserializer) const {
+    AsVector(virkestoffMedStyrke, GetVirkestoffMedStyrke);
+}
+
+std::vector<POppfVirkestoff> FestVectors::GetVirkestoff(const FestDeserializer &festDeserializer) const {
+    AsVector(virkestoff, GetVirkestoff);
+}

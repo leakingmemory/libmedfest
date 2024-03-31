@@ -480,6 +480,54 @@ std::vector<POppfLegemiddelVirkestoff> FestDeserializer::GetLegemiddelVirkestoff
     return result;
 }
 
+std::vector<POppfMedForbrMatr> FestDeserializer::GetMedForbrMatr() const {
+    std::vector<POppfMedForbrMatr> result{};
+    ForEachMedForbrMatr([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfNaringsmiddel> FestDeserializer::GetNaringsmiddel() const {
+    std::vector<POppfNaringsmiddel> result{};
+    ForEachNaringsmiddel([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfBrystprotese> FestDeserializer::GetBrystprotese() const {
+    std::vector<POppfBrystprotese> result{};
+    ForEachBrystprotese([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfLegemiddeldose> FestDeserializer::GetLegemiddeldose() const {
+    std::vector<POppfLegemiddeldose> result{};
+    ForEachLegemiddeldose([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfVirkestoffMedStyrke> FestDeserializer::GetVirkestoffMedStyrke() const {
+    std::vector<POppfVirkestoffMedStyrke> result{};
+    for (std::remove_const<typeof(numVirkestoffMedStyrke)>::type i = 0; i < numVirkestoffMedStyrke; i++) {
+        result.emplace_back(this->virkestoffMedStyrke[i]);
+    }
+    return result;
+}
+
+std::vector<POppfVirkestoff> FestDeserializer::GetVirkestoff() const {
+    std::vector<POppfVirkestoff> result{};
+    for (std::remove_const<typeof(numVirkestoff)>::type i = 0; i < numVirkestoff; i++) {
+        result.emplace_back(this->virkestoff[i]);
+    }
+    return result;
+}
+
 std::vector<PString> FestDeserializer::GetStrings() const {
     std::vector<PString> strings{};
     size_t idx{0};

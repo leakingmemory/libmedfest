@@ -137,6 +137,12 @@ public:
     [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare() const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning> GetLegemiddelPakning() const;
     [[nodiscard]] std::vector<POppfLegemiddelVirkestoff> GetLegemiddelVirkestoff() const;
+    [[nodiscard]] std::vector<POppfMedForbrMatr> GetMedForbrMatr() const;
+    [[nodiscard]] std::vector<POppfNaringsmiddel> GetNaringsmiddel() const;
+    [[nodiscard]] std::vector<POppfBrystprotese> GetBrystprotese() const;
+    [[nodiscard]] std::vector<POppfLegemiddeldose> GetLegemiddeldose() const;
+    [[nodiscard]] std::vector<POppfVirkestoffMedStyrke> GetVirkestoffMedStyrke() const;
+    [[nodiscard]] std::vector<POppfVirkestoff> GetVirkestoff() const;
     [[nodiscard]] std::vector<PString> GetStrings() const;
     [[nodiscard]] std::vector<PPrisVare> GetPrisVare() const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfo() const;

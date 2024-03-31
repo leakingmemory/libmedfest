@@ -11,6 +11,12 @@
 class POppfLegemiddelMerkevare;
 class POppfLegemiddelpakning;
 class POppfLegemiddelVirkestoff;
+class POppfMedForbrMatr;
+class POppfNaringsmiddel;
+class POppfBrystprotese;
+class POppfLegemiddeldose;
+class POppfVirkestoffMedStyrke;
+class POppfVirkestoff;
 
 class FestVectors {
 private:
@@ -39,6 +45,12 @@ public:
     [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning> GetLegemiddelPakning(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfLegemiddelVirkestoff> GetLegemiddelVirkestoff(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfMedForbrMatr> GetMedForbrMatr(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfNaringsmiddel> GetNaringsmiddel(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfBrystprotese> GetBrystprotese(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfLegemiddeldose> GetLegemiddeldose(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfVirkestoffMedStyrke> GetVirkestoffMedStyrke(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfVirkestoff> GetVirkestoff(const FestDeserializer &) const;
 };
 
 

@@ -1562,3 +1562,14 @@ Legemiddelforbruk FestDeserializer::Unpack(const PLegemiddelforbruk &pLegemiddel
 Lenke FestDeserializer::Unpack(const PLenke &lenke) const {
     return {Unpack(lenke.beskrivelse), Unpack(lenke.www)};
 }
+
+std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems &items) const {
+    std::vector<FestUuid> ids{};
+    {
+        auto pf = Unpack(festUuidList, numFestUuidList, items);
+        for (const auto &pid : pf) {
+            ids.emplace_back(Unpack(pid));
+        }
+    }
+    return ids;
+}

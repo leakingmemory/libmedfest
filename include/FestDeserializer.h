@@ -248,6 +248,7 @@ public:
     [[nodiscard]] DoseFastTidspunkt Unpack(const PDoseFastTidspunkt &pDoseFastTidspunkt) const;
     [[nodiscard]] Dosering Unpack(const PDosering &pDosering) const;
     [[nodiscard]] Legemiddelforbruk Unpack(const PLegemiddelforbruk &pLegemiddelforbruk) const;
+    [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems &) const;
     template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, const GenericListItems &items) const {
         if (items.start < size) {
             std::vector<T> output{};

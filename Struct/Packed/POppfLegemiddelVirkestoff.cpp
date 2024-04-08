@@ -7,7 +7,7 @@
 
 POppfLegemiddelVirkestoff::POppfLegemiddelVirkestoff(const OppfLegemiddelVirkestoff &oppf, std::string &strblock,
                                                      std::map<std::string,uint32_t> &cache,
-                                                     std::vector<FestUuid> uuidlist, StringList &stringList,
+                                                     std::vector<FestUuid> &uuidlist, StringList &stringList,
                                                      FestUuidList &festUuidList,
                                                      ValueWithCodesetList &valueWithCodesetList,
                                                      RefusjonList &refusjonList) :

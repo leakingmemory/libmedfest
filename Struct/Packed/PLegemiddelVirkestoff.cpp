@@ -8,7 +8,7 @@
 #include "Struct/Packed/FestUuidList.h"
 
 PLegemiddelVirkestoff::PLegemiddelVirkestoff(const LegemiddelVirkestoff &legemiddelVirkestoff, std::string &strblock,
-                                             std::map<std::string,uint32_t> &cache, std::vector<FestUuid> uuidlist,
+                                             std::map<std::string,uint32_t> &cache, std::vector<FestUuid> &uuidlist,
                                              StringList &stringList, FestUuidList &festUuidList,
                                              ValueWithCodesetList &valueWithCodesetList, RefusjonList &refusjonList) :
         PLegemiddel(legemiddelVirkestoff, strblock, cache, festUuidList, valueWithCodesetList),

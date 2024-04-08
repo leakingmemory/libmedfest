@@ -23,7 +23,7 @@ private:
     GenericListItems refPakning;
 public:
     PLegemiddelVirkestoff(const LegemiddelVirkestoff &legemiddelVirkestoff, std::string &strblock,
-                          std::map<std::string,uint32_t> &cache, std::vector<FestUuid> uuidlist, StringList &,
+                          std::map<std::string,uint32_t> &cache, std::vector<FestUuid> &uuidlist, StringList &,
                           FestUuidList &, ValueWithCodesetList &valueWithCodesetList, RefusjonList &refusjonList);
     bool operator == (const PLegemiddelVirkestoff &) const;
     PValueWithCodeset GetForskrivningsenhetResept() const;

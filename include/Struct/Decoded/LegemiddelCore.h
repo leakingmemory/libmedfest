@@ -32,6 +32,7 @@ public:
             atc(atc), navnFormStyrke(navnFormStyrke), reseptgruppe(reseptgruppe),
             legemiddelformKort(legemiddelformKort), refVilkar(refVilkar), typeSoknadSlv(typeSoknadSlv),
             opioidsoknad(opioidsoknad), svartTrekant(svartTrekant) {}
+    virtual ~LegemiddelCore() = default;
     [[nodiscard]] Atc GetAtc() const;
     [[nodiscard]] std::string GetNavnFormStyrke() const;
     [[nodiscard]] Reseptgruppe GetReseptgruppe() const;

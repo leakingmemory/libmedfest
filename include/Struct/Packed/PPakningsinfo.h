@@ -32,6 +32,46 @@ public:
     PPakningsinfo(const Pakningsinfo &, std::vector<FestUuid> &uuidblock, PakningskomponentList &pakningskomponentList,
                   std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PPakningsinfo &) const;
+
+    [[nodiscard]] PFestId GetMerkevareId() const {
+        return merkevareId;
+    }
+
+    [[nodiscard]] PString GetPakningsstr() const {
+        return pakningsstr;
+    }
+
+    [[nodiscard]] PValueWithCodeset GetEnhetPakning() const {
+        return enhetPakning;
+    }
+
+    [[nodiscard]] PValueWithCodeset GetPakningstype() const {
+        return pakningstype;
+    }
+
+    [[nodiscard]] PValueUnit GetDDD() const {
+        return ddd;
+    }
+
+    [[nodiscard]] PString GetMengde() const {
+        return mengde;
+    }
+
+    [[nodiscard]] GenericListItems GetPakningskomponent() const {
+        return pakningskomponent;
+    }
+
+    [[nodiscard]] double GetStatistikkfaktor() const {
+        return statistikkfaktor;
+    }
+
+    [[nodiscard]] uint16_t GetAntall() const {
+        return antall;
+    }
+
+    [[nodiscard]] uint16_t GetMultippel() const {
+        return multippel;
+    }
 };
 
 

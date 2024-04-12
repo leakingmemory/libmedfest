@@ -1563,6 +1563,10 @@ Lenke FestDeserializer::Unpack(const PLenke &lenke) const {
     return {Unpack(lenke.beskrivelse), Unpack(lenke.www)};
 }
 
+std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemiddelpakning &ppakning) const {
+    return Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
+}
+
 std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems &items) const {
     std::vector<FestUuid> ids{};
     {

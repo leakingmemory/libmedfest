@@ -16,6 +16,10 @@ std::string Refusjonskode::GetForskrivesTilDato() const {
     return forskrivesTilDato;
 }
 
+std::string Refusjonskode::GetUtleveresTilDato() const {
+    return utleveresTilDato;
+}
+
 std::vector<std::string> Refusjonskode::GetUnderterm() const {
     return underterm;
 }

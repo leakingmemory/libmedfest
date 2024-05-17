@@ -35,7 +35,8 @@ add_library(fest OBJECT Fest.cpp FestIdObject.cpp FestIdObject.h KatLegemiddelMe
         XmlInteraksjonIkkeVurdert.cpp XmlInteraksjonIkkeVurdert.h KatStrDosering.cpp KatStrDosering.h
         XmlKortdose.cpp XmlKortdose.h XmlBeskrivelseTerm.cpp XmlBeskrivelseTerm.h
         XmlLegemiddelforbruk.cpp XmlLegemiddelforbruk.h XmlDosering.cpp XmlDosering.h
-        XmlDoseFastTidspunkt.cpp XmlDoseFastTidspunkt.h XmlFastDose.cpp XmlFastDose.h)
+        XmlDoseFastTidspunkt.cpp XmlDoseFastTidspunkt.h XmlFastDose.cpp XmlFastDose.h
+        XmlUtleveresTilDato.cpp XmlUtleveresTilDato.h)
 
 include_directories(fest ${Boost_INCLUDE_DIRS} )
 include_directories(fest ../include)

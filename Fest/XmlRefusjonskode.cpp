@@ -17,7 +17,7 @@ void XmlRefusjonskode::AddUnderterm(const std::string &underterm) {
 }
 
 bool XmlRefusjonskode::Merge() {
-    parent->AddRefusjonskode({refusjonskode, GetGyldigFraDato(), GetForskrivesTilDato(), underterm, GetRefusjonsvilkar()});
+    parent->AddRefusjonskode({refusjonskode, GetGyldigFraDato(), GetForskrivesTilDato(), GetUtleveresTilDato(), underterm, GetRefusjonsvilkar()});
     return true;
 }
 

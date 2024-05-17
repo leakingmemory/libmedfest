@@ -77,7 +77,7 @@ struct FestFirstHeader {
     uint16_t numElement;
     uint16_t numKodeverk;
     uint16_t numRefRefusjonsvilkar;
-    uint16_t numRefusjonskode;
+    uint16_t numRefusjonskode_0_0_0;
     uint16_t numRefusjon;
     uint16_t numVilkar;
     uint16_t numVarselSlv;
@@ -93,6 +93,19 @@ struct FestFirstHeader {
     uint16_t numStrDosering;
     uint32_t numUint16List : 22;
     uint16_t numFests : 10;
+} __attribute__((__packed__));
+
+struct FestSecondHeader {
+    uint64_t magic;
+    uint32_t stringblockSize;
+    uint16_t secondHeaderSize;
+    uint16_t numRefusjonskode;
+} __attribute__((__packed__));
+
+struct FestTrailer {
+    uint32_t reserved;
+    uint32_t secondHeaderOffset;
+    uint64_t magic;
 } __attribute__((__packed__));
 
 class FestDeserializer;
@@ -114,6 +127,7 @@ private:
     RefusjonList refusjonList{};
     ElementList elementList{};
     RefRefusjonsvilkarList refRefusjonsvilkarList{};
+    RefusjonskodeList_0_0_0 refusjonskodeList_0_0_0{};
     RefusjonskodeList refusjonskodeList{};
     ReferanseList referanseList{};
     SubstansgruppeList substansgruppeList{};

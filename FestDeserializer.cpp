@@ -38,7 +38,9 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     if (close(fd) != 0) {
         std::cerr << "Error: Close file: " << strerror(errno )<< "\n";
     }
-    FestFirstHeader *header = (FestFirstHeader *) mapping;
+    auto *header = (FestFirstHeader *) mapping;
+    FestSecondHeader *secondHeader{nullptr};
+    uint32_t secondDataOffset{0};
     size_t offset = sizeof(*header);
     {
         auto off = offset % alignment;
@@ -57,12 +59,43 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             std::cerr << "Error: File is not a FEST db file\n";
             throw PackException("Not a FEST file");
         }
+        versionMajor = version.major;
+        versionMinor = version.minor;
+        versionPatch = version.patch;
         if (version.major != 0) {
             std::cerr << "Error: Major version " << version.major << " can not be read\n";
             throw PackException("Major version of file");
         }
-        if (version.minor != 0) {
+        if (version.minor > 1) {
             std::cerr << "Warning: Minor version " << version.minor << " contains unsupported data (ignored)\n";
+        }
+        if (version.minor == 1) {
+            if (mapsize < sizeof(FestTrailer)) {
+                throw PackException("Insufficient size (trailer)");
+            }
+            auto *trailer = (FestTrailer *) (((uint8_t *) mapping) + (mapsize - sizeof(FestTrailer)));
+            if (trailer->magic != header->magic) {
+                throw PackException("Trailer magic incorrect");
+            }
+            if (mapsize <= 0 || (trailer->secondHeaderOffset + sizeof(FestSecondHeader)) > (mapsize - 1)) {
+                throw PackException("Second header offset overflow");
+            }
+            secondHeader = (FestSecondHeader *) (((uint8_t *) mapping) + trailer->secondHeaderOffset);
+            if (trailer->magic != secondHeader->magic) {
+                throw PackException("Second header magic incorrect");
+            }
+            if ((trailer->secondHeaderOffset + secondHeader->secondHeaderSize) > (mapsize - 1)) {
+                throw PackException("Second header offset overflow");
+            }
+            secondDataOffset = trailer->secondHeaderOffset;
+            secondDataOffset += secondHeader->secondHeaderSize;
+            {
+                auto off = secondDataOffset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    secondDataOffset += off;
+                }
+            }
         }
     }
     merkevare = (POppfLegemiddelMerkevare *) (void *) (((uint8_t *) mapping) + offset);
@@ -345,9 +378,9 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
-    refusjonskodeList = (const PRefusjonskode *) (void *) (((uint8_t *) mapping) + offset);
-    numRefusjonskode = header->numRefusjonskode;
-    offset += ((size_t) numRefusjonskode) * sizeof(*refusjonskodeList);
+    refusjonskodeList_0_0_0 = (const PRefusjonskode_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+    numRefusjonskode_0_0_0 = header->numRefusjonskode_0_0_0;
+    offset += ((size_t) numRefusjonskode_0_0_0) * sizeof(*refusjonskodeList_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -448,12 +481,39 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             throw PackException("Truncated file");
         }
     }
+    if (secondHeader != nullptr) {
+        if (stringblocksize < secondHeader->stringblockSize) {
+            throw PackException("Stringblock overflow");
+        }
+        stringblocksize = secondHeader->stringblockSize;
+        offset = secondDataOffset;
+        refusjonskodeList = (const PRefusjonskode *) (void *) (((uint8_t *) mapping) + offset);
+        numRefusjonskode = secondHeader->numRefusjonskode;
+        if ((offset + (sizeof(*refusjonskodeList) * numRefusjonskode)) > size) {
+            throw PackException("Refusjonskode list overflow (v0.1.0)");
+        }
+    } else {
+        refusjonskodeList = nullptr;
+        numRefusjonskode = 0;
+    }
 }
 
 FestDeserializer::~FestDeserializer() {
     if (mapping != nullptr) {
         munmap(mapping, mapsize);
     }
+}
+
+int FestDeserializer::GetVersionMajor() const {
+    return versionMajor;
+}
+
+int FestDeserializer::GetVersionMinor() const {
+    return versionMinor;
+}
+
+int FestDeserializer::GetVersionPatch() const {
+    return versionPatch;
 }
 
 std::vector<POppfLegemiddelMerkevare> FestDeserializer::GetLegemiddelMerkevare() const {
@@ -524,6 +584,14 @@ std::vector<POppfVirkestoff> FestDeserializer::GetVirkestoff() const {
     std::vector<POppfVirkestoff> result{};
     for (std::remove_const<typeof(numVirkestoff)>::type i = 0; i < numVirkestoff; i++) {
         result.emplace_back(this->virkestoff[i]);
+    }
+    return result;
+}
+
+std::vector<POppfRefusjon> FestDeserializer::GetOppfRefusjon() const {
+    std::vector<POppfRefusjon> result{};
+    for (std::remove_const<typeof(numRefusjon)>::type i = 0; i < numRefusjon; i++) {
+        result.emplace_back(this->refusjon[i]);
     }
     return result;
 }
@@ -644,11 +712,36 @@ std::vector<PRefRefusjonsvilkar> FestDeserializer::GetRefRefusjonsvilkar() const
     return refRefusjonsvilkar;
 }
 
-std::vector<PRefusjonskode> FestDeserializer::GetRefusjonskode() const {
+std::vector<PRefusjonskode_0_0_0> FestDeserializer::GetRefusjonskode_0_0_0() const {
+    std::vector<PRefusjonskode_0_0_0> refusjonskode{};
+    refusjonskode.reserve(numRefusjonskode_0_0_0);
+    for (std::remove_const<typeof(numRefusjonskode_0_0_0)>::type i = 0; i < numRefusjonskode_0_0_0; i++) {
+        refusjonskode.emplace_back(this->refusjonskodeList_0_0_0[i]);
+    }
+    return refusjonskode;
+}
+
+std::vector<PRefusjonskode> FestDeserializer::GetRefusjonskode_0_1_0() const {
     std::vector<PRefusjonskode> refusjonskode{};
     refusjonskode.reserve(numRefusjonskode);
     for (std::remove_const<typeof(numRefusjonskode)>::type i = 0; i < numRefusjonskode; i++) {
         refusjonskode.emplace_back(this->refusjonskodeList[i]);
+    }
+    return refusjonskode;
+}
+
+std::vector<PRefusjonskode> FestDeserializer::GetRefusjonskode() const {
+    std::vector<PRefusjonskode> refusjonskode{};
+    if (numRefusjonskode > 0) {
+        refusjonskode.reserve(numRefusjonskode);
+        for (std::remove_const<typeof(numRefusjonskode)>::type i = 0; i < numRefusjonskode; i++) {
+            refusjonskode.emplace_back(this->refusjonskodeList[i]);
+        }
+        return refusjonskode;
+    }
+    refusjonskode.reserve(numRefusjonskode_0_0_0);
+    for (std::remove_const<typeof(numRefusjonskode_0_0_0)>::type i = 0; i < numRefusjonskode_0_0_0; i++) {
+        refusjonskode.emplace_back(this->refusjonskodeList_0_0_0[i]);
     }
     return refusjonskode;
 }
@@ -1420,6 +1513,31 @@ RefRefusjonsvilkar FestDeserializer::Unpack(const PRefRefusjonsvilkar &pref) con
     };
 }
 
+Refusjonskode FestDeserializer::Unpack(const PRefusjonskode_0_0_0 &pref) const {
+    std::vector<std::string> underterm{};
+    {
+        auto list = Unpack(stringList, numStringList, pref.underterm);
+        for (const auto &put : list) {
+            underterm.emplace_back(Unpack(put));
+        }
+    }
+    std::vector<RefRefusjonsvilkar> refusjonsvilkar{};
+    {
+        auto list = Unpack(refRefusjonsvilkarList, numRefRefusjonsvilkar, pref.refusjonsvilkar);
+        for (const auto &pr : list) {
+            refusjonsvilkar.emplace_back(Unpack(pr));
+        }
+    }
+    return {
+            Unpack(pref.refusjonskode),
+            Unpack(pref.gyldigFraDato),
+            Unpack(pref.forskrivesTilDato),
+            {},
+            underterm,
+            refusjonsvilkar
+    };
+}
+
 Refusjonskode FestDeserializer::Unpack(const PRefusjonskode &pref) const {
     std::vector<std::string> underterm{};
     {
@@ -1439,6 +1557,7 @@ Refusjonskode FestDeserializer::Unpack(const PRefusjonskode &pref) const {
         Unpack(pref.refusjonskode),
         Unpack(pref.gyldigFraDato),
         Unpack(pref.forskrivesTilDato),
+        Unpack(pref.utleveresTilDato),
         underterm,
         refusjonsvilkar
     };
@@ -1446,8 +1565,13 @@ Refusjonskode FestDeserializer::Unpack(const PRefusjonskode &pref) const {
 
 Refusjonsgruppe FestDeserializer::Unpack(const PRefusjonsgruppe &pRefusjonsgruppe) const {
     std::vector<Refusjonskode> refusjonskode{};
-    {
+    if (versionMajor > 0 || versionMinor > 0) {
         auto list = Unpack(refusjonskodeList, numRefusjonskode, pRefusjonsgruppe.refusjonskode);
+        for (const auto &item : list) {
+            refusjonskode.emplace_back(Unpack(item));
+        }
+    } else {
+        auto list = Unpack(refusjonskodeList_0_0_0, numRefusjonskode_0_0_0, pRefusjonsgruppe.refusjonskode);
         for (const auto &item : list) {
             refusjonskode.emplace_back(Unpack(item));
         }

@@ -12,6 +12,7 @@
 
 class FestDeserializer;
 class Refusjonsgruppe;
+class RefusjonskodeList_0_0_0;
 class RefusjonskodeList;
 class RefRefusjonsvilkarList;
 class FestUuid;
@@ -28,7 +29,7 @@ private:
     PValueWithCodeset atc;
     bool kreverRefusjonskode : 1;
 public:
-    PRefusjonsgruppe(const Refusjonsgruppe &, RefusjonskodeList &, RefRefusjonsvilkarList &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    PRefusjonsgruppe(const Refusjonsgruppe &, RefusjonskodeList_0_0_0 &, RefusjonskodeList &, RefRefusjonsvilkarList &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PRefusjonsgruppe &) const;
 };
 

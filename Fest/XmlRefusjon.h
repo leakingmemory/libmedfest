@@ -10,6 +10,7 @@
 #include "XmlContentElement.h"
 #include "XmlGyldigFraDato.h"
 #include "XmlForskrivesTilDato.h"
+#include "XmlUtleveresTilDato.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -23,16 +24,14 @@ public:
     [[nodiscard]] std::vector<Refusjon> GetRefusjon() const;
 };
 
-class XmlRefusjonObject : public XMLObject, public XmlGyldigFraDato, public XmlForskrivesTilDato {
+class XmlRefusjonObject : public XMLObject, public XmlGyldigFraDato, public XmlForskrivesTilDato, public XmlUtleveresTilDato {
 private:
     std::shared_ptr<XmlRefusjon> parent;
     std::vector<std::string> ref;
-    std::string utleveresTilDato;
 public:
     XmlRefusjonObject(std::shared_ptr<XmlRefusjon> parent) : parent(parent) {}
     std::string GetName() const override;
     void AddRefRefusjonsgruppe(const std::string &ref);
-    void SetUtleveresTilDato(const std::string &utleveresTilDato);
     bool Merge();
 };
 
@@ -45,12 +44,6 @@ public:
 class XmlRefRefusjonsgruppeHandler : public XmlContentElementHandler<XmlRefusjonObject> {
 public:
     XmlRefRefusjonsgruppeHandler() : XmlContentElementHandler<XmlRefusjonObject>("RefRefusjonsgruppe") {}
-    bool Merge(std::shared_ptr<XmlRefusjonObject> parent, const std::string &content) override;
-};
-
-class XmlUtleveresTilDatoHandler : public XmlContentElementHandler<XmlRefusjonObject> {
-public:
-    XmlUtleveresTilDatoHandler() : XmlContentElementHandler<XmlRefusjonObject>("UtleveresTilDato") {}
     bool Merge(std::shared_ptr<XmlRefusjonObject> parent, const std::string &content) override;
 };
 

@@ -108,7 +108,7 @@ PString::PString(const std::string &str, std::string &textblock, std::map<std::s
 
 std::string PString::ToString(const char *textblock, size_t size) const {
     auto offset = this->offset;
-    if (offset < size) {
+    if (offset != Max && offset < size) {
         auto end = offset;
         while (end < size && textblock[end] != '\0') {
             ++end;

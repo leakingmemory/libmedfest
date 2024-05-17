@@ -53,6 +53,9 @@ class FestDeserializer {
 private:
     void *mapping;
     size_t mapsize;
+    int versionMajor;
+    int versionMinor;
+    int versionPatch;
     const POppfLegemiddelMerkevare *merkevare;
     const POppfLegemiddelpakning *pakning;
     const POppfLegemiddelVirkestoff *legemiddelVirkestoff;
@@ -81,6 +84,7 @@ private:
     const PRefusjon *refusjonList;
     const PElement *elementList;
     const PRefRefusjonsvilkar *refRefusjonsvilkarList;
+    const PRefusjonskode_0_0_0 *refusjonskodeList_0_0_0;
     const PRefusjonskode *refusjonskodeList;
     const PReferanse *referanseList;
     const PSubstansgruppe *substansgruppeList;
@@ -120,6 +124,7 @@ private:
     size_t numRefusjonList;
     size_t numElement;
     size_t numRefRefusjonsvilkar;
+    size_t numRefusjonskode_0_0_0;
     size_t numRefusjonskode;
     size_t numReferanseList;
     size_t numSubstansgruppeList;
@@ -134,6 +139,9 @@ private:
 public:
     FestDeserializer(const std::string &filename);
     ~FestDeserializer();
+    [[nodiscard]] int GetVersionMajor() const;
+    [[nodiscard]] int GetVersionMinor() const;
+    [[nodiscard]] int GetVersionPatch() const;
     [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare() const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning> GetLegemiddelPakning() const;
     [[nodiscard]] std::vector<POppfLegemiddelVirkestoff> GetLegemiddelVirkestoff() const;
@@ -143,6 +151,7 @@ public:
     [[nodiscard]] std::vector<POppfLegemiddeldose> GetLegemiddeldose() const;
     [[nodiscard]] std::vector<POppfVirkestoffMedStyrke> GetVirkestoffMedStyrke() const;
     [[nodiscard]] std::vector<POppfVirkestoff> GetVirkestoff() const;
+    [[nodiscard]] std::vector<POppfRefusjon> GetOppfRefusjon() const;
     [[nodiscard]] std::vector<PString> GetStrings() const;
     [[nodiscard]] std::vector<PPrisVare> GetPrisVare() const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfo() const;
@@ -155,6 +164,8 @@ public:
     [[nodiscard]] std::vector<PRefusjon> GetRefusjon() const;
     [[nodiscard]] std::vector<PElement> GetElement() const;
     [[nodiscard]] std::vector<PRefRefusjonsvilkar> GetRefRefusjonsvilkar() const;
+    [[nodiscard]] std::vector<PRefusjonskode_0_0_0> GetRefusjonskode_0_0_0() const;
+    [[nodiscard]] std::vector<PRefusjonskode> GetRefusjonskode_0_1_0() const;
     [[nodiscard]] std::vector<PRefusjonskode> GetRefusjonskode() const;
     [[nodiscard]] std::vector<PReferanse> GetReferanse() const;
     [[nodiscard]] std::vector<PSubstansgruppe> GetSubstansgruppe() const;
@@ -238,6 +249,7 @@ public:
     [[nodiscard]] Element Unpack(const PElement &pElement) const;
     [[nodiscard]] Term Unpack(const PTerm &pTerm) const;
     [[nodiscard]] RefRefusjonsvilkar Unpack(const PRefRefusjonsvilkar &pref) const;
+    [[nodiscard]] Refusjonskode Unpack(const PRefusjonskode_0_0_0 &pref) const;
     [[nodiscard]] Refusjonskode Unpack(const PRefusjonskode &pref) const;
     [[nodiscard]] Refusjonsgruppe Unpack(const PRefusjonsgruppe &pRefusjonsgruppe) const;
     [[nodiscard]] StrukturertVilkar Unpack(const PStrukturertVilkar &pStrukturertVilkar) const;

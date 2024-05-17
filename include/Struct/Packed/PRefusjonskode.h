@@ -14,8 +14,11 @@ class RefRefusjonsvilkarList;
 class StringList;
 class FestUuid;
 
-class PRefusjonskode {
+class PRefusjonskode;
+
+class PRefusjonskode_0_0_0 {
     friend FestDeserializer;
+    friend PRefusjonskode;
 private:
     PValueWithCodeset refusjonskode;
     PString gyldigFraDato;
@@ -23,6 +26,23 @@ private:
     GenericListItems underterm;
     GenericListItems refusjonsvilkar;
 public:
+    explicit PRefusjonskode_0_0_0(const PRefusjonskode &);
+    PRefusjonskode_0_0_0(const Refusjonskode &, RefRefusjonsvilkarList &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    bool operator ==(const PRefusjonskode_0_0_0 &other) const;
+};
+
+class PRefusjonskode {
+    friend FestDeserializer;
+    friend PRefusjonskode_0_0_0;
+private:
+    PValueWithCodeset refusjonskode;
+    PString gyldigFraDato;
+    PString forskrivesTilDato;
+    PString utleveresTilDato;
+    GenericListItems underterm;
+    GenericListItems refusjonsvilkar;
+public:
+    explicit PRefusjonskode(const PRefusjonskode_0_0_0 &);
     PRefusjonskode(const Refusjonskode &, RefRefusjonsvilkarList &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator ==(const PRefusjonskode &other) const;
 };

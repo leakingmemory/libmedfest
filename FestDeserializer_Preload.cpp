@@ -12,12 +12,25 @@ template <class T> void PL(std::vector<T> &serializer, const T *deserializer, si
     }
 }
 
+template <class T, class S> void PL(std::vector<T> &serializer, const S *deserializer, size_t num, const std::function<T (const S &)> &convert) {
+    serializer.reserve(num);
+    for (typeof(num) i = 0; i < num; i++) {
+        T obj = convert(deserializer[i]);
+        serializer.emplace_back(obj);
+    }
+}
+
 class FestDeserializerPreloader {
 public:
     template <class List, class P> void Preload(List &list, const P *src, size_t num) {
         auto &listStorage = static_cast<GenericListStorage<P>&>(list);
         auto &vec = listStorage.list;
         PL(vec, src, num);
+    }
+    template <class List, class P, class S> void Preload(List &list, const S *src, size_t num, const std::function<P (const S &)> &convert) {
+        auto &listStorage = static_cast<GenericListStorage<P>&>(list);
+        auto &vec = listStorage.list;
+        PL(vec, src, num, convert);
     }
 };
 
@@ -54,7 +67,16 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     preloader.Preload(festSerializer.refusjonList, refusjonList, numRefusjonList);
     preloader.Preload(festSerializer.elementList, elementList, numElement);
     preloader.Preload(festSerializer.refRefusjonsvilkarList, refRefusjonsvilkarList, numRefRefusjonsvilkar);
-    preloader.Preload(festSerializer.refusjonskodeList, refusjonskodeList, numRefusjonskode);
+    preloader.Preload(festSerializer.refusjonskodeList_0_0_0, refusjonskodeList_0_0_0, numRefusjonskode_0_0_0);
+    if (versionMajor > 0 || versionMinor >= 1) {
+        preloader.Preload(festSerializer.refusjonskodeList, refusjonskodeList, numRefusjonskode);
+    } else {
+        std::function<PRefusjonskode (const PRefusjonskode_0_0_0 &)> convert{[] (const PRefusjonskode_0_0_0 &src) {
+            PRefusjonskode dst{src};
+            return dst;
+        }};
+        preloader.Preload(festSerializer.refusjonskodeList, refusjonskodeList_0_0_0, numRefusjonskode_0_0_0, convert);
+    }
     preloader.Preload(festSerializer.referanseList, referanseList, numReferanseList);
     preloader.Preload(festSerializer.substansgruppeList, substansgruppeList, numSubstansgruppeList);
     preloader.Preload(festSerializer.substansList, substansList, numSubstansList);

@@ -98,6 +98,9 @@ bool FestSerializer::Write() {
     if (refRefusjonsvilkarList.size() >= (1 << 16)) {
         throw PackException("Max ref refusjonsvilkar list");
     }
+    if (refusjonskodeList_0_0_0.size() >= (1 << 16)) {
+        throw PackException("Max refusjonskode 0.0.0 list");
+    }
     if (refusjonskodeList.size() >= (1 << 16)) {
         throw PackException("Max refusjonskode list");
     }
@@ -170,7 +173,7 @@ bool FestSerializer::Write() {
         .numElement = (uint16_t) elementList.size(),
         .numKodeverk = (uint16_t) kodeverk.size(),
         .numRefRefusjonsvilkar = (uint16_t) refRefusjonsvilkarList.size(),
-        .numRefusjonskode = (uint16_t) refusjonskodeList.size(),
+        .numRefusjonskode_0_0_0 = (uint16_t) refusjonskodeList_0_0_0.size(),
         .numRefusjon = (uint16_t) refusjon.size(),
         .numVilkar = (uint16_t) vilkar.size(),
         .numVarselSlv = (uint16_t) varselSlv.size(),
@@ -600,7 +603,7 @@ bool FestSerializer::Write() {
         }
     }
     {
-        auto list = refusjonskodeList.GetStorageList();
+        auto list = refusjonskodeList_0_0_0.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
@@ -740,7 +743,64 @@ bool FestSerializer::Write() {
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
-    output.write(stringblock.c_str(), stringblock.size());
+    {
+        auto size = stringblock.size();
+        output.write(stringblock.c_str(), size);
+        offset += size;
+    }
+    auto dbVersion = GetDbVersion(firstHeader.magic);
+    if (dbVersion.major > 0 || dbVersion.minor > 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output.write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        if (offset > std::numeric_limits<uint32_t>::max()) {
+            throw PackException("Size limits overshoot (v0.1.0 - offset of second header)");
+        }
+        FestTrailer trailer{.reserved = 0, .secondHeaderOffset = (uint32_t) offset, .magic = firstHeader.magic};
+        if (stringblock.size() > std::numeric_limits<uint32_t>::max()) {
+            throw PackException("Stringblock size overshoot (v0.1.0)");
+        }
+        if (refusjonskodeList.size() > std::numeric_limits<uint16_t>::max()) {
+            throw PackException("Refusjonskode list size overshoot (v0.1.0)");
+        }
+        FestSecondHeader secondHeader{
+            .magic = firstHeader.magic,
+            .stringblockSize = (uint32_t) stringblock.size(),
+            .secondHeaderSize = sizeof(FestSecondHeader),
+            .numRefusjonskode = (uint16_t) refusjonskodeList.size()
+        };
+        output.write((char *) (void *) &secondHeader, sizeof(secondHeader));
+        offset += sizeof(secondHeader);
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output.write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        {
+            auto list = refusjonskodeList.GetStorageList();
+            auto *ptr = list.data();
+            auto size = list.size() * sizeof(*ptr);
+            output.write((char *) (void *) ptr, size);
+            offset += size;
+        }
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output.write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        output.write((char *) (void *) &trailer, sizeof(trailer));
+    }
     output.close();
     return true;
 }
@@ -835,7 +895,7 @@ bool FestSerializer::Visit(const std::string &fest, const OppfKodeverk &kodeverk
 }
 
 bool FestSerializer::Visit(const std::string &fest, const OppfRefusjon &refusjon) {
-    auto index = Add(this->refusjon, {refusjon, refusjonskodeList, refRefusjonsvilkarList, stringList, festidblock, stringblock, stringblockCache});
+    auto index = Add(this->refusjon, {refusjon, refusjonskodeList_0_0_0, refusjonskodeList, refRefusjonsvilkarList, stringList, festidblock, stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.refusjon.emplace_back(index); });
     return true;
 }

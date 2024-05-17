@@ -101,6 +101,68 @@ public:
         }
         return {.start = (uint32_t) start, .size = (uint32_t) size};
     }
+    GenericListItems StoreList(const std::vector<T> &list, uint32_t startHint) {
+        {
+            auto check_iter = list.begin();
+            if (check_iter == list.end()) {
+                return {.start = 0, .size = 0};
+            }
+            size_t index = 0;
+            auto iter = this->list.begin();
+            while (iter != this->list.end()) {
+                if (*iter == *check_iter) {
+                    auto size = 1;
+                    auto c_iter = iter;
+                    ++c_iter;
+                    ++check_iter;
+                    while (c_iter != this->list.end() && check_iter != list.end() && *c_iter == *check_iter) {
+                        ++c_iter;
+                        ++check_iter;
+                        ++size;
+                    }
+                    if (check_iter == list.end() && index == startHint) {
+                        if (size > GenericListItems::max_size) {
+                            std::cerr << "Error: List item max_size overshoot: " << size << "\n";
+                            return {.start = 0, .size = 0};
+                        }
+                        return {.start = (uint32_t) index, .size = (uint32_t) size};
+                    } else if (c_iter == this->list.end() && index == startHint) {
+                        do {
+                            this->list.push_back(*check_iter);
+                            ++check_iter;
+                            ++size;
+                        } while (check_iter != list.end());
+                        if (size > GenericListItems::max_size) {
+                            std::cerr << "Error: List item max_size overshoot: " << size << "\n";
+                            return {.start = 0, .size = 0};
+                        }
+                        if (index > GenericListItems::max_address) {
+                            std::cerr << "Error: List total size overshoot: " << index << "\n";
+                        }
+                        return {.start = (uint32_t) index, .size = (uint32_t) size};
+                    }
+                    check_iter = list.begin();
+                }
+                ++iter;
+                ++index;
+            }
+        }
+        auto start = this->list.size();
+        if (start > GenericListItems::max_address) {
+            std::cerr << "Error: Lists max count overshoot: " << start << "\n";
+            return {.start = 0, .size = 0};
+        }
+        size_t size = 0;
+        for (const auto &item : list) {
+            this->list.emplace_back(item);
+            ++size;
+        }
+        if (size > GenericListItems::max_size) {
+            std::cerr << "Error: List item max_size overshoot: " << size << "\n";
+            return {.start = 0, .size = 0};
+        }
+        return {.start = (uint32_t) start, .size = (uint32_t) size};
+    }
     [[nodiscard]] std::vector<T> RetrieveList(const GenericListItems &litems) const {
         size_t size = litems.size;
         if (size <= 0) {

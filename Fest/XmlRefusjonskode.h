@@ -11,9 +11,10 @@
 #include "XmlContentElement.h"
 #include "XmlRefusjonsvilkar.h"
 #include "XmlForskrivesTilDato.h"
+#include "XmlUtleveresTilDato.h"
 
 class XmlRefusjonskode : public XMLObject, public XmlGyldigFraDato, public XmlRefRefusjonsvilkar,
-                         public XmlForskrivesTilDato {
+                         public XmlForskrivesTilDato, public XmlUtleveresTilDato {
 private:
     std::shared_ptr<XmlRefusjonsgruppe> parent;
     ValueWithCodeSet refusjonskode{};

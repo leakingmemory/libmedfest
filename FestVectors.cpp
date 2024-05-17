@@ -120,3 +120,7 @@ std::vector<POppfVirkestoffMedStyrke> FestVectors::GetVirkestoffMedStyrke(const 
 std::vector<POppfVirkestoff> FestVectors::GetVirkestoff(const FestDeserializer &festDeserializer) const {
     AsVector(virkestoff, GetVirkestoff);
 }
+
+std::vector<POppfRefusjon> FestVectors::GetRefusjon(const FestDeserializer &festDeserializer) const {
+    AsVector(refusjon, GetOppfRefusjon);
+}

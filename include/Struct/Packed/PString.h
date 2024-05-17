@@ -8,15 +8,19 @@
 #include <cstdint>
 #include <string>
 #include <map>
+#include <limits>
 
 class FestDeserializer;
 
 class PString {
     friend FestDeserializer;
-private:
-    uint32_t offset;
 public:
-    PString() : offset(0) {}
+    typedef uint32_t Type;
+    static constexpr Type Max = std::numeric_limits<Type>::max();
+private:
+    Type offset;
+public:
+    PString() : offset(Max) {}
     PString(const std::string &str, std::string &textblock, std::map<std::string,uint32_t> &cache);
     explicit PString(uint32_t offset) : offset(offset) {}
     [[nodiscard]] std::string ToString(const char *textblock, size_t size) const;

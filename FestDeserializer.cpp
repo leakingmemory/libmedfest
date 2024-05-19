@@ -596,6 +596,14 @@ std::vector<POppfRefusjon> FestDeserializer::GetOppfRefusjon() const {
     return result;
 }
 
+std::vector<POppfKodeverk> FestDeserializer::GetOppfKodeverk() const {
+    std::vector<POppfKodeverk> result{};
+    for (std::remove_const<typeof(numKodeverk)>::type i = 0; i < numKodeverk; i++) {
+        result.emplace_back(this->kodeverk[i]);
+    }
+    return result;
+}
+
 std::vector<PString> FestDeserializer::GetStrings() const {
     std::vector<PString> strings{};
     size_t idx{0};
@@ -996,7 +1004,7 @@ OppfVirkestoff FestDeserializer::Unpack(const POppfVirkestoff &poppf) const {
 OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk &poppf) const {
     std::vector<Element> element{};
     {
-        auto list = Unpack(elementList, numElement, poppf.elements);
+        auto list = GetElementList(poppf);
         for (const auto &item : list) {
             element.emplace_back(Unpack(item));
         }
@@ -1691,6 +1699,10 @@ std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemidd
     return Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
 }
 
+std::vector<PElement> FestDeserializer::GetElementList(const POppfKodeverk &pkodeverk) const {
+    return Unpack(elementList, numElement, pkodeverk.elements);;
+}
+
 std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems &items) const {
     std::vector<FestUuid> ids{};
     {
@@ -1700,4 +1712,59 @@ std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems &ite
         }
     }
     return ids;
+}
+
+constexpr void Quota(std::vector<FestDbQuota> &quotas, const std::string &name, size_t num, size_t compatMax=std::numeric_limits<uint16_t>::max(), size_t hardMax=std::numeric_limits<uint16_t>::max()) {
+    FestDbQuota q{
+        .name = name,
+        .total = num,
+        .compatMax = compatMax,
+        .hardMax = hardMax
+    };
+    quotas.emplace_back(std::move(q));
+}
+
+std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
+    std::vector<FestDbQuota> quotas{};
+    Quota(quotas, "Merkevare", numMerkevare);
+    Quota(quotas, "Pakning", numPakning);
+    Quota(quotas, "Legemiddel virkestoff", numLegemiddelVirkestoff);
+    Quota(quotas, "Med forbr matr", numMedForbrMatr);
+    Quota(quotas, "Naringsmiddel", numNaringsmiddel);
+    Quota(quotas, "Brystprotese", numBrystprotese);
+    Quota(quotas, "Legemiddeldose", numLegemiddeldose);
+    Quota(quotas, "Virkestoff med styrke", numVirkestoffMedStyrke);
+    Quota(quotas, "Virkestoff", numVirkestoff);
+    Quota(quotas, "Kodeverk", numKodeverk);
+    Quota(quotas, "Refusjon", numRefusjon);
+    Quota(quotas, "Vilkar", numVilkar);
+    Quota(quotas, "Varsel slv", numVarselSlv);
+    Quota(quotas, "Byttegruppe", numByttegruppe);
+    Quota(quotas, "Interaksjon", numInteraksjon);
+    Quota(quotas, "Interaksjon ikke vurdert", numInteraksjonIkkeVurdert);
+    Quota(quotas, "Str dosering", numStrDosering);
+    Quota(quotas, "Fest UUID", numFestUuid, 16777215, 16777215);
+    Quota(quotas, "Fest UUID list", numFestUuidList);
+    Quota(quotas, "Value with codeset list", numValueWithCodesetList);
+    Quota(quotas, "Reseptgyldighet", numReseptgyldighet, 255, 255);
+    Quota(quotas, "Pakningskomponent", numPakningskomponent);
+    Quota(quotas, "Pakningskomponent info", numPakningskomponentInfo);
+    Quota(quotas, "Pakningsinfo", numPakningsinfo);
+    Quota(quotas, "Pris vare", numPrisVare);
+    Quota(quotas, "Refusjon list", numRefusjonList);
+    Quota(quotas, "Element", numElement);
+    Quota(quotas, "Ref refusjonsvilkar", numRefRefusjonsvilkar);
+    Quota(quotas, "Refusjonskode 0.0.0", numRefusjonskode_0_0_0);
+    Quota(quotas, "Refusjonskode", numRefusjonskode);
+    Quota(quotas, "Referanse list", numReferanseList);
+    Quota(quotas, "Substansgruppe list", numSubstansgruppeList);
+    Quota(quotas, "Substans list", numSubstansList);
+    Quota(quotas, "Dose fast tidspunkt list", numDoseFastTidspunktList);
+    Quota(quotas, "Dosering list", numDoseringList);
+    Quota(quotas, "Legemiddelforbruk list", numLegemiddelforbrukList);
+    Quota(quotas, "Uint16_t list", numUint16List, 4194303, 4194303);
+    Quota(quotas, "FEST Versions", numFests, 1023, 1023);
+    Quota(quotas, "String list", numStringList);
+    Quota(quotas, "Stringblock", stringblocksize, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());
+    return quotas;
 }

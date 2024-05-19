@@ -124,3 +124,7 @@ std::vector<POppfVirkestoff> FestVectors::GetVirkestoff(const FestDeserializer &
 std::vector<POppfRefusjon> FestVectors::GetRefusjon(const FestDeserializer &festDeserializer) const {
     AsVector(refusjon, GetOppfRefusjon);
 }
+
+std::vector<POppfKodeverk> FestVectors::GetKodeverk(const FestDeserializer &festDeserializer) const {
+    AsVector(kodeverk, GetOppfKodeverk);
+}

@@ -49,6 +49,13 @@
 
 class FestSerializer;
 
+struct FestDbQuota {
+    std::string name{};
+    uint64_t total{0};
+    uint64_t compatMax{0};
+    uint64_t hardMax{0};
+};
+
 class FestDeserializer {
 private:
     void *mapping;
@@ -152,6 +159,7 @@ public:
     [[nodiscard]] std::vector<POppfVirkestoffMedStyrke> GetVirkestoffMedStyrke() const;
     [[nodiscard]] std::vector<POppfVirkestoff> GetVirkestoff() const;
     [[nodiscard]] std::vector<POppfRefusjon> GetOppfRefusjon() const;
+    [[nodiscard]] std::vector<POppfKodeverk> GetOppfKodeverk() const;
     [[nodiscard]] std::vector<PString> GetStrings() const;
     [[nodiscard]] std::vector<PPrisVare> GetPrisVare() const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfo() const;
@@ -261,7 +269,9 @@ public:
     [[nodiscard]] Dosering Unpack(const PDosering &pDosering) const;
     [[nodiscard]] Legemiddelforbruk Unpack(const PLegemiddelforbruk &pLegemiddelforbruk) const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfoList(const PLegemiddelpakning &) const;
+    [[nodiscard]] std::vector<PElement> GetElementList(const POppfKodeverk &) const;
     [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems &) const;
+    [[nodiscard]] std::vector<FestDbQuota> GetQuotas() const;
     template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, const GenericListItems &items) const {
         if (items.start < size) {
             std::vector<T> output{};

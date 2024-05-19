@@ -1714,7 +1714,7 @@ std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems &ite
     return ids;
 }
 
-constexpr void Quota(std::vector<FestDbQuota> &quotas, const std::string &name, size_t num, size_t compatMax=std::numeric_limits<uint16_t>::max(), size_t hardMax=std::numeric_limits<uint16_t>::max()) {
+void Quota(std::vector<FestDbQuota> &quotas, const std::string &name, size_t num, size_t compatMax=std::numeric_limits<uint16_t>::max(), size_t hardMax=std::numeric_limits<uint16_t>::max()) {
     FestDbQuota q{
         .name = name,
         .total = num,

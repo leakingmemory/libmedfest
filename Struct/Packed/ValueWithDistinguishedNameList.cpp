@@ -4,6 +4,6 @@
 
 #include <Struct/Packed/ValueWithDistinguishedNameList.h>
 
-GenericListItems ValueWithDistinguishedNameList::StoreList(const std::vector<PValueWithDistinguishedName> &list) {
-    return GenericListStorage<PValueWithDistinguishedName>::StoreList(list);
+GenericListItems32 ValueWithDistinguishedNameList::StoreList(const std::vector<PValueWithDistinguishedName> &list) {
+    return GenericListStorage32<PValueWithDistinguishedName>::StoreList(list);
 }

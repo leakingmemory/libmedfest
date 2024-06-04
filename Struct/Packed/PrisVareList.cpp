@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/PrisVareList.h>
 
-GenericListItems PrisVareList::StoreList(const std::vector<PPrisVare> &list) {
-    return GenericListStorage<PPrisVare>::StoreList(list);
+GenericListItems32 PrisVareList::StoreList(const std::vector<PPrisVare> &list) {
+    return GenericListStorage32<PPrisVare>::StoreList(list);
 }
 
 std::vector<PPrisVare> PrisVareList::GetStorageList() const {

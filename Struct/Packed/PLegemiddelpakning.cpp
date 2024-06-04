@@ -74,10 +74,10 @@ PString PLegemiddelpakning::GetEan() const {
 PValueWithDistinguishedName PLegemiddelpakning::GetOppbevaring() const {
     return oppbevaring;
 }
-GenericListItems PLegemiddelpakning::GetPakningsinfo() const {
+GenericListItems32 PLegemiddelpakning::GetPakningsinfo() const {
     return pakningsinfo;
 }
-GenericListItems PLegemiddelpakning::GetPrisVare() const {
+GenericListItems32 PLegemiddelpakning::GetPrisVare() const {
     return prisVare;
 }
 PMarkedsforingsinfo PLegemiddelpakning::GetMarkedsforingsinfo() const {

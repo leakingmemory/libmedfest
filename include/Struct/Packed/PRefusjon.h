@@ -15,7 +15,7 @@ class StringList;
 class PRefusjon {
     friend FestDeserializer;
 private:
-    GenericListItems refRefusjonsgruppe;
+    GenericListItems32 refRefusjonsgruppe;
     PString gyldigFraDato;
     PString forskrivesTilDato;
     PString utleveresTilDato;

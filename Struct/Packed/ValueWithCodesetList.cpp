@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/ValueWithCodesetList.h>
 
-GenericListItems ValueWithCodesetList::StoreList(const std::vector<PValueWithCodeset> &valueWithCodesetList) {
-    return GenericListStorage<PValueWithCodeset>::StoreList(valueWithCodesetList);
+GenericListItems32 ValueWithCodesetList::StoreList(const std::vector<PValueWithCodeset> &valueWithCodesetList) {
+    return GenericListStorage32<PValueWithCodeset>::StoreList(valueWithCodesetList);
 }
 
 std::vector<PValueWithCodeset> ValueWithCodesetList::GetStorageBlock() const {

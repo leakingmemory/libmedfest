@@ -24,7 +24,7 @@ private:
     PValueWithCodeset pakningstype;
     PValueUnit ddd;
     PString mengde;
-    GenericListItems pakningskomponent;
+    GenericListItems32 pakningskomponent;
     double statistikkfaktor;
     uint16_t antall;
     uint16_t multippel;
@@ -57,7 +57,7 @@ public:
         return mengde;
     }
 
-    [[nodiscard]] GenericListItems GetPakningskomponent() const {
+    [[nodiscard]] GenericListItems32 GetPakningskomponent() const {
         return pakningskomponent;
     }
 

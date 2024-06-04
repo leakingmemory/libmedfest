@@ -22,9 +22,9 @@ class PInteraksjon {
 private:
     PValueWithDistinguishedName relevans;
     PValueWithDistinguishedName kildegrunnlag;
-    GenericListItems visningsregel;
-    GenericListItems referanse;
-    GenericListItems substansgruppe;
+    GenericListItems32 visningsregel;
+    GenericListItems32 referanse;
+    GenericListItems32 substansgruppe;
     PFestId id;
     PString kliniskKonsekvens;
     PString interaksjonsmekanisme;

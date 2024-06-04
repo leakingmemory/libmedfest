@@ -4,12 +4,12 @@
 
 #include <Struct/Packed/ElementList.h>
 
-GenericListItems ElementList::StoreList(const std::vector<PElement> &elements) {
-    return GenericListStorage<PElement>::StoreList(elements);
+GenericListItems32 ElementList::StoreList(const std::vector<PElement> &elements) {
+    return GenericListStorage32<PElement>::StoreList(elements);
 }
 
 std::vector<PElement> ElementList::GetStorageList() const {
-    return GenericListStorage<PElement>::GetList();
+    return GenericListStorage32<PElement>::GetList();
 }
 
 size_t ElementList::size() const {

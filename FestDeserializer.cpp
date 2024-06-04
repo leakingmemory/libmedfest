@@ -1666,7 +1666,7 @@ DoseFastTidspunkt FestDeserializer::Unpack(const PDoseFastTidspunkt &pDoseFastTi
 Dosering FestDeserializer::Unpack(const PDosering &pDosering) const {
     std::vector<DoseFastTidspunkt> doseFastTidspunkt{};
     {
-        auto list = Unpack(doseFastTidspunktList, numDoseFastTidspunktList, static_cast<const GenericListItems>(pDosering));
+        auto list = Unpack(doseFastTidspunktList, numDoseFastTidspunktList, static_cast<const GenericListItems32>(pDosering));
         for (const auto &item : list) {
             doseFastTidspunkt.emplace_back(Unpack(item));
         }
@@ -1703,7 +1703,7 @@ std::vector<PElement> FestDeserializer::GetElementList(const POppfKodeverk &pkod
     return Unpack(elementList, numElement, pkodeverk.elements);;
 }
 
-std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems &items) const {
+std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems32 &items) const {
     std::vector<FestUuid> ids{};
     {
         auto pf = Unpack(festUuidList, numFestUuidList, items);
@@ -1722,6 +1722,13 @@ void Quota(std::vector<FestDbQuota> &quotas, const std::string &name, size_t num
         .hardMax = hardMax
     };
     quotas.emplace_back(std::move(q));
+}
+
+constexpr uint64_t min(uint64_t first, uint64_t second) {
+    if (first < second) {
+        return first;
+    }
+    return second;
 }
 
 std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
@@ -1744,25 +1751,25 @@ std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
     Quota(quotas, "Interaksjon ikke vurdert", numInteraksjonIkkeVurdert);
     Quota(quotas, "Str dosering", numStrDosering);
     Quota(quotas, "Fest UUID", numFestUuid, 16777215, 16777215);
-    Quota(quotas, "Fest UUID list", numFestUuidList);
-    Quota(quotas, "Value with codeset list", numValueWithCodesetList);
-    Quota(quotas, "Reseptgyldighet", numReseptgyldighet, 255, 255);
-    Quota(quotas, "Pakningskomponent", numPakningskomponent);
-    Quota(quotas, "Pakningskomponent info", numPakningskomponentInfo);
-    Quota(quotas, "Pakningsinfo", numPakningsinfo);
-    Quota(quotas, "Pris vare", numPrisVare);
-    Quota(quotas, "Refusjon list", numRefusjonList);
-    Quota(quotas, "Element", numElement);
-    Quota(quotas, "Ref refusjonsvilkar", numRefRefusjonsvilkar);
-    Quota(quotas, "Refusjonskode 0.0.0", numRefusjonskode_0_0_0);
-    Quota(quotas, "Refusjonskode", numRefusjonskode);
-    Quota(quotas, "Referanse list", numReferanseList);
-    Quota(quotas, "Substansgruppe list", numSubstansgruppeList);
-    Quota(quotas, "Substans list", numSubstansList);
-    Quota(quotas, "Dose fast tidspunkt list", numDoseFastTidspunktList);
-    Quota(quotas, "Dosering list", numDoseringList);
-    Quota(quotas, "Legemiddelforbruk list", numLegemiddelforbrukList);
-    Quota(quotas, "Uint16_t list", numUint16List, 4194303, 4194303);
+    Quota(quotas, "Fest UUID list", numFestUuidList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Value with codeset list", numValueWithCodesetList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Reseptgyldighet", numReseptgyldighet, min(GenericListItems32::max_address, 255), min(GenericListItems32::max_address, 255));
+    Quota(quotas, "Pakningskomponent", numPakningskomponent, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Pakningskomponent info", numPakningskomponentInfo, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Pakningsinfo", numPakningsinfo, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Pris vare", numPrisVare, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Refusjon list", numRefusjonList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Element", numElement, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Ref refusjonsvilkar", numRefRefusjonsvilkar, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Refusjonskode 0.0.0", numRefusjonskode_0_0_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Refusjonskode", numRefusjonskode, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Referanse list", numReferanseList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Substansgruppe list", numSubstansgruppeList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Substans list", numSubstansList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Dose fast tidspunkt list", numDoseFastTidspunktList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Dosering list", numDoseringList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Legemiddelforbruk list", numLegemiddelforbrukList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Uint16_t list", numUint16List, min(GenericListItems32::max_address, 4194303), min(GenericListItems32::max_address, 4194303));
     Quota(quotas, "FEST Versions", numFests, 1023, 1023);
     Quota(quotas, "String list", numStringList);
     Quota(quotas, "Stringblock", stringblocksize, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());

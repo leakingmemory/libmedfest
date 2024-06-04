@@ -24,8 +24,8 @@ private:
     PValueWithCodeset gruppeNr;
     PString id;
     PString refusjonsberettigetBruk;
-    GenericListItems refusjonskode;
-    GenericListItems refVilkar;
+    GenericListItems32 refusjonskode;
+    GenericListItems32 refVilkar;
     PValueWithCodeset atc;
     bool kreverRefusjonskode : 1;
 public:

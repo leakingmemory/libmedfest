@@ -16,7 +16,7 @@ class PLegemiddel : public PLegemiddelCore {
     friend FestDeserializer;
 private:
     PAdministreringLegemiddel administreringLegemiddel;
-    GenericListItems sortertVirkestoffMedStyrke;
+    GenericListItems32 sortertVirkestoffMedStyrke;
 public:
     PLegemiddel(const Legemiddel &legemiddel, std::string &strblock, std::map<std::string,uint32_t> &cache,
                 FestUuidList &festUuidList, ValueWithCodesetList &valueWithCodesetList);

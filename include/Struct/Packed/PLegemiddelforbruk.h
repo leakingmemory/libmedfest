@@ -16,7 +16,7 @@ class DoseFastTidspunktList;
 class PLegemiddelforbruk {
     friend FestDeserializer;
 private:
-    GenericListItems dosering;
+    GenericListItems32 dosering;
     PString periode;
     double mengde;
     int64_t lopenr : 48;

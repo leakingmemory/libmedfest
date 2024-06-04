@@ -10,11 +10,11 @@
 
 class FestDeserializerPreloader;
 
-class StringList : GenericListStorage<PString> {
+class StringList : GenericListStorage32<PString> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PString> &);
-    GenericListItems StoreList(const std::vector<std::string> &, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    GenericListItems32 StoreList(const std::vector<PString> &);
+    GenericListItems32 StoreList(const std::vector<std::string> &, std::string &strblock, std::map<std::string,uint32_t> &cache);
     [[nodiscard]] std::vector<PString> GetStorageList() const;
     [[nodiscard]] size_t size() const;
 };

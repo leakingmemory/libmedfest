@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/ReseptgyldighetList.h>
 
-GenericListItems ReseptgyldighetList::StoreList(const std::vector<PReseptgyldighet> &list) {
-    return GenericListStorage<PReseptgyldighet>::StoreList(list);
+GenericListItems32 ReseptgyldighetList::StoreList(const std::vector<PReseptgyldighet> &list) {
+    return GenericListStorage32<PReseptgyldighet>::StoreList(list);
 }
 
 std::vector<PReseptgyldighet> ReseptgyldighetList::GetStorageList() const {

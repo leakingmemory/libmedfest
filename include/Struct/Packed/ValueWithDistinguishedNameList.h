@@ -8,9 +8,9 @@
 #include "GenericListStorage.h"
 #include "PValueWithDistinguishedName.h"
 
-class ValueWithDistinguishedNameList : private GenericListStorage<PValueWithDistinguishedName> {
+class ValueWithDistinguishedNameList : private GenericListStorage32<PValueWithDistinguishedName> {
 public:
-    [[nodiscard]] GenericListItems StoreList(const std::vector<PValueWithDistinguishedName> &list);
+    [[nodiscard]] GenericListItems32 StoreList(const std::vector<PValueWithDistinguishedName> &list);
 };
 
 

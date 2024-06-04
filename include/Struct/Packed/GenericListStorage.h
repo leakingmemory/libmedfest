@@ -9,18 +9,28 @@
 #include <cstdint>
 #include <vector>
 #include <iostream>
+#include <limits>
 
 template <typename T> concept GenericListStorageObject = requires (T tp) {
     {tp == std::declval<T>()} -> std::convertible_to<bool>;
 };
 
-struct GenericListItems {
-    typedef uint32_t int_type;
+template <typename T> concept GenericListItemType = requires (T tp) {
+    { T::max_size } -> std::convertible_to<int>;
+    { T::max_address } -> std::convertible_to<int>;
+    { tp.start } -> std::convertible_to<int>;
+    { tp.size } -> std::convertible_to<int>;
+    { tp == std::declval<T>() } -> std::convertible_to<bool>;
+    { std::declval<typename T::int_type>() } -> std::convertible_to<int>;
+};
+
+template <typename T, int sizeBits> struct GenericListItems {
+    typedef T int_type;
     constexpr static int total_bits = sizeof(int_type) * 8;
-    constexpr static int size_bits = 14;
+    constexpr static int size_bits = sizeBits;
     constexpr static int addr_bits = total_bits - size_bits;
-    constexpr static int_type max_address = (1 << addr_bits) - 1;
-    constexpr static int_type max_size = (1 << size_bits) - 1;
+    constexpr static int_type max_address = (((int_type) 1) << addr_bits) - 1;
+    constexpr static int_type max_size = (((int_type) 1) << size_bits) - 1;
     int_type start : addr_bits;
     int_type size : size_bits;
 
@@ -29,17 +39,27 @@ struct GenericListItems {
                 size == other.size;
     }
 } __attribute__((__packed__));
-static_assert(sizeof(GenericListItems) == sizeof(GenericListItems::int_type));
+
+typedef GenericListItems<uint32_t,14> GenericListItems32;
+
+static_assert(sizeof(GenericListItems32) == sizeof(GenericListItems32::int_type));
+static_assert(sizeof(GenericListItems32) == sizeof(uint32_t));
+
+typedef GenericListItems<uint64_t,32> GenericListItems64;
+
+static_assert(sizeof(GenericListItems64) == sizeof(GenericListItems64::int_type));
+static_assert(sizeof(GenericListItems64) == sizeof(uint64_t));
+static_assert(GenericListItems64::max_address == std::numeric_limits<uint32_t>::max());
 
 class FestDeserializerPreloader;
 
-template <GenericListStorageObject T> class GenericListStorage {
+template <GenericListStorageObject T, GenericListItemType ItemType> class GenericListStorage {
     friend FestDeserializerPreloader;
 private:
     std::vector<T> list;
 public:
     GenericListStorage() : list() {}
-    GenericListItems StoreList(const std::vector<T> &list) {
+    ItemType StoreList(const std::vector<T> &list) {
         {
             auto check_iter = list.begin();
             if (check_iter == list.end()) {
@@ -59,25 +79,25 @@ public:
                         ++size;
                     }
                     if (check_iter == list.end()) {
-                        if (size > GenericListItems::max_size) {
+                        if (size > ItemType::max_size) {
                             std::cerr << "Error: List item max_size overshoot: " << size << "\n";
                             return {.start = 0, .size = 0};
                         }
-                        return {.start = (uint32_t) index, .size = (uint32_t) size};
+                        return {.start = (typename ItemType::int_type) index, .size = (typename ItemType::int_type) size};
                     } else if (c_iter == this->list.end()) {
                         do {
                             this->list.push_back(*check_iter);
                             ++check_iter;
                             ++size;
                         } while (check_iter != list.end());
-                        if (size > GenericListItems::max_size) {
+                        if (size > ItemType::max_size) {
                             std::cerr << "Error: List item max_size overshoot: " << size << "\n";
                             return {.start = 0, .size = 0};
                         }
-                        if (index > GenericListItems::max_address) {
+                        if (index > ItemType::max_address) {
                             std::cerr << "Error: List total size overshoot: " << index << "\n";
                         }
-                        return {.start = (uint32_t) index, .size = (uint32_t) size};
+                        return {.start = (typename ItemType::int_type) index, .size = (typename ItemType::int_type) size};
                     }
                     check_iter = list.begin();
                 }
@@ -86,7 +106,7 @@ public:
             }
         }
         auto start = this->list.size();
-        if (start > GenericListItems::max_address) {
+        if (start > ItemType::max_address) {
             std::cerr << "Error: Lists max count overshoot: " << start << "\n";
             return {.start = 0, .size = 0};
         }
@@ -95,13 +115,13 @@ public:
             this->list.emplace_back(item);
             ++size;
         }
-        if (size > GenericListItems::max_size) {
+        if (size > ItemType::max_size) {
             std::cerr << "Error: List item max_size overshoot: " << size << "\n";
             return {.start = 0, .size = 0};
         }
         return {.start = (uint32_t) start, .size = (uint32_t) size};
     }
-    GenericListItems StoreList(const std::vector<T> &list, uint32_t startHint) {
+    ItemType StoreList(const std::vector<T> &list, uint32_t startHint) {
         {
             auto check_iter = list.begin();
             if (check_iter == list.end()) {
@@ -121,25 +141,25 @@ public:
                         ++size;
                     }
                     if (check_iter == list.end() && index == startHint) {
-                        if (size > GenericListItems::max_size) {
+                        if (size > ItemType::max_size) {
                             std::cerr << "Error: List item max_size overshoot: " << size << "\n";
                             return {.start = 0, .size = 0};
                         }
-                        return {.start = (uint32_t) index, .size = (uint32_t) size};
+                        return {.start = (typename ItemType::int_type) index, .size = (typename ItemType::int_type) size};
                     } else if (c_iter == this->list.end() && index == startHint) {
                         do {
                             this->list.push_back(*check_iter);
                             ++check_iter;
                             ++size;
                         } while (check_iter != list.end());
-                        if (size > GenericListItems::max_size) {
+                        if (size > ItemType::max_size) {
                             std::cerr << "Error: List item max_size overshoot: " << size << "\n";
                             return {.start = 0, .size = 0};
                         }
-                        if (index > GenericListItems::max_address) {
+                        if (index > ItemType::max_address) {
                             std::cerr << "Error: List total size overshoot: " << index << "\n";
                         }
-                        return {.start = (uint32_t) index, .size = (uint32_t) size};
+                        return {.start = (typename ItemType::int_type) index, .size = (typename ItemType::int_type) size};
                     }
                     check_iter = list.begin();
                 }
@@ -148,7 +168,7 @@ public:
             }
         }
         auto start = this->list.size();
-        if (start > GenericListItems::max_address) {
+        if (start > ItemType::max_address) {
             std::cerr << "Error: Lists max count overshoot: " << start << "\n";
             return {.start = 0, .size = 0};
         }
@@ -157,13 +177,13 @@ public:
             this->list.emplace_back(item);
             ++size;
         }
-        if (size > GenericListItems::max_size) {
+        if (size > ItemType::max_size) {
             std::cerr << "Error: List item max_size overshoot: " << size << "\n";
             return {.start = 0, .size = 0};
         }
-        return {.start = (uint32_t) start, .size = (uint32_t) size};
+        return {.start = (typename ItemType::int_type) start, .size = (typename ItemType::int_type) size};
     }
-    [[nodiscard]] std::vector<T> RetrieveList(const GenericListItems &litems) const {
+    [[nodiscard]] std::vector<T> RetrieveList(const ItemType &litems) const {
         size_t size = litems.size;
         if (size <= 0) {
             return {};
@@ -191,5 +211,8 @@ public:
         return list.size();
     }
 };
+
+template <GenericListStorageObject T> class GenericListStorage32 : public GenericListStorage<T,GenericListItems32> {};
+template <GenericListStorageObject T> class GenericListStorage64 : public GenericListStorage<T,GenericListItems64> {};
 
 #endif //LEGEMFEST_GENERICLISTSTORAGE_H

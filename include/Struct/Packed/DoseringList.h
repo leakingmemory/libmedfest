@@ -10,10 +10,10 @@
 
 class FestDeserializerPreloader;
 
-class DoseringList : private GenericListStorage<PDosering> {
+class DoseringList : private GenericListStorage32<PDosering> {
     friend FestDeserializerPreloader;
 public:
-    [[nodiscard]] GenericListItems StoreList(std::vector<PDosering> &);
+    [[nodiscard]] GenericListItems32 StoreList(std::vector<PDosering> &);
     [[nodiscard]] std::vector<PDosering> GetStorageList() const;
     size_t size() const;
 };

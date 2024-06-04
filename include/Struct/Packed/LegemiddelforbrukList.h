@@ -10,10 +10,10 @@
 
 class FestDeserializerPreloader;
 
-class LegemiddelforbrukList : private GenericListStorage<PLegemiddelforbruk> {
+class LegemiddelforbrukList : private GenericListStorage32<PLegemiddelforbruk> {
     friend FestDeserializerPreloader;
 public:
-    [[nodiscard]] GenericListItems StoreList(std::vector<PLegemiddelforbruk> &);
+    [[nodiscard]] GenericListItems32 StoreList(std::vector<PLegemiddelforbruk> &);
     [[nodiscard]] std::vector<PLegemiddelforbruk> GetStorageList() const;
     size_t size() const;
 };

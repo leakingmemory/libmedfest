@@ -23,8 +23,8 @@ private:
     PValueWithCodeset refusjonskode;
     PString gyldigFraDato;
     PString forskrivesTilDato;
-    GenericListItems underterm;
-    GenericListItems refusjonsvilkar;
+    GenericListItems32 underterm;
+    GenericListItems32 refusjonsvilkar;
 public:
     explicit PRefusjonskode_0_0_0(const PRefusjonskode &);
     PRefusjonskode_0_0_0(const Refusjonskode &, RefRefusjonsvilkarList &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
@@ -39,8 +39,8 @@ private:
     PString gyldigFraDato;
     PString forskrivesTilDato;
     PString utleveresTilDato;
-    GenericListItems underterm;
-    GenericListItems refusjonsvilkar;
+    GenericListItems32 underterm;
+    GenericListItems32 refusjonsvilkar;
 public:
     explicit PRefusjonskode(const PRefusjonskode_0_0_0 &);
     PRefusjonskode(const Refusjonskode &, RefRefusjonsvilkarList &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);

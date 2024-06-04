@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/SubstansList.h>
 
-GenericListItems SubstansList::StoreList(const std::vector<PSubstans> &list) {
-    return GenericListStorage<PSubstans>::StoreList(list);
+GenericListItems32 SubstansList::StoreList(const std::vector<PSubstans> &list) {
+    return GenericListStorage32<PSubstans>::StoreList(list);
 }
 
 std::vector<PSubstans> SubstansList::GetStorageList() const {

@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/DoseringList.h>
 
-GenericListItems DoseringList::StoreList(std::vector<PDosering> &list) {
-    return GenericListStorage<PDosering>::StoreList(list);
+GenericListItems32 DoseringList::StoreList(std::vector<PDosering> &list) {
+    return GenericListStorage32<PDosering>::StoreList(list);
 }
 
 std::vector<PDosering> DoseringList::GetStorageList() const {

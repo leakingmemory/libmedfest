@@ -4,14 +4,14 @@
 
 #include <Struct/Packed/RefusjonList.h>
 
-GenericListItems RefusjonList::StoreList(const std::vector<PRefusjon> &list) {
-    return GenericListStorage<PRefusjon>::StoreList(list);
+GenericListItems32 RefusjonList::StoreList(const std::vector<PRefusjon> &list) {
+    return GenericListStorage32<PRefusjon>::StoreList(list);
 }
 
 std::vector<PRefusjon> RefusjonList::GetStorageList() const {
-    return GenericListStorage<PRefusjon>::GetList();
+    return GenericListStorage32<PRefusjon>::GetList();
 }
 
 size_t RefusjonList::size() const {
-    return GenericListStorage<PRefusjon>::GetSize();
+    return GenericListStorage32<PRefusjon>::GetSize();
 }

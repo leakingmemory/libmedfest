@@ -29,8 +29,8 @@ private:
     PString referanseprodukt;
     PFestId id;
     PPreparatomtaleavsnitt preparatomtaleavsnitt;
-    GenericListItems sortertVirkestoffUtenStyrke;
-    GenericListItems reseptgyldighet;
+    GenericListItems32 sortertVirkestoffUtenStyrke;
+    GenericListItems32 reseptgyldighet;
     uint8_t varseltrekant : 2;
 public:
     PLegemiddelMerkevare(const LegemiddelMerkevare &, std::string &strblock, std::map<std::string,uint32_t> &cache,
@@ -46,8 +46,8 @@ public:
     PString GetReferanseprodukt() const;
     PFestId GetId() const;
     PPreparatomtaleavsnitt GetPreparatomtaleavsnitt() const;
-    GenericListItems GetSortertVirkestoffUtenStyrke() const;
-    GenericListItems GetReseptgyldighet() const;
+    GenericListItems32 GetSortertVirkestoffUtenStyrke() const;
+    GenericListItems32 GetReseptgyldighet() const;
     uint8_t GetVarseltrekant() const;
 };
 

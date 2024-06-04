@@ -13,7 +13,7 @@ class FestDeserializer;
 class Dosering;
 class DoseFastTidspunktList;
 
-class PDosering : private GenericListItems {
+class PDosering : private GenericListItems32 {
     friend FestDeserializer;
 public:
     PDosering(const Dosering &, DoseFastTidspunktList &, std::string &strblock, std::map<std::string,uint32_t> &cache);

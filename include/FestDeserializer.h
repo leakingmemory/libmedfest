@@ -270,9 +270,9 @@ public:
     [[nodiscard]] Legemiddelforbruk Unpack(const PLegemiddelforbruk &pLegemiddelforbruk) const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfoList(const PLegemiddelpakning &) const;
     [[nodiscard]] std::vector<PElement> GetElementList(const POppfKodeverk &) const;
-    [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems &) const;
+    [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems32 &) const;
     [[nodiscard]] std::vector<FestDbQuota> GetQuotas() const;
-    template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, const GenericListItems &items) const {
+    template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, const GenericListItems32 &items) const {
         if (items.start < size) {
             std::vector<T> output{};
             S i = items.start;

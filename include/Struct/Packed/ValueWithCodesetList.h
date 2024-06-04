@@ -10,10 +10,10 @@
 
 class FestDeserializerPreloader;
 
-class ValueWithCodesetList : private GenericListStorage<PValueWithCodeset> {
+class ValueWithCodesetList : private GenericListStorage32<PValueWithCodeset> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PValueWithCodeset> &);
+    GenericListItems32 StoreList(const std::vector<PValueWithCodeset> &);
     [[nodiscard]] std::vector<PValueWithCodeset> GetStorageBlock() const;
     [[nodiscard]] size_t size() const;
 };

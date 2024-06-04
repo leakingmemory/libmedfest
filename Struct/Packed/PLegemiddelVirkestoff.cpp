@@ -41,14 +41,14 @@ PFestId PLegemiddelVirkestoff::GetId() const {
     return id;
 }
 
-GenericListItems PLegemiddelVirkestoff::GetRefusjon() const {
+GenericListItems32 PLegemiddelVirkestoff::GetRefusjon() const {
     return refusjon;
 }
 
-GenericListItems PLegemiddelVirkestoff::GetRefLegemiddelMerkevare() const {
+GenericListItems32 PLegemiddelVirkestoff::GetRefLegemiddelMerkevare() const {
     return refLegemiddelMerkevare;
 }
 
-GenericListItems PLegemiddelVirkestoff::GetRefPakning() const {
+GenericListItems32 PLegemiddelVirkestoff::GetRefPakning() const {
     return refPakning;
 }

@@ -10,10 +10,10 @@
 
 class FestDeserializerPreloader;
 
-class DoseFastTidspunktList : private GenericListStorage<PDoseFastTidspunkt> {
+class DoseFastTidspunktList : private GenericListStorage32<PDoseFastTidspunkt> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PDoseFastTidspunkt> &);
+    GenericListItems32 StoreList(const std::vector<PDoseFastTidspunkt> &);
     std::vector<PDoseFastTidspunkt> GetStorageList() const;
     size_t size() const;
 };

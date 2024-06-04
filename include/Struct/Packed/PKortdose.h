@@ -19,7 +19,7 @@ class PKortdose {
 private:
     PValueWithCodeset kortdose;
     PString beskrivelseTerm;
-    GenericListItems legemiddelforbruk;
+    GenericListItems32 legemiddelforbruk;
 public:
     PKortdose(const Kortdose &, LegemiddelforbrukList &, DoseringList &, DoseFastTidspunktList &, std::string &strblock,
               std::map<std::string,uint32_t> &cache);

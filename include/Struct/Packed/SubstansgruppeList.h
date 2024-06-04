@@ -10,10 +10,10 @@
 
 class FestDeserializerPreloader;
 
-class SubstansgruppeList : private GenericListStorage<PSubstansgruppe> {
+class SubstansgruppeList : private GenericListStorage32<PSubstansgruppe> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PSubstansgruppe> &list);
+    GenericListItems32 StoreList(const std::vector<PSubstansgruppe> &list);
     std::vector<PSubstansgruppe> GetStorageList() const;
     size_t size() const;
 };

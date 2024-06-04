@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/LegemiddelforbrukList.h>
 
-GenericListItems LegemiddelforbrukList::StoreList(std::vector<PLegemiddelforbruk> &list) {
-    return GenericListStorage<PLegemiddelforbruk>::StoreList(list);
+GenericListItems32 LegemiddelforbrukList::StoreList(std::vector<PLegemiddelforbruk> &list) {
+    return GenericListStorage32<PLegemiddelforbruk>::StoreList(list);
 }
 
 std::vector<PLegemiddelforbruk> LegemiddelforbrukList::GetStorageList() const {

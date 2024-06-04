@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/Uint16List.h>
 
-GenericListItems Uint16List::StoreList(const std::vector<uint16_t> &list) {
-    return GenericListStorage<uint16_t>::StoreList(list);
+GenericListItems32 Uint16List::StoreList(const std::vector<uint16_t> &list) {
+    return GenericListStorage32<uint16_t>::StoreList(list);
 }
 
 std::vector<uint16_t> Uint16List::GetStorageList() const {

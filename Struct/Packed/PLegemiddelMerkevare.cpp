@@ -79,10 +79,10 @@ PFestId PLegemiddelMerkevare::GetId() const {
 PPreparatomtaleavsnitt PLegemiddelMerkevare::GetPreparatomtaleavsnitt() const {
     return preparatomtaleavsnitt;
 }
-GenericListItems PLegemiddelMerkevare::GetSortertVirkestoffUtenStyrke() const {
+GenericListItems32 PLegemiddelMerkevare::GetSortertVirkestoffUtenStyrke() const {
     return sortertVirkestoffUtenStyrke;
 }
-GenericListItems PLegemiddelMerkevare::GetReseptgyldighet() const {
+GenericListItems32 PLegemiddelMerkevare::GetReseptgyldighet() const {
     return reseptgyldighet;
 }
 uint8_t PLegemiddelMerkevare::GetVarseltrekant() const {

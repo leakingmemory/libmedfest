@@ -18,9 +18,9 @@ class PLegemiddelVirkestoff : public PLegemiddel {
 private:
     PValueWithCodeset forskrivningsenhetResept;
     PFestId id;
-    GenericListItems refusjon;
-    GenericListItems refLegemiddelMerkevare;
-    GenericListItems refPakning;
+    GenericListItems32 refusjon;
+    GenericListItems32 refLegemiddelMerkevare;
+    GenericListItems32 refPakning;
 public:
     PLegemiddelVirkestoff(const LegemiddelVirkestoff &legemiddelVirkestoff, std::string &strblock,
                           std::map<std::string,uint32_t> &cache, std::vector<FestUuid> &uuidlist, StringList &,
@@ -28,9 +28,9 @@ public:
     bool operator == (const PLegemiddelVirkestoff &) const;
     PValueWithCodeset GetForskrivningsenhetResept() const;
     PFestId GetId() const;
-    GenericListItems GetRefusjon() const;
-    GenericListItems GetRefLegemiddelMerkevare() const;
-    GenericListItems GetRefPakning() const;
+    GenericListItems32 GetRefusjon() const;
+    GenericListItems32 GetRefLegemiddelMerkevare() const;
+    GenericListItems32 GetRefPakning() const;
 };
 
 

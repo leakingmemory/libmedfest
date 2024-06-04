@@ -9,10 +9,10 @@
 
 class FestDeserializerPreloader;
 
-class Uint16List : private GenericListStorage<uint16_t> {
+class Uint16List : private GenericListStorage32<uint16_t> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<uint16_t> &);
+    GenericListItems32 StoreList(const std::vector<uint16_t> &);
     std::vector<uint16_t> GetStorageList() const;
     size_t size() const;
 };

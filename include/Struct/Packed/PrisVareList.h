@@ -10,10 +10,10 @@
 
 class FestDeserializerPreloader;
 
-class PrisVareList : private GenericListStorage<PPrisVare> {
+class PrisVareList : private GenericListStorage32<PPrisVare> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PPrisVare> &);
+    GenericListItems32 StoreList(const std::vector<PPrisVare> &);
     [[nodiscard]] std::vector<PPrisVare> GetStorageList() const;
     [[nodiscard]] size_t size() const;
 };

@@ -10,10 +10,10 @@
 
 class FestDeserializerPreloader;
 
-class PakningskomponentInfoList : private GenericListStorage<PPakningskomponentInfo> {
+class PakningskomponentInfoList : private GenericListStorage32<PPakningskomponentInfo> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PPakningskomponentInfo> &);
+    GenericListItems32 StoreList(const std::vector<PPakningskomponentInfo> &);
     [[nodiscard]] std::vector<PPakningskomponentInfo> GetStorageList() const;
     [[nodiscard]] size_t size() const;
 };

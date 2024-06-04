@@ -21,10 +21,10 @@ private:
     PValueUnit mengde;
     PFestId id;
     PString lmrLopenr;
-    GenericListItems refLegemiddelMerkevare;
-    GenericListItems refPakning;
+    GenericListItems32 refLegemiddelMerkevare;
+    GenericListItems32 refPakning;
     PValueWithCodeset pakningstype;
-    GenericListItems pakningskomponent;
+    GenericListItems32 pakningskomponent;
 public:
     PLegemiddeldose(const Legemiddeldose &, PakningskomponentInfoList &, FestUuidList &, std::vector<FestUuid> &,
                     std::string &strblock, std::map<std::string,uint32_t> &cache);

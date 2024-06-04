@@ -4,11 +4,11 @@
 
 #include <Struct/Packed/StringList.h>
 
-GenericListItems StringList::StoreList(const std::vector<PString> &list) {
-    return GenericListStorage<PString>::StoreList(list);
+GenericListItems32 StringList::StoreList(const std::vector<PString> &list) {
+    return GenericListStorage32<PString>::StoreList(list);
 }
 
-GenericListItems StringList::StoreList(const std::vector<std::string> &strings, std::string &strblock,
+GenericListItems32 StringList::StoreList(const std::vector<std::string> &strings, std::string &strblock,
                                        std::map<std::string,uint32_t> &cache){
     std::vector<PString> strs{};
     for (const auto &str : strings) {

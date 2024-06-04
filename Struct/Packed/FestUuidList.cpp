@@ -4,7 +4,7 @@
 
 #include <Struct/Packed/FestUuidList.h>
 
-GenericListItems FestUuidList::StoreList(const std::vector<std::string> &ids) {
+GenericListItems32 FestUuidList::StoreList(const std::vector<std::string> &ids) {
     if (ids.size() <= 0) {
         return {.start = 0, .size = 0};
     }
@@ -12,16 +12,16 @@ GenericListItems FestUuidList::StoreList(const std::vector<std::string> &ids) {
     for (const auto &id : ids) {
         packed.emplace_back(id, uuidblock);
     }
-    return GenericListStorage<PFestId>::StoreList(packed);
+    return GenericListStorage32<PFestId>::StoreList(packed);
 }
 
-std::vector<std::string> FestUuidList::RetrieveList(const GenericListItems &litems) const {
+std::vector<std::string> FestUuidList::RetrieveList(const GenericListItems32 &litems) const {
     if (litems.size <= 0) {
         return {};
     }
     std::vector<std::string> result{};
     {
-        auto packed = GenericListStorage<PFestId>::RetrieveList(litems);
+        auto packed = GenericListStorage32<PFestId>::RetrieveList(litems);
         for (const auto &p : packed) {
             auto id = p.ToString(uuidblock);
             result.emplace_back(id);

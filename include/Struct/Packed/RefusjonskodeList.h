@@ -10,18 +10,18 @@
 
 class FestDeserializerPreloader;
 
-class RefusjonskodeList_0_0_0 : private GenericListStorage<PRefusjonskode_0_0_0> {
+class RefusjonskodeList_0_0_0 : private GenericListStorage32<PRefusjonskode_0_0_0> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PRefusjonskode_0_0_0> &list, uint32_t start);
+    GenericListItems32 StoreList(const std::vector<PRefusjonskode_0_0_0> &list, uint32_t start);
     std::vector<PRefusjonskode_0_0_0> GetStorageList() const;
     size_t size() const;
 };
 
-class RefusjonskodeList : private GenericListStorage<PRefusjonskode> {
+class RefusjonskodeList : private GenericListStorage32<PRefusjonskode> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PRefusjonskode> &list);
+    GenericListItems32 StoreList(const std::vector<PRefusjonskode> &list);
     std::vector<PRefusjonskode> GetStorageList() const;
     size_t size() const;
 };

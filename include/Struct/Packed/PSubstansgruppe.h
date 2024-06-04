@@ -17,7 +17,7 @@ class FestUuid;
 class PSubstansgruppe {
     friend FestDeserializer;
 private:
-    GenericListItems substans;
+    GenericListItems32 substans;
     PString navn;
 public:
     PSubstansgruppe(const Substansgruppe &, SubstansList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);

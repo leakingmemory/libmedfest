@@ -19,7 +19,7 @@ private:
     PString navnFormStyrke;
     PValueWithDistinguishedName reseptgruppe;
     PValueWithCodeset legemiddelformKort;
-    GenericListItems refVilkar;
+    GenericListItems32 refVilkar;
     PValueWithDistinguishedName typeSoknadSlv;
     PValueWithCodeset svartTrekant;
     uint8_t opioidsoknad : 2;
@@ -29,7 +29,7 @@ public:
     [[nodiscard]] PString GetNavnFormStyrke() const;
     [[nodiscard]] PValueWithDistinguishedName GetReseptgruppe() const;
     [[nodiscard]] PValueWithCodeset GetLegemiddelformKort() const;
-    [[nodiscard]] GenericListItems GetRefVilkar() const;
+    [[nodiscard]] GenericListItems32 GetRefVilkar() const;
     [[nodiscard]] PValueWithDistinguishedName GetTypeSoknadSlv() const;
     [[nodiscard]] PValueWithCodeset GetSvartTrekant() const;
     uint8_t GetOpioidsoknad() const;

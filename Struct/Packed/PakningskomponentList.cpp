@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/PakningskomponentList.h>
 
-GenericListItems PakningskomponentList::StoreList(const std::vector<PPakningskomponent> &list) {
-    return GenericListStorage<PPakningskomponent>::StoreList(list);
+GenericListItems32 PakningskomponentList::StoreList(const std::vector<PPakningskomponent> &list) {
+    return GenericListStorage32<PPakningskomponent>::StoreList(list);
 }
 
 std::vector<PPakningskomponent> PakningskomponentList::GetStorageList() const {

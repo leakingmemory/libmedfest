@@ -24,7 +24,7 @@ private:
     PString navn;
     PProduktInfoVare produktInfoVare;
     PLeverandor leverandor;
-    GenericListItems prisVare;
+    GenericListItems32 prisVare;
     PRefusjon refusjon;
 public:
     PHandelsvare(const Handelsvare &handelsvare, PrisVareList &prisVareList, StringList &stringList, std::string &strblock, std::map<std::string,uint32_t> &cache);

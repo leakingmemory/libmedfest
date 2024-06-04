@@ -6,7 +6,7 @@
 #include <Struct/Packed/DoseFastTidspunktList.h>
 #include <Struct/Decoded/Dosering.h>
 
-static GenericListItems CreateDoseFastTidspunktList(const std::vector<DoseFastTidspunkt> &items,
+static GenericListItems32 CreateDoseFastTidspunktList(const std::vector<DoseFastTidspunkt> &items,
                                                     DoseFastTidspunktList &doseFastTidspunktList, std::string &strblock,
                                                     std::map<std::string,uint32_t> &cache) {
     std::vector<PDoseFastTidspunkt> list{};

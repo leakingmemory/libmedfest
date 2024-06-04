@@ -22,7 +22,7 @@ private:
     PValueWithCodeset type;
     PReferanseelement referanseelement;
     PLenke lenke;
-    GenericListItems visningsregel;
+    GenericListItems32 visningsregel;
     PString overskrift;
     PString varseltekst;
     PString fraDato;

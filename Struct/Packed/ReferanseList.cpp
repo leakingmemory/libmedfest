@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/ReferanseList.h>
 
-GenericListItems ReferanseList::StoreList(const std::vector<PReferanse> &list) {
-    return GenericListStorage<PReferanse>::StoreList(list);
+GenericListItems32 ReferanseList::StoreList(const std::vector<PReferanse> &list) {
+    return GenericListStorage32<PReferanse>::StoreList(list);
 }
 
 std::vector<PReferanse> ReferanseList::GetStorageList() const {

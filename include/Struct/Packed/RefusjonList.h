@@ -10,10 +10,10 @@
 
 class FestDeserializerPreloader;
 
-class RefusjonList : private GenericListStorage<PRefusjon> {
+class RefusjonList : private GenericListStorage32<PRefusjon> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PRefusjon> &);
+    GenericListItems32 StoreList(const std::vector<PRefusjon> &);
     [[nodiscard]] std::vector<PRefusjon> GetStorageList() const;
     [[nodiscard]] size_t size() const;
 };

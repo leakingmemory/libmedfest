@@ -10,10 +10,10 @@
 
 class FestDeserializerPreloader;
 
-class ReferanseList : private GenericListStorage<PReferanse> {
+class ReferanseList : private GenericListStorage32<PReferanse> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems StoreList(const std::vector<PReferanse> &list);
+    GenericListItems32 StoreList(const std::vector<PReferanse> &list);
     std::vector<PReferanse> GetStorageList() const;
     size_t size() const;
 };

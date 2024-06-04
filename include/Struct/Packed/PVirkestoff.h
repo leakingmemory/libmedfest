@@ -18,7 +18,7 @@ class FestUuid;
 class PVirkestoff {
     friend FestDeserializer;
 private:
-    GenericListItems refVirkestoff;
+    GenericListItems32 refVirkestoff;
     PFestId id;
     PString navn;
     PString navnEngelsk;

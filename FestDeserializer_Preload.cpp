@@ -23,12 +23,12 @@ template <class T, class S> void PL(std::vector<T> &serializer, const S *deseria
 class FestDeserializerPreloader {
 public:
     template <class List, class P> void Preload(List &list, const P *src, size_t num) {
-        auto &listStorage = static_cast<GenericListStorage<P>&>(list);
+        auto &listStorage = static_cast<GenericListStorage32<P>&>(list);
         auto &vec = listStorage.list;
         PL(vec, src, num);
     }
     template <class List, class P, class S> void Preload(List &list, const S *src, size_t num, const std::function<P (const S &)> &convert) {
-        auto &listStorage = static_cast<GenericListStorage<P>&>(list);
+        auto &listStorage = static_cast<GenericListStorage32<P>&>(list);
         auto &vec = listStorage.list;
         PL(vec, src, num, convert);
     }

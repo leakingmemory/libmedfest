@@ -18,9 +18,9 @@ class PAdministreringLegemiddel {
 private:
     PValueWithCodeset administrasjonsvei;
     PValueWithCodeset enhetDosering;
-    GenericListItems bruksomradeEtikett;
-    GenericListItems forhandsregelInntak;
-    GenericListItems kortdose;
+    GenericListItems32 bruksomradeEtikett;
+    GenericListItems32 forhandsregelInntak;
+    GenericListItems32 kortdose;
     PValueWithDistinguishedName kanKnuses;
     PValueWithDistinguishedName deling;
     PValueWithDistinguishedName kanApnes;

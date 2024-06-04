@@ -10,7 +10,7 @@ constexpr bool CheckRange(size_t start, size_t size, size_t sizeUuint16List) {
     return start >= sizeUuint16List || size > sizeUuint16List || (start + size) > sizeUuint16List;
 }
 
-template <GenericListItems PFest::* V> void CheckRange(const PFest &fest, size_t sizeUuint16List) {
+template <GenericListItems32 PFest::* V> void CheckRange(const PFest &fest, size_t sizeUuint16List) {
     if (CheckRange((fest.*V).start, (fest.*V).size, sizeUuint16List)) {
         throw PackException("Range error with FEST items list");
     }
@@ -60,7 +60,7 @@ std::string FestVectors::GetDato() const {
     return dato;
 }
 
-template <typename T> std::vector<T> AsVector(const T *ptr, const GenericListItems &items) {
+template <typename T> std::vector<T> AsVector(const T *ptr, const GenericListItems32 &items) {
     std::vector<T> result{};
     for (int i = 0; i < items.size; i++) {
         result.push_back(ptr[i]);

@@ -38,7 +38,7 @@ PValueWithDistinguishedName PLegemiddelCore::GetReseptgruppe() const {
 PValueWithCodeset PLegemiddelCore::GetLegemiddelformKort() const {
     return legemiddelformKort;
 }
-GenericListItems PLegemiddelCore::GetRefVilkar() const {
+GenericListItems32 PLegemiddelCore::GetRefVilkar() const {
     return refVilkar;
 }
 PValueWithDistinguishedName PLegemiddelCore::GetTypeSoknadSlv() const {

@@ -4,8 +4,8 @@
 
 #include <Struct/Packed/DoseFastTidspunktList.h>
 
-GenericListItems DoseFastTidspunktList::StoreList(const std::vector<PDoseFastTidspunkt> &list) {
-    return GenericListStorage<PDoseFastTidspunkt>::StoreList(list);
+GenericListItems32 DoseFastTidspunktList::StoreList(const std::vector<PDoseFastTidspunkt> &list) {
+    return GenericListStorage32<PDoseFastTidspunkt>::StoreList(list);
 }
 
 std::vector<PDoseFastTidspunkt> DoseFastTidspunktList::GetStorageList() const {

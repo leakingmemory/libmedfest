@@ -28,8 +28,8 @@ private:
     PString varenr;
     PString ean;
     PValueWithDistinguishedName oppbevaring;
-    GenericListItems pakningsinfo;
-    GenericListItems prisVare;
+    GenericListItems32 pakningsinfo;
+    GenericListItems32 prisVare;
     PMarkedsforingsinfo markedsforingsinfo;
     PRefusjon refusjon;
     PPakningByttegruppe pakningByttegruppe;
@@ -45,8 +45,8 @@ public:
     PString GetVarenr() const;
     PString GetEan() const;
     PValueWithDistinguishedName GetOppbevaring() const;
-    GenericListItems GetPakningsinfo() const;
-    GenericListItems GetPrisVare() const;
+    GenericListItems32 GetPakningsinfo() const;
+    GenericListItems32 GetPrisVare() const;
     PMarkedsforingsinfo GetMarkedsforingsinfo() const;
     PRefusjon GetRefusjon() const;
     PPakningByttegruppe GetPakningByttegruppe() const;

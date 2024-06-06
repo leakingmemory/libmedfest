@@ -66,10 +66,10 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             std::cerr << "Error: Major version " << version.major << " can not be read\n";
             throw PackException("Major version of file");
         }
-        if (version.minor > 1) {
+        if (version.minor > 2) {
             std::cerr << "Warning: Minor version " << version.minor << " contains unsupported data (ignored)\n";
         }
-        if (version.minor == 1) {
+        if (version.minor >= 1) {
             if (mapsize < sizeof(FestTrailer)) {
                 throw PackException("Insufficient size (trailer)");
             }
@@ -77,8 +77,15 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             if (trailer->magic != header->magic) {
                 throw PackException("Trailer magic incorrect");
             }
-            if (mapsize <= 0 || (trailer->secondHeaderOffset + sizeof(FestSecondHeader)) > (mapsize - 1)) {
+            if (mapsize <= 0) {
                 throw PackException("Second header offset overflow");
+            }
+            if (version.minor == 1) {
+                if ((trailer->secondHeaderOffset + sizeof(FestSecondHeaderV0_1_0)) > (mapsize - 1)) {
+                    throw PackException("Second header offset overflow (V0.1.0)");
+                }
+            } else if ((trailer->secondHeaderOffset + sizeof(FestSecondHeader)) > (mapsize - 1)) {
+                throw PackException("Second header offset overflow (V0.2.0)");
             }
             secondHeader = (FestSecondHeader *) (((uint8_t *) mapping) + trailer->secondHeaderOffset);
             if (trailer->magic != secondHeader->magic) {
@@ -448,9 +455,9 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
-    uint16List = (const uint16_t *) (void *) (((uint8_t *) mapping) + offset);
-    numUint16List = header->numUint16List;
-    offset += ((size_t) numUint16List) * sizeof(*uint16List);
+    uint16List_V_0_0_0 = (const uint16_t *) (void *) (((uint8_t *) mapping) + offset);
+    numUint16List_V_0_0_0 = header->numUint16List;
+    offset += ((size_t) numUint16List_V_0_0_0) * sizeof(*uint16List_V_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -458,9 +465,9 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
             offset += off;
         }
     }
-    fests = (const PFest *) (void *) (((uint8_t *) mapping) + offset);
-    numFests = header->numFests;
-    offset += ((size_t) numFests) * sizeof(*fests);
+    fests_V_0_0_0 = (const PFest_V_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+    numFests_V_0_0_0 = header->numFests;
+    offset += ((size_t) numFests_V_0_0_0) * sizeof(*fests_V_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -489,12 +496,49 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
         offset = secondDataOffset;
         refusjonskodeList = (const PRefusjonskode *) (void *) (((uint8_t *) mapping) + offset);
         numRefusjonskode = secondHeader->numRefusjonskode;
-        if ((offset + (sizeof(*refusjonskodeList) * numRefusjonskode)) > size) {
+        offset += ((size_t) numRefusjonskode) * sizeof(*refusjonskodeList);
+        if (offset > size) {
             throw PackException("Refusjonskode list overflow (v0.1.0)");
+        }
+        if (versionMinor > 1) {
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            uint16List = (const uint16_t *) (void *) (((uint8_t *) mapping) + offset);
+            numUint16List = secondHeader->numUint16NewList;
+            offset += ((size_t) numUint16List) * sizeof(*uint16List);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            if (offset > size) {
+                throw PackException("Uint16List list overflow (v0.2.0)");
+            }
+            fests = (const PFest *) (void *) (((uint8_t *) mapping) + offset);
+            numFests = secondHeader->numFests;
+            if ((offset + (sizeof(*fests) * numFests)) > size) {
+                throw PackException("Fest list overflow (v0.2.0)");
+            }
+        } else {
+            uint16List = nullptr;
+            numUint16List = 0;
+            fests = nullptr;
+            numFests = 0;
         }
     } else {
         refusjonskodeList = nullptr;
         numRefusjonskode = 0;
+        uint16List = nullptr;
+        numUint16List = 0;
+        fests = nullptr;
+        numFests = 0;
     }
 }
 
@@ -919,14 +963,41 @@ void FestDeserializer::ForEachStrDosering(const std::function<void(const POppfSt
     }
 }
 
-void FestDeserializer::ForEachFests(const std::function<void(const PFest &)> &func) const {
+void FestDeserializer::ForEachFests_V_0_0_0(const std::function<void(const PFest_V_0_0_0 &)> &func) const {
+    for (std::remove_const<typeof(numFests_V_0_0_0)>::type i = 0; i < numFests_V_0_0_0; i++) {
+        func(this->fests_V_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachFests_V_0_2_0(const std::function<void(const PFest &)> &func) const {
     for (std::remove_const<typeof(numFests)>::type i = 0; i < numFests; i++) {
         func(this->fests[i]);
     }
 }
 
+void FestDeserializer::ForEachFests(const std::function<void(const PFest &)> &func) const {
+    if (versionMajor > 0 || versionMinor >= 2) {
+        for (std::remove_const<typeof(numFests)>::type i = 0; i < numFests; i++) {
+            func(this->fests[i]);
+        }
+    } else {
+        for (std::remove_const<typeof(numFests_V_0_0_0)>::type i = 0; i < numFests_V_0_0_0; i++) {
+            PFest newFest{this->fests_V_0_0_0[i]};
+            func(newFest);
+        }
+    }
+}
+
+FestVectors FestDeserializer::Unpack(const PFest_V_0_0_0 &pFest) const {
+    return {pFest, Unpack(pFest.dato), uint16List_V_0_0_0, numUint16List_V_0_0_0};
+}
+
 FestVectors FestDeserializer::Unpack(const PFest &pFest) const {
-    return {pFest, Unpack(pFest.dato), uint16List, numUint16List};
+    if (versionMajor > 0 || versionMinor >= 2) {
+        return {pFest, Unpack(pFest.dato), uint16List, numUint16List};
+    } else {
+        return {pFest, Unpack(pFest.dato), uint16List_V_0_0_0, numUint16List_V_0_0_0};
+    }
 }
 
 std::string FestDeserializer::Unpack(const PString &str) const {
@@ -1769,8 +1840,10 @@ std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
     Quota(quotas, "Dose fast tidspunkt list", numDoseFastTidspunktList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Dosering list", numDoseringList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Legemiddelforbruk list", numLegemiddelforbrukList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
-    Quota(quotas, "Uint16_t list", numUint16List, min(GenericListItems32::max_address, 4194303), min(GenericListItems32::max_address, 4194303));
-    Quota(quotas, "FEST Versions", numFests, 1023, 1023);
+    Quota(quotas, "Uint16_t list 0.0.0", numUint16List_V_0_0_0, min(GenericListItems32::max_address, 4194303), min(GenericListItems32::max_address, 4194303));
+    Quota(quotas, "Uint16_t list", numUint16List, min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()), min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()));
+    Quota(quotas, "FEST Versions 0.0.0", numFests_V_0_0_0, 1023, 1023);
+    Quota(quotas, "FEST Versions", numFests, std::numeric_limits<uint16_t>::max(), std::numeric_limits<uint16_t>::max());
     Quota(quotas, "String list", numStringList);
     Quota(quotas, "Stringblock", stringblocksize, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());
     return quotas;

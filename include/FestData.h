@@ -6,10 +6,12 @@
 #define LEGEMFEST_FESTDATA_H
 
 class FestSerializer;
+class PFest_V_0_0_0;
 class PFest;
 
 class FestData {
     friend FestSerializer;
+    friend PFest_V_0_0_0;
     friend PFest;
 private:
     std::string dato;

@@ -22,8 +22,13 @@ template <class T, class S> void PL(std::vector<T> &serializer, const S *deseria
 
 class FestDeserializerPreloader {
 public:
-    template <class List, class P> void Preload(List &list, const P *src, size_t num) {
+    template <GenericListStorage32Type List, class P> void Preload(List &list, const P *src, size_t num) {
         auto &listStorage = static_cast<GenericListStorage32<P>&>(list);
+        auto &vec = listStorage.list;
+        PL(vec, src, num);
+    }
+    template <GenericListStorage64Type List, class P> void Preload(List &list, const P *src, size_t num) {
+        auto &listStorage = static_cast<GenericListStorage64<P>&>(list);
         auto &vec = listStorage.list;
         PL(vec, src, num);
     }
@@ -55,7 +60,16 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     PL(festSerializer.interaksjon, interaksjon, numInteraksjon);
     PL(festSerializer.interaksjonIkkeVurdert, interaksjonIkkeVurdert, numInteraksjonIkkeVurdert);
     PL(festSerializer.strDosering, strDosering, numStrDosering);
-    PL(festSerializer.fests, fests, numFests);
+    PL(festSerializer.fests_V_0_0_0, fests_V_0_0_0, numFests_V_0_0_0);
+    if (versionMajor > 0 || versionMinor >= 2) {
+        PL(festSerializer.fests, fests, numFests);
+    } else {
+        std::function<PFest (const PFest_V_0_0_0 &)> convert{[] (const PFest_V_0_0_0 &src) {
+            PFest dst{src};
+            return dst;
+        }};
+        PL(festSerializer.fests, fests_V_0_0_0, numFests_V_0_0_0, convert);
+    }
     FestDeserializerPreloader preloader{};
     preloader.Preload(festSerializer.festUuidList, festUuidList, numFestUuidList);
     preloader.Preload(festSerializer.valueWithCodesetList, valueWithCodesetList, numValueWithCodesetList);
@@ -67,7 +81,7 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     preloader.Preload(festSerializer.refusjonList, refusjonList, numRefusjonList);
     preloader.Preload(festSerializer.elementList, elementList, numElement);
     preloader.Preload(festSerializer.refRefusjonsvilkarList, refRefusjonsvilkarList, numRefRefusjonsvilkar);
-    preloader.Preload(festSerializer.refusjonskodeList_0_0_0, refusjonskodeList_0_0_0, numRefusjonskode_0_0_0);
+    preloader.Preload(static_cast<GenericListStorage32<PRefusjonskode_0_0_0> &>(festSerializer.refusjonskodeList_0_0_0), refusjonskodeList_0_0_0, numRefusjonskode_0_0_0);
     if (versionMajor > 0 || versionMinor >= 1) {
         preloader.Preload(festSerializer.refusjonskodeList, refusjonskodeList, numRefusjonskode);
     } else {
@@ -83,7 +97,12 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     preloader.Preload(festSerializer.doseFastTidspunktList, doseFastTidspunktList, numDoseFastTidspunktList);
     preloader.Preload(festSerializer.doseringList, doseringList, numDoseringList);
     preloader.Preload(festSerializer.legemiddelforbrukList, legemiddelforbrukList, numLegemiddelforbrukList);
-    preloader.Preload(festSerializer.uint16List, uint16List, numUint16List);
+    preloader.Preload(static_cast<GenericListStorage32<uint16_t> &>(festSerializer.uint16List_V_0_0_0), uint16List_V_0_0_0, numUint16List_V_0_0_0);
+    if (versionMajor > 0 || versionMinor >= 2) {
+        preloader.Preload(festSerializer.uint16List, uint16List, numUint16List);
+    } else {
+        preloader.Preload(festSerializer.uint16List, uint16List_V_0_0_0, numUint16List_V_0_0_0);
+    }
     preloader.Preload(festSerializer.stringList, stringList, numStringList);
     for (const auto &pstr : GetStrings()) {
         std::string str = Unpack(pstr);

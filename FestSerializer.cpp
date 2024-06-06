@@ -21,6 +21,7 @@ bool FestSerializer::Serialize(const Fest &fest) {
     ProgressFinished(result);
     for (const auto &festPair : this->festMap) {
         const auto &festInst = *(festPair.second);
+        fests_V_0_0_0.emplace_back(festInst, uint16List_V_0_0_0, stringblock, stringblockCache);
         fests.emplace_back(festInst, uint16List, stringblock, stringblockCache);
     }
     return result;
@@ -143,11 +144,17 @@ bool FestSerializer::Write() {
     if (strDosering.size() >= (1 << 16)) {
         throw PackException("Max str dosering size\n");
     }
-    if (uint16List.size() >= (1 << 22)) {
-        throw PackException("Max uint16 list storage size\n");
+    if (uint16List_V_0_0_0.size() >= (1 << 22)) {
+        throw PackException("Max uint16 legacy list storage size\n");
     }
-    if (fests.size() >= (1 << 10)) {
-        throw PackException("Max fests stroage size\n");
+    if (uint16List.size() >= std::numeric_limits<uint32_t>::max()) {
+        throw PackException("Max uint16 new list storage size\n");
+    }
+    if (fests_V_0_0_0.size() >= (1 << 10)) {
+        throw PackException("Max fests storage size (V0.0.0)");
+    }
+    if (fests.size() >= std::numeric_limits<uint16_t>::max()) {
+        throw PackException("Max fests storage size (V0.2.0)");
     }
     FestFirstHeader firstHeader{
         .magic = GetMagicNumbber(),
@@ -187,7 +194,7 @@ bool FestSerializer::Write() {
         .numDoseringList = (uint16_t) doseringList.size(),
         .numLegemiddelforbrukList = (uint16_t) legemiddelforbrukList.size(),
         .numStrDosering = (uint16_t) strDosering.size(),
-        .numUint16List = (uint32_t) uint16List.size(),
+        .numUint16List = (uint32_t) uint16List_V_0_0_0.size(),
         .numFests = (uint16_t) fests.size()
     };
     size_t offset = sizeof(firstHeader);
@@ -708,7 +715,7 @@ bool FestSerializer::Write() {
         }
     }
     {
-        auto list = uint16List.GetStorageList();
+        auto list = uint16List_V_0_0_0.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
@@ -723,8 +730,8 @@ bool FestSerializer::Write() {
         }
     }
     {
-        auto *ptr = fests.data();
-        auto size = fests.size() * sizeof(*ptr);
+        auto *ptr = fests_V_0_0_0.data();
+        auto size = fests_V_0_0_0.size() * sizeof(*ptr);
         output.write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -772,7 +779,10 @@ bool FestSerializer::Write() {
             .magic = firstHeader.magic,
             .stringblockSize = (uint32_t) stringblock.size(),
             .secondHeaderSize = sizeof(FestSecondHeader),
-            .numRefusjonskode = (uint16_t) refusjonskodeList.size()
+            .numRefusjonskode = (uint16_t) refusjonskodeList.size(),
+            .numUint16NewList = (uint32_t) (dbVersion.minor > 1 ? uint16List.size() : 0),
+            .numFests = (uint16_t) (dbVersion.minor > 1 ? fests.size() : 0),
+            .reservedZ = 0
         };
         output.write((char *) (void *) &secondHeader, sizeof(secondHeader));
         offset += sizeof(secondHeader);
@@ -797,6 +807,37 @@ bool FestSerializer::Write() {
                 off = alignment - off;
                 output.write(&(alignmentBlock[0]), off);
                 offset += off;
+            }
+        }
+        if (dbVersion.minor > 1) {
+            {
+                auto list = uint16List.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output.write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output.write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto *ptr = fests.data();
+                auto size = fests.size() * sizeof(*ptr);
+                output.write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output.write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
             }
         }
         output.write((char *) (void *) &trailer, sizeof(trailer));

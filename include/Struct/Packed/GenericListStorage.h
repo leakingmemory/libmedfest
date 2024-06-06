@@ -34,6 +34,12 @@ template <typename T, int sizeBits> struct GenericListItems {
     int_type start : addr_bits;
     int_type size : size_bits;
 
+    template <GenericListItemType TL> constexpr TL CastToWider() const {
+        static_assert(TL::max_address >= max_address);
+        static_assert(TL::max_size >= max_size);
+        return {.start = start, .size = size};
+    }
+
     bool operator == (const GenericListItems &other) const {
         return  start == other.start &&
                 size == other.size;
@@ -58,6 +64,7 @@ template <GenericListStorageObject T, GenericListItemType ItemType> class Generi
 private:
     std::vector<T> list;
 public:
+    typedef T ListItemType;
     GenericListStorage() : list() {}
     ItemType StoreList(const std::vector<T> &list) {
         {
@@ -214,5 +221,14 @@ public:
 
 template <GenericListStorageObject T> class GenericListStorage32 : public GenericListStorage<T,GenericListItems32> {};
 template <GenericListStorageObject T> class GenericListStorage64 : public GenericListStorage<T,GenericListItems64> {};
+
+template <class T> concept GenericListStorage32Type = requires (T list) {
+    { list.StoreList(std::declval<std::vector<typename T::ListItemType>>()) }
+    -> std::convertible_to<GenericListItems32>;
+};
+template <class T> concept GenericListStorage64Type = requires (T list) {
+    { list.StoreList(std::declval<std::vector<typename T::ListItemType>>()) }
+    -> std::convertible_to<GenericListItems64>;
+};
 
 #endif //LEGEMFEST_GENERICLISTSTORAGE_H

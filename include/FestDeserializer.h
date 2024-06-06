@@ -99,7 +99,9 @@ private:
     const PDosering *doseringList;
     const PLegemiddelforbruk *legemiddelforbrukList;
     const PSubstans *substansList;
+    const uint16_t *uint16List_V_0_0_0;
     const uint16_t *uint16List;
+    const PFest_V_0_0_0 *fests_V_0_0_0;
     const PFest *fests;
     const PString *stringList;
     const char *stringblock;
@@ -139,7 +141,9 @@ private:
     size_t numDoseFastTidspunktList;
     size_t numDoseringList;
     size_t numLegemiddelforbrukList;
+    size_t numUint16List_V_0_0_0;
     size_t numUint16List;
+    size_t numFests_V_0_0_0;
     size_t numFests;
     size_t numStringList;
     size_t stringblocksize;
@@ -199,7 +203,10 @@ public:
     void ForEachInteraksjon(const std::function<void (const POppfInteraksjon &)> &) const;
     void ForEachInteraksjonIkkeVurdert(const std::function<void (const POppfInteraksjonIkkeVurdert &)> &) const;
     void ForEachStrDosering(const std::function<void (const POppfStrDosering &)> &) const;
+    void ForEachFests_V_0_0_0(const std::function<void (const PFest_V_0_0_0 &)> &) const;
+    void ForEachFests_V_0_2_0(const std::function<void (const PFest &)> &) const;
     void ForEachFests(const std::function<void (const PFest &)> &) const;
+    [[nodiscard]] FestVectors Unpack(const PFest_V_0_0_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;

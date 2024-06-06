@@ -95,11 +95,21 @@ struct FestFirstHeader {
     uint16_t numFests : 10;
 } __attribute__((__packed__));
 
+struct FestSecondHeaderV0_1_0 {
+    uint64_t magic;
+    uint32_t stringblockSize;
+    uint16_t secondHeaderSize;
+    uint16_t numRefusjonskode;
+} __attribute__((__packed__));
+
 struct FestSecondHeader {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
     uint16_t numRefusjonskode;
+    uint32_t numUint16NewList;
+    uint16_t numFests;
+    uint16_t reservedZ;
 } __attribute__((__packed__));
 
 struct FestTrailer {
@@ -135,6 +145,7 @@ private:
     DoseFastTidspunktList doseFastTidspunktList{};
     DoseringList doseringList{};
     LegemiddelforbrukList legemiddelforbrukList{};
+    Uint16List_V_0_0_0 uint16List_V_0_0_0{};
     Uint16List uint16List{};
     StringList stringList{};
     std::vector<POppfLegemiddelMerkevare> legemiddelMerkevare{};
@@ -154,6 +165,7 @@ private:
     std::vector<POppfInteraksjon> interaksjon{};
     std::vector<POppfInteraksjonIkkeVurdert> interaksjonIkkeVurdert{};
     std::vector<POppfStrDosering> strDosering{};
+    std::vector<PFest_V_0_0_0> fests_V_0_0_0{};
     std::vector<PFest> fests{};
     std::map<std::string,std::shared_ptr<FestData>> festMap{};
     int percentDone;

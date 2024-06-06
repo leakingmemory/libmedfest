@@ -23,7 +23,9 @@ class POppfKodeverk;
 class FestVectors {
 private:
     std::string dato;
+    const PFest_V_0_0_0 fest_V_0_0_0;
     const PFest fest;
+    const bool isFestV_0_2_0;
     const uint16_t* legemiddelMerkevare;
     const uint16_t* legemiddelpakning;
     const uint16_t* legemiddelVirkestoff;
@@ -42,6 +44,7 @@ private:
     const uint16_t* interaksjonIkkeVurdert;
     const uint16_t* strDosering;
 public:
+    FestVectors(const PFest_V_0_0_0 &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List);
     FestVectors(const PFest &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List);
     [[nodiscard]] std::string GetDato() const;
     [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare(const FestDeserializer &) const;

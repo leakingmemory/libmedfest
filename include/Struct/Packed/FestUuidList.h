@@ -12,6 +12,8 @@ class FestDeserializerPreloader;
 
 class FestUuidList : private GenericListStorage32<PFestId> {
     friend FestDeserializerPreloader;
+public:
+    typedef std::string ListItemType;
 private:
     std::vector<FestUuid> &uuidblock;
 public:

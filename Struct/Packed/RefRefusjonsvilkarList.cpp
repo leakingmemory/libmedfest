@@ -4,7 +4,7 @@
 
 #include <Struct/Packed/RefRefusjonsvilkarList.h>
 
-GenericListItems32 RefRefusjonsvilkarList::StoreList(std::vector<PRefRefusjonsvilkar> &list) {
+GenericListItems32 RefRefusjonsvilkarList::StoreList(const std::vector<PRefRefusjonsvilkar> &list) {
     return GenericListStorage32<PRefRefusjonsvilkar>::StoreList(list);
 }
 

@@ -13,7 +13,8 @@ class FestDeserializerPreloader;
 class DoseringList : private GenericListStorage32<PDosering> {
     friend FestDeserializerPreloader;
 public:
-    [[nodiscard]] GenericListItems32 StoreList(std::vector<PDosering> &);
+    typedef PDosering ListItemType;
+    [[nodiscard]] GenericListItems32 StoreList(const std::vector<PDosering> &);
     [[nodiscard]] std::vector<PDosering> GetStorageList() const;
     size_t size() const;
 };

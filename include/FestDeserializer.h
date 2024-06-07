@@ -149,6 +149,8 @@ private:
     size_t stringblocksize;
 public:
     FestDeserializer(const std::string &filename);
+    FestDeserializer(const void *data, size_t size);
+    void Init();
     ~FestDeserializer();
     [[nodiscard]] int GetVersionMajor() const;
     [[nodiscard]] int GetVersionMinor() const;

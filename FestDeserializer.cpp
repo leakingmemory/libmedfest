@@ -24,7 +24,7 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     if (lseek(fd, 0, SEEK_SET) != 0) {
         std::cerr << "Error: Seek start: " << strerror(errno) << "\n";
         if (close(fd) != 0) {
-            std::cerr << "Error: Close file: " << strerror(errno )<< "\n";
+            std::cerr << "Error: Close file: " << strerror(errno) << "\n";
         }
         throw PackException("Seek file");
     }
@@ -36,8 +36,25 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
         throw PackException("Map failed");
     }
     if (close(fd) != 0) {
-        std::cerr << "Error: Close file: " << strerror(errno )<< "\n";
+        std::cerr << "Error: Close file: " << strerror(errno) << "\n";
     }
+    Init();
+}
+
+FestDeserializer::FestDeserializer(const void *data, size_t size) {
+    mapsize = size;
+    mapping = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (mapping == MAP_FAILED) {
+        std::cerr << "Error: Map failed: " << strerror(errno) << "\n";
+        mapping = nullptr;
+        throw PackException("Map failed");
+    }
+    memcpy(mapping, data, size);
+    mprotect(mapping, size, PROT_READ);
+    Init();
+}
+
+void FestDeserializer::Init() {
     auto *header = (FestFirstHeader *) mapping;
     FestSecondHeader *secondHeader{nullptr};
     uint32_t secondDataOffset{0};
@@ -479,11 +496,11 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     numStringList = header->numStringList;
     offset += ((size_t) numStringList) * sizeof(*stringList);
     stringblock = (const char *) (void *) (((uint8_t *) mapping) + offset);
-    if (offset < size) {
-        stringblocksize = size - offset;
+    if (offset < mapsize) {
+        stringblocksize = mapsize - offset;
     } else {
         stringblocksize = 0;
-        if (offset > size) {
+        if (offset > mapsize) {
             std::cerr << "Error: File is truncated\n";
             throw PackException("Truncated file");
         }
@@ -497,7 +514,7 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
         refusjonskodeList = (const PRefusjonskode *) (void *) (((uint8_t *) mapping) + offset);
         numRefusjonskode = secondHeader->numRefusjonskode;
         offset += ((size_t) numRefusjonskode) * sizeof(*refusjonskodeList);
-        if (offset > size) {
+        if (offset > mapsize) {
             throw PackException("Refusjonskode list overflow (v0.1.0)");
         }
         if (versionMinor > 1) {
@@ -518,12 +535,12 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
                     offset += off;
                 }
             }
-            if (offset > size) {
+            if (offset > mapsize) {
                 throw PackException("Uint16List list overflow (v0.2.0)");
             }
             fests = (const PFest *) (void *) (((uint8_t *) mapping) + offset);
             numFests = secondHeader->numFests;
-            if ((offset + (sizeof(*fests) * numFests)) > size) {
+            if ((offset + (sizeof(*fests) * numFests)) > mapsize) {
                 throw PackException("Fest list overflow (v0.2.0)");
             }
         } else {

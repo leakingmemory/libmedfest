@@ -295,6 +295,8 @@ public:
                 std::cerr << "Error: GenericListItems end out of range\n";
             }
             return output;
+        } else if (items.start == 0 && items.size == 0) {
+            return {};
         } else {
             std::cerr << "Error: GenericListItems start out of range\n";
             return {};

@@ -178,7 +178,11 @@ public:
     FestSerializer &operator =(FestSerializer &&) = delete;
     bool is_open() const;
     bool Serialize(const Fest &fest);
+private:
+    bool Write(uint64_t magic);
+public:
     bool Write();
+    bool WriteVersion(uint8_t major, uint8_t minor, uint8_t patch);
 private:
     template <class T> uint16_t Add(std::vector<T> &list, const T &obj) {
         for (typename std::remove_const<typeof(list.size())>::type i = 0; i < list.size(); i++) {

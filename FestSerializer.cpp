@@ -43,7 +43,7 @@ bool FestSerializer::Serialize(const Fest &fest) {
     return result;
 }
 
-bool FestSerializer::Write() {
+bool FestSerializer::Write(uint64_t magic) {
     if (!is_open()) {
         std::cerr << "Error: Output file is not opened, or writeable\n";
         throw PackException("File not writeable or open");
@@ -173,7 +173,7 @@ bool FestSerializer::Write() {
         throw PackException("Max fests storage size (V0.2.0)");
     }
     FestFirstHeader firstHeader{
-        .magic = GetMagicNumbber(),
+        .magic = magic,
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
         .numLegemiddelMerkevare = (uint16_t) legemiddelMerkevare.size(),
@@ -863,6 +863,14 @@ bool FestSerializer::Write() {
         fs->close();
     }
     return true;
+}
+
+bool FestSerializer::Write() {
+    return Write(GetMagicNumbber());
+}
+
+bool FestSerializer::WriteVersion(uint8_t major, uint8_t minor, uint8_t patch) {
+    return Write(GetMagicNumbber(major, minor, patch));
 }
 
 void FestSerializer::Add(const std::string &dato, const std::function<void(FestData &)> &func) {

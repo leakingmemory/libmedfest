@@ -103,6 +103,7 @@ public:
     std::string GetHentetDato() {
         return hentetDato;
     }
+    void Add(const OppfLegemiddelMerkevare &);
     void Add(const XmlOppfLegemiddelMerkevare &);
     void Add(const XmlOppfLegemiddelpakning &);
     [[nodiscard]] bool Add(const XmlOppfVirkestoff &);

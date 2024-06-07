@@ -36,6 +36,10 @@ std::string Fest::GetName() const {
     return "FEST";
 }
 
+void Fest::Add(const OppfLegemiddelMerkevare &oppf) {
+    oppfLegemiddelMerkevare.emplace_back(oppf);
+}
+
 void Fest::Add(const XmlOppfLegemiddelMerkevare &xmlOppf) {
     oppfLegemiddelMerkevare.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetLegemiddelMerkevare());
 }

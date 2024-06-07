@@ -5,11 +5,27 @@
 #include "FestSerializer.h"
 #include "Struct/Packed/PackException.h"
 #include <iostream>
+#include <fstream>
 
 FestData::FestData(const std::string &dato) : dato(dato) {}
 
+FestSerializer::FestSerializer(const std::shared_ptr<std::ostream> &stream)
+: output(stream), percentDone(0) {
+}
+
 FestSerializer::FestSerializer(const std::string &filename)
-: output(filename, std::ios::binary | std::ios::out | std::ios::trunc), percentDone(0) {
+: FestSerializer(std::make_shared<std::ofstream>(filename, std::ios::binary | std::ios::out | std::ios::trunc)) {
+}
+
+bool FestSerializer::is_open() const {
+    if (!output) {
+        return false;
+    }
+    auto fs = std::dynamic_pointer_cast<std::ofstream>(output);
+    if (fs) {
+        return fs->is_open();
+    }
+    return true;
 }
 
 bool FestSerializer::Serialize(const Fest &fest) {
@@ -198,264 +214,264 @@ bool FestSerializer::Write() {
         .numFests = (uint16_t) fests.size()
     };
     size_t offset = sizeof(firstHeader);
-    output.write((char *) (void *) &firstHeader, offset);
+    output->write((char *) (void *) &firstHeader, offset);
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = legemiddelMerkevare.data();
         auto size = legemiddelMerkevare.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = legemiddelpakning.data();
         auto size = legemiddelpakning.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = legemiddelVirkestoff.data();
         auto size = legemiddelVirkestoff.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = medForbrMatr.data();
         auto size = medForbrMatr.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = naringsmiddel.data();
         auto size = naringsmiddel.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = brystprotese.data();
         auto size = brystprotese.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = legemiddeldose.data();
         auto size = legemiddeldose.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = virkestoffMedStyrke.data();
         auto size = virkestoffMedStyrke.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = virkestoff.data();
         auto size = virkestoff.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = kodeverk.data();
         auto size = kodeverk.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = refusjon.data();
         auto size = refusjon.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = vilkar.data();
         auto size = vilkar.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = varselSlv.data();
         auto size = varselSlv.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = byttegruppe.data();
         auto size = byttegruppe.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = interaksjon.data();
         auto size = interaksjon.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = interaksjonIkkeVurdert.data();
         auto size = interaksjonIkkeVurdert.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = strDosering.data();
         auto size = strDosering.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = festidblock.data();
         auto size = festidblock.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -463,14 +479,14 @@ bool FestSerializer::Write() {
         auto list = festUuidList.GetStorageBlock();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -478,14 +494,14 @@ bool FestSerializer::Write() {
         auto list = valueWithCodesetList.GetStorageBlock();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -493,14 +509,14 @@ bool FestSerializer::Write() {
         auto list = reseptgyldighetList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -508,14 +524,14 @@ bool FestSerializer::Write() {
         auto list = pakningskomponentList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -523,14 +539,14 @@ bool FestSerializer::Write() {
         auto list = pakningskomponentInfoList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -538,14 +554,14 @@ bool FestSerializer::Write() {
         auto list = pakningsinfoList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -553,14 +569,14 @@ bool FestSerializer::Write() {
         auto list = prisVareList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -568,14 +584,14 @@ bool FestSerializer::Write() {
         auto list = refusjonList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -583,14 +599,14 @@ bool FestSerializer::Write() {
         auto list = elementList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -598,14 +614,14 @@ bool FestSerializer::Write() {
         auto list = refRefusjonsvilkarList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -613,14 +629,14 @@ bool FestSerializer::Write() {
         auto list = refusjonskodeList_0_0_0.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -628,14 +644,14 @@ bool FestSerializer::Write() {
         auto list = referanseList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -643,14 +659,14 @@ bool FestSerializer::Write() {
         auto list = substansgruppeList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -658,14 +674,14 @@ bool FestSerializer::Write() {
         auto list = substansList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -673,14 +689,14 @@ bool FestSerializer::Write() {
         auto list = doseFastTidspunktList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -688,14 +704,14 @@ bool FestSerializer::Write() {
         auto list = doseringList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -703,14 +719,14 @@ bool FestSerializer::Write() {
         auto list = legemiddelforbrukList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -718,28 +734,28 @@ bool FestSerializer::Write() {
         auto list = uint16List_V_0_0_0.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
     {
         auto *ptr = fests_V_0_0_0.data();
         auto size = fests_V_0_0_0.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto off = offset % alignment;
         if (off != 0) {
             off = alignment - off;
-            output.write(&(alignmentBlock[0]), off);
+            output->write(&(alignmentBlock[0]), off);
             offset += off;
         }
     }
@@ -747,12 +763,12 @@ bool FestSerializer::Write() {
         auto list = stringList.GetStorageList();
         auto *ptr = list.data();
         auto size = list.size() * sizeof(*ptr);
-        output.write((char *) (void *) ptr, size);
+        output->write((char *) (void *) ptr, size);
         offset += size;
     }
     {
         auto size = stringblock.size();
-        output.write(stringblock.c_str(), size);
+        output->write(stringblock.c_str(), size);
         offset += size;
     }
     auto dbVersion = GetDbVersion(firstHeader.magic);
@@ -761,7 +777,7 @@ bool FestSerializer::Write() {
             auto off = offset % alignment;
             if (off != 0) {
                 off = alignment - off;
-                output.write(&(alignmentBlock[0]), off);
+                output->write(&(alignmentBlock[0]), off);
                 offset += off;
             }
         }
@@ -784,13 +800,13 @@ bool FestSerializer::Write() {
             .numFests = (uint16_t) (dbVersion.minor > 1 ? fests.size() : 0),
             .reservedZ = 0
         };
-        output.write((char *) (void *) &secondHeader, sizeof(secondHeader));
+        output->write((char *) (void *) &secondHeader, sizeof(secondHeader));
         offset += sizeof(secondHeader);
         {
             auto off = offset % alignment;
             if (off != 0) {
                 off = alignment - off;
-                output.write(&(alignmentBlock[0]), off);
+                output->write(&(alignmentBlock[0]), off);
                 offset += off;
             }
         }
@@ -798,14 +814,14 @@ bool FestSerializer::Write() {
             auto list = refusjonskodeList.GetStorageList();
             auto *ptr = list.data();
             auto size = list.size() * sizeof(*ptr);
-            output.write((char *) (void *) ptr, size);
+            output->write((char *) (void *) ptr, size);
             offset += size;
         }
         {
             auto off = offset % alignment;
             if (off != 0) {
                 off = alignment - off;
-                output.write(&(alignmentBlock[0]), off);
+                output->write(&(alignmentBlock[0]), off);
                 offset += off;
             }
         }
@@ -814,35 +830,38 @@ bool FestSerializer::Write() {
                 auto list = uint16List.GetStorageList();
                 auto *ptr = list.data();
                 auto size = list.size() * sizeof(*ptr);
-                output.write((char *) (void *) ptr, size);
+                output->write((char *) (void *) ptr, size);
                 offset += size;
             }
             {
                 auto off = offset % alignment;
                 if (off != 0) {
                     off = alignment - off;
-                    output.write(&(alignmentBlock[0]), off);
+                    output->write(&(alignmentBlock[0]), off);
                     offset += off;
                 }
             }
             {
                 auto *ptr = fests.data();
                 auto size = fests.size() * sizeof(*ptr);
-                output.write((char *) (void *) ptr, size);
+                output->write((char *) (void *) ptr, size);
                 offset += size;
             }
             {
                 auto off = offset % alignment;
                 if (off != 0) {
                     off = alignment - off;
-                    output.write(&(alignmentBlock[0]), off);
+                    output->write(&(alignmentBlock[0]), off);
                     offset += off;
                 }
             }
         }
-        output.write((char *) (void *) &trailer, sizeof(trailer));
+        output->write((char *) (void *) &trailer, sizeof(trailer));
     }
-    output.close();
+    auto fs = std::dynamic_pointer_cast<std::ofstream>(output);
+    if (fs) {
+        fs->close();
+    }
     return true;
 }
 

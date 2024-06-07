@@ -20,7 +20,7 @@ enable_testing()
 add_subdirectory(Fest)
 add_subdirectory(Struct/Decoded)
 add_subdirectory(Struct/Packed)
-add_subdirectory(Test/Struct/Packed)
+add_subdirectory(Test)
 
 add_library(medfest SHARED FestZip.cpp libzip_zip.cpp libzip_file.cpp FestObjectStream.cpp XMLParser.cpp
         FestSerializer.cpp FestDeserializer.cpp FestVectors.cpp FestDeserializer_Preload.cpp)

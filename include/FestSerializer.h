@@ -47,7 +47,7 @@
 #include "DbVersion.h"
 #include <memory>
 #include <string>
-#include <fstream>
+#include <ostream>
 #include <map>
 #include <functional>
 
@@ -123,7 +123,7 @@ class FestDeserializer;
 class FestSerializer : private FestVisitor {
     friend FestDeserializer;
 private:
-    std::ofstream output;
+    std::shared_ptr<std::ostream> output;
     std::string stringblock{};
     std::map<std::string,uint32_t> stringblockCache{};
     std::vector<FestUuid> festidblock{};
@@ -170,14 +170,13 @@ private:
     std::map<std::string,std::shared_ptr<FestData>> festMap{};
     int percentDone;
 public:
+    FestSerializer(const std::shared_ptr<std::ostream> &output);
     FestSerializer(const std::string &filename);
     FestSerializer(const FestSerializer &) = delete;
     FestSerializer(FestSerializer &&) = delete;
     FestSerializer &operator =(const FestSerializer &) = delete;
     FestSerializer &operator =(FestSerializer &&) = delete;
-    bool is_open() {
-        return output.is_open();
-    }
+    bool is_open() const;
     bool Serialize(const Fest &fest);
     bool Write();
 private:

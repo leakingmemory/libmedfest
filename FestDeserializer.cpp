@@ -1590,7 +1590,7 @@ Element FestDeserializer::Unpack(const PElement &pElement) const {
     return {
         Unpack(pElement.id),
         Unpack(pElement.kode),
-        Unpack(static_cast<PTerm>(pElement))
+        { Unpack(static_cast<PTerm>(pElement)) }
     };
 }
 

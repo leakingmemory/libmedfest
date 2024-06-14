@@ -12,6 +12,6 @@ std::string Element::GetKode() const {
     return kode;
 }
 
-Term Element::GetTerm() const {
+std::vector<Term> Element::GetTerm() const {
     return term;
 }

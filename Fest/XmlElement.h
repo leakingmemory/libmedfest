@@ -15,17 +15,18 @@
 #include <Struct/Decoded/Term.h>
 #include <memory>
 #include <map>
+#include <vector>
 
 class XmlOppfKodeverk;
 
 class XmlElement : public XMLObject, public FestIdObject, public XmlKode {
 private:
     std::shared_ptr<XmlOppfKodeverk> parent;
-    Term term{};
+    std::vector<Term> term{};
 public:
     XmlElement(std::shared_ptr<XmlOppfKodeverk> parent) : parent(parent) {}
     std::string GetName() const override;
-    void SetTerm(const Term &term);
+    void AddTerm(const Term &term);
     bool Merge();
 };
 

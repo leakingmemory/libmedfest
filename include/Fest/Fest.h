@@ -112,6 +112,7 @@ public:
     void Add(const XmlOppfRefusjon &);
     void Add(const XmlOppfVilkar &);
     void Add(const XmlOppfVarselSlv &);
+    void Add(const OppfKodeverk &);
     void Add(const XmlOppfKodeverk &);
     void Add(const XmlOppfByttegruppe &);
     void Add(const XmlOppfLegemiddeldose &);

@@ -119,6 +119,10 @@ void Fest::Add(const XmlOppfVarselSlv &oppf) {
     oppfVarselSlv.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetVarselSlv());
 }
 
+void Fest::Add(const OppfKodeverk &oppf) {
+    oppfKodeverk.emplace_back(oppf);
+}
+
 void Fest::Add(const XmlOppfKodeverk &oppf) {
     oppfKodeverk.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetInfo(), oppf.GetElement());
 }

@@ -10,8 +10,8 @@ std::string XmlElement::GetName() const {
     return "Element";
 }
 
-void XmlElement::SetTerm(const Term &term) {
-    this->term = term;
+void XmlElement::AddTerm(const Term &term) {
+    this->term.emplace_back(term);
 }
 
 bool XmlElement::Merge() {
@@ -32,7 +32,7 @@ void XmlTerm::SetSprak(const Sprak &sprak) {
 }
 
 bool XmlTerm::Merge() {
-    parent->SetTerm({term, GetBeskrivelseTerm(), sprak});
+    parent->AddTerm({term, GetBeskrivelseTerm(), sprak});
     return true;
 }
 

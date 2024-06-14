@@ -117,10 +117,39 @@ static OppfLegemiddelMerkevare GetMerkevare2() {
     return {{"ID_5D5B4373-0611-4F44-BA26-4D2DB36ECBB0", "2021-07-02T00:53:48", {"A", "Aktiv oppføring"}}, legemiddelMerkevare};
 }
 
+static OppfKodeverk GetAtc1() {
+    Oppf oppf{"ID_8D2DBCCC-73E3-40C3-9812-D6957905FFB1", "2024-02-20T00:50:55", ValueWithDistinguishedName("A", "Aktiv oppføring")};
+    Info info{"2.16.578.1.12.4.1.1.7180", "ATC - Anatomisk Terapeutisk Kjemisk legemiddelregister", "ATC", "WHO Collaborating Centre for Drug Statistics Methodology (WHOCC)"};
+    Element element1{"ID_0011BBC5-0E37-4060-8EB9-B6D044E82958", "J07BN01", {
+            {"Covid-19, RNA-based vaccine", "", {{"EN", "ENGELSK"}}},
+            {"Covid-19, RNA-basert vaksine", "", {{"NO", "NORSK"}}}
+    }};
+    Element element2{"ID_0044FC56-66BF-4750-875F-128C66528FF4", "A11HA03", {
+            {"Tocopherol (vit E)", "", {{"EN", "ENGELSK"}}},
+            {"Tokoferol (Vit E)", "", {{"NO", "NORSK"}}}
+    }};
+    return {oppf, info, {element1, element2}};
+}
+
+static OppfKodeverk GetAtc2() {
+    Oppf oppf{"ID_8D2DBCCC-73E3-40C3-9812-D6957905FFB1", "2024-02-20T00:50:55", ValueWithDistinguishedName("A", "Aktiv oppføring")};
+    Info info{"2.16.578.1.12.4.1.1.7180", "ATC - Anatomisk Terapeutisk Kjemisk legemiddelregister", "ATC", "WHO Collaborating Centre for Drug Statistics Methodology (WHOCC)"};
+    Element element2{"ID_0044FC56-66BF-4750-875F-128C66528FF4", "A11HA03", {
+            {"Tocopherol (vit E)", "", {{"EN", "ENGELSK"}}},
+            {"Tokoferol (Vit E)", "", {{"NO", "NORSK"}}}
+    }};
+    Element element3{"ID_00528370-A033-43A1-BAB4-4BD0D20CF4DE", "C01DX16", {
+            {"Nicorandil", "", {{"EN", "ENGELSK"}}},
+            {"Nikorandil", "", {{"NO", "NORSK"}}}
+    }};
+    return {oppf, info, {element2, element3}};
+}
+
 static Fest GetFest1() {
     Fest fest{};
     fest.SetHentetDato(festVersion1);
     fest.Add(GetMerkevare1());
+    fest.Add(GetAtc1());
     return fest;
 }
 
@@ -128,6 +157,7 @@ static Fest GetFest2() {
     Fest fest{};
     fest.SetHentetDato(festVersion2);
     fest.Add(GetMerkevare2());
+    fest.Add(GetAtc2());
     return fest;
 }
 
@@ -272,6 +302,16 @@ int main() {
         auto pmerkevare1 = merkevarer1[0];
         auto merkevare1 = festDeserializerDb1.Unpack(pmerkevare1);
         AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1);
+        AssertSize(kodeverk1, 1);
+        auto atc1 = festDeserializerDb1.Unpack(kodeverk1[0]);
+        AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+        auto atc1element = atc1.GetElement();
+        AssertSize(atc1element, 2);
+        auto atc1element0term = atc1element[0].GetTerm();
+        AssertSize(atc1element0term, 1);
+        AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+        AssertEquals(atc1element[1].GetKode(), "A11HA03");
     }
     FestDeserializer festDeserializerDb1_0_2_0{fest1Db_0_2_0.data(), fest1Db_0_2_0.size()};
     {
@@ -285,6 +325,16 @@ int main() {
         auto pmerkevare1 = merkevarer1[0];
         auto merkevare1 = festDeserializerDb1_0_2_0.Unpack(pmerkevare1);
         AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1_0_2_0);
+        AssertSize(kodeverk1, 1);
+        auto atc1 = festDeserializerDb1_0_2_0.Unpack(kodeverk1[0]);
+        AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+        auto atc1element = atc1.GetElement();
+        AssertSize(atc1element, 2);
+        auto atc1element0term = atc1element[0].GetTerm();
+        AssertSize(atc1element0term, 1);
+        AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+        AssertEquals(atc1element[1].GetKode(), "A11HA03");
     }
     FestDeserializer festDeserializerDb1_0_1_0{fest1Db_0_1_0.data(), fest1Db_0_1_0.size()};
     {
@@ -298,6 +348,16 @@ int main() {
         auto pmerkevare1 = merkevarer1[0];
         auto merkevare1 = festDeserializerDb1_0_1_0.Unpack(pmerkevare1);
         AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1_0_1_0);
+        AssertSize(kodeverk1, 1);
+        auto atc1 = festDeserializerDb1_0_1_0.Unpack(kodeverk1[0]);
+        AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+        auto atc1element = atc1.GetElement();
+        AssertSize(atc1element, 2);
+        auto atc1element0term = atc1element[0].GetTerm();
+        AssertSize(atc1element0term, 1);
+        AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+        AssertEquals(atc1element[1].GetKode(), "A11HA03");
     }
     FestDeserializer festDeserializerDb1_0_0_0{fest1Db_0_0_0.data(), fest1Db_0_0_0.size()};
     {
@@ -311,6 +371,16 @@ int main() {
         auto pmerkevare1 = merkevarer1[0];
         auto merkevare1 = festDeserializerDb1_0_0_0.Unpack(pmerkevare1);
         AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1_0_0_0);
+        AssertSize(kodeverk1, 1);
+        auto atc1 = festDeserializerDb1_0_0_0.Unpack(kodeverk1[0]);
+        AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+        auto atc1element = atc1.GetElement();
+        AssertSize(atc1element, 2);
+        auto atc1element0term = atc1element[0].GetTerm();
+        AssertSize(atc1element0term, 1);
+        AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+        AssertEquals(atc1element[1].GetKode(), "A11HA03");
     }
 
     auto festInput2 = GetFest2();
@@ -361,6 +431,26 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb2.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb2.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb2.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTerm();
+                auto atc2element0term = atc2element[0].GetTerm();
+                AssertSize(atc1element0term, 1);
+                AssertSize(atc2element0term, 1);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
             }
         }
         {
@@ -384,6 +474,26 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb2_0_2_0.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2_0_2_0);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2_0_2_0);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb2_0_2_0.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb2_0_2_0.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTerm();
+                auto atc2element0term = atc2element[0].GetTerm();
+                AssertSize(atc1element0term, 1);
+                AssertSize(atc2element0term, 1);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
             }
         }
         {
@@ -407,6 +517,26 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb2_0_1_0.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2_0_1_0);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2_0_1_0);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb2_0_1_0.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb2_0_1_0.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTerm();
+                auto atc2element0term = atc2element[0].GetTerm();
+                AssertSize(atc1element0term, 1);
+                AssertSize(atc2element0term, 1);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
             }
             FestDeserializer festDeserializerDb2_0_0_0{fest2Db_0_0_0.data(), fest2Db_0_0_0.size()};
             {
@@ -428,6 +558,26 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb2_0_0_0.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2_0_0_0);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2_0_0_0);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb2_0_0_0.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb2_0_0_0.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTerm();
+                auto atc2element0term = atc2element[0].GetTerm();
+                AssertSize(atc1element0term, 1);
+                AssertSize(atc2element0term, 1);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
             }
             std::string fest3Db_0_1_0_to_latest = WriteFest(
                     [&festDeserializerDb2_0_1_0, &festInput2](FestSerializer &serializer) {
@@ -461,6 +611,26 @@ int main() {
                     auto pmerkevare2 = merkevarer2[0];
                     auto merkevare2 = festDeserializerDb3_0_1_0_to_latest.Unpack(pmerkevare2);
                     AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb3_0_1_0_to_latest);
+                    auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb3_0_1_0_to_latest);
+                    AssertSize(kodeverk1, 1);
+                    AssertSize(kodeverk2, 1);
+                    auto atc1 = festDeserializerDb3_0_1_0_to_latest.Unpack(kodeverk1[0]);
+                    auto atc2 = festDeserializerDb3_0_1_0_to_latest.Unpack(kodeverk2[0]);
+                    AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                    AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                    auto atc1element = atc1.GetElement();
+                    auto atc2element = atc2.GetElement();
+                    AssertSize(atc1element, 2);
+                    AssertSize(atc2element, 2);
+                    auto atc1element0term = atc1element[0].GetTerm();
+                    auto atc2element0term = atc2element[0].GetTerm();
+                    AssertSize(atc1element0term, 1);
+                    AssertSize(atc2element0term, 1);
+                    AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                    AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                    AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                    AssertEquals(atc2element[1].GetKode(), "C01DX16");
                 }
             }
             {
@@ -485,6 +655,26 @@ int main() {
                     auto pmerkevare2 = merkevarer2[0];
                     auto merkevare2 = festDeserializerDb3_0_0_0_to_latest.Unpack(pmerkevare2);
                     AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb3_0_0_0_to_latest);
+                    auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb3_0_0_0_to_latest);
+                    AssertSize(kodeverk1, 1);
+                    AssertSize(kodeverk2, 1);
+                    auto atc1 = festDeserializerDb3_0_0_0_to_latest.Unpack(kodeverk1[0]);
+                    auto atc2 = festDeserializerDb3_0_0_0_to_latest.Unpack(kodeverk2[0]);
+                    AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                    AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                    auto atc1element = atc1.GetElement();
+                    auto atc2element = atc2.GetElement();
+                    AssertSize(atc1element, 2);
+                    AssertSize(atc2element, 2);
+                    auto atc1element0term = atc1element[0].GetTerm();
+                    auto atc2element0term = atc2element[0].GetTerm();
+                    AssertSize(atc1element0term, 1);
+                    AssertSize(atc2element0term, 1);
+                    AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                    AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                    AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                    AssertEquals(atc2element[1].GetKode(), "C01DX16");
                 }
             }
         }
@@ -524,6 +714,26 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb4_0_1_0_to_latest.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb4_0_1_0_to_latest);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb4_0_1_0_to_latest);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb4_0_1_0_to_latest.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb4_0_1_0_to_latest.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTerm();
+                auto atc2element0term = atc2element[0].GetTerm();
+                AssertSize(atc1element0term, 1);
+                AssertSize(atc2element0term, 1);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
             }
         }
         {
@@ -548,6 +758,26 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb4_0_0_0_to_latest.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb4_0_0_0_to_latest);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb4_0_0_0_to_latest);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb4_0_0_0_to_latest.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb4_0_0_0_to_latest.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTerm();
+                auto atc2element0term = atc2element[0].GetTerm();
+                AssertSize(atc1element0term, 1);
+                AssertSize(atc2element0term, 1);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
             }
         }
     }

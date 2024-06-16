@@ -72,7 +72,8 @@ private:
     const POppfLegemiddeldose *legemiddeldose;
     const POppfVirkestoffMedStyrke *virkestoffMedStyrke;
     const POppfVirkestoff *virkestoff;
-    const POppfKodeverk *kodeverk;
+    const POppfKodeverk_0_0_0 *kodeverk_0_0_0;
+    const POppfKodeverk_0_3_0 *kodeverk_0_3_0;
     const POppfRefusjon *refusjon;
     const POppfVilkar *vilkar;
     const POppfVarselSlv *varselSlv;
@@ -89,7 +90,9 @@ private:
     const PPakningsinfo *pakningsinfoList;
     const PPrisVare *prisVareList;
     const PRefusjon *refusjonList;
-    const PElement *elementList;
+    const PElement_0_0_0 *elementList_0_0_0;
+    const PElement_0_3_0 *elementList_0_3_0;
+    const PTerm *termList;
     const PRefRefusjonsvilkar *refRefusjonsvilkarList;
     const PRefusjonskode_0_0_0 *refusjonskodeList_0_0_0;
     const PRefusjonskode *refusjonskodeList;
@@ -114,7 +117,8 @@ private:
     size_t numLegemiddeldose;
     size_t numVirkestoffMedStyrke;
     size_t numVirkestoff;
-    size_t numKodeverk;
+    size_t numKodeverk_0_0_0;
+    size_t numKodeverk_0_3_0;
     size_t numRefusjon;
     size_t numVilkar;
     size_t numVarselSlv;
@@ -131,7 +135,9 @@ private:
     size_t numPakningsinfo;
     size_t numPrisVare;
     size_t numRefusjonList;
-    size_t numElement;
+    size_t numElement_0_0_0;
+    size_t numElement_0_3_0;
+    size_t numTerm;
     size_t numRefRefusjonsvilkar;
     size_t numRefusjonskode_0_0_0;
     size_t numRefusjonskode;
@@ -165,7 +171,8 @@ public:
     [[nodiscard]] std::vector<POppfVirkestoffMedStyrke> GetVirkestoffMedStyrke() const;
     [[nodiscard]] std::vector<POppfVirkestoff> GetVirkestoff() const;
     [[nodiscard]] std::vector<POppfRefusjon> GetOppfRefusjon() const;
-    [[nodiscard]] std::vector<POppfKodeverk> GetOppfKodeverk() const;
+    [[nodiscard]] std::vector<POppfKodeverk_0_0_0> GetOppfKodeverk_0_0_0() const;
+    [[nodiscard]] std::vector<POppfKodeverk_0_3_0> GetOppfKodeverk_0_3_0() const;
     [[nodiscard]] std::vector<PString> GetStrings() const;
     [[nodiscard]] std::vector<PPrisVare> GetPrisVare() const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfo() const;
@@ -176,7 +183,8 @@ public:
     [[nodiscard]] std::vector<FestUuid> GetFestIds() const;
     [[nodiscard]] std::vector<PFestId> GetFestIdLists() const;
     [[nodiscard]] std::vector<PRefusjon> GetRefusjon() const;
-    [[nodiscard]] std::vector<PElement> GetElement() const;
+    [[nodiscard]] std::vector<PElement_0_0_0> GetElement_0_0_0() const;
+    [[nodiscard]] std::vector<PElement_0_3_0> GetElement_0_3_0() const;
     [[nodiscard]] std::vector<PRefRefusjonsvilkar> GetRefRefusjonsvilkar() const;
     [[nodiscard]] std::vector<PRefusjonskode_0_0_0> GetRefusjonskode_0_0_0() const;
     [[nodiscard]] std::vector<PRefusjonskode> GetRefusjonskode_0_1_0() const;
@@ -197,7 +205,8 @@ public:
     void ForEachLegemiddeldose(const std::function<void (const POppfLegemiddeldose &)> &) const;
     void ForEachVirkestoffMedStyrke(const std::function<void (const POppfVirkestoffMedStyrke &)> &) const;
     void ForEachVirkestoff(const std::function<void (const POppfVirkestoff &)> &) const;
-    void ForEachKodeverk(const std::function<void (const POppfKodeverk &)> &) const;
+    void ForEachKodeverk_0_0_0(const std::function<void (const POppfKodeverk_0_0_0 &)> &) const;
+    void ForEachKodeverk_0_3_0(const std::function<void (const POppfKodeverk_0_3_0 &)> &) const;
     void ForEachRefusjon(const std::function<void (const POppfRefusjon &)> &) const;
     void ForEachVilkar(const std::function<void (const POppfVilkar &)> &) const;
     void ForEachVarselSlv(const std::function<void (const POppfVarselSlv &)> &) const;
@@ -225,6 +234,8 @@ public:
     [[nodiscard]] OppfLegemiddeldose Unpack(const POppfLegemiddeldose &poppf) const;
     [[nodiscard]] OppfVirkestoffMedStyrke Unpack(const POppfVirkestoffMedStyrke &poppf) const;
     [[nodiscard]] OppfVirkestoff Unpack(const POppfVirkestoff &poppf) const;
+    [[nodiscard]] OppfKodeverk Unpack(const POppfKodeverk_0_0_0 &poppf) const;
+    [[nodiscard]] OppfKodeverk Unpack(const POppfKodeverk_0_3_0 &poppf) const;
     [[nodiscard]] OppfKodeverk Unpack(const POppfKodeverk &poppf) const;
     [[nodiscard]] OppfRefusjon Unpack(const POppfRefusjon &poppf) const;
     [[nodiscard]] OppfVilkar Unpack(const POppfVilkar &poppf) const;
@@ -263,7 +274,8 @@ public:
     [[nodiscard]] PakningByttegruppe Unpack(const PPakningByttegruppe &pPakningByttegruppe) const;
     [[nodiscard]] ProduktInfoVare Unpack(const PProduktInfoVare &pProduktInfoVare) const;
     [[nodiscard]] Leverandor Unpack(const PLeverandor &pLeverandor) const;
-    [[nodiscard]] Element Unpack(const PElement &pElement) const;
+    [[nodiscard]] Element Unpack(const PElement_0_0_0 &pElement) const;
+    [[nodiscard]] Element Unpack(const PElement_0_3_0 &pElement) const;
     [[nodiscard]] Term Unpack(const PTerm &pTerm) const;
     [[nodiscard]] RefRefusjonsvilkar Unpack(const PRefRefusjonsvilkar &pref) const;
     [[nodiscard]] Refusjonskode Unpack(const PRefusjonskode_0_0_0 &pref) const;
@@ -278,15 +290,16 @@ public:
     [[nodiscard]] Dosering Unpack(const PDosering &pDosering) const;
     [[nodiscard]] Legemiddelforbruk Unpack(const PLegemiddelforbruk &pLegemiddelforbruk) const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfoList(const PLegemiddelpakning &) const;
-    [[nodiscard]] std::vector<PElement> GetElementList(const POppfKodeverk &) const;
+    [[nodiscard]] std::vector<PElement_0_0_0> GetElementList(const POppfKodeverk_0_0_0 &) const;
+    [[nodiscard]] std::vector<PElement_0_3_0> GetElementList(const POppfKodeverk_0_3_0 &) const;
     [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems32 &) const;
     [[nodiscard]] std::vector<FestDbQuota> GetQuotas() const;
-    template <typename T, typename S> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, const GenericListItems32 &items) const {
+    template <typename T, typename S, GenericListItemType ItemType> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, const ItemType &items) const {
         if (items.start < size) {
             std::vector<T> output{};
             S i = items.start;
-            const std::remove_const<typeof(items.size)>::type N = items.size;
-            std::remove_const<typeof(items.size)>::type n = 0;
+            const typename ItemType::int_type N = items.size;
+            typename ItemType::int_type n = 0;
             while (i < size && n < N) {
                 output.emplace_back(list[i]);
                 ++i; ++n;

@@ -19,6 +19,7 @@
 #include "Struct/Packed/PakningskomponentInfoList.h"
 #include "Struct/Packed/RefusjonList.h"
 #include "Struct/Packed/ElementList.h"
+#include "Struct/Packed/TermList.h"
 #include "Struct/Packed/RefRefusjonsvilkarList.h"
 #include "Struct/Packed/RefusjonskodeList.h"
 #include "Struct/Packed/ReferanseList.h"
@@ -102,7 +103,7 @@ struct FestSecondHeaderV0_1_0 {
     uint16_t numRefusjonskode;
 } __attribute__((__packed__));
 
-struct FestSecondHeader {
+struct FestSecondHeader_0_2_0 {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
@@ -110,6 +111,18 @@ struct FestSecondHeader {
     uint32_t numUint16NewList;
     uint16_t numFests;
     uint16_t reservedZ;
+} __attribute__((__packed__));
+
+struct FestSecondHeader {
+    uint64_t magic;
+    uint32_t stringblockSize;
+    uint16_t secondHeaderSize;
+    uint16_t numRefusjonskode;
+    uint32_t numUint16NewList;
+    uint16_t numFests;
+    uint16_t numKodeverk;
+    uint32_t numElementList;
+    uint32_t numTermList;
 } __attribute__((__packed__));
 
 struct FestTrailer {
@@ -135,7 +148,9 @@ private:
     PakningsinfoList pakningsinfoList{};
     PrisVareList prisVareList{};
     RefusjonList refusjonList{};
-    ElementList elementList{};
+    ElementList_0_0_0 elementList_0_0_0{};
+    ElementList_0_3_0 elementList_0_3_0{};
+    TermList termList{};
     RefRefusjonsvilkarList refRefusjonsvilkarList{};
     RefusjonskodeList_0_0_0 refusjonskodeList_0_0_0{};
     RefusjonskodeList refusjonskodeList{};
@@ -157,7 +172,8 @@ private:
     std::vector<POppfLegemiddeldose> legemiddeldose{};
     std::vector<POppfVirkestoffMedStyrke> virkestoffMedStyrke{};
     std::vector<POppfVirkestoff> virkestoff{};
-    std::vector<POppfKodeverk> kodeverk{};
+    std::vector<POppfKodeverk_0_0_0> kodeverk_0_0_0{};
+    std::vector<POppfKodeverk_0_3_0> kodeverk_0_3_0{};
     std::vector<POppfRefusjon> refusjon{};
     std::vector<POppfVilkar> vilkar{};
     std::vector<POppfVarselSlv> varselSlv{};

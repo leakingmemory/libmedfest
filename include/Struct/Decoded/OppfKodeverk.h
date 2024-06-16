@@ -10,10 +10,12 @@
 #include "Element.h"
 #include <vector>
 
-class POppfKodeverk;
+class POppfKodeverk_0_0_0;
+class POppfKodeverk_0_3_0;
 
 class OppfKodeverk : public Oppf {
-    friend POppfKodeverk;
+    friend POppfKodeverk_0_0_0;
+    friend POppfKodeverk_0_3_0;
 private:
     Info info;
     std::vector<Element> element;

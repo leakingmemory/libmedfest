@@ -83,7 +83,7 @@ void FestDeserializer::Init() {
             std::cerr << "Error: Major version " << version.major << " can not be read\n";
             throw PackException("Major version of file");
         }
-        if (version.minor > 2) {
+        if (version.minor > 3) {
             std::cerr << "Warning: Minor version " << version.minor << " contains unsupported data (ignored)\n";
         }
         if (version.minor >= 1) {
@@ -212,9 +212,9 @@ void FestDeserializer::Init() {
             offset += off;
         }
     }
-    kodeverk = (POppfKodeverk *) (void *) (((uint8_t *) mapping) + offset);
-    numKodeverk = header->numKodeverk;
-    offset += ((size_t) numKodeverk) * sizeof(*kodeverk);
+    kodeverk_0_0_0 = (POppfKodeverk_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+    numKodeverk_0_0_0 = header->numKodeverk;
+    offset += ((size_t) numKodeverk_0_0_0) * sizeof(*kodeverk_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -382,9 +382,9 @@ void FestDeserializer::Init() {
             offset += off;
         }
     }
-    elementList = (const PElement *) (void *) (((uint8_t *) mapping) + offset);
-    numElement = header->numElement;
-    offset += ((size_t) numElement) * sizeof(*elementList);
+    elementList_0_0_0 = (const PElement_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+    numElement_0_0_0 = header->numElement;
+    offset += ((size_t) numElement_0_0_0) * sizeof(*elementList_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -540,7 +540,8 @@ void FestDeserializer::Init() {
             }
             fests = (const PFest *) (void *) (((uint8_t *) mapping) + offset);
             numFests = secondHeader->numFests;
-            if ((offset + (sizeof(*fests) * numFests)) > mapsize) {
+            offset += sizeof(*fests) * ((size_t)numFests);
+            if (offset > mapsize) {
                 throw PackException("Fest list overflow (v0.2.0)");
             }
         } else {
@@ -549,6 +550,48 @@ void FestDeserializer::Init() {
             fests = nullptr;
             numFests = 0;
         }
+        if (versionMinor > 2) {
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            elementList_0_3_0 = (const PElement_0_3_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numElement_0_3_0 = secondHeader->numElementList;
+            offset += ((size_t) numElement_0_3_0) * sizeof(*elementList_0_3_0);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            termList = (const PTerm *) (void *) (((uint8_t *) mapping) + offset);
+            numTerm = secondHeader->numTermList;
+            offset += ((size_t) numTerm) * sizeof(*termList);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            kodeverk_0_3_0 = (const POppfKodeverk_0_3_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numKodeverk_0_3_0 = secondHeader->numKodeverk;
+            offset += ((size_t) numKodeverk_0_3_0) * sizeof(*kodeverk_0_3_0);
+            if (offset > mapsize) {
+                throw PackException("Fest list overflow (v0.3.0)");
+            }
+        } else {
+            elementList_0_3_0 = nullptr;
+            numElement_0_3_0 = 0;
+            termList = nullptr;
+            numTerm = 0;
+            kodeverk_0_3_0 = nullptr;
+            numKodeverk_0_3_0 = 0;
+        }
     } else {
         refusjonskodeList = nullptr;
         numRefusjonskode = 0;
@@ -556,6 +599,12 @@ void FestDeserializer::Init() {
         numUint16List = 0;
         fests = nullptr;
         numFests = 0;
+        elementList_0_3_0 = nullptr;
+        numElement_0_3_0 = 0;
+        termList = nullptr;
+        numTerm = 0;
+        kodeverk_0_3_0 = nullptr;
+        numKodeverk_0_3_0 = 0;
     }
 }
 
@@ -657,10 +706,18 @@ std::vector<POppfRefusjon> FestDeserializer::GetOppfRefusjon() const {
     return result;
 }
 
-std::vector<POppfKodeverk> FestDeserializer::GetOppfKodeverk() const {
-    std::vector<POppfKodeverk> result{};
-    for (std::remove_const<typeof(numKodeverk)>::type i = 0; i < numKodeverk; i++) {
-        result.emplace_back(this->kodeverk[i]);
+std::vector<POppfKodeverk_0_0_0> FestDeserializer::GetOppfKodeverk_0_0_0() const {
+    std::vector<POppfKodeverk_0_0_0> result{};
+    for (std::remove_const<typeof(numKodeverk_0_0_0)>::type i = 0; i < numKodeverk_0_0_0; i++) {
+        result.emplace_back(this->kodeverk_0_0_0[i]);
+    }
+    return result;
+}
+
+std::vector<POppfKodeverk_0_3_0> FestDeserializer::GetOppfKodeverk_0_3_0() const {
+    std::vector<POppfKodeverk_0_3_0> result{};
+    for (std::remove_const<typeof(numKodeverk_0_3_0)>::type i = 0; i < numKodeverk_0_3_0; i++) {
+        result.emplace_back(this->kodeverk_0_3_0[i]);
     }
     return result;
 }
@@ -763,11 +820,20 @@ std::vector<PRefusjon> FestDeserializer::GetRefusjon() const {
     return refusjon;
 }
 
-std::vector<PElement> FestDeserializer::GetElement() const {
-    std::vector<PElement> element{};
-    element.reserve(numElement);
-    for (std::remove_const<typeof(numElement)>::type i = 0; i < numElement; i++) {
-        element.emplace_back(this->elementList[i]);
+std::vector<PElement_0_0_0> FestDeserializer::GetElement_0_0_0() const {
+    std::vector<PElement_0_0_0> element{};
+    element.reserve(numElement_0_0_0);
+    for (std::remove_const<typeof(numElement_0_0_0)>::type i = 0; i < numElement_0_0_0; i++) {
+        element.emplace_back(this->elementList_0_0_0[i]);
+    }
+    return element;
+}
+
+std::vector<PElement_0_3_0> FestDeserializer::GetElement_0_3_0() const {
+    std::vector<PElement_0_3_0> element{};
+    element.reserve(numElement_0_3_0);
+    for (std::remove_const<typeof(numElement_0_3_0)>::type i = 0; i < numElement_0_3_0; i++) {
+        element.emplace_back(this->elementList_0_3_0[i]);
     }
     return element;
 }
@@ -932,9 +998,15 @@ void FestDeserializer::ForEachVirkestoff(const std::function<void(const POppfVir
     }
 }
 
-void FestDeserializer::ForEachKodeverk(const std::function<void(const POppfKodeverk &)> &func) const {
-    for (std::remove_const<typeof(numKodeverk)>::type i = 0; i < numKodeverk; i++) {
-        func(this->kodeverk[i]);
+void FestDeserializer::ForEachKodeverk_0_0_0(const std::function<void(const POppfKodeverk_0_0_0 &)> &func) const {
+    for (std::remove_const<typeof(numKodeverk_0_0_0)>::type i = 0; i < numKodeverk_0_0_0; i++) {
+        func(this->kodeverk_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachKodeverk_0_3_0(const std::function<void(const POppfKodeverk_0_3_0 &)> &func) const {
+    for (std::remove_const<typeof(numKodeverk_0_3_0)>::type i = 0; i < numKodeverk_0_3_0; i++) {
+        func(this->kodeverk_0_3_0[i]);
     }
 }
 
@@ -1089,7 +1161,7 @@ OppfVirkestoff FestDeserializer::Unpack(const POppfVirkestoff &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVirkestoff>(poppf))};
 }
 
-OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk &poppf) const {
+OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk_0_0_0 &poppf) const {
     std::vector<Element> element{};
     {
         auto list = GetElementList(poppf);
@@ -1098,6 +1170,25 @@ OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk &poppf) const {
         }
     }
     return {Unpack(static_cast<POppf>(poppf)), Unpack(static_cast<PInfo>(poppf)), element};
+}
+
+OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk_0_3_0 &poppf) const {
+    std::vector<Element> element{};
+    {
+        auto list = GetElementList(poppf);
+        for (const auto &item : list) {
+            element.emplace_back(Unpack(item));
+        }
+    }
+    return {Unpack(static_cast<POppf>(poppf)), Unpack(static_cast<PInfo>(poppf)), element};
+}
+
+OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk &poppf) const {
+    if (std::holds_alternative<POppfKodeverk_0_3_0>(poppf)) {
+        return Unpack(std::get<POppfKodeverk_0_3_0>(poppf));
+    } else {
+        return Unpack(std::get<POppfKodeverk_0_0_0>(poppf));
+    }
 }
 
 OppfRefusjon FestDeserializer::Unpack(const POppfRefusjon &poppf) const {
@@ -1586,11 +1677,26 @@ Leverandor FestDeserializer::Unpack(const PLeverandor &pLeverandor) const {
     };
 }
 
-Element FestDeserializer::Unpack(const PElement &pElement) const {
+Element FestDeserializer::Unpack(const PElement_0_0_0 &pElement) const {
     return {
         Unpack(pElement.id),
         Unpack(pElement.kode),
         { Unpack(static_cast<PTerm>(pElement)) }
+    };
+}
+
+Element FestDeserializer::Unpack(const PElement_0_3_0 &pElement) const {
+    std::vector<Term> terms{};
+    {
+        std::vector<PTerm> pTerms = Unpack(termList, numTerm, pElement.term);
+        for (const auto &pTerm : pTerms) {
+            terms.emplace_back(Unpack(pTerm));
+        }
+    }
+    return {
+            Unpack(pElement.id),
+            Unpack(pElement.kode),
+            terms
     };
 }
 
@@ -1787,8 +1893,12 @@ std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemidd
     return Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
 }
 
-std::vector<PElement> FestDeserializer::GetElementList(const POppfKodeverk &pkodeverk) const {
-    return Unpack(elementList, numElement, pkodeverk.elements);;
+std::vector<PElement_0_0_0> FestDeserializer::GetElementList(const POppfKodeverk_0_0_0 &pkodeverk) const {
+    return Unpack(elementList_0_0_0, numElement_0_0_0, pkodeverk.elements);;
+}
+
+std::vector<PElement_0_3_0> FestDeserializer::GetElementList(const POppfKodeverk_0_3_0 &pkodeverk) const {
+    return Unpack(elementList_0_3_0, numElement_0_3_0, pkodeverk.elements);;
 }
 
 std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems32 &items) const {
@@ -1830,7 +1940,8 @@ std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
     Quota(quotas, "Legemiddeldose", numLegemiddeldose);
     Quota(quotas, "Virkestoff med styrke", numVirkestoffMedStyrke);
     Quota(quotas, "Virkestoff", numVirkestoff);
-    Quota(quotas, "Kodeverk", numKodeverk);
+    Quota(quotas, "Kodeverk v0.0.0", numKodeverk_0_0_0);
+    Quota(quotas, "Kodeverk v0.3.0", numKodeverk_0_3_0);
     Quota(quotas, "Refusjon", numRefusjon);
     Quota(quotas, "Vilkar", numVilkar);
     Quota(quotas, "Varsel slv", numVarselSlv);
@@ -1847,7 +1958,9 @@ std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
     Quota(quotas, "Pakningsinfo", numPakningsinfo, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Pris vare", numPrisVare, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Refusjon list", numRefusjonList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
-    Quota(quotas, "Element", numElement, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Element 0.0.0", numElement_0_0_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Element 0.3.0", numElement_0_3_0, min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()), min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()));
+    Quota(quotas, "Term", numTerm, min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()), min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()));
     Quota(quotas, "Ref refusjonsvilkar", numRefRefusjonsvilkar, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Refusjonskode 0.0.0", numRefusjonskode_0_0_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Refusjonskode", numRefusjonskode, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));

@@ -10,13 +10,20 @@
 
 class FestDeserializerPreloader;
 
-class ElementList : private GenericListStorage32<PElement> {
+class ElementList_0_0_0 : private GenericListStorage32<PElement_0_0_0> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems32 StoreList(const std::vector<PElement> &elements);
-    std::vector<PElement> GetStorageList() const;
+    GenericListItems32 StoreList(const std::vector<PElement_0_0_0> &elements);
+    std::vector<PElement_0_0_0> GetStorageList() const;
     size_t size() const;
 };
 
+class ElementList_0_3_0 : private GenericListStorage64<PElement_0_3_0> {
+    friend FestDeserializerPreloader;
+public:
+    GenericListItems64 StoreList(const std::vector<PElement_0_3_0> &elements);
+    std::vector<PElement_0_3_0> GetStorageList() const;
+    size_t size() const;
+};
 
 #endif //LEGEMFEST_ELEMENTLIST_H

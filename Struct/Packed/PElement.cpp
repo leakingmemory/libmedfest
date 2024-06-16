@@ -4,6 +4,7 @@
 
 #include <Struct/Packed/PElement.h>
 #include <Struct/Packed/FestUuid.h>
+#include <Struct/Packed/TermList.h>
 #include <Struct/Decoded/Element.h>
 
 template <class T> constexpr T LastItemOf(std::vector<T> vec) {
@@ -14,15 +15,36 @@ template <class T> constexpr T LastItemOf(std::vector<T> vec) {
     return {};
 }
 
-PElement::PElement(const Element &element, std::string &strblock, std::map<std::string, uint32_t> &cache) :
+PElement_0_0_0::PElement_0_0_0(const Element &element, std::string &strblock, std::map<std::string, uint32_t> &cache) :
         PTerm(LastItemOf(element.GetTerm()), strblock, cache),
         id(element.GetId(), strblock, cache),
         kode(element.GetKode(), strblock, cache)
 {
 }
 
-bool PElement::operator==(const PElement &other) const {
+bool PElement_0_0_0::operator==(const PElement_0_0_0 &other) const {
     return PTerm::operator==(other) &&
             id == other.id &&
             kode == other.kode;
+}
+
+PElement_0_3_0::PElement_0_3_0(const Element &element, TermList &termList, std::string &strblock, std::map<std::string, uint32_t> &cache) :
+        id(element.GetId(), strblock, cache),
+        kode(element.GetKode(), strblock, cache),
+        term()
+{
+    std::vector<PTerm> terms{};
+    {
+        auto dTerms = element.GetTerm();
+        for (const auto &dt : dTerms) {
+            terms.emplace_back(dt, strblock, cache);
+        }
+    }
+    term = termList.StoreList(terms);
+}
+
+bool PElement_0_3_0::operator==(const PElement_0_3_0 &other) const {
+    return id == other.id &&
+           kode == other.kode &&
+           term == other.term;
 }

@@ -10,14 +10,14 @@ add_library(packed OBJECT PackException.cpp PFestId.cpp PString.cpp FestUuid.cpp
         PLegemiddelVirkestoff.cpp POppfLegemiddelVirkestoff.cpp RefusjonList.cpp PHandelsvare.cpp PProduktInfoVare.cpp
         PLeverandor.cpp POppfHandelsvare.cpp StringList.cpp PLegemiddeldose.cpp PakningskomponentInfoList.cpp
         POppfLegemiddeldose.cpp PVirkestoffMedStyrke.cpp POppfVirkestoffMedStyrke.cpp PVirkestoff.cpp
-        POppfVirkestoff.cpp PInfo.cpp PTerm.cpp POppfKodeverk.cpp PElement.cpp ElementList.cpp PRefRefusjonsvilkar.cpp
-        PRefusjonsgruppe.cpp RefRefusjonsvilkarList.cpp PRefusjonshjemmel.cpp POppfRefusjon.cpp PRefusjonskode.cpp
-        RefusjonskodeList.cpp PStrukturertVilkar.cpp PVilkar.cpp POppfVilkar.cpp PReferanseelement.cpp PVarselSlv.cpp
-        POppfVarselSlv.cpp PByttegruppe.cpp POppfByttegruppe.cpp PInteraksjon.cpp PReferanse.cpp ReferanseList.cpp
-        PSubstans.cpp SubstansList.cpp PSubstansgruppe.cpp POppfInteraksjon.cpp SubstansgruppeList.cpp
-        PInteraksjonIkkeVurdert.cpp POppfInteraksjonIkkeVurdert.cpp PDoseFastTidspunkt.cpp DoseFastTidspunktList.cpp
-        PDosering.cpp DoseringList.cpp PLegemiddelforbruk.cpp LegemiddelforbrukList.cpp PKortdose.cpp
-        POppfStrDosering.cpp PFest.cpp Uint16List.cpp)
+        POppfVirkestoff.cpp PInfo.cpp PTerm.cpp POppfKodeverk.cpp POppfKodeverk_convert.cpp PElement.cpp ElementList.cpp
+        PRefRefusjonsvilkar.cpp PRefusjonsgruppe.cpp RefRefusjonsvilkarList.cpp PRefusjonshjemmel.cpp POppfRefusjon.cpp
+        PRefusjonskode.cpp RefusjonskodeList.cpp PStrukturertVilkar.cpp PVilkar.cpp POppfVilkar.cpp
+        PReferanseelement.cpp PVarselSlv.cpp POppfVarselSlv.cpp PByttegruppe.cpp POppfByttegruppe.cpp PInteraksjon.cpp
+        PReferanse.cpp ReferanseList.cpp PSubstans.cpp SubstansList.cpp PSubstansgruppe.cpp POppfInteraksjon.cpp
+        SubstansgruppeList.cpp PInteraksjonIkkeVurdert.cpp POppfInteraksjonIkkeVurdert.cpp PDoseFastTidspunkt.cpp
+        DoseFastTidspunktList.cpp PDosering.cpp DoseringList.cpp PLegemiddelforbruk.cpp LegemiddelforbrukList.cpp
+        PKortdose.cpp POppfStrDosering.cpp PFest.cpp Uint16List.cpp TermList.cpp)
 
 include_directories(packed ${Boost_INCLUDE_DIRS} )
 include_directories(packed ../../include)

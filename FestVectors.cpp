@@ -191,6 +191,26 @@ std::vector<POppfRefusjon> FestVectors::GetRefusjon(const FestDeserializer &fest
     AsVector(refusjon, GetOppfRefusjon);
 }
 
+std::vector<POppfKodeverk_0_0_0> FestVectors::GetKodeverk_0_0_0(const FestDeserializer &festDeserializer) const {
+    AsVector(kodeverk, GetOppfKodeverk_0_0_0);
+}
+
+std::vector<POppfKodeverk_0_3_0> FestVectors::GetKodeverk_0_3_0(const FestDeserializer &festDeserializer) const {
+    AsVector(kodeverk, GetOppfKodeverk_0_3_0);
+}
+
 std::vector<POppfKodeverk> FestVectors::GetKodeverk(const FestDeserializer &festDeserializer) const {
-    AsVector(kodeverk, GetOppfKodeverk);
+    std::vector<POppfKodeverk> kodeverk{};
+    if (festDeserializer.GetVersionMajor() > 0 || festDeserializer.GetVersionMinor() > 2) {
+        auto kodeverk_0_3_0 = GetKodeverk_0_3_0(festDeserializer);
+        for (const auto &k : kodeverk_0_3_0) {
+            kodeverk.emplace_back(k);
+        }
+    } else {
+        auto kodeverk_0_0_0 = GetKodeverk_0_0_0(festDeserializer);
+        for (const auto &k : kodeverk_0_0_0) {
+            kodeverk.emplace_back(k);
+        }
+    }
+    return kodeverk;
 }

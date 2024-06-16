@@ -52,7 +52,7 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     PL(festSerializer.legemiddeldose, legemiddeldose, numLegemiddeldose);
     PL(festSerializer.virkestoffMedStyrke, virkestoffMedStyrke, numVirkestoffMedStyrke);
     PL(festSerializer.virkestoff, virkestoff, numVirkestoff);
-    PL(festSerializer.kodeverk, kodeverk, numKodeverk);
+    PL(festSerializer.kodeverk_0_0_0, kodeverk_0_0_0, numKodeverk_0_0_0);
     PL(festSerializer.refusjon, refusjon, numRefusjon);
     PL(festSerializer.vilkar, vilkar, numVilkar);
     PL(festSerializer.varselSlv, varselSlv, numVarselSlv);
@@ -79,7 +79,9 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     preloader.Preload(festSerializer.pakningsinfoList, pakningsinfoList, numPakningsinfo);
     preloader.Preload(festSerializer.prisVareList, prisVareList, numPrisVare);
     preloader.Preload(festSerializer.refusjonList, refusjonList, numRefusjonList);
-    preloader.Preload(festSerializer.elementList, elementList, numElement);
+    preloader.Preload(festSerializer.elementList_0_0_0, elementList_0_0_0, numElement_0_0_0);
+    preloader.Preload(festSerializer.elementList_0_3_0, elementList_0_3_0, numElement_0_3_0);
+    preloader.Preload(festSerializer.termList, termList, numTerm);
     preloader.Preload(festSerializer.refRefusjonsvilkarList, refRefusjonsvilkarList, numRefRefusjonsvilkar);
     preloader.Preload(static_cast<GenericListStorage32<PRefusjonskode_0_0_0> &>(festSerializer.refusjonskodeList_0_0_0), refusjonskodeList_0_0_0, numRefusjonskode_0_0_0);
     if (versionMajor > 0 || versionMinor >= 1) {
@@ -109,5 +111,14 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
         if (festSerializer.stringblockCache.find(str) == festSerializer.stringblockCache.end()) {
             festSerializer.stringblockCache.insert_or_assign(str, pstr.offset);
         }
+    }
+    if (versionMajor > 0 || versionMinor >= 3) {
+        PL(festSerializer.kodeverk_0_3_0, kodeverk_0_3_0, numKodeverk_0_3_0);
+    } else {
+        std::function<POppfKodeverk_0_3_0 (const POppfKodeverk_0_0_0 &)> convert{[this, &festSerializer] (const POppfKodeverk_0_0_0 &src) {
+            POppfKodeverk_0_3_0 dst{src, *this, festSerializer.elementList_0_3_0, festSerializer.termList, festSerializer.stringblock, festSerializer.stringblockCache};
+            return dst;
+        }};
+        PL(festSerializer.kodeverk_0_3_0, kodeverk_0_0_0, numKodeverk_0_0_0, convert);
     }
 }

@@ -18,6 +18,8 @@ class POppfLegemiddeldose;
 class POppfVirkestoffMedStyrke;
 class POppfVirkestoff;
 class POppfRefusjon;
+class POppfKodeverk_0_0_0;
+class POppfKodeverk_0_3_0;
 class POppfKodeverk;
 
 class FestVectors {
@@ -57,6 +59,8 @@ public:
     [[nodiscard]] std::vector<POppfVirkestoffMedStyrke> GetVirkestoffMedStyrke(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfVirkestoff> GetVirkestoff(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfRefusjon> GetRefusjon(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfKodeverk_0_0_0> GetKodeverk_0_0_0(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfKodeverk_0_3_0> GetKodeverk_0_3_0(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfKodeverk> GetKodeverk(const FestDeserializer &) const;
 };
 

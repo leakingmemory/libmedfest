@@ -8,6 +8,7 @@
 #include "PTerm.h"
 #include "PFestId.h"
 #include "GenericListStorage.h"
+#include <variant>
 
 class FestDeserializer;
 class Element;
@@ -32,6 +33,13 @@ private:
 public:
     PElement_0_3_0(const Element &, TermList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PElement_0_3_0 &other) const;
+};
+
+class PElement : public std::variant<PElement_0_0_0,PElement_0_3_0> {
+public:
+    PElement() = delete;
+    explicit PElement(const PElement_0_0_0 &);
+    explicit PElement(const PElement_0_3_0 &);
 };
 
 #endif //LEGEMFEST_PELEMENT_H

@@ -185,6 +185,7 @@ public:
     [[nodiscard]] std::vector<PRefusjon> GetRefusjon() const;
     [[nodiscard]] std::vector<PElement_0_0_0> GetElement_0_0_0() const;
     [[nodiscard]] std::vector<PElement_0_3_0> GetElement_0_3_0() const;
+    [[nodiscard]] std::vector<PElement> GetElement() const;
     [[nodiscard]] std::vector<PRefRefusjonsvilkar> GetRefRefusjonsvilkar() const;
     [[nodiscard]] std::vector<PRefusjonskode_0_0_0> GetRefusjonskode_0_0_0() const;
     [[nodiscard]] std::vector<PRefusjonskode> GetRefusjonskode_0_1_0() const;
@@ -207,6 +208,7 @@ public:
     void ForEachVirkestoff(const std::function<void (const POppfVirkestoff &)> &) const;
     void ForEachKodeverk_0_0_0(const std::function<void (const POppfKodeverk_0_0_0 &)> &) const;
     void ForEachKodeverk_0_3_0(const std::function<void (const POppfKodeverk_0_3_0 &)> &) const;
+    void ForEachKodeverk(const std::function<void (const POppfKodeverk &)> &) const;
     void ForEachRefusjon(const std::function<void (const POppfRefusjon &)> &) const;
     void ForEachVilkar(const std::function<void (const POppfVilkar &)> &) const;
     void ForEachVarselSlv(const std::function<void (const POppfVarselSlv &)> &) const;
@@ -276,6 +278,7 @@ public:
     [[nodiscard]] Leverandor Unpack(const PLeverandor &pLeverandor) const;
     [[nodiscard]] Element Unpack(const PElement_0_0_0 &pElement) const;
     [[nodiscard]] Element Unpack(const PElement_0_3_0 &pElement) const;
+    [[nodiscard]] Element Unpack(const PElement &pElement) const;
     [[nodiscard]] Term Unpack(const PTerm &pTerm) const;
     [[nodiscard]] RefRefusjonsvilkar Unpack(const PRefRefusjonsvilkar &pref) const;
     [[nodiscard]] Refusjonskode Unpack(const PRefusjonskode_0_0_0 &pref) const;
@@ -292,6 +295,7 @@ public:
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfoList(const PLegemiddelpakning &) const;
     [[nodiscard]] std::vector<PElement_0_0_0> GetElementList(const POppfKodeverk_0_0_0 &) const;
     [[nodiscard]] std::vector<PElement_0_3_0> GetElementList(const POppfKodeverk_0_3_0 &) const;
+    [[nodiscard]] std::vector<PElement> GetElementList(const POppfKodeverk &) const;
     [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems32 &) const;
     [[nodiscard]] std::vector<FestDbQuota> GetQuotas() const;
     template <typename T, typename S, GenericListItemType ItemType> [[nodiscard]] std::vector<T> Unpack(const T *list, S size, const ItemType &items) const {

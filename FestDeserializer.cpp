@@ -838,6 +838,24 @@ std::vector<PElement_0_3_0> FestDeserializer::GetElement_0_3_0() const {
     return element;
 }
 
+std::vector<PElement> FestDeserializer::GetElement() const {
+    std::vector<PElement> element{};
+    if (GetVersionMajor() > 0 || GetVersionMinor() > 2) {
+        auto element_0_3_0 = GetElement_0_3_0();
+        element.reserve(element_0_3_0.size());
+        for (const auto &e : element_0_3_0) {
+            element.emplace_back(e);
+        }
+    } else {
+        auto element_0_0_0 = GetElement_0_0_0();
+        element.reserve(element_0_0_0.size());
+        for (const auto &e : element_0_0_0) {
+            element.emplace_back(e);
+        }
+    }
+    return element;
+}
+
 std::vector<PRefRefusjonsvilkar> FestDeserializer::GetRefRefusjonsvilkar() const {
     std::vector<PRefRefusjonsvilkar> refRefusjonsvilkar{};
     refRefusjonsvilkar.reserve(numRefRefusjonsvilkar);
@@ -1007,6 +1025,20 @@ void FestDeserializer::ForEachKodeverk_0_0_0(const std::function<void(const POpp
 void FestDeserializer::ForEachKodeverk_0_3_0(const std::function<void(const POppfKodeverk_0_3_0 &)> &func) const {
     for (std::remove_const<typeof(numKodeverk_0_3_0)>::type i = 0; i < numKodeverk_0_3_0; i++) {
         func(this->kodeverk_0_3_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachKodeverk(const std::function<void(const POppfKodeverk &)> &func) const {
+    if (GetVersionMajor() > 0 || GetVersionMinor() > 2) {
+        ForEachKodeverk_0_3_0([&func] (const auto &k) {
+            POppfKodeverk kodeverk{k};
+            func(kodeverk);
+        });
+    } else {
+        ForEachKodeverk_0_0_0([&func] (const auto &k) {
+            POppfKodeverk kodeverk{k};
+            func(kodeverk);
+        });
     }
 }
 
@@ -1700,6 +1732,14 @@ Element FestDeserializer::Unpack(const PElement_0_3_0 &pElement) const {
     };
 }
 
+Element FestDeserializer::Unpack(const PElement &pElement) const {
+    if (std::holds_alternative<PElement_0_3_0>(pElement)) {
+        return Unpack(std::get<PElement_0_3_0>(pElement));
+    } else {
+        return Unpack(std::get<PElement_0_0_0>(pElement));
+    }
+}
+
 Term FestDeserializer::Unpack(const PTerm &pTerm) const {
    return {
        Unpack(pTerm.term),
@@ -1899,6 +1939,24 @@ std::vector<PElement_0_0_0> FestDeserializer::GetElementList(const POppfKodeverk
 
 std::vector<PElement_0_3_0> FestDeserializer::GetElementList(const POppfKodeverk_0_3_0 &pkodeverk) const {
     return Unpack(elementList_0_3_0, numElement_0_3_0, pkodeverk.elements);;
+}
+
+std::vector<PElement> FestDeserializer::GetElementList(const POppfKodeverk &kodeverk) const {
+    std::vector<PElement> element{};
+    if (std::holds_alternative<POppfKodeverk_0_3_0>(kodeverk)) {
+        auto element_0_3_0 = GetElementList(std::get<POppfKodeverk_0_3_0>(kodeverk));
+        element.reserve(element_0_3_0.size());
+        for (const auto &e : element_0_3_0) {
+            element.emplace_back(e);
+        }
+    } else {
+        auto element_0_0_0 = GetElementList(std::get<POppfKodeverk_0_0_0>(kodeverk));
+        element.reserve(element_0_0_0.size());
+        for (const auto &e : element_0_0_0) {
+            element.emplace_back(e);
+        }
+    }
+    return element;
 }
 
 std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems32 &items) const {

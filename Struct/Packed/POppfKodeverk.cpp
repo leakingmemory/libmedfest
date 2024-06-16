@@ -45,10 +45,30 @@ bool POppfKodeverk_0_3_0::operator==(const POppfKodeverk_0_3_0 &other) const {
            elements == other.elements;
 }
 
-POppfKodeverk::POppfKodeverk(const POppfKodeverk_0_0_0 &oppf) : std::variant<POppfKodeverk_0_0_0,POppfKodeverk_0_3_0>(oppf)
+POppfKodeverk::POppfKodeverk(const POppfKodeverk_0_0_0 &oppf) :
+            std::variant<POppfKodeverk_0_0_0,POppfKodeverk_0_3_0>(oppf),
+            POppf(static_cast<const POppf &>(oppf)),
+            PInfo(static_cast<const PInfo &>(oppf))
 {
 }
 
-POppfKodeverk::POppfKodeverk(const POppfKodeverk_0_3_0 &oppf) : std::variant<POppfKodeverk_0_0_0,POppfKodeverk_0_3_0>(oppf)
+POppfKodeverk::POppfKodeverk(const POppfKodeverk_0_3_0 &oppf) :
+            std::variant<POppfKodeverk_0_0_0,POppfKodeverk_0_3_0>(oppf),
+            POppf(static_cast<const POppf &>(oppf)),
+            PInfo(static_cast<const PInfo &>(oppf))
 {
+}
+
+bool POppfKodeverk::operator==(const POppfKodeverk &other) const {
+    if (std::holds_alternative<POppfKodeverk_0_3_0>(*this)) {
+        if (!std::holds_alternative<POppfKodeverk_0_3_0>(other)) {
+            return false;
+        }
+        return std::get<POppfKodeverk_0_3_0>(*this).operator==(std::get<POppfKodeverk_0_3_0>(other));
+    } else {
+        if (std::holds_alternative<POppfKodeverk_0_3_0>(other)) {
+            return false;
+        }
+        return std::get<POppfKodeverk_0_0_0>(*this).operator==(std::get<POppfKodeverk_0_0_0>(other));
+    }
 }

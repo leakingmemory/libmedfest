@@ -322,7 +322,7 @@ int main() {
         AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
         auto atc1element = atc1.GetElement();
         AssertSize(atc1element, 2);
-        auto atc1element0term = atc1element[0].GetTerm();
+        auto atc1element0term = atc1element[0].GetTermList();
         AssertSize(atc1element0term, 2);
         AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
         AssertEquals(atc1element0term[1].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -346,7 +346,7 @@ int main() {
         AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
         auto atc1element = atc1.GetElement();
         AssertSize(atc1element, 2);
-        auto atc1element0term = atc1element[0].GetTerm();
+        auto atc1element0term = atc1element[0].GetTermList();
         AssertSize(atc1element0term, 2);
         AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
         AssertEquals(atc1element0term[1].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -370,7 +370,7 @@ int main() {
         AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
         auto atc1element = atc1.GetElement();
         AssertSize(atc1element, 2);
-        auto atc1element0term = atc1element[0].GetTerm();
+        auto atc1element0term = atc1element[0].GetTermList();
         AssertSize(atc1element0term, 1);
         AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
         AssertEquals(atc1element[1].GetKode(), "A11HA03");
@@ -393,7 +393,7 @@ int main() {
         AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
         auto atc1element = atc1.GetElement();
         AssertSize(atc1element, 2);
-        auto atc1element0term = atc1element[0].GetTerm();
+        auto atc1element0term = atc1element[0].GetTermList();
         AssertSize(atc1element0term, 1);
         AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
         AssertEquals(atc1element[1].GetKode(), "A11HA03");
@@ -416,7 +416,7 @@ int main() {
         AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
         auto atc1element = atc1.GetElement();
         AssertSize(atc1element, 2);
-        auto atc1element0term = atc1element[0].GetTerm();
+        auto atc1element0term = atc1element[0].GetTermList();
         AssertSize(atc1element0term, 1);
         AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
         AssertEquals(atc1element[1].GetKode(), "A11HA03");
@@ -488,8 +488,8 @@ int main() {
                 auto atc2element = atc2.GetElement();
                 AssertSize(atc1element, 2);
                 AssertSize(atc2element, 2);
-                auto atc1element0term = atc1element[0].GetTerm();
-                auto atc2element0term = atc2element[0].GetTerm();
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
                 AssertSize(atc1element0term, 2);
                 AssertSize(atc2element0term, 2);
                 AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
@@ -533,8 +533,8 @@ int main() {
                 auto atc2element = atc2.GetElement();
                 AssertSize(atc1element, 2);
                 AssertSize(atc2element, 2);
-                auto atc1element0term = atc1element[0].GetTerm();
-                auto atc2element0term = atc2element[0].GetTerm();
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
                 AssertSize(atc1element0term, 2);
                 AssertSize(atc2element0term, 2);
                 AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
@@ -578,8 +578,8 @@ int main() {
                 auto atc2element = atc2.GetElement();
                 AssertSize(atc1element, 2);
                 AssertSize(atc2element, 2);
-                auto atc1element0term = atc1element[0].GetTerm();
-                auto atc2element0term = atc2element[0].GetTerm();
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
                 AssertSize(atc1element0term, 1);
                 AssertSize(atc2element0term, 1);
                 AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -619,8 +619,8 @@ int main() {
                 auto atc2element = atc2.GetElement();
                 AssertSize(atc1element, 2);
                 AssertSize(atc2element, 2);
-                auto atc1element0term = atc1element[0].GetTerm();
-                auto atc2element0term = atc2element[0].GetTerm();
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
                 AssertSize(atc1element0term, 1);
                 AssertSize(atc2element0term, 1);
                 AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -660,8 +660,8 @@ int main() {
                 auto atc2element = atc2.GetElement();
                 AssertSize(atc1element, 2);
                 AssertSize(atc2element, 2);
-                auto atc1element0term = atc1element[0].GetTerm();
-                auto atc2element0term = atc2element[0].GetTerm();
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
                 AssertSize(atc1element0term, 1);
                 AssertSize(atc2element0term, 1);
                 AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -718,8 +718,8 @@ int main() {
                     auto atc2element = atc2.GetElement();
                     AssertSize(atc1element, 2);
                     AssertSize(atc2element, 2);
-                    auto atc1element0term = atc1element[0].GetTerm();
-                    auto atc2element0term = atc2element[0].GetTerm();
+                    auto atc1element0term = atc1element[0].GetTermList();
+                    auto atc2element0term = atc2element[0].GetTermList();
                     AssertSize(atc1element0term, 1);
                     AssertSize(atc2element0term, 1);
                     AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -762,8 +762,8 @@ int main() {
                     auto atc2element = atc2.GetElement();
                     AssertSize(atc1element, 2);
                     AssertSize(atc2element, 2);
-                    auto atc1element0term = atc1element[0].GetTerm();
-                    auto atc2element0term = atc2element[0].GetTerm();
+                    auto atc1element0term = atc1element[0].GetTermList();
+                    auto atc2element0term = atc2element[0].GetTermList();
                     AssertSize(atc1element0term, 1);
                     AssertSize(atc2element0term, 1);
                     AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -806,8 +806,8 @@ int main() {
                     auto atc2element = atc2.GetElement();
                     AssertSize(atc1element, 2);
                     AssertSize(atc2element, 2);
-                    auto atc1element0term = atc1element[0].GetTerm();
-                    auto atc2element0term = atc2element[0].GetTerm();
+                    auto atc1element0term = atc1element[0].GetTermList();
+                    auto atc2element0term = atc2element[0].GetTermList();
                     AssertSize(atc1element0term, 1);
                     AssertSize(atc2element0term, 1);
                     AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -871,8 +871,8 @@ int main() {
                 auto atc2element = atc2.GetElement();
                 AssertSize(atc1element, 2);
                 AssertSize(atc2element, 2);
-                auto atc1element0term = atc1element[0].GetTerm();
-                auto atc2element0term = atc2element[0].GetTerm();
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
                 AssertSize(atc1element0term, 1);
                 AssertSize(atc2element0term, 2);
                 AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -916,8 +916,8 @@ int main() {
                 auto atc2element = atc2.GetElement();
                 AssertSize(atc1element, 2);
                 AssertSize(atc2element, 2);
-                auto atc1element0term = atc1element[0].GetTerm();
-                auto atc2element0term = atc2element[0].GetTerm();
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
                 AssertSize(atc1element0term, 1);
                 AssertSize(atc2element0term, 2);
                 AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
@@ -961,8 +961,8 @@ int main() {
                 auto atc2element = atc2.GetElement();
                 AssertSize(atc1element, 2);
                 AssertSize(atc2element, 2);
-                auto atc1element0term = atc1element[0].GetTerm();
-                auto atc2element0term = atc2element[0].GetTerm();
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
                 AssertSize(atc1element0term, 1);
                 AssertSize(atc2element0term, 2);
                 AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");

@@ -19,7 +19,8 @@ public:
     Element(const std::string &id, const std::string &kode, const std::vector<Term> &term) : id(id), kode(kode), term(term) {}
     [[nodiscard]] std::string GetId() const;
     [[nodiscard]] std::string GetKode() const;
-    [[nodiscard]] std::vector<Term> GetTerm() const;
+    [[deprecated]] [[nodiscard]] Term GetTerm() const;
+    [[nodiscard]] std::vector<Term> GetTermList() const;
 };
 
 

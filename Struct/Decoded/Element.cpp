@@ -12,6 +12,14 @@ std::string Element::GetKode() const {
     return kode;
 }
 
-std::vector<Term> Element::GetTerm() const {
+Term Element::GetTerm() const {
+    if (!term.empty()) {
+        return term[term.size() - 1];
+    } else {
+        return {};
+    }
+}
+
+std::vector<Term> Element::GetTermList() const {
     return term;
 }

@@ -16,7 +16,7 @@ template <class T> constexpr T LastItemOf(std::vector<T> vec) {
 }
 
 PElement_0_0_0::PElement_0_0_0(const Element &element, std::string &strblock, std::map<std::string, uint32_t> &cache) :
-        PTerm(LastItemOf(element.GetTerm()), strblock, cache),
+        PTerm(LastItemOf(element.GetTermList()), strblock, cache),
         id(element.GetId(), strblock, cache),
         kode(element.GetKode(), strblock, cache)
 {
@@ -35,7 +35,7 @@ PElement_0_3_0::PElement_0_3_0(const Element &element, TermList &termList, std::
 {
     std::vector<PTerm> terms{};
     {
-        auto dTerms = element.GetTerm();
+        auto dTerms = element.GetTermList();
         for (const auto &dt : dTerms) {
             terms.emplace_back(dt, strblock, cache);
         }
@@ -47,4 +47,12 @@ bool PElement_0_3_0::operator==(const PElement_0_3_0 &other) const {
     return id == other.id &&
            kode == other.kode &&
            term == other.term;
+}
+
+PElement::PElement(const PElement_0_0_0 &element) : std::variant<PElement_0_0_0,PElement_0_3_0>(element)
+{
+}
+
+PElement::PElement(const PElement_0_3_0 &element) : std::variant<PElement_0_0_0,PElement_0_3_0>(element)
+{
 }

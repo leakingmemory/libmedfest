@@ -37,11 +37,12 @@ public:
     bool operator == (const POppfKodeverk_0_3_0 &) const;
 };
 
-class POppfKodeverk : public std::variant<POppfKodeverk_0_0_0,POppfKodeverk_0_3_0> {
+class POppfKodeverk : public std::variant<POppfKodeverk_0_0_0,POppfKodeverk_0_3_0>, public POppf, public PInfo {
 public:
     POppfKodeverk() = delete;
     explicit POppfKodeverk(const POppfKodeverk_0_0_0 &);
     explicit POppfKodeverk(const POppfKodeverk_0_3_0 &);
+    bool operator == (const POppfKodeverk &other) const;
 };
 
 #endif //LEGEMFEST_POPPFKODEVERK_H

@@ -203,11 +203,13 @@ std::vector<POppfKodeverk> FestVectors::GetKodeverk(const FestDeserializer &fest
     std::vector<POppfKodeverk> kodeverk{};
     if (festDeserializer.GetVersionMajor() > 0 || festDeserializer.GetVersionMinor() > 2) {
         auto kodeverk_0_3_0 = GetKodeverk_0_3_0(festDeserializer);
+        kodeverk.reserve(kodeverk_0_3_0.size());
         for (const auto &k : kodeverk_0_3_0) {
             kodeverk.emplace_back(k);
         }
     } else {
         auto kodeverk_0_0_0 = GetKodeverk_0_0_0(festDeserializer);
+        kodeverk.reserve(kodeverk_0_0_0.size());
         for (const auto &k : kodeverk_0_0_0) {
             kodeverk.emplace_back(k);
         }

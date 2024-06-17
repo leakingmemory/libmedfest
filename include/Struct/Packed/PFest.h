@@ -7,18 +7,23 @@
 
 #include "GenericListStorage.h"
 #include "PString.h"
+#include <variant>
 
 class FestDeserializer;
 class FestVectors;
 class FestData;
 class Uint16List_V_0_0_0;
 class Uint16List;
-class PFest;
+class Uint32List;
+class PFest_V_0_2_0_or_later;
+class PFest_V_0_2_0;
+class PFest_V_0_3_0;
 
 class PFest_V_0_0_0 {
     friend FestDeserializer;
     friend FestVectors;
-    friend PFest;
+    friend PFest_V_0_2_0_or_later;
+    friend PFest_V_0_3_0;
 private:
     PString dato;
     GenericListItems32 legemiddelMerkevare;
@@ -43,9 +48,11 @@ public:
     PFest_V_0_0_0(const FestData &, Uint16List_V_0_0_0 &uint16LegacyList, std::string &strblock, std::map<std::string,uint32_t> &cache);
 };
 
-class PFest {
+class PFest_V_0_2_0_or_later {
     friend FestDeserializer;
     friend FestVectors;
+    friend PFest_V_0_2_0;
+    friend PFest_V_0_3_0;
 private:
     PString dato;
     GenericListItems64 legemiddelMerkevare;
@@ -66,10 +73,36 @@ private:
     GenericListItems64 interaksjonIkkeVurdert;
     GenericListItems64 strDosering;
 private:
-    PFest() = default;
-    PFest(const PFest_V_0_0_0 &legacy);
+    PFest_V_0_2_0_or_later() = default;
+    PFest_V_0_2_0_or_later(const PFest_V_0_0_0 &legacy);
 public:
-    PFest(const FestData &, Uint16List &uint16NewList, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    PFest_V_0_2_0_or_later(const FestData &, GenericListItems64 legemiddelpakning, GenericListItems64 kodeverk, Uint16List &uint16NewList, std::string &strblock, std::map<std::string,uint32_t> &cache);
+};
+
+class PFest_V_0_2_0 : public PFest_V_0_2_0_or_later {
+    friend FestDeserializer;
+    friend FestVectors;
+private:
+    PFest_V_0_2_0(const PFest_V_0_0_0 &legacy);
+public:
+    PFest_V_0_2_0(const FestData &, Uint16List &uint16NewList, std::string &strblock, std::map<std::string,uint32_t> &cache);
+};
+
+class PFest_V_0_3_0 : public PFest_V_0_2_0_or_later {
+    friend FestDeserializer;
+    friend FestVectors;
+private:
+    PFest_V_0_3_0(const PFest_V_0_0_0 &legacy, const FestDeserializer &festDeserializer, Uint32List &uint32list);
+    PFest_V_0_3_0(const PFest_V_0_2_0 &legacy, const FestDeserializer &festDeserializer, Uint32List &uint32list);
+public:
+    PFest_V_0_3_0(const FestData &, Uint32List &uint32List, Uint16List &uint16NewList, std::string &strblock, std::map<std::string,uint32_t> &cache);
+};
+
+class PFest : public std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0> {
+public:
+    PFest(const PFest_V_0_0_0 &);
+    PFest(const PFest_V_0_2_0 &);
+    PFest(const PFest_V_0_3_0 &);
 };
 
 #endif //LEGEMFEST_PFEST_H

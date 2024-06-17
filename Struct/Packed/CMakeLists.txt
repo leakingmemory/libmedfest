@@ -17,7 +17,7 @@ add_library(packed OBJECT PackException.cpp PFestId.cpp PString.cpp FestUuid.cpp
         PReferanse.cpp ReferanseList.cpp PSubstans.cpp SubstansList.cpp PSubstansgruppe.cpp POppfInteraksjon.cpp
         SubstansgruppeList.cpp PInteraksjonIkkeVurdert.cpp POppfInteraksjonIkkeVurdert.cpp PDoseFastTidspunkt.cpp
         DoseFastTidspunktList.cpp PDosering.cpp DoseringList.cpp PLegemiddelforbruk.cpp LegemiddelforbrukList.cpp
-        PKortdose.cpp POppfStrDosering.cpp PFest.cpp Uint16List.cpp TermList.cpp)
+        PKortdose.cpp POppfStrDosering.cpp PFest.cpp PFest_convert.cpp Uint16List.cpp TermList.cpp Uint32List.cpp)
 
 include_directories(packed ${Boost_INCLUDE_DIRS} )
 include_directories(packed ../../include)

@@ -43,6 +43,7 @@
 #include "Struct/Packed/POppfStrDosering.h"
 #include "Struct/Packed/PackException.h"
 #include "Struct/Packed/Uint16List.h"
+#include "Struct/Packed/Uint32List.h"
 #include "Struct/Packed/PFest.h"
 #include "FestData.h"
 #include "DbVersion.h"
@@ -123,6 +124,8 @@ struct FestSecondHeader {
     uint16_t numKodeverk;
     uint32_t numElementList;
     uint32_t numTermList;
+    uint32_t numUint32List;
+    uint32_t numPakning;
 } __attribute__((__packed__));
 
 struct FestTrailer {
@@ -162,6 +165,7 @@ private:
     LegemiddelforbrukList legemiddelforbrukList{};
     Uint16List_V_0_0_0 uint16List_V_0_0_0{};
     Uint16List uint16List{};
+    Uint32List uint32List{};
     StringList stringList{};
     std::vector<POppfLegemiddelMerkevare> legemiddelMerkevare{};
     std::vector<POppfLegemiddelpakning> legemiddelpakning{};
@@ -182,7 +186,8 @@ private:
     std::vector<POppfInteraksjonIkkeVurdert> interaksjonIkkeVurdert{};
     std::vector<POppfStrDosering> strDosering{};
     std::vector<PFest_V_0_0_0> fests_V_0_0_0{};
-    std::vector<PFest> fests{};
+    std::vector<PFest_V_0_2_0> fests_V_0_2_0{};
+    std::vector<PFest_V_0_3_0> fests_V_0_3_0{};
     std::map<std::string,std::shared_ptr<FestData>> festMap{};
     int percentDone;
 public:

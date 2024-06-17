@@ -117,6 +117,90 @@ static OppfLegemiddelMerkevare GetMerkevare2() {
     return {{"ID_5D5B4373-0611-4F44-BA26-4D2DB36ECBB0", "2021-07-02T00:53:48", {"A", "Aktiv oppføring"}}, legemiddelMerkevare};
 }
 
+static OppfLegemiddelpakning GetLegemiddelpakning1() {
+    Oppf oppf{"ID_3C5E83CC-44B4-43A3-8FC2-85F6DE4D15C8", "2024-01-06T00:50:03", {"A", "Aktiv oppføring"}};
+    LegemiddelCore legemiddelCore{
+            {{{"N02AJ07", "Kodein og acetylsalisylsyre"}, "2.16.578.1.12.4.1.1.7180"}},
+            "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg",
+            {{"B", "Reseptgruppe B"}},
+            {{{"53", "Tablett"}, "2.16.578.1.12.4.1.1.7448"}},
+            {},
+            {{"2", "Søknad vurderes av apotek"}},
+            MaybeBoolean::MTRUE,
+            {}
+    };
+    Pakningsinfo pakningsinfo{
+            "ID_000A27B8-3930-4264-80F9-CDB14C895662",
+            "100",
+            {{{"stk", "stykk"}, "2.16.578.1.12.4.1.1.7452"}},
+            {{{"169", "Blisterpakning"}, "2.16.578.1.12.4.1.1.7449"}},
+            "100",
+            {{6, "ED"}},
+            {},
+            100,
+            0,
+            0
+    };
+    Legemiddelpakning legemiddelpakning{
+        legemiddelCore,
+        {{"11", "Krever godkj. Fritak"}},
+        "ID_39A1D548-A66D-4E62-B0BC-FA556660B24E",
+        "243591",
+        {{"R", "Rom (15-25 grader)"}},
+        {pakningsinfo},
+        {"2023-06-15", "", "", ""},
+        "",
+        {},
+        {},
+        {},
+        {},
+        false
+    };
+    return {oppf, legemiddelpakning};
+}
+
+static OppfLegemiddelpakning GetLegemiddelpakning2() {
+    Oppf oppf{"ID_9A78E5F5-1056-4FB9-AA99-4593AAF61A61", "2021-07-02T00:53:48", {"A", "Aktiv oppføring"}};
+    LegemiddelCore legemiddelCore{
+            {{{"P01AB03", "Ornidazol"}, "2.16.578.1.12.4.1.1.7180"}},
+            "Tiberal tab 500 mg",
+            {{"C", "Reseptgruppe C"}},
+            {{{"53", "Tablett"}, "2.16.578.1.12.4.1.1.7448"}},
+            {},
+            {{"2", "Søknad vurderes av apotek"}},
+            MaybeBoolean::UNSPECIFIED,
+            {}
+    };
+    Pakningsinfo pakningsinfo{
+            "ID_000BFBF7-8101-466D-A2F9-EDC055808F1A",
+            "10",
+            {{{"stk", "stykk"}, "2.16.578.1.12.4.1.1.7452"}},
+            {{{"169", "Blisterpakning"}, "2.16.578.1.12.4.1.1.7449"}},
+            "10",
+            {{1.5, "g"}},
+            {},
+            5,
+            0,
+            0
+    };
+    Legemiddelpakning legemiddelpakning{
+            legemiddelCore,
+            {{"11", "Krever godkj. Fritak"}},
+            "ID_D308C2C5-7639-4140-A68B-274286296391",
+            "364814",
+            {{"R", "Rom (15-25 grader)"}},
+            {pakningsinfo},
+            {"2010-03-01", "", "", ""},
+            "",
+            {},
+            {},
+            {},
+            {},
+            false
+    };
+    return {oppf, legemiddelpakning};
+}
+
 static OppfKodeverk GetAtc1() {
     Oppf oppf{"ID_8D2DBCCC-73E3-40C3-9812-D6957905FFB1", "2024-02-20T00:50:55", ValueWithDistinguishedName("A", "Aktiv oppføring")};
     Info info{"2.16.578.1.12.4.1.1.7180", "ATC - Anatomisk Terapeutisk Kjemisk legemiddelregister", "ATC", "WHO Collaborating Centre for Drug Statistics Methodology (WHOCC)"};
@@ -149,6 +233,7 @@ static Fest GetFest1() {
     Fest fest{};
     fest.SetHentetDato(festVersion1);
     fest.Add(GetMerkevare1());
+    fest.Add(GetLegemiddelpakning1());
     fest.Add(GetAtc1());
     return fest;
 }
@@ -157,6 +242,7 @@ static Fest GetFest2() {
     Fest fest{};
     fest.SetHentetDato(festVersion2);
     fest.Add(GetMerkevare2());
+    fest.Add(GetLegemiddelpakning2());
     fest.Add(GetAtc2());
     return fest;
 }
@@ -316,6 +402,11 @@ int main() {
         auto pmerkevare1 = merkevarer1[0];
         auto merkevare1 = festDeserializerDb1.Unpack(pmerkevare1);
         AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb1);
+        AssertSize(pakninger1, 1);
+        auto ppakning1 = pakninger1[0];
+        auto pakning1 = festDeserializerDb1.Unpack(ppakning1);
+        AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
         auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1);
         AssertSize(kodeverk1, 1);
         auto atc1 = festDeserializerDb1.Unpack(kodeverk1[0]);
@@ -340,6 +431,11 @@ int main() {
         auto pmerkevare1 = merkevarer1[0];
         auto merkevare1 = festDeserializerDb1_0_3_0.Unpack(pmerkevare1);
         AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb1_0_3_0);
+        AssertSize(pakninger1, 1);
+        auto ppakning1 = pakninger1[0];
+        auto pakning1 = festDeserializerDb1_0_3_0.Unpack(ppakning1);
+        AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
         auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1_0_3_0);
         AssertSize(kodeverk1, 1);
         auto atc1 = festDeserializerDb1_0_3_0.Unpack(kodeverk1[0]);
@@ -364,6 +460,11 @@ int main() {
         auto pmerkevare1 = merkevarer1[0];
         auto merkevare1 = festDeserializerDb1_0_2_0.Unpack(pmerkevare1);
         AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb1_0_2_0);
+        AssertSize(pakninger1, 1);
+        auto ppakning1 = pakninger1[0];
+        auto pakning1 = festDeserializerDb1_0_2_0.Unpack(ppakning1);
+        AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
         auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1_0_2_0);
         AssertSize(kodeverk1, 1);
         auto atc1 = festDeserializerDb1_0_2_0.Unpack(kodeverk1[0]);
@@ -387,6 +488,11 @@ int main() {
         auto pmerkevare1 = merkevarer1[0];
         auto merkevare1 = festDeserializerDb1_0_1_0.Unpack(pmerkevare1);
         AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb1_0_1_0);
+        AssertSize(pakninger1, 1);
+        auto ppakning1 = pakninger1[0];
+        auto pakning1 = festDeserializerDb1_0_1_0.Unpack(ppakning1);
+        AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
         auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1_0_1_0);
         AssertSize(kodeverk1, 1);
         auto atc1 = festDeserializerDb1_0_1_0.Unpack(kodeverk1[0]);
@@ -410,6 +516,11 @@ int main() {
         auto pmerkevare1 = merkevarer1[0];
         auto merkevare1 = festDeserializerDb1_0_0_0.Unpack(pmerkevare1);
         AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb1_0_0_0);
+        AssertSize(pakninger1, 1);
+        auto ppakning1 = pakninger1[0];
+        auto pakning1 = festDeserializerDb1_0_0_0.Unpack(ppakning1);
+        AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
         auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1_0_0_0);
         AssertSize(kodeverk1, 1);
         auto atc1 = festDeserializerDb1_0_0_0.Unpack(kodeverk1[0]);
@@ -476,6 +587,16 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb2.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb2);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb2);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb2.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb2.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                 auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2);
                 auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2);
                 AssertSize(kodeverk1, 1);
@@ -521,6 +642,16 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb2_0_3_0.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb2_0_3_0);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb2_0_3_0);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb2_0_3_0.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb2_0_3_0.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                 auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2_0_3_0);
                 auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2_0_3_0);
                 AssertSize(kodeverk1, 1);
@@ -566,6 +697,16 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb2_0_2_0.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb2_0_2_0);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb2_0_2_0);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb2_0_2_0.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb2_0_2_0.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                 auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2_0_2_0);
                 auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2_0_2_0);
                 AssertSize(kodeverk1, 1);
@@ -607,6 +748,16 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb2_0_1_0.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb2_0_1_0);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb2_0_1_0);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb2_0_1_0.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb2_0_1_0.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                 auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2_0_1_0);
                 auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2_0_1_0);
                 AssertSize(kodeverk1, 1);
@@ -648,6 +799,16 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb2_0_0_0.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb2_0_0_0);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb2_0_0_0);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb2_0_0_0.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb2_0_0_0.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                 auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2_0_0_0);
                 auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2_0_0_0);
                 AssertSize(kodeverk1, 1);
@@ -706,6 +867,16 @@ int main() {
                     auto pmerkevare2 = merkevarer2[0];
                     auto merkevare2 = festDeserializerDb3_0_2_0_to_latest.Unpack(pmerkevare2);
                     AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb3_0_2_0_to_latest);
+                    auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb3_0_2_0_to_latest);
+                    AssertSize(pakninger1, 1);
+                    AssertSize(pakninger2, 1);
+                    auto ppakning1 = pakninger1[0];
+                    auto pakning1 = festDeserializerDb3_0_2_0_to_latest.Unpack(ppakning1);
+                    AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto ppakning2 = pakninger2[0];
+                    auto pakning2 = festDeserializerDb3_0_2_0_to_latest.Unpack(ppakning2);
+                    AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                     auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb3_0_2_0_to_latest);
                     auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb3_0_2_0_to_latest);
                     AssertSize(kodeverk1, 1);
@@ -750,6 +921,16 @@ int main() {
                     auto pmerkevare2 = merkevarer2[0];
                     auto merkevare2 = festDeserializerDb3_0_1_0_to_latest.Unpack(pmerkevare2);
                     AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb3_0_1_0_to_latest);
+                    auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb3_0_1_0_to_latest);
+                    AssertSize(pakninger1, 1);
+                    AssertSize(pakninger2, 1);
+                    auto ppakning1 = pakninger1[0];
+                    auto pakning1 = festDeserializerDb3_0_1_0_to_latest.Unpack(ppakning1);
+                    AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto ppakning2 = pakninger2[0];
+                    auto pakning2 = festDeserializerDb3_0_1_0_to_latest.Unpack(ppakning2);
+                    AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                     auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb3_0_1_0_to_latest);
                     auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb3_0_1_0_to_latest);
                     AssertSize(kodeverk1, 1);
@@ -794,6 +975,16 @@ int main() {
                     auto pmerkevare2 = merkevarer2[0];
                     auto merkevare2 = festDeserializerDb3_0_0_0_to_latest.Unpack(pmerkevare2);
                     AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb3_0_0_0_to_latest);
+                    auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb3_0_0_0_to_latest);
+                    AssertSize(pakninger1, 1);
+                    AssertSize(pakninger2, 1);
+                    auto ppakning1 = pakninger1[0];
+                    auto pakning1 = festDeserializerDb3_0_0_0_to_latest.Unpack(ppakning1);
+                    AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto ppakning2 = pakninger2[0];
+                    auto pakning2 = festDeserializerDb3_0_0_0_to_latest.Unpack(ppakning2);
+                    AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                     auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb3_0_0_0_to_latest);
                     auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb3_0_0_0_to_latest);
                     AssertSize(kodeverk1, 1);
@@ -859,6 +1050,16 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb4_0_2_0_to_latest.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb4_0_2_0_to_latest);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb4_0_2_0_to_latest);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb4_0_2_0_to_latest.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb4_0_2_0_to_latest.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                 auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb4_0_2_0_to_latest);
                 auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb4_0_2_0_to_latest);
                 AssertSize(kodeverk1, 1);
@@ -904,6 +1105,16 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb4_0_1_0_to_latest.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb4_0_1_0_to_latest);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb4_0_1_0_to_latest);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb4_0_1_0_to_latest.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb4_0_1_0_to_latest.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                 auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb4_0_1_0_to_latest);
                 auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb4_0_1_0_to_latest);
                 AssertSize(kodeverk1, 1);
@@ -949,6 +1160,16 @@ int main() {
                 auto pmerkevare2 = merkevarer2[0];
                 auto merkevare2 = festDeserializerDb4_0_0_0_to_latest.Unpack(pmerkevare2);
                 AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb4_0_0_0_to_latest);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb4_0_0_0_to_latest);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb4_0_0_0_to_latest.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb4_0_0_0_to_latest.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
                 auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb4_0_0_0_to_latest);
                 auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb4_0_0_0_to_latest);
                 AssertSize(kodeverk1, 1);

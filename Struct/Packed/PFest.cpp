@@ -4,12 +4,23 @@
 
 #include <Struct/Packed/PFest.h>
 #include <Struct/Packed/Uint16List.h>
+#include <Struct/Packed/Uint32List.h>
 #include <FestSerializer.h>
+
+static std::vector<uint16_t> ClipTo16bit(const std::vector<uint32_t> &src) {
+    std::vector<uint16_t> output{};
+    for (uint32_t s : src) {
+        if (s <= std::numeric_limits<uint16_t>::max()) {
+            output.push_back(static_cast<uint16_t>(s));
+        }
+    }
+    return output;
+}
 
 PFest_V_0_0_0::PFest_V_0_0_0(const FestData &festData, Uint16List_V_0_0_0 &uint16List, std::string &strblock, std::map<std::string, uint32_t> &cache) :
         dato(festData.dato, strblock, cache),
         legemiddelMerkevare(uint16List.StoreList(festData.legemiddelMerkevare)),
-        legemiddelpakning(uint16List.StoreList(festData.legemiddelpakning)),
+        legemiddelpakning(uint16List.StoreList(ClipTo16bit(festData.legemiddelpakning))),
         legemiddelVirkestoff(uint16List.StoreList(festData.legemiddelVirkestoff)),
         medForbrMatr(uint16List.StoreList(festData.medForbrMatr)),
         naringsmiddel(uint16List.StoreList(festData.naringsmiddel)),
@@ -17,7 +28,7 @@ PFest_V_0_0_0::PFest_V_0_0_0(const FestData &festData, Uint16List_V_0_0_0 &uint1
         legemiddeldose(uint16List.StoreList(festData.legemiddeldose)),
         virkestoffMedStyrke(uint16List.StoreList(festData.virkestoffMedStyrke)),
         virkestoff(uint16List.StoreList(festData.virkestoff)),
-        kodeverk(uint16List.StoreList(festData.kodeverk)),
+        kodeverk(uint16List.StoreList(festData.kodeverk_0_0_0)),
         refusjon(uint16List.StoreList(festData.refusjon)),
         vilkar(uint16List.StoreList(festData.vilkar)),
         varselSlv(uint16List.StoreList(festData.varselSlv)),
@@ -28,7 +39,7 @@ PFest_V_0_0_0::PFest_V_0_0_0(const FestData &festData, Uint16List_V_0_0_0 &uint1
 {
 }
 
-PFest::PFest(const PFest_V_0_0_0 &legacy) :
+PFest_V_0_2_0_or_later::PFest_V_0_2_0_or_later(const PFest_V_0_0_0 &legacy) :
 dato(legacy.dato),
 legemiddelMerkevare(legacy.legemiddelMerkevare.CastToWider<GenericListItems64>()),
 legemiddelpakning(legacy.legemiddelpakning.CastToWider<GenericListItems64>()),
@@ -50,10 +61,10 @@ strDosering(legacy.strDosering.CastToWider<GenericListItems64>())
 {
 }
 
-PFest::PFest(const FestData &festData, Uint16List &uint16List, std::string &strblock, std::map<std::string, uint32_t> &cache) :
+PFest_V_0_2_0_or_later::PFest_V_0_2_0_or_later(const FestData &festData, GenericListItems64 legemiddelpakning, GenericListItems64 kodeverk, Uint16List &uint16List, std::string &strblock, std::map<std::string, uint32_t> &cache) :
         dato(festData.dato, strblock, cache),
         legemiddelMerkevare(uint16List.StoreList(festData.legemiddelMerkevare)),
-        legemiddelpakning(uint16List.StoreList(festData.legemiddelpakning)),
+        legemiddelpakning(legemiddelpakning),
         legemiddelVirkestoff(uint16List.StoreList(festData.legemiddelVirkestoff)),
         medForbrMatr(uint16List.StoreList(festData.medForbrMatr)),
         naringsmiddel(uint16List.StoreList(festData.naringsmiddel)),
@@ -61,7 +72,7 @@ PFest::PFest(const FestData &festData, Uint16List &uint16List, std::string &strb
         legemiddeldose(uint16List.StoreList(festData.legemiddeldose)),
         virkestoffMedStyrke(uint16List.StoreList(festData.virkestoffMedStyrke)),
         virkestoff(uint16List.StoreList(festData.virkestoff)),
-        kodeverk(uint16List.StoreList(festData.kodeverk)),
+        kodeverk(kodeverk),
         refusjon(uint16List.StoreList(festData.refusjon)),
         vilkar(uint16List.StoreList(festData.vilkar)),
         varselSlv(uint16List.StoreList(festData.varselSlv)),
@@ -71,3 +82,34 @@ PFest::PFest(const FestData &festData, Uint16List &uint16List, std::string &strb
         strDosering(uint16List.StoreList(festData.strDosering))
 {
 }
+
+PFest_V_0_2_0::PFest_V_0_2_0(const PFest_V_0_0_0 &legacy) : PFest_V_0_2_0_or_later(legacy) {
+}
+
+PFest_V_0_2_0::PFest_V_0_2_0(const FestData &festData, Uint16List &uint16NewList, std::string &strblock,
+                             std::map<std::string, uint32_t> &cache) :
+        PFest_V_0_2_0_or_later(
+                festData,
+                uint16NewList.StoreList(ClipTo16bit(festData.legemiddelpakning)),
+                uint16NewList.StoreList(festData.kodeverk_0_0_0),
+                uint16NewList,
+                strblock,
+                cache
+                ){
+}
+
+PFest_V_0_3_0::PFest_V_0_3_0(const FestData &festData, Uint32List &uint32List, Uint16List &uint16List, std::string &strblock,
+                                      std::map<std::string, uint32_t> &cache) :
+        PFest_V_0_2_0_or_later(
+                festData,
+                uint32List.StoreList(festData.legemiddelpakning),
+                uint16List.StoreList(festData.kodeverk_0_3_0),
+                uint16List,
+                strblock,
+                cache
+                ){
+}
+
+PFest::PFest(const PFest_V_0_0_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0>(fest) {}
+PFest::PFest(const PFest_V_0_2_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0>(fest) {}
+PFest::PFest(const PFest_V_0_3_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0>(fest) {}

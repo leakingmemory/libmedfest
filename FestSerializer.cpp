@@ -38,7 +38,8 @@ bool FestSerializer::Serialize(const Fest &fest) {
     for (const auto &festPair : this->festMap) {
         const auto &festInst = *(festPair.second);
         fests_V_0_0_0.emplace_back(festInst, uint16List_V_0_0_0, stringblock, stringblockCache);
-        fests.emplace_back(festInst, uint16List, stringblock, stringblockCache);
+        fests_V_0_2_0.emplace_back(festInst, uint16List, stringblock, stringblockCache);
+        fests_V_0_3_0.emplace_back(festInst, uint32List, uint16List, stringblock, stringblockCache);
     }
     return result;
 }
@@ -76,7 +77,7 @@ bool FestSerializer::Write(uint64_t magic) {
     if (festUuidList.size() >= (1 << 16)) {
         throw PackException("Max size uuid-list-list");
     }
-    if (legemiddelpakning.size() >= (1 << 16)) {
+    if (legemiddelpakning.size() >= std::numeric_limits<uint32_t>::max()) {
         throw PackException("Max size legemiddelpakning");
     }
     if (refusjonList.size() >= (1 << 16)) {
@@ -178,8 +179,11 @@ bool FestSerializer::Write(uint64_t magic) {
     if (fests_V_0_0_0.size() >= (1 << 10)) {
         throw PackException("Max fests storage size (V0.0.0)");
     }
-    if (fests.size() >= std::numeric_limits<uint16_t>::max()) {
+    if (fests_V_0_2_0.size() >= std::numeric_limits<uint16_t>::max()) {
         throw PackException("Max fests storage size (V0.2.0)");
+    }
+    if (fests_V_0_3_0.size() >= std::numeric_limits<uint16_t>::max()) {
+        throw PackException("Max fests storage size (V0.3.0)");
     }
     FestFirstHeader firstHeader{
         .magic = magic,
@@ -192,7 +196,7 @@ bool FestSerializer::Write(uint64_t magic) {
         .numPakningsinfo = (uint16_t) pakningsinfoList.size(),
         .numPrisVare = (uint16_t) prisVareList.size(),
         .numUuidLists = (uint16_t) festUuidList.size(),
-        .numPakning = (uint16_t) legemiddelpakning.size(),
+        .numPakning = (uint16_t) (legemiddelpakning.size() <= std::numeric_limits<uint16_t>::max() ? legemiddelpakning.size() : std::numeric_limits<uint16_t>::max()),
         .numRefusjonList = (uint16_t) refusjonList.size(),
         .numLegemiddelVirkestoff = (uint16_t) legemiddelVirkestoff.size(),
         .numStringList = (uint16_t) stringList.size(),
@@ -220,7 +224,7 @@ bool FestSerializer::Write(uint64_t magic) {
         .numLegemiddelforbrukList = (uint16_t) legemiddelforbrukList.size(),
         .numStrDosering = (uint16_t) strDosering.size(),
         .numUint16List = (uint32_t) uint16List_V_0_0_0.size(),
-        .numFests = (uint16_t) fests.size()
+        .numFests = (uint16_t) fests_V_0_0_0.size()
     };
     size_t offset = sizeof(firstHeader);
     output->write((char *) (void *) &firstHeader, offset);
@@ -248,7 +252,11 @@ bool FestSerializer::Write(uint64_t magic) {
     }
     {
         auto *ptr = legemiddelpakning.data();
-        auto size = legemiddelpakning.size() * sizeof(*ptr);
+        auto size = (size_t) legemiddelpakning.size();
+        if (size > std::numeric_limits<uint16_t>::max()) {
+            size = std::numeric_limits<uint16_t>::max();
+        }
+        size = size * sizeof(*ptr);
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -800,16 +808,21 @@ bool FestSerializer::Write(uint64_t magic) {
         if (refusjonskodeList.size() > std::numeric_limits<uint16_t>::max()) {
             throw PackException("Refusjonskode list size overshoot (v0.1.0)");
         }
+        if (dbVersion.minor > 2 && fests_V_0_2_0.size() != fests_V_0_3_0.size()) {
+            throw PackException("Size mismatch V 0.2.0 vs. 0.3.0");
+        }
         FestSecondHeader secondHeader{
             .magic = firstHeader.magic,
             .stringblockSize = (uint32_t) stringblock.size(),
             .secondHeaderSize = sizeof(FestSecondHeader),
             .numRefusjonskode = (uint16_t) refusjonskodeList.size(),
             .numUint16NewList = (uint32_t) (dbVersion.minor > 1 ? uint16List.size() : 0),
-            .numFests = (uint16_t) (dbVersion.minor > 1 ? fests.size() : 0),
+            .numFests = (uint16_t) (dbVersion.minor > 1 ? fests_V_0_2_0.size() : 0),
             .numKodeverk = (uint16_t) (dbVersion.minor > 2 ? kodeverk_0_3_0.size() : 0),
             .numElementList = (uint32_t) (dbVersion.minor > 2 ? elementList_0_3_0.size() : 0),
-            .numTermList = (uint32_t) (dbVersion.minor > 2 ? termList.size() : 0)
+            .numTermList = (uint32_t) (dbVersion.minor > 2 ? termList.size() : 0),
+            .numUint32List = (uint32_t) (dbVersion.minor > 2 ? uint32List.size() : 0),
+            .numPakning = (uint32_t) (dbVersion.minor > 2 ? legemiddelpakning.size() : 0),
         };
         output->write((char *) (void *) &secondHeader, sizeof(secondHeader));
         offset += sizeof(secondHeader);
@@ -853,8 +866,8 @@ bool FestSerializer::Write(uint64_t magic) {
                 }
             }
             {
-                auto *ptr = fests.data();
-                auto size = fests.size() * sizeof(*ptr);
+                auto *ptr = fests_V_0_2_0.data();
+                auto size = fests_V_0_2_0.size() * sizeof(*ptr);
                 output->write((char *) (void *) ptr, size);
                 offset += size;
             }
@@ -900,6 +913,50 @@ bool FestSerializer::Write(uint64_t magic) {
             }
             {
                 auto &list = kodeverk_0_3_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddelpakning;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto *ptr = fests_V_0_3_0.data();
+                auto size = fests_V_0_3_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto list = uint32List.GetStorageList();
                 auto *ptr = list.data();
                 auto size = list.size() * sizeof(*ptr);
                 output->write((char *) (void *) ptr, size);
@@ -1017,10 +1074,10 @@ bool FestSerializer::Visit(const std::string &fest, const OppfVirkestoff &virkes
 bool FestSerializer::Visit(const std::string &fest, const OppfKodeverk &kodeverk) {
     auto index = Add(this->kodeverk_0_0_0, {kodeverk, elementList_0_0_0, festidblock, stringblock, stringblockCache});
     auto index_0_3_0 = Add(this->kodeverk_0_3_0, {kodeverk, elementList_0_3_0, termList, festidblock, stringblock, stringblockCache});
-    if (index != index_0_3_0) {
-        throw PackException("Index mismatch between v0.0.0 structure and v0.3.0 structure for kodeverk");
-    }
-    Add(fest, [index] (FestData &f) { f.kodeverk.emplace_back(index); });
+    Add(fest, [index, index_0_3_0] (FestData &f) {
+        f.kodeverk_0_0_0.emplace_back(index);
+        f.kodeverk_0_3_0.emplace_back(index_0_3_0);
+    });
     return true;
 }
 

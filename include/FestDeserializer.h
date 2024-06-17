@@ -57,6 +57,7 @@ struct FestDbQuota {
 };
 
 class FestDeserializer {
+    friend PFest_V_0_3_0;
 private:
     void *mapping;
     size_t mapsize;
@@ -104,8 +105,10 @@ private:
     const PSubstans *substansList;
     const uint16_t *uint16List_V_0_0_0;
     const uint16_t *uint16List;
+    const uint32_t *uint32List;
     const PFest_V_0_0_0 *fests_V_0_0_0;
-    const PFest *fests;
+    const PFest_V_0_2_0 *fests_V_0_2_0;
+    const PFest_V_0_3_0 *fests_V_0_3_0;
     const PString *stringList;
     const char *stringblock;
     size_t numMerkevare;
@@ -149,8 +152,10 @@ private:
     size_t numLegemiddelforbrukList;
     size_t numUint16List_V_0_0_0;
     size_t numUint16List;
+    size_t numUint32List;
     size_t numFests_V_0_0_0;
-    size_t numFests;
+    size_t numFests_V_0_2_0;
+    size_t numFests_V_0_3_0;
     size_t numStringList;
     size_t stringblocksize;
 public:
@@ -217,9 +222,12 @@ public:
     void ForEachInteraksjonIkkeVurdert(const std::function<void (const POppfInteraksjonIkkeVurdert &)> &) const;
     void ForEachStrDosering(const std::function<void (const POppfStrDosering &)> &) const;
     void ForEachFests_V_0_0_0(const std::function<void (const PFest_V_0_0_0 &)> &) const;
-    void ForEachFests_V_0_2_0(const std::function<void (const PFest &)> &) const;
+    void ForEachFests_V_0_2_0(const std::function<void (const PFest_V_0_2_0 &)> &) const;
+    void ForEachFests_V_0_3_0(const std::function<void (const PFest_V_0_3_0 &)> &) const;
     void ForEachFests(const std::function<void (const PFest &)> &) const;
     [[nodiscard]] FestVectors Unpack(const PFest_V_0_0_0 &) const;
+    [[nodiscard]] FestVectors Unpack(const PFest_V_0_2_0 &) const;
+    [[nodiscard]] FestVectors Unpack(const PFest_V_0_3_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;

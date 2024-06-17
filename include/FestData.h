@@ -7,16 +7,20 @@
 
 class FestSerializer;
 class PFest_V_0_0_0;
-class PFest;
+class PFest_V_0_2_0_or_later;
+class PFest_V_0_2_0;
+class PFest_V_0_3_0;
 
 class FestData {
     friend FestSerializer;
     friend PFest_V_0_0_0;
-    friend PFest;
+    friend PFest_V_0_2_0_or_later;
+    friend PFest_V_0_2_0;
+    friend PFest_V_0_3_0;
 private:
     std::string dato;
     std::vector<uint16_t> legemiddelMerkevare{};
-    std::vector<uint16_t> legemiddelpakning{};
+    std::vector<uint32_t> legemiddelpakning{};
     std::vector<uint16_t> legemiddelVirkestoff{};
     std::vector<uint16_t> medForbrMatr{};
     std::vector<uint16_t> naringsmiddel{};
@@ -24,7 +28,8 @@ private:
     std::vector<uint16_t> legemiddeldose{};
     std::vector<uint16_t> virkestoffMedStyrke{};
     std::vector<uint16_t> virkestoff{};
-    std::vector<uint16_t> kodeverk{};
+    std::vector<uint16_t> kodeverk_0_0_0{};
+    std::vector<uint16_t> kodeverk_0_3_0{};
     std::vector<uint16_t> refusjon{};
     std::vector<uint16_t> vilkar{};
     std::vector<uint16_t> varselSlv{};

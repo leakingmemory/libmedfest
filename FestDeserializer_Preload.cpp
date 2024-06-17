@@ -61,14 +61,33 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     PL(festSerializer.interaksjonIkkeVurdert, interaksjonIkkeVurdert, numInteraksjonIkkeVurdert);
     PL(festSerializer.strDosering, strDosering, numStrDosering);
     PL(festSerializer.fests_V_0_0_0, fests_V_0_0_0, numFests_V_0_0_0);
-    if (versionMajor > 0 || versionMinor >= 2) {
-        PL(festSerializer.fests, fests, numFests);
+    if (versionMajor > 0 || versionMinor >= 3) {
+        PL(festSerializer.fests_V_0_3_0, fests_V_0_3_0, numFests_V_0_3_0);
+        PL(festSerializer.fests_V_0_2_0, fests_V_0_2_0, numFests_V_0_2_0);
+    } else if (versionMinor >= 2) {
+        {
+            std::function<PFest_V_0_3_0 (const PFest_V_0_2_0 &)> convert{[this, &festSerializer](const PFest_V_0_2_0 &src) {
+                PFest_V_0_3_0 dst{src, *this, festSerializer.uint32List};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_0_3_0, fests_V_0_2_0, numFests_V_0_2_0, convert);
+        }
+        PL(festSerializer.fests_V_0_2_0, fests_V_0_2_0, numFests_V_0_2_0);
     } else {
-        std::function<PFest (const PFest_V_0_0_0 &)> convert{[] (const PFest_V_0_0_0 &src) {
-            PFest dst{src};
-            return dst;
-        }};
-        PL(festSerializer.fests, fests_V_0_0_0, numFests_V_0_0_0, convert);
+        {
+            std::function<PFest_V_0_3_0 (const PFest_V_0_0_0 &)> convert{[this, &festSerializer](const PFest_V_0_0_0 &src) {
+                PFest_V_0_3_0 dst{src, *this, festSerializer.uint32List};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_0_3_0, fests_V_0_0_0, numFests_V_0_0_0, convert);
+        }
+        {
+            std::function<PFest_V_0_2_0 (const PFest_V_0_0_0 &)> convert{[](const PFest_V_0_0_0 &src) {
+                PFest_V_0_2_0 dst{src};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_0_2_0, fests_V_0_0_0, numFests_V_0_0_0, convert);
+        }
     }
     FestDeserializerPreloader preloader{};
     preloader.Preload(festSerializer.festUuidList, festUuidList, numFestUuidList);
@@ -104,6 +123,9 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
         preloader.Preload(festSerializer.uint16List, uint16List, numUint16List);
     } else {
         preloader.Preload(festSerializer.uint16List, uint16List_V_0_0_0, numUint16List_V_0_0_0);
+    }
+    if (versionMajor > 0 || versionMinor >= 3) {
+        preloader.Preload(festSerializer.uint32List, uint32List, numUint32List);
     }
     preloader.Preload(festSerializer.stringList, stringList, numStringList);
     for (const auto &pstr : GetStrings()) {

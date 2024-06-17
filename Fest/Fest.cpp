@@ -44,6 +44,10 @@ void Fest::Add(const XmlOppfLegemiddelMerkevare &xmlOppf) {
     oppfLegemiddelMerkevare.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetLegemiddelMerkevare());
 }
 
+void Fest::Add(const OppfLegemiddelpakning &oppf) {
+    oppfLegemiddelpakning.emplace_back(oppf);
+}
+
 void Fest::Add(const XmlOppfLegemiddelpakning &xmlOppf) {
     oppfLegemiddelpakning.emplace_back(xmlOppf.GetId(), xmlOppf.GetTidspunkt(), xmlOppf.GetStatus(), xmlOppf.GetLegemiddelpakning());
 }

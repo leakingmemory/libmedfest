@@ -7,6 +7,7 @@
 
 #include <string>
 #include "Struct/Packed/PFest.h"
+#include <variant>
 
 class POppfLegemiddelMerkevare;
 class POppfLegemiddelpakning;
@@ -25,11 +26,10 @@ class POppfKodeverk;
 class FestVectors {
 private:
     std::string dato;
-    const PFest_V_0_0_0 fest_V_0_0_0;
-    const PFest fest;
-    const bool isFestV_0_2_0;
+    const std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0> festV;
     const uint16_t* legemiddelMerkevare;
-    const uint16_t* legemiddelpakning;
+    const uint16_t* legemiddelpakning_0_0_0;
+    const uint32_t* legemiddelpakning_0_3_0;
     const uint16_t* legemiddelVirkestoff;
     const uint16_t* medForbrMatr;
     const uint16_t* naringsmiddel;
@@ -47,7 +47,8 @@ private:
     const uint16_t* strDosering;
 public:
     FestVectors(const PFest_V_0_0_0 &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List);
-    FestVectors(const PFest &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List);
+    FestVectors(const PFest_V_0_2_0 &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List);
+    FestVectors(const PFest_V_0_3_0 &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List, const uint32_t *uint32List, size_t sizeUint32List);
     [[nodiscard]] std::string GetDato() const;
     [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning> GetLegemiddelPakning(const FestDeserializer &) const;

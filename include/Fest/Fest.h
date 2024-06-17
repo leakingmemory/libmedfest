@@ -105,6 +105,7 @@ public:
     }
     void Add(const OppfLegemiddelMerkevare &);
     void Add(const XmlOppfLegemiddelMerkevare &);
+    void Add(const OppfLegemiddelpakning &);
     void Add(const XmlOppfLegemiddelpakning &);
     [[nodiscard]] bool Add(const XmlOppfVirkestoff &);
     void Add(const XmlOppfLegemiddelVirkestoff &);

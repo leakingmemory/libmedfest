@@ -62,6 +62,15 @@ bool FestSerializer::Write(uint64_t magic) {
     if (dbVersion.major < minimumMajorVersion) {
         throw PackException("Output version below minimum with the imported data");
     }
+    if (dbVersion.major < GetLowestSupportedMajorVersion()) {
+        throw PackException("Major version below supported range");
+    }
+    if (dbVersion.major > GetHighestSupportedMajorVersion()) {
+        throw PackException("Major version above supported range");
+    }
+    if (dbVersion.minor > GetHighestSupportedMinorVersion(dbVersion.major)) {
+        throw PackException("Minor version above supported range for this major version");
+    }
     char alignmentBlock[alignment] = {};
     if (festidblock.size() >= (1 << 24)) {
         throw PackException("Max size fest-id-block");
@@ -1010,6 +1019,24 @@ bool FestSerializer::Write() {
 
 bool FestSerializer::WriteVersion(uint8_t major, uint8_t minor, uint8_t patch) {
     return Write(GetMagicNumbber(major, minor, patch));
+}
+
+int FestSerializer::GetLowestSupportedMajorVersion() {
+    return 0;
+}
+
+int FestSerializer::GetHighestSupportedMajorVersion() {
+    return 1;
+}
+
+int FestSerializer::GetHighestSupportedMinorVersion(int major) {
+    if (major == 1) {
+        return 0;
+    } else if (major == 0) {
+        return 3;
+    } else {
+        return 0;
+    }
 }
 
 void FestSerializer::Add(const std::string &dato, const std::function<void(FestData &)> &func) {

@@ -317,6 +317,8 @@ void AssertEquals(const std::string &value, const std::string &expected) {
 int main() {
     std::string emptyDb = WriteFest([] (auto &) {});
     std::cout << "Empty DB size " << emptyDb.size() << "\n";
+    std::string emptyDb_1_0_0 = WriteFestVersion([] (auto &) {}, 1, 0, 0);
+    std::cout << "Empty DB v1.0.0 size " << emptyDb_1_0_0.size() << "\n";
     std::string emptyDb_0_3_0 = WriteFestVersion([] (auto &) {}, 0, 3, 0);
     std::cout << "Empty DB v0.3.0 size " << emptyDb_0_3_0.size() << "\n";
     std::string emptyDb_0_2_0 = WriteFestVersion([] (auto &) {}, 0, 2, 0);
@@ -332,6 +334,10 @@ int main() {
         AssertTrue(serializer.Serialize(festInput1));
     });
     std::cout << "DB 1 size " << fest1Db.size() << "\n";
+    std::string fest1Db_1_0_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
+        AssertTrue(serializer.Serialize(festInput1));
+    }, 1, 0, 0);
+    std::cout << "DB 1 v1.0.0 size " << fest1Db_1_0_0.size() << "\n";
     std::string fest1Db_0_3_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
         AssertTrue(serializer.Serialize(festInput1));
     }, 0, 3, 0);
@@ -354,6 +360,14 @@ int main() {
         {
             AssertVersion(festDeserializer, 0, 3, 0);
             auto festVectors = GetFestVectors(festDeserializer);
+            AssertSize(festVectors, 0);
+        }
+    }
+    {
+        FestDeserializer festDeserializer_1_0_0{emptyDb_1_0_0.data(), emptyDb_1_0_0.size()};
+        {
+            AssertVersion(festDeserializer_1_0_0, 1, 0, 0);
+            auto festVectors = GetFestVectors(festDeserializer_1_0_0);
             AssertSize(festVectors, 0);
         }
     }
@@ -410,6 +424,35 @@ int main() {
         auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1);
         AssertSize(kodeverk1, 1);
         auto atc1 = festDeserializerDb1.Unpack(kodeverk1[0]);
+        AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+        auto atc1element = atc1.GetElement();
+        AssertSize(atc1element, 2);
+        auto atc1element0term = atc1element[0].GetTermList();
+        AssertSize(atc1element0term, 2);
+        AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
+        AssertEquals(atc1element0term[1].GetTerm(), "Covid-19, RNA-basert vaksine");
+        AssertEquals(atc1element[1].GetKode(), "A11HA03");
+    }
+    FestDeserializer festDeserializerDb1_1_0_0{fest1Db_1_0_0.data(), fest1Db_1_0_0.size()};
+    {
+        AssertVersion(festDeserializerDb1_1_0_0, 1, 0, 0);
+        auto festVectors = GetFestVectors(festDeserializerDb1_1_0_0);
+        AssertSize(festVectors, 1);
+        auto fest1 = festVectors[0];
+        AssertEquals(fest1.GetDato(), festVersion1);
+        auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb1_1_0_0);
+        AssertSize(merkevarer1, 1);
+        auto pmerkevare1 = merkevarer1[0];
+        auto merkevare1 = festDeserializerDb1_1_0_0.Unpack(pmerkevare1);
+        AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb1_1_0_0);
+        AssertSize(pakninger1, 1);
+        auto ppakning1 = pakninger1[0];
+        auto pakning1 = festDeserializerDb1_1_0_0.Unpack(ppakning1);
+        AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+        auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1_1_0_0);
+        AssertSize(kodeverk1, 1);
+        auto atc1 = festDeserializerDb1_1_0_0.Unpack(kodeverk1[0]);
         AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
         auto atc1element = atc1.GetElement();
         AssertSize(atc1element, 2);
@@ -541,6 +584,12 @@ int main() {
             AssertTrue(serializer.Serialize(festInput2));
         });
         std::cout << "DB 2 size " << fest2Db.size() << "\n";
+        std::string fest2Db_1_0_0 = WriteFestVersion(
+                [&festDeserializerDb1_1_0_0, &festInput2](FestSerializer &serializer) {
+                    festDeserializerDb1_1_0_0.Preload(serializer);
+                    AssertTrue(serializer.Serialize(festInput2));
+                }, 1, 0, 0);
+        std::cout << "DB 2 v1.0.0 size " << fest2Db_1_0_0.size() << "\n";
         std::string fest2Db_0_3_0 = WriteFestVersion(
                 [&festDeserializerDb1_0_3_0, &festInput2](FestSerializer &serializer) {
                     festDeserializerDb1_0_3_0.Preload(serializer);
@@ -622,6 +671,61 @@ int main() {
             }
         }
         {
+            FestDeserializer festDeserializerDb2_1_0_0{fest2Db_1_0_0.data(), fest2Db_1_0_0.size()};
+            {
+                AssertVersion(festDeserializerDb2_1_0_0, 1, 0, 0);
+                auto festVectors = GetFestVectors(festDeserializerDb2_1_0_0);
+                AssertSize(festVectors, 2);
+                auto fest1 = festVectors[0];
+                auto fest2 = festVectors[1];
+                AssertEquals(fest1.GetDato(), festVersion1);
+                AssertEquals(fest2.GetDato(), festVersion2);
+                auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb2_1_0_0);
+                auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb2_1_0_0);
+                AssertSize(merkevarer1, 1);
+                AssertSize(merkevarer2, 1);
+                auto pmerkevare1 = merkevarer1[0];
+                auto merkevare1 = festDeserializerDb2_1_0_0.Unpack(pmerkevare1);
+                AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                             "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto pmerkevare2 = merkevarer2[0];
+                auto merkevare2 = festDeserializerDb2_1_0_0.Unpack(pmerkevare2);
+                AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb2_1_0_0);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb2_1_0_0);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb2_1_0_0.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb2_1_0_0.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2_1_0_0);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2_1_0_0);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb2_1_0_0.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb2_1_0_0.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
+                AssertSize(atc1element0term, 2);
+                AssertSize(atc2element0term, 2);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
+                AssertEquals(atc1element0term[1].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tocopherol (vit E)");
+                AssertEquals(atc2element0term[1].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
+            }
+        }
+        {
             FestDeserializer festDeserializerDb2_0_3_0{fest2Db_0_3_0.data(), fest2Db_0_3_0.size()};
             {
                 AssertVersion(festDeserializerDb2_0_3_0, 0, 3, 0);
@@ -675,8 +779,6 @@ int main() {
                 AssertEquals(atc1element[1].GetKode(), "A11HA03");
                 AssertEquals(atc2element[1].GetKode(), "C01DX16");
             }
-        }
-        {
             FestDeserializer festDeserializerDb2_0_2_0{fest2Db_0_2_0.data(), fest2Db_0_2_0.size()};
             {
                 AssertVersion(festDeserializerDb2_0_2_0, 0, 2, 0);
@@ -830,26 +932,264 @@ int main() {
                 AssertEquals(atc1element[1].GetKode(), "A11HA03");
                 AssertEquals(atc2element[1].GetKode(), "C01DX16");
             }
-            std::string fest3Db_0_2_0_to_latest = WriteFest(
+            std::string fest3Db_0_2_0_to_0_3 = WriteFest(
                     [&festDeserializerDb2_0_2_0](FestSerializer &serializer) {
                         festDeserializerDb2_0_2_0.Preload(serializer);
                     });
-            std::cout << "DB 3 upgraded from v0.2.0 size " << fest3Db_0_2_0_to_latest.size() << "\n";
-            std::string fest3Db_0_1_0_to_latest = WriteFest(
+            std::cout << "DB 3 upgraded from v0.2.0 to v0.3.0 size " << fest3Db_0_2_0_to_0_3.size() << "\n";
+            std::string fest3Db_0_1_0_to_0_3 = WriteFest(
                     [&festDeserializerDb2_0_1_0](FestSerializer &serializer) {
                         festDeserializerDb2_0_1_0.Preload(serializer);
                     });
-            std::cout << "DB 3 upgraded from v0.1.0 size " << fest3Db_0_1_0_to_latest.size() << "\n";
-            std::string fest3Db_0_0_0_to_latest = WriteFest(
+            std::cout << "DB 3 upgraded from v0.1.0 to v0.3.0 size " << fest3Db_0_1_0_to_0_3.size() << "\n";
+            std::string fest3Db_0_0_0_to_0_3 = WriteFest(
                     [&festDeserializerDb2_0_0_0](FestSerializer &serializer) {
                         festDeserializerDb2_0_0_0.Preload(serializer);
                     });
+            std::cout << "DB 3 upgraded from v0.0.0 to v0.3.0 size " << fest3Db_0_0_0_to_0_3.size() << "\n";
+            {
+                FestDeserializer festDeserializerDb3_0_2_0_to_0_3{fest3Db_0_2_0_to_0_3.data(),
+                                                                     fest3Db_0_2_0_to_0_3.size()};
+                {
+                    AssertVersion(festDeserializerDb3_0_2_0_to_0_3, 0, 3, 0);
+                    auto festVectors = GetFestVectors(festDeserializerDb3_0_2_0_to_0_3);
+                    AssertSize(festVectors, 2);
+                    auto fest1 = festVectors[0];
+                    auto fest2 = festVectors[1];
+                    AssertEquals(fest1.GetDato(), festVersion1);
+                    AssertEquals(fest2.GetDato(), festVersion2);
+                    auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb3_0_2_0_to_0_3);
+                    auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb3_0_2_0_to_0_3);
+                    AssertSize(merkevarer1, 1);
+                    AssertSize(merkevarer2, 1);
+                    auto pmerkevare1 = merkevarer1[0];
+                    auto merkevare1 = festDeserializerDb3_0_2_0_to_0_3.Unpack(pmerkevare1);
+                    AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                                 "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto pmerkevare2 = merkevarer2[0];
+                    auto merkevare2 = festDeserializerDb3_0_2_0_to_0_3.Unpack(pmerkevare2);
+                    AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb3_0_2_0_to_0_3);
+                    auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb3_0_2_0_to_0_3);
+                    AssertSize(pakninger1, 1);
+                    AssertSize(pakninger2, 1);
+                    auto ppakning1 = pakninger1[0];
+                    auto pakning1 = festDeserializerDb3_0_2_0_to_0_3.Unpack(ppakning1);
+                    AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto ppakning2 = pakninger2[0];
+                    auto pakning2 = festDeserializerDb3_0_2_0_to_0_3.Unpack(ppakning2);
+                    AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb3_0_2_0_to_0_3);
+                    auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb3_0_2_0_to_0_3);
+                    AssertSize(kodeverk1, 1);
+                    AssertSize(kodeverk2, 1);
+                    auto atc1 = festDeserializerDb3_0_2_0_to_0_3.Unpack(kodeverk1[0]);
+                    auto atc2 = festDeserializerDb3_0_2_0_to_0_3.Unpack(kodeverk2[0]);
+                    AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                    AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                    auto atc1element = atc1.GetElement();
+                    auto atc2element = atc2.GetElement();
+                    AssertSize(atc1element, 2);
+                    AssertSize(atc2element, 2);
+                    auto atc1element0term = atc1element[0].GetTermList();
+                    auto atc2element0term = atc2element[0].GetTermList();
+                    AssertSize(atc1element0term, 1);
+                    AssertSize(atc2element0term, 1);
+                    AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                    AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                    AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                    AssertEquals(atc2element[1].GetKode(), "C01DX16");
+                }
+            }
+            {
+                FestDeserializer festDeserializerDb3_0_1_0_to_0_3{fest3Db_0_1_0_to_0_3.data(),
+                                                                  fest3Db_0_1_0_to_0_3.size()};
+                {
+                    AssertVersion(festDeserializerDb3_0_1_0_to_0_3, 0, 3, 0);
+                    auto festVectors = GetFestVectors(festDeserializerDb3_0_1_0_to_0_3);
+                    AssertSize(festVectors, 2);
+                    auto fest1 = festVectors[0];
+                    auto fest2 = festVectors[1];
+                    AssertEquals(fest1.GetDato(), festVersion1);
+                    AssertEquals(fest2.GetDato(), festVersion2);
+                    auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb3_0_1_0_to_0_3);
+                    auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb3_0_1_0_to_0_3);
+                    AssertSize(merkevarer1, 1);
+                    AssertSize(merkevarer2, 1);
+                    auto pmerkevare1 = merkevarer1[0];
+                    auto merkevare1 = festDeserializerDb3_0_1_0_to_0_3.Unpack(pmerkevare1);
+                    AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                                 "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto pmerkevare2 = merkevarer2[0];
+                    auto merkevare2 = festDeserializerDb3_0_1_0_to_0_3.Unpack(pmerkevare2);
+                    AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb3_0_1_0_to_0_3);
+                    auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb3_0_1_0_to_0_3);
+                    AssertSize(pakninger1, 1);
+                    AssertSize(pakninger2, 1);
+                    auto ppakning1 = pakninger1[0];
+                    auto pakning1 = festDeserializerDb3_0_1_0_to_0_3.Unpack(ppakning1);
+                    AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto ppakning2 = pakninger2[0];
+                    auto pakning2 = festDeserializerDb3_0_1_0_to_0_3.Unpack(ppakning2);
+                    AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb3_0_1_0_to_0_3);
+                    auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb3_0_1_0_to_0_3);
+                    AssertSize(kodeverk1, 1);
+                    AssertSize(kodeverk2, 1);
+                    auto atc1 = festDeserializerDb3_0_1_0_to_0_3.Unpack(kodeverk1[0]);
+                    auto atc2 = festDeserializerDb3_0_1_0_to_0_3.Unpack(kodeverk2[0]);
+                    AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                    AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                    auto atc1element = atc1.GetElement();
+                    auto atc2element = atc2.GetElement();
+                    AssertSize(atc1element, 2);
+                    AssertSize(atc2element, 2);
+                    auto atc1element0term = atc1element[0].GetTermList();
+                    auto atc2element0term = atc2element[0].GetTermList();
+                    AssertSize(atc1element0term, 1);
+                    AssertSize(atc2element0term, 1);
+                    AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                    AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                    AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                    AssertEquals(atc2element[1].GetKode(), "C01DX16");
+                }
+            }
+            {
+                FestDeserializer festDeserializerDb3_0_0_0_to_0_3{fest3Db_0_0_0_to_0_3.data(),
+                                                                  fest3Db_0_0_0_to_0_3.size()};
+                {
+                    AssertVersion(festDeserializerDb3_0_0_0_to_0_3, 0, 3, 0);
+                    auto festVectors = GetFestVectors(festDeserializerDb3_0_0_0_to_0_3);
+                    AssertSize(festVectors, 2);
+                    auto fest1 = festVectors[0];
+                    auto fest2 = festVectors[1];
+                    AssertEquals(fest1.GetDato(), festVersion1);
+                    AssertEquals(fest2.GetDato(), festVersion2);
+                    auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb3_0_0_0_to_0_3);
+                    auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb3_0_0_0_to_0_3);
+                    AssertSize(merkevarer1, 1);
+                    AssertSize(merkevarer2, 1);
+                    auto pmerkevare1 = merkevarer1[0];
+                    auto merkevare1 = festDeserializerDb3_0_0_0_to_0_3.Unpack(pmerkevare1);
+                    AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                                 "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto pmerkevare2 = merkevarer2[0];
+                    auto merkevare2 = festDeserializerDb3_0_0_0_to_0_3.Unpack(pmerkevare2);
+                    AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb3_0_0_0_to_0_3);
+                    auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb3_0_0_0_to_0_3);
+                    AssertSize(pakninger1, 1);
+                    AssertSize(pakninger2, 1);
+                    auto ppakning1 = pakninger1[0];
+                    auto pakning1 = festDeserializerDb3_0_0_0_to_0_3.Unpack(ppakning1);
+                    AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto ppakning2 = pakninger2[0];
+                    auto pakning2 = festDeserializerDb3_0_0_0_to_0_3.Unpack(ppakning2);
+                    AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb3_0_0_0_to_0_3);
+                    auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb3_0_0_0_to_0_3);
+                    AssertSize(kodeverk1, 1);
+                    AssertSize(kodeverk2, 1);
+                    auto atc1 = festDeserializerDb3_0_0_0_to_0_3.Unpack(kodeverk1[0]);
+                    auto atc2 = festDeserializerDb3_0_0_0_to_0_3.Unpack(kodeverk2[0]);
+                    AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                    AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                    auto atc1element = atc1.GetElement();
+                    auto atc2element = atc2.GetElement();
+                    AssertSize(atc1element, 2);
+                    AssertSize(atc2element, 2);
+                    auto atc1element0term = atc1element[0].GetTermList();
+                    auto atc2element0term = atc2element[0].GetTermList();
+                    AssertSize(atc1element0term, 1);
+                    AssertSize(atc2element0term, 1);
+                    AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                    AssertEquals(atc2element0term[0].GetTerm(), "Tokoferol (Vit E)");
+                    AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                    AssertEquals(atc2element[1].GetKode(), "C01DX16");
+                }
+            }
+            std::string fest3Db_0_3_0_to_latest = WriteFestVersion(
+                    [&festDeserializerDb2_0_3_0](FestSerializer &serializer) {
+                        festDeserializerDb2_0_3_0.Preload(serializer);
+                    }, 1, 0, 0);
+            std::cout << "DB 3 upgraded from v0.3.0 size " << fest3Db_0_3_0_to_latest.size() << "\n";
+            std::string fest3Db_0_2_0_to_latest = WriteFestVersion(
+                    [&festDeserializerDb2_0_2_0](FestSerializer &serializer) {
+                        festDeserializerDb2_0_2_0.Preload(serializer);
+                    }, 1, 0, 0);
+            std::cout << "DB 3 upgraded from v0.2.0 size " << fest3Db_0_2_0_to_latest.size() << "\n";
+            std::string fest3Db_0_1_0_to_latest = WriteFestVersion(
+                    [&festDeserializerDb2_0_1_0](FestSerializer &serializer) {
+                        festDeserializerDb2_0_1_0.Preload(serializer);
+                    }, 1, 0, 0);
+            std::cout << "DB 3 upgraded from v0.1.0 size " << fest3Db_0_1_0_to_latest.size() << "\n";
+            std::string fest3Db_0_0_0_to_latest = WriteFestVersion(
+                    [&festDeserializerDb2_0_0_0](FestSerializer &serializer) {
+                        festDeserializerDb2_0_0_0.Preload(serializer);
+                    }, 1, 0, 0);
             std::cout << "DB 3 upgraded from v0.0.0 size " << fest3Db_0_0_0_to_latest.size() << "\n";
+            {
+                FestDeserializer festDeserializerDb3_0_3_0_to_latest{fest3Db_0_3_0_to_latest.data(),
+                                                                     fest3Db_0_3_0_to_latest.size()};
+                {
+                    AssertVersion(festDeserializerDb3_0_3_0_to_latest, 1, 0, 0);
+                    auto festVectors = GetFestVectors(festDeserializerDb3_0_3_0_to_latest);
+                    AssertSize(festVectors, 2);
+                    auto fest1 = festVectors[0];
+                    auto fest2 = festVectors[1];
+                    AssertEquals(fest1.GetDato(), festVersion1);
+                    AssertEquals(fest2.GetDato(), festVersion2);
+                    auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb3_0_3_0_to_latest);
+                    auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb3_0_3_0_to_latest);
+                    AssertSize(merkevarer1, 1);
+                    AssertSize(merkevarer2, 1);
+                    auto pmerkevare1 = merkevarer1[0];
+                    auto merkevare1 = festDeserializerDb3_0_3_0_to_latest.Unpack(pmerkevare1);
+                    AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                                 "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto pmerkevare2 = merkevarer2[0];
+                    auto merkevare2 = festDeserializerDb3_0_3_0_to_latest.Unpack(pmerkevare2);
+                    AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb3_0_3_0_to_latest);
+                    auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb3_0_3_0_to_latest);
+                    AssertSize(pakninger1, 1);
+                    AssertSize(pakninger2, 1);
+                    auto ppakning1 = pakninger1[0];
+                    auto pakning1 = festDeserializerDb3_0_3_0_to_latest.Unpack(ppakning1);
+                    AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                    auto ppakning2 = pakninger2[0];
+                    auto pakning2 = festDeserializerDb3_0_3_0_to_latest.Unpack(ppakning2);
+                    AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                    auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb3_0_3_0_to_latest);
+                    auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb3_0_3_0_to_latest);
+                    AssertSize(kodeverk1, 1);
+                    AssertSize(kodeverk2, 1);
+                    auto atc1 = festDeserializerDb3_0_3_0_to_latest.Unpack(kodeverk1[0]);
+                    auto atc2 = festDeserializerDb3_0_3_0_to_latest.Unpack(kodeverk2[0]);
+                    AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                    AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                    auto atc1element = atc1.GetElement();
+                    auto atc2element = atc2.GetElement();
+                    AssertSize(atc1element, 2);
+                    AssertSize(atc2element, 2);
+                    auto atc1element0term = atc1element[0].GetTermList();
+                    auto atc2element0term = atc2element[0].GetTermList();
+                    AssertSize(atc1element0term, 2);
+                    AssertSize(atc2element0term, 2);
+                    AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
+                    AssertEquals(atc1element0term[1].GetTerm(), "Covid-19, RNA-basert vaksine");
+                    AssertEquals(atc2element0term[0].GetTerm(), "Tocopherol (vit E)");
+                    AssertEquals(atc2element0term[1].GetTerm(), "Tokoferol (Vit E)");
+                    AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                    AssertEquals(atc2element[1].GetKode(), "C01DX16");
+                }
+            }
             {
                 FestDeserializer festDeserializerDb3_0_2_0_to_latest{fest3Db_0_2_0_to_latest.data(),
                                                                      fest3Db_0_2_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_2_0_to_latest, 0, 3, 0);
+                    AssertVersion(festDeserializerDb3_0_2_0_to_latest, 1, 0, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_2_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -903,7 +1243,7 @@ int main() {
                 FestDeserializer festDeserializerDb3_0_1_0_to_latest{fest3Db_0_1_0_to_latest.data(),
                                                                      fest3Db_0_1_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_1_0_to_latest, 0, 3, 0);
+                    AssertVersion(festDeserializerDb3_0_1_0_to_latest, 1, 0, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_1_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -957,7 +1297,7 @@ int main() {
                 FestDeserializer festDeserializerDb3_0_0_0_to_latest{fest3Db_0_0_0_to_latest.data(),
                                                                      fest3Db_0_0_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_0_0_to_latest, 0, 3, 0);
+                    AssertVersion(festDeserializerDb3_0_0_0_to_latest, 1, 0, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_0_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1010,29 +1350,274 @@ int main() {
         }
     }
     {
-        std::string fest4Db_0_2_0_to_latest = WriteFest(
+        std::string fest4Db_0_2_0_to_0_3 = WriteFest(
                 [&festDeserializerDb1_0_2_0, &festInput2](FestSerializer &serializer) {
                     festDeserializerDb1_0_2_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 });
-        std::cout << "DB 4 upgraded from v0.2.0 size " << fest4Db_0_2_0_to_latest.size() << "\n";
-        std::string fest4Db_0_1_0_to_latest = WriteFest(
+        std::cout << "DB 4 upgraded from v0.2.0 to v0.3.0 size " << fest4Db_0_2_0_to_0_3.size() << "\n";
+        std::string fest4Db_0_1_0_to_0_3 = WriteFest(
                 [&festDeserializerDb1_0_1_0, &festInput2](FestSerializer &serializer) {
                     festDeserializerDb1_0_1_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 });
-        std::cout << "DB 4 upgraded from v0.1.0 size " << fest4Db_0_1_0_to_latest.size() << "\n";
-        std::string fest4Db_0_0_0_to_latest = WriteFest(
+        std::cout << "DB 4 upgraded from v0.1.0 to v0.3.0 size " << fest4Db_0_1_0_to_0_3.size() << "\n";
+        std::string fest4Db_0_0_0_to_0_3 = WriteFest(
                 [&festDeserializerDb1_0_0_0, &festInput2](FestSerializer &serializer) {
                     festDeserializerDb1_0_0_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 });
+        std::cout << "DB 4 upgraded from v0.0.0 to v0.3.0 size " << fest4Db_0_0_0_to_0_3.size() << "\n";
+        {
+            FestDeserializer festDeserializerDb4_0_2_0_to_0_3{fest4Db_0_2_0_to_0_3.data(),
+                                                                 fest4Db_0_2_0_to_0_3.size()};
+            {
+                AssertVersion(festDeserializerDb4_0_2_0_to_0_3, 0, 3, 0);
+                auto festVectors = GetFestVectors(festDeserializerDb4_0_2_0_to_0_3);
+                AssertSize(festVectors, 2);
+                auto fest1 = festVectors[0];
+                auto fest2 = festVectors[1];
+                AssertEquals(fest1.GetDato(), festVersion1);
+                AssertEquals(fest2.GetDato(), festVersion2);
+                auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb4_0_2_0_to_0_3);
+                auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb4_0_2_0_to_0_3);
+                AssertSize(merkevarer1, 1);
+                AssertSize(merkevarer2, 1);
+                auto pmerkevare1 = merkevarer1[0];
+                auto merkevare1 = festDeserializerDb4_0_2_0_to_0_3.Unpack(pmerkevare1);
+                AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                             "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto pmerkevare2 = merkevarer2[0];
+                auto merkevare2 = festDeserializerDb4_0_2_0_to_0_3.Unpack(pmerkevare2);
+                AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb4_0_2_0_to_0_3);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb4_0_2_0_to_0_3);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb4_0_2_0_to_0_3.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb4_0_2_0_to_0_3.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb4_0_2_0_to_0_3);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb4_0_2_0_to_0_3);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb4_0_2_0_to_0_3.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb4_0_2_0_to_0_3.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
+                AssertSize(atc1element0term, 1);
+                AssertSize(atc2element0term, 2);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tocopherol (vit E)");
+                AssertEquals(atc2element0term[1].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
+            }
+        }
+        {
+            FestDeserializer festDeserializerDb4_0_1_0_to_0_3{fest4Db_0_1_0_to_0_3.data(),
+                                                              fest4Db_0_1_0_to_0_3.size()};
+            {
+                AssertVersion(festDeserializerDb4_0_1_0_to_0_3, 0, 3, 0);
+                auto festVectors = GetFestVectors(festDeserializerDb4_0_1_0_to_0_3);
+                AssertSize(festVectors, 2);
+                auto fest1 = festVectors[0];
+                auto fest2 = festVectors[1];
+                AssertEquals(fest1.GetDato(), festVersion1);
+                AssertEquals(fest2.GetDato(), festVersion2);
+                auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb4_0_1_0_to_0_3);
+                auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb4_0_1_0_to_0_3);
+                AssertSize(merkevarer1, 1);
+                AssertSize(merkevarer2, 1);
+                auto pmerkevare1 = merkevarer1[0];
+                auto merkevare1 = festDeserializerDb4_0_1_0_to_0_3.Unpack(pmerkevare1);
+                AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                             "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto pmerkevare2 = merkevarer2[0];
+                auto merkevare2 = festDeserializerDb4_0_1_0_to_0_3.Unpack(pmerkevare2);
+                AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb4_0_1_0_to_0_3);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb4_0_1_0_to_0_3);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb4_0_1_0_to_0_3.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb4_0_1_0_to_0_3.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb4_0_1_0_to_0_3);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb4_0_1_0_to_0_3);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb4_0_1_0_to_0_3.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb4_0_1_0_to_0_3.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
+                AssertSize(atc1element0term, 1);
+                AssertSize(atc2element0term, 2);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tocopherol (vit E)");
+                AssertEquals(atc2element0term[1].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
+            }
+        }
+        {
+            FestDeserializer festDeserializerDb4_0_0_0_to_0_3{fest4Db_0_0_0_to_0_3.data(),
+                                                              fest4Db_0_0_0_to_0_3.size()};
+            {
+                AssertVersion(festDeserializerDb4_0_0_0_to_0_3, 0, 3, 0);
+                auto festVectors = GetFestVectors(festDeserializerDb4_0_0_0_to_0_3);
+                AssertSize(festVectors, 2);
+                auto fest1 = festVectors[0];
+                auto fest2 = festVectors[1];
+                AssertEquals(fest1.GetDato(), festVersion1);
+                AssertEquals(fest2.GetDato(), festVersion2);
+                auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb4_0_0_0_to_0_3);
+                auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb4_0_0_0_to_0_3);
+                AssertSize(merkevarer1, 1);
+                AssertSize(merkevarer2, 1);
+                auto pmerkevare1 = merkevarer1[0];
+                auto merkevare1 = festDeserializerDb4_0_0_0_to_0_3.Unpack(pmerkevare1);
+                AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                             "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto pmerkevare2 = merkevarer2[0];
+                auto merkevare2 = festDeserializerDb4_0_0_0_to_0_3.Unpack(pmerkevare2);
+                AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb4_0_0_0_to_0_3);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb4_0_0_0_to_0_3);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb4_0_0_0_to_0_3.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb4_0_0_0_to_0_3.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb4_0_0_0_to_0_3);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb4_0_0_0_to_0_3);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb4_0_0_0_to_0_3.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb4_0_0_0_to_0_3.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
+                AssertSize(atc1element0term, 1);
+                AssertSize(atc2element0term, 2);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tocopherol (vit E)");
+                AssertEquals(atc2element0term[1].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
+            }
+        }
+        std::string fest4Db_0_3_0_to_latest = WriteFestVersion(
+                [&festDeserializerDb1_0_3_0, &festInput2](FestSerializer &serializer) {
+                    festDeserializerDb1_0_3_0.Preload(serializer);
+                    AssertTrue(serializer.Serialize(festInput2));
+                }, 1, 0, 0);
+        std::cout << "DB 4 upgraded from v0.3.0 size " << fest4Db_0_3_0_to_latest.size() << "\n";
+        std::string fest4Db_0_2_0_to_latest = WriteFestVersion(
+                [&festDeserializerDb1_0_2_0, &festInput2](FestSerializer &serializer) {
+                    festDeserializerDb1_0_2_0.Preload(serializer);
+                    AssertTrue(serializer.Serialize(festInput2));
+                }, 1, 0, 0);
+        std::cout << "DB 4 upgraded from v0.2.0 size " << fest4Db_0_2_0_to_latest.size() << "\n";
+        std::string fest4Db_0_1_0_to_latest = WriteFestVersion(
+                [&festDeserializerDb1_0_1_0, &festInput2](FestSerializer &serializer) {
+                    festDeserializerDb1_0_1_0.Preload(serializer);
+                    AssertTrue(serializer.Serialize(festInput2));
+                }, 1, 0, 0);
+        std::cout << "DB 4 upgraded from v0.1.0 size " << fest4Db_0_1_0_to_latest.size() << "\n";
+        std::string fest4Db_0_0_0_to_latest = WriteFestVersion(
+                [&festDeserializerDb1_0_0_0, &festInput2](FestSerializer &serializer) {
+                    festDeserializerDb1_0_0_0.Preload(serializer);
+                    AssertTrue(serializer.Serialize(festInput2));
+                }, 1, 0, 0);
         std::cout << "DB 4 upgraded from v0.0.0 size " << fest4Db_0_0_0_to_latest.size() << "\n";
+        {
+            FestDeserializer festDeserializerDb4_0_3_0_to_latest{fest4Db_0_3_0_to_latest.data(),
+                                                                 fest4Db_0_3_0_to_latest.size()};
+            {
+                AssertVersion(festDeserializerDb4_0_3_0_to_latest, 1, 0, 0);
+                auto festVectors = GetFestVectors(festDeserializerDb4_0_3_0_to_latest);
+                AssertSize(festVectors, 2);
+                auto fest1 = festVectors[0];
+                auto fest2 = festVectors[1];
+                AssertEquals(fest1.GetDato(), festVersion1);
+                AssertEquals(fest2.GetDato(), festVersion2);
+                auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb4_0_3_0_to_latest);
+                auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb4_0_3_0_to_latest);
+                AssertSize(merkevarer1, 1);
+                AssertSize(merkevarer2, 1);
+                auto pmerkevare1 = merkevarer1[0];
+                auto merkevare1 = festDeserializerDb4_0_3_0_to_latest.Unpack(pmerkevare1);
+                AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                             "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto pmerkevare2 = merkevarer2[0];
+                auto merkevare2 = festDeserializerDb4_0_3_0_to_latest.Unpack(pmerkevare2);
+                AssertEquals(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb4_0_3_0_to_latest);
+                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb4_0_3_0_to_latest);
+                AssertSize(pakninger1, 1);
+                AssertSize(pakninger2, 1);
+                auto ppakning1 = pakninger1[0];
+                auto pakning1 = festDeserializerDb4_0_3_0_to_latest.Unpack(ppakning1);
+                AssertEquals(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+                auto ppakning2 = pakninger2[0];
+                auto pakning2 = festDeserializerDb4_0_3_0_to_latest.Unpack(ppakning2);
+                AssertEquals(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
+                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb4_0_3_0_to_latest);
+                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb4_0_3_0_to_latest);
+                AssertSize(kodeverk1, 1);
+                AssertSize(kodeverk2, 1);
+                auto atc1 = festDeserializerDb4_0_3_0_to_latest.Unpack(kodeverk1[0]);
+                auto atc2 = festDeserializerDb4_0_3_0_to_latest.Unpack(kodeverk2[0]);
+                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
+                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
+                auto atc1element = atc1.GetElement();
+                auto atc2element = atc2.GetElement();
+                AssertSize(atc1element, 2);
+                AssertSize(atc2element, 2);
+                auto atc1element0term = atc1element[0].GetTermList();
+                auto atc2element0term = atc2element[0].GetTermList();
+                AssertSize(atc1element0term, 2);
+                AssertSize(atc2element0term, 2);
+                AssertEquals(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
+                AssertEquals(atc1element0term[1].GetTerm(), "Covid-19, RNA-basert vaksine");
+                AssertEquals(atc2element0term[0].GetTerm(), "Tocopherol (vit E)");
+                AssertEquals(atc2element0term[1].GetTerm(), "Tokoferol (Vit E)");
+                AssertEquals(atc1element[1].GetKode(), "A11HA03");
+                AssertEquals(atc2element[1].GetKode(), "C01DX16");
+            }
+        }
         {
             FestDeserializer festDeserializerDb4_0_2_0_to_latest{fest4Db_0_2_0_to_latest.data(),
                                                                  fest4Db_0_2_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_2_0_to_latest, 0, 3, 0);
+                AssertVersion(festDeserializerDb4_0_2_0_to_latest, 1, 0, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_2_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -1087,7 +1672,7 @@ int main() {
             FestDeserializer festDeserializerDb4_0_1_0_to_latest{fest4Db_0_1_0_to_latest.data(),
                                                                  fest4Db_0_1_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_1_0_to_latest, 0, 3, 0);
+                AssertVersion(festDeserializerDb4_0_1_0_to_latest, 1, 0, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_1_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -1142,7 +1727,7 @@ int main() {
             FestDeserializer festDeserializerDb4_0_0_0_to_latest{fest4Db_0_0_0_to_latest.data(),
                                                                  fest4Db_0_0_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_0_0_to_latest, 0, 3, 0);
+                AssertVersion(festDeserializerDb4_0_0_0_to_latest, 1, 0, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_0_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];

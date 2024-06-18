@@ -79,14 +79,15 @@ void FestDeserializer::Init() {
         versionMajor = version.major;
         versionMinor = version.minor;
         versionPatch = version.patch;
-        if (version.major != 0) {
+        if (version.major > 1) {
             std::cerr << "Error: Major version " << version.major << " can not be read\n";
             throw PackException("Major version of file");
         }
-        if (version.minor > 3) {
-            std::cerr << "Warning: Minor version " << version.minor << " contains unsupported data (ignored)\n";
+        if ((version.major == 0 && version.minor > 3) ||
+            (version.major == 1 && version.minor > 0)) {
+            std::cerr << "Warning: Version " << ((int) version.major) << "." << ((int) version.minor) << " contains unsupported data (ignored)\n";
         }
-        if (version.minor >= 1) {
+        if (version.major > 0 || version.minor >= 1) {
             if (mapsize < sizeof(FestTrailer)) {
                 throw PackException("Insufficient size (trailer)");
             }
@@ -97,12 +98,22 @@ void FestDeserializer::Init() {
             if (mapsize <= 0) {
                 throw PackException("Second header offset overflow");
             }
-            if (version.minor == 1) {
-                if ((trailer->secondHeaderOffset + sizeof(FestSecondHeaderV0_1_0)) > (mapsize - 1)) {
-                    throw PackException("Second header offset overflow (V0.1.0)");
+            if (version.major == 0) {
+                if (version.minor == 1) {
+                    if ((trailer->secondHeaderOffset + sizeof(FestSecondHeaderV0_1_0)) > (mapsize - 1)) {
+                        throw PackException("Second header offset overflow (V0.1.0)");
+                    }
+                } else if (version.minor == 2) {
+                    if ((trailer->secondHeaderOffset + sizeof(FestSecondHeader_0_2_0)) > (mapsize - 1)) {
+                        throw PackException("Second header offset overflow (V0.2.0)");
+                    }
+                } else if ((trailer->secondHeaderOffset + sizeof(FestSecondHeader)) > (mapsize - 1)) {
+                    throw PackException("Second header offset overflow (V0.3.0)");
                 }
-            } else if ((trailer->secondHeaderOffset + sizeof(FestSecondHeader)) > (mapsize - 1)) {
-                throw PackException("Second header offset overflow (V0.2.0)");
+            } else {
+                if ((trailer->secondHeaderOffset + sizeof(FestSecondHeader)) > (mapsize - 1)) {
+                    throw PackException("Second header offset overflow (V1.0.0)");
+                }
             }
             secondHeader = (FestSecondHeader *) (((uint8_t *) mapping) + trailer->secondHeaderOffset);
             if (trailer->magic != secondHeader->magic) {
@@ -125,16 +136,18 @@ void FestDeserializer::Init() {
     merkevare = (POppfLegemiddelMerkevare *) (void *) (((uint8_t *) mapping) + offset);
     numMerkevare = header->numLegemiddelMerkevare;
     offset += ((size_t) numMerkevare) * sizeof(*merkevare);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+    if (versionMajor == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
+        pakning = (POppfLegemiddelpakning *) (void *) (((uint8_t *) mapping) + offset);
+        numPakning = header->numPakning;
+        offset += ((size_t) numPakning) * sizeof(*pakning);
     }
-    pakning = (POppfLegemiddelpakning *) (void *) (((uint8_t *) mapping) + offset);
-    numPakning = header->numPakning;
-    offset += ((size_t) numPakning) * sizeof(*pakning);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -205,16 +218,18 @@ void FestDeserializer::Init() {
     virkestoff = (POppfVirkestoff *) (void *) (((uint8_t *) mapping) + offset);
     numVirkestoff = header->numVirkestoff;
     offset += ((size_t) numVirkestoff) * sizeof(*virkestoff);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+    if (versionMajor == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
+        kodeverk_0_0_0 = (POppfKodeverk_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+        numKodeverk_0_0_0 = header->numKodeverk;
+        offset += ((size_t) numKodeverk_0_0_0) * sizeof(*kodeverk_0_0_0);
     }
-    kodeverk_0_0_0 = (POppfKodeverk_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
-    numKodeverk_0_0_0 = header->numKodeverk;
-    offset += ((size_t) numKodeverk_0_0_0) * sizeof(*kodeverk_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -375,16 +390,18 @@ void FestDeserializer::Init() {
     refusjonList = (const PRefusjon *) (void *) (((uint8_t *) mapping) + offset);
     numRefusjonList = header->numRefusjonList;
     offset += ((size_t) numRefusjonList) * sizeof(*refusjonList);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+    if (versionMajor == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
+        elementList_0_0_0 = (const PElement_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+        numElement_0_0_0 = header->numElement;
+        offset += ((size_t) numElement_0_0_0) * sizeof(*elementList_0_0_0);
     }
-    elementList_0_0_0 = (const PElement_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
-    numElement_0_0_0 = header->numElement;
-    offset += ((size_t) numElement_0_0_0) * sizeof(*elementList_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -395,16 +412,18 @@ void FestDeserializer::Init() {
     refRefusjonsvilkarList = (const PRefRefusjonsvilkar *) (void *) (((uint8_t *) mapping) + offset);
     numRefRefusjonsvilkar = header->numRefRefusjonsvilkar;
     offset += ((size_t) numRefRefusjonsvilkar) * sizeof(*refRefusjonsvilkarList);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+    if (versionMajor == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
+        refusjonskodeList_0_0_0 = (const PRefusjonskode_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+        numRefusjonskode_0_0_0 = header->numRefusjonskode_0_0_0;
+        offset += ((size_t) numRefusjonskode_0_0_0) * sizeof(*refusjonskodeList_0_0_0);
     }
-    refusjonskodeList_0_0_0 = (const PRefusjonskode_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
-    numRefusjonskode_0_0_0 = header->numRefusjonskode_0_0_0;
-    offset += ((size_t) numRefusjonskode_0_0_0) * sizeof(*refusjonskodeList_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -465,26 +484,28 @@ void FestDeserializer::Init() {
     legemiddelforbrukList = (const PLegemiddelforbruk *) (void *) (((uint8_t *) mapping) + offset);
     numLegemiddelforbrukList = header->numLegemiddelforbrukList;
     offset += ((size_t) numLegemiddelforbrukList) * sizeof(*legemiddelforbrukList);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+    if (versionMajor == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
-    }
-    uint16List_V_0_0_0 = (const uint16_t *) (void *) (((uint8_t *) mapping) + offset);
-    numUint16List_V_0_0_0 = header->numUint16List;
-    offset += ((size_t) numUint16List_V_0_0_0) * sizeof(*uint16List_V_0_0_0);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+        uint16List_V_0_0_0 = (const uint16_t *) (void *) (((uint8_t *) mapping) + offset);
+        numUint16List_V_0_0_0 = header->numUint16List;
+        offset += ((size_t) numUint16List_V_0_0_0) * sizeof(*uint16List_V_0_0_0);
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
+        fests_V_0_0_0 = (const PFest_V_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+        numFests_V_0_0_0 = header->numFests;
+        offset += ((size_t) numFests_V_0_0_0) * sizeof(*fests_V_0_0_0);
     }
-    fests_V_0_0_0 = (const PFest_V_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
-    numFests_V_0_0_0 = header->numFests;
-    offset += ((size_t) numFests_V_0_0_0) * sizeof(*fests_V_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -517,7 +538,7 @@ void FestDeserializer::Init() {
         if (offset > mapsize) {
             throw PackException("Refusjonskode list overflow (v0.1.0)");
         }
-        if (versionMinor > 1) {
+        if (versionMajor > 0 || versionMinor > 1) {
             {
                 auto off = offset % alignment;
                 if (off != 0) {
@@ -528,18 +549,20 @@ void FestDeserializer::Init() {
             uint16List = (const uint16_t *) (void *) (((uint8_t *) mapping) + offset);
             numUint16List = secondHeader->numUint16NewList;
             offset += ((size_t) numUint16List) * sizeof(*uint16List);
-            {
-                auto off = offset % alignment;
-                if (off != 0) {
-                    off = alignment - off;
-                    offset += off;
+            if (versionMajor == 0) {
+                {
+                    auto off = offset % alignment;
+                    if (off != 0) {
+                        off = alignment - off;
+                        offset += off;
+                    }
                 }
-            }
-            fests_V_0_2_0 = (const PFest_V_0_2_0 *) (void *) (((uint8_t *) mapping) + offset);
-            numFests_V_0_2_0 = secondHeader->numFests;
-            offset += sizeof(*fests_V_0_2_0) * ((size_t)numFests_V_0_2_0);
-            if (offset > mapsize) {
-                throw PackException("Fest list overflow (v0.2.0)");
+                fests_V_0_2_0 = (const PFest_V_0_2_0 *) (void *) (((uint8_t *) mapping) + offset);
+                numFests_V_0_2_0 = secondHeader->numFests;
+                offset += sizeof(*fests_V_0_2_0) * ((size_t) numFests_V_0_2_0);
+                if (offset > mapsize) {
+                    throw PackException("Fest list overflow (v0.2.0)");
+                }
             }
         } else {
             uint16List = nullptr;
@@ -547,7 +570,7 @@ void FestDeserializer::Init() {
             fests_V_0_2_0 = nullptr;
             numFests_V_0_2_0 = 0;
         }
-        if (versionMinor > 2) {
+        if (versionMajor > 0 || versionMinor > 2) {
             {
                 auto off = offset % alignment;
                 if (off != 0) {

@@ -190,6 +190,7 @@ private:
     std::vector<PFest_V_0_3_0> fests_V_0_3_0{};
     std::map<std::string,std::shared_ptr<FestData>> festMap{};
     int percentDone;
+    int minimumMajorVersion;
 public:
     FestSerializer(const std::shared_ptr<std::ostream> &output);
     FestSerializer(const std::string &filename);

@@ -40,6 +40,7 @@ public:
 };
 
 void FestDeserializer::Preload(FestSerializer &festSerializer) const {
+    festSerializer.minimumMajorVersion = versionMajor;
     festSerializer.stringblock.clear();
     festSerializer.stringblock.append(stringblock, stringblocksize);
     PL(festSerializer.festidblock, festUuid, numFestUuid);

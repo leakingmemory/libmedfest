@@ -229,6 +229,9 @@ void FestDeserializer::Init() {
         kodeverk_0_0_0 = (POppfKodeverk_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
         numKodeverk_0_0_0 = header->numKodeverk;
         offset += ((size_t) numKodeverk_0_0_0) * sizeof(*kodeverk_0_0_0);
+    } else {
+        kodeverk_0_0_0 = nullptr;
+        numKodeverk_0_0_0 = 0;
     }
     {
         auto off = offset % alignment;
@@ -401,6 +404,9 @@ void FestDeserializer::Init() {
         elementList_0_0_0 = (const PElement_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
         numElement_0_0_0 = header->numElement;
         offset += ((size_t) numElement_0_0_0) * sizeof(*elementList_0_0_0);
+    } else {
+        elementList_0_0_0 = nullptr;
+        numElement_0_0_0 = 0;
     }
     {
         auto off = offset % alignment;
@@ -423,6 +429,9 @@ void FestDeserializer::Init() {
         refusjonskodeList_0_0_0 = (const PRefusjonskode_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
         numRefusjonskode_0_0_0 = header->numRefusjonskode_0_0_0;
         offset += ((size_t) numRefusjonskode_0_0_0) * sizeof(*refusjonskodeList_0_0_0);
+    } else {
+        refusjonskodeList_0_0_0 = nullptr;
+        numRefusjonskode_0_0_0 = 0;
     }
     {
         auto off = offset % alignment;
@@ -643,6 +652,8 @@ void FestDeserializer::Init() {
             numKodeverk_0_3_0 = 0;
             fests_V_0_3_0 = nullptr;
             numFests_V_0_3_0 = 0;
+            uint32List = nullptr;
+            numUint32List = 0;
         }
     } else {
         refusjonskodeList = nullptr;
@@ -659,6 +670,8 @@ void FestDeserializer::Init() {
         numKodeverk_0_3_0 = 0;
         fests_V_0_3_0 = nullptr;
         numFests_V_0_3_0 = 0;
+        uint32List = nullptr;
+        numUint32List = 0;
     }
 }
 

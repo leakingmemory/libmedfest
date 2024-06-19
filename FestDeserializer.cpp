@@ -620,6 +620,8 @@ void FestDeserializer::Init() {
             numKodeverk_0_3_0 = 0;
             fests_V_0_3_0 = nullptr;
             numFests_V_0_3_0 = 0;
+            uint32List = nullptr;
+            numUint32List = 0;
         }
     } else {
         refusjonskodeList = nullptr;
@@ -636,6 +638,8 @@ void FestDeserializer::Init() {
         numKodeverk_0_3_0 = 0;
         fests_V_0_3_0 = nullptr;
         numFests_V_0_3_0 = 0;
+        uint32List = nullptr;
+        numUint32List = 0;
     }
 }
 

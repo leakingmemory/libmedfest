@@ -40,6 +40,7 @@ bool FestSerializer::Serialize(const Fest &fest) {
         fests_V_0_0_0.emplace_back(festInst, uint16List_V_0_0_0, stringblock, stringblockCache);
         fests_V_0_2_0.emplace_back(festInst, uint16List, stringblock, stringblockCache);
         fests_V_0_3_0.emplace_back(festInst, uint32List, uint16List, stringblock, stringblockCache);
+        fests_V_0_4_0.emplace_back(festInst, uint32List, uint16List, stringblock, stringblockCache);
     }
     return result;
 }
@@ -53,11 +54,11 @@ bool FestSerializer::Write(uint64_t magic) {
     if (dbVersion.major > 1) {
         throw PackException("Output version above 1.X.X is not supported");
     }
-    if (dbVersion.major == 1 && dbVersion.minor > 0) {
+    if (dbVersion.major == 1 && dbVersion.minor > 1) {
         throw PackException("Output version above 1.0.X is not supported");
     }
-    if (dbVersion.major == 0 && dbVersion.minor > 3) {
-        throw PackException("Output version major 1 with minor > 3 (1.3.X) is not supported");
+    if (dbVersion.major == 0 && dbVersion.minor > 4) {
+        throw PackException("Output version major 0 with minor > 4 (0.4.X) is not supported");
     }
     if (dbVersion.major < minimumMajorVersion) {
         throw PackException("Output version below minimum with the imported data");
@@ -78,8 +79,11 @@ bool FestSerializer::Write(uint64_t magic) {
     if (reseptgyldighetList.size() >= (1 << 8)) {
         throw PackException("Max size reseptgyldighet-list");
     }
-    if (legemiddelMerkevare.size() >= (1 << 16)) {
-        throw PackException("Max size merkevare-list");
+    if (legemiddelMerkevare_0_0_0.size() >= (1 << 16)) {
+        throw PackException("Max size merkevare-list v0.0.0");
+    }
+    if (legemiddelMerkevare_0_4_0.size() > std::numeric_limits<uint32_t>::max()) {
+        throw PackException("Max size merkevare-list v0.4.0");
     }
     if (valueWithCodesetList.size() >= (1 << 16)) {
         throw PackException("Max vc-list");
@@ -96,17 +100,26 @@ bool FestSerializer::Write(uint64_t magic) {
     if (prisVareList.size() >= (1 << 16)) {
         throw PackException("Max pris-vare-list");
     }
-    if (festUuidList.size() >= (1 << 16)) {
-        throw PackException("Max size uuid-list-list");
+    if (festUuidList_0_0_0.size() >= (1 << 16)) {
+        throw PackException("Max size uuid-list-list (v0.0.0)");
     }
-    if (legemiddelpakning.size() >= std::numeric_limits<uint32_t>::max()) {
+    if (festUuidList_0_4_0.size() >= std::numeric_limits<uint32_t>::max()) {
+        throw PackException("Max size uuid-list-list (v0.4.0)");
+    }
+    if (legemiddelpakning_0_0_0.size() >= std::numeric_limits<uint32_t>::max()) {
+        throw PackException("Max size legemiddelpakning");
+    }
+    if (legemiddelpakning_0_4_0.size() >= std::numeric_limits<uint32_t>::max()) {
         throw PackException("Max size legemiddelpakning");
     }
     if (refusjonList.size() >= (1 << 16)) {
         throw PackException("Max size refusjon-list");
     }
-    if (legemiddelVirkestoff.size() >= (1 << 16)) {
-        throw PackException("Max size legemiddel-virkestoff");
+    if (legemiddelVirkestoff_0_0_0.size() >= (1 << 16)) {
+        throw PackException("Max size legemiddel-virkestoff v0.0.0");
+    }
+    if (legemiddelVirkestoff_0_4_0.size() > std::numeric_limits<uint32_t>::max()) {
+        throw PackException("Max size legemiddel-virkestoff v0.4.0");
     }
     if (stringList.size() >= (1 << 16)) {
         throw PackException("Max size string-list");
@@ -120,14 +133,20 @@ bool FestSerializer::Write(uint64_t magic) {
     if (brystprotese.size() >= (1 << 16)) {
         throw PackException("Max brystprotese list size");
     }
-    if (legemiddeldose.size() >= (1 << 16)) {
-        throw PackException("Max legemiddeldose list size");
+    if (legemiddeldose_0_0_0.size() >= (1 << 16)) {
+        throw PackException("Max legemiddeldose list size v0.0.0");
+    }
+    if (legemiddeldose_0_4_0.size() >= std::numeric_limits<uint32_t>::max()) {
+        throw PackException("Max legemiddeldose list size v0.4.0");
     }
     if (virkestoffMedStyrke.size() >= (1 << 16)) {
         throw PackException("Max virkestoff med styrke list size");
     }
-    if (virkestoff.size() >= (1 << 16)) {
-        throw PackException("Max virkestoff list size");
+    if (virkestoff_0_0_0.size() >= (1 << 16)) {
+        throw PackException("Max virkestoff list size v0.0.0");
+    }
+    if (virkestoff_0_4_0.size() > std::numeric_limits<uint32_t>::max()) {
+        throw PackException("Max virkestoff list size v0.4.0");
     }
     if (dbVersion.major == 0 && elementList_0_0_0.size() >= (1 << 16)) {
         throw PackException("Max element v0.0.0 list size");
@@ -159,8 +178,11 @@ bool FestSerializer::Write(uint64_t magic) {
     if (vilkar.size() >= (1 << 16)) {
         throw PackException("Max oppf vilkar size\n");
     }
-    if (varselSlv.size() >= (1 << 16)) {
-        throw PackException("Max oppf varsel slv size\n");
+    if (varselSlv_0_0_0.size() >= (1 << 16)) {
+        throw PackException("Max oppf varsel slv size v0.0.0\n");
+    }
+    if (varselSlv_0_4_0.size() > std::numeric_limits<uint32_t>::max()) {
+        throw PackException("Max oppf varsel slv size v0.4.0\n");
     }
     if (byttegruppe.size() >= (1 << 16)) {
         throw PackException("Max oppf byttegruppe size\n");
@@ -211,30 +233,30 @@ bool FestSerializer::Write(uint64_t magic) {
         .magic = magic,
         .numUuids = (uint32_t) festidblock.size(),
         .numReseptgyldighet = (uint8_t) reseptgyldighetList.size(),
-        .numLegemiddelMerkevare = (uint16_t) legemiddelMerkevare.size(),
+        .numLegemiddelMerkevare = (uint16_t) (dbVersion.major <= 1 ? legemiddelMerkevare_0_0_0.size() : 0),
         .numValueCodeset = (uint16_t) valueWithCodesetList.size(),
         .numPakningskomponent = (uint16_t) pakningskomponentList.size(),
         .numPakningskomponentInfo = (uint16_t) pakningskomponentInfoList.size(),
         .numPakningsinfo = (uint16_t) pakningsinfoList.size(),
         .numPrisVare = (uint16_t) prisVareList.size(),
-        .numUuidLists = (uint16_t) festUuidList.size(),
-        .numPakning = (uint16_t) (dbVersion.major == 0 ? (legemiddelpakning.size() <= std::numeric_limits<uint16_t>::max() ? legemiddelpakning.size() : std::numeric_limits<uint16_t>::max()) : 0),
+        .numUuidLists = (uint16_t) (dbVersion.major <= 1 ? festUuidList_0_0_0.size() : 0),
+        .numPakning = (uint16_t) (dbVersion.major == 0 ? (legemiddelpakning_0_0_0.size() <= std::numeric_limits<uint16_t>::max() ? legemiddelpakning_0_0_0.size() : std::numeric_limits<uint16_t>::max()) : 0),
         .numRefusjonList = (uint16_t) refusjonList.size(),
-        .numLegemiddelVirkestoff = (uint16_t) legemiddelVirkestoff.size(),
+        .numLegemiddelVirkestoff = (uint16_t) (dbVersion.major <= 1 ? legemiddelVirkestoff_0_0_0.size() : 0),
         .numStringList = (uint16_t) stringList.size(),
         .numMedForbrMatr = (uint16_t) medForbrMatr.size(),
         .numNaringsmiddel = (uint16_t) naringsmiddel.size(),
         .numBrystprotese = (uint16_t) brystprotese.size(),
-        .numLegemiddeldose = (uint16_t) legemiddeldose.size(),
+        .numLegemiddeldose = (uint16_t) (dbVersion.major <= 1 ? legemiddeldose_0_0_0.size() : 0),
         .numVirkestoffMedStyrke = (uint16_t) virkestoffMedStyrke.size(),
-        .numVirkestoff = (uint16_t) virkestoff.size(),
+        .numVirkestoff = (uint16_t) (dbVersion.major <= 1 ? virkestoff_0_0_0.size() : 0),
         .numElement = (uint16_t) (dbVersion.major == 0 ? elementList_0_0_0.size() : 0),
         .numKodeverk = (uint16_t) (dbVersion.major == 0 ? kodeverk_0_0_0.size() : 0),
         .numRefRefusjonsvilkar = (uint16_t) refRefusjonsvilkarList.size(),
         .numRefusjonskode_0_0_0 = (uint16_t) (dbVersion.major == 0 ? refusjonskodeList_0_0_0.size() : 0),
         .numRefusjon = (uint16_t) refusjon.size(),
         .numVilkar = (uint16_t) vilkar.size(),
-        .numVarselSlv = (uint16_t) varselSlv.size(),
+        .numVarselSlv = (uint16_t) varselSlv_0_0_0.size(),
         .numByttegruppe = (uint16_t) byttegruppe.size(),
         .numReferanseList = (uint16_t) referanseList.size(),
         .numSubstansgruppeList = (uint16_t) substansgruppeList.size(),
@@ -250,19 +272,21 @@ bool FestSerializer::Write(uint64_t magic) {
     };
     size_t offset = sizeof(firstHeader);
     output->write((char *) (void *) &firstHeader, offset);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+    if (dbVersion.major <= 1) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
         }
-    }
-    {
-        auto *ptr = legemiddelMerkevare.data();
-        auto size = legemiddelMerkevare.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
+        {
+            auto *ptr = legemiddelMerkevare_0_0_0.data();
+            auto size = legemiddelMerkevare_0_0_0.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
     }
     if (dbVersion.major == 0) {
         {
@@ -274,8 +298,8 @@ bool FestSerializer::Write(uint64_t magic) {
             }
         }
         {
-            auto *ptr = legemiddelpakning.data();
-            auto size = (size_t) legemiddelpakning.size();
+            auto *ptr = legemiddelpakning_0_0_0.data();
+            auto size = (size_t) legemiddelpakning_0_0_0.size();
             if (size > std::numeric_limits<uint16_t>::max()) {
                 size = std::numeric_limits<uint16_t>::max();
             }
@@ -292,18 +316,20 @@ bool FestSerializer::Write(uint64_t magic) {
             offset += off;
         }
     }
-    {
-        auto *ptr = legemiddelVirkestoff.data();
-        auto size = legemiddelVirkestoff.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+    if (dbVersion.major <= 1) {
+        {
+            auto *ptr = legemiddelVirkestoff_0_0_0.data();
+            auto size = legemiddelVirkestoff_0_0_0.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
         }
     }
     {
@@ -340,19 +366,21 @@ bool FestSerializer::Write(uint64_t magic) {
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+    if (dbVersion.major <= 1) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
         }
-    }
-    {
-        auto *ptr = legemiddeldose.data();
-        auto size = legemiddeldose.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
+        {
+            auto *ptr = legemiddeldose_0_0_0.data();
+            auto size = legemiddeldose_0_0_0.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
     }
     {
         auto off = offset % alignment;
@@ -368,19 +396,21 @@ bool FestSerializer::Write(uint64_t magic) {
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+    if (dbVersion.major <= 1) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
         }
-    }
-    {
-        auto *ptr = virkestoff.data();
-        auto size = virkestoff.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
+        {
+            auto *ptr = virkestoff_0_0_0.data();
+            auto size = virkestoff_0_0_0.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
     }
     if (dbVersion.major == 0) {
         {
@@ -426,19 +456,21 @@ bool FestSerializer::Write(uint64_t magic) {
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+    if (dbVersion.major <= 1) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
         }
-    }
-    {
-        auto *ptr = varselSlv.data();
-        auto size = varselSlv.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
+        {
+            auto *ptr = varselSlv_0_0_0.data();
+            auto size = varselSlv_0_0_0.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
     }
     {
         auto off = offset % alignment;
@@ -518,19 +550,21 @@ bool FestSerializer::Write(uint64_t magic) {
             offset += off;
         }
     }
-    {
-        auto list = festUuidList.GetStorageBlock();
-        auto *ptr = list.data();
-        auto size = list.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+    if (dbVersion.major <= 1) {
+        {
+            auto list = festUuidList_0_0_0.GetStorageBlock();
+            auto *ptr = list.data();
+            auto size = list.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
         }
     }
     {
@@ -853,7 +887,14 @@ bool FestSerializer::Write(uint64_t magic) {
             .numElementList = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? elementList_0_3_0.size() : 0),
             .numTermList = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? termList.size() : 0),
             .numUint32List = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? uint32List.size() : 0),
-            .numPakning = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? legemiddelpakning.size() : 0),
+            .numPakning_0_3_0 = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? legemiddelpakning_0_0_0.size() : 0),
+            .numPakning_0_4_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddelpakning_0_4_0.size() : 0),
+            .numMerkevare = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddelMerkevare_0_4_0.size() : 0),
+            .numLegemiddelVirkestoff = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddelVirkestoff_0_4_0.size() : 0),
+            .numLegemiddeldose = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddeldose_0_4_0.size() : 0),
+            .numFestUuidList = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? festUuidList_0_4_0.size() : 0),
+            .numVirkestoff = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? virkestoff_0_4_0.size() : 0),
+            .numVarselSlv = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? varselSlv_0_4_0.size() : 0)
         };
         output->write((char *) (void *) &secondHeader, sizeof(secondHeader));
         offset += sizeof(secondHeader);
@@ -959,19 +1000,21 @@ bool FestSerializer::Write(uint64_t magic) {
                     offset += off;
                 }
             }
-            {
-                auto &list = legemiddelpakning;
-                auto *ptr = list.data();
-                auto size = list.size() * sizeof(*ptr);
-                output->write((char *) (void *) ptr, size);
-                offset += size;
-            }
-            {
-                auto off = offset % alignment;
-                if (off != 0) {
-                    off = alignment - off;
-                    output->write(&(alignmentBlock[0]), off);
-                    offset += off;
+            if (dbVersion.major <= 1) {
+                {
+                    auto &list = legemiddelpakning_0_0_0;
+                    auto *ptr = list.data();
+                    auto size = list.size() * sizeof(*ptr);
+                    output->write((char *) (void *) ptr, size);
+                    offset += size;
+                }
+                {
+                    auto off = offset % alignment;
+                    if (off != 0) {
+                        off = alignment - off;
+                        output->write(&(alignmentBlock[0]), off);
+                        offset += off;
+                    }
                 }
             }
             {
@@ -992,6 +1035,125 @@ bool FestSerializer::Write(uint64_t magic) {
                 auto list = uint32List.GetStorageList();
                 auto *ptr = list.data();
                 auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+        }
+        if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3)) {
+            {
+                auto list = festUuidList_0_4_0.GetStorageBlock();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddelMerkevare_0_4_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddelVirkestoff_0_4_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddelpakning_0_4_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddeldose_0_4_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto *ptr = virkestoff_0_4_0.data();
+                auto size = virkestoff_0_4_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto *ptr = varselSlv_0_4_0.data();
+                auto size = varselSlv_0_4_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto *ptr = fests_V_0_4_0.data();
+                auto size = fests_V_0_4_0.size() * sizeof(*ptr);
                 output->write((char *) (void *) ptr, size);
                 offset += size;
             }
@@ -1031,9 +1193,9 @@ int FestSerializer::GetHighestSupportedMajorVersion() {
 
 int FestSerializer::GetHighestSupportedMinorVersion(int major) {
     if (major == 1) {
-        return 0;
+        return 1;
     } else if (major == 0) {
-        return 3;
+        return 4;
     } else {
         return 0;
     }
@@ -1069,20 +1231,26 @@ void FestSerializer::ProgressFinished(bool success) {
 }
 
 bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelMerkevare &merkevare) {
-    auto index = Add(this->legemiddelMerkevare, {merkevare, stringblock, stringblockCache, festidblock, festUuidList, valueWithCodesetList, reseptgyldighetList});
-    Add(fest, [index] (FestData &f) { f.legemiddelMerkevare.emplace_back(index); });
+    auto index_0_0_0 = Add(this->legemiddelMerkevare_0_0_0, {merkevare, stringblock, stringblockCache, festidblock, festUuidList_0_0_0, valueWithCodesetList, reseptgyldighetList});
+    auto index_0_4_0 = Add(this->legemiddelMerkevare_0_4_0, {merkevare, stringblock, stringblockCache, festidblock, festUuidList_0_4_0, valueWithCodesetList, reseptgyldighetList});
+    Add(fest, [index_0_0_0] (FestData &f) { f.legemiddelMerkevare_0_0_0.emplace_back(index_0_0_0); });
+    Add(fest, [index_0_4_0] (FestData &f) { f.legemiddelMerkevare_0_4_0.emplace_back(index_0_4_0); });
     return true;
 }
 
 bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelpakning &pakning) {
-    auto index = Add(this->legemiddelpakning, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, festidblock, stringblock, stringblockCache});
-    Add(fest, [index] (FestData &f) { f.legemiddelpakning.emplace_back(index); });
+    auto index_0_0_0 = Add(this->legemiddelpakning_0_0_0, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList_0_0_0, festidblock, stringblock, stringblockCache});
+    auto index_0_4_0 = Add(this->legemiddelpakning_0_4_0, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
+    Add(fest, [index_0_0_0] (FestData &f) { f.legemiddelpakning_0_0_0.emplace_back(index_0_0_0); });
+    Add(fest, [index_0_4_0] (FestData &f) { f.legemiddelpakning_0_4_0.emplace_back(index_0_4_0); });
     return true;
 }
 
 bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelVirkestoff &virkestoff) {
-    auto index = Add(this->legemiddelVirkestoff, {virkestoff, stringblock, stringblockCache, festidblock, stringList, festUuidList, valueWithCodesetList, refusjonList});
-    Add(fest, [index] (FestData &f) { f.legemiddelVirkestoff.emplace_back(index); });
+    auto index_0_0_0 = Add(this->legemiddelVirkestoff_0_0_0, {virkestoff, stringblock, stringblockCache, festidblock, stringList, festUuidList_0_0_0, valueWithCodesetList, refusjonList});
+    auto index_0_4_0 = Add(this->legemiddelVirkestoff_0_4_0, {virkestoff, stringblock, stringblockCache, festidblock, stringList, festUuidList_0_4_0, valueWithCodesetList, refusjonList});
+    Add(fest, [index_0_0_0] (FestData &f) { f.legemiddelVirkestoff_0_0_0.emplace_back(index_0_0_0); });
+    Add(fest, [index_0_4_0] (FestData &f) { f.legemiddelVirkestoff_0_4_0.emplace_back(index_0_4_0); });
     return true;
 }
 
@@ -1105,8 +1273,10 @@ bool FestSerializer::Visit(const std::string &fest, const OppfBrystprotese &brys
 }
 
 bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddeldose &legemiddeldose) {
-    auto index = Add(this->legemiddeldose, {legemiddeldose, pakningskomponentInfoList, festUuidList, festidblock, stringblock, stringblockCache});
-    Add(fest, [index] (FestData &f) { f.legemiddeldose.emplace_back(index); });
+    auto index_0_0_0 = Add(this->legemiddeldose_0_0_0, {legemiddeldose, pakningskomponentInfoList, festUuidList_0_0_0, festidblock, stringblock, stringblockCache});
+    auto index_0_4_0 = Add(this->legemiddeldose_0_4_0, {legemiddeldose, pakningskomponentInfoList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
+    Add(fest, [index_0_0_0] (FestData &f) { f.legemiddeldose_0_0_0.emplace_back(index_0_0_0); });
+    Add(fest, [index_0_4_0] (FestData &f) { f.legemiddeldose_0_4_0.emplace_back(index_0_4_0); });
     return true;
 }
 
@@ -1117,7 +1287,12 @@ bool FestSerializer::Visit(const std::string &fest, const OppfVirkestoffMedStyrk
 }
 
 bool FestSerializer::Visit(const std::string &fest, const OppfVirkestoff &virkestoff) {
-    auto index = Add(this->virkestoff, {virkestoff, festUuidList, festidblock, stringblock, stringblockCache});
+    auto index = Add(this->virkestoff_0_0_0, {virkestoff, festUuidList_0_0_0, festidblock, stringblock, stringblockCache});
+    auto index_0_4_0 = Add(this->virkestoff_0_4_0, {virkestoff, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
+    // TODO
+    if (index_0_4_0 != index) {
+        throw PackException("Index v0.4.0 is off (OppfVirkestoff)");
+    }
     Add(fest, [index] (FestData &f) { f.virkestoff.emplace_back(index); });
     return true;
 }
@@ -1145,7 +1320,12 @@ bool FestSerializer::Visit(const std::string &fest, const OppfVilkar &vilkar) {
 }
 
 bool FestSerializer::Visit(const std::string &fest, const OppfVarselSlv &varselSlv) {
-    auto index = Add(this->varselSlv, {varselSlv, valueWithCodesetList, festUuidList, festidblock, stringblock, stringblockCache});
+    auto index = Add(this->varselSlv_0_0_0, {varselSlv, valueWithCodesetList, festUuidList_0_0_0, festidblock, stringblock, stringblockCache});
+    auto index_0_4_0 = Add(this->varselSlv_0_4_0, {varselSlv, valueWithCodesetList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
+    // TODO
+    if (index != index_0_4_0) {
+        throw PackException("VarselSlv v0.4.0 index mismatch");
+    }
     Add(fest, [index] (FestData &f) { f.varselSlv.emplace_back(index); });
     return true;
 }

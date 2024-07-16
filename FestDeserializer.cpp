@@ -59,6 +59,8 @@ void FestDeserializer::Init() {
     FestSecondHeader *secondHeader{nullptr};
     uint32_t secondDataOffset{0};
     size_t offset = sizeof(*header);
+    size_t trailerOffset{0};
+    bool fullySupportedVersion{true};
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -83,15 +85,17 @@ void FestDeserializer::Init() {
             std::cerr << "Error: Major version " << version.major << " can not be read\n";
             throw PackException("Major version of file");
         }
-        if ((version.major == 0 && version.minor > 3) ||
-            (version.major == 1 && version.minor > 0)) {
+        if ((version.major == 0 && version.minor > 4) ||
+            (version.major == 1 && version.minor > 1)) {
             std::cerr << "Warning: Version " << ((int) version.major) << "." << ((int) version.minor) << " contains unsupported data (ignored)\n";
+            fullySupportedVersion = false;
         }
         if (version.major > 0 || version.minor >= 1) {
             if (mapsize < sizeof(FestTrailer)) {
                 throw PackException("Insufficient size (trailer)");
             }
-            auto *trailer = (FestTrailer *) (((uint8_t *) mapping) + (mapsize - sizeof(FestTrailer)));
+            trailerOffset = mapsize - sizeof(FestTrailer);
+            auto *trailer = (FestTrailer *) (((uint8_t *) mapping) + trailerOffset);
             if (trailer->magic != header->magic) {
                 throw PackException("Trailer magic incorrect");
             }
@@ -133,10 +137,22 @@ void FestDeserializer::Init() {
             }
         }
     }
-    merkevare = (POppfLegemiddelMerkevare *) (void *) (((uint8_t *) mapping) + offset);
-    numMerkevare = header->numLegemiddelMerkevare;
-    offset += ((size_t) numMerkevare) * sizeof(*merkevare);
-    if (versionMajor == 0) {
+    if (versionMajor < 2) {
+        merkevare_0_0_0 = (POppfLegemiddelMerkevare_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+        numMerkevare_0_0_0 = header->numLegemiddelMerkevare;
+        offset += ((size_t) numMerkevare_0_0_0) * sizeof(*merkevare_0_0_0);
+        if (versionMajor == 0) {
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            pakning_0_0_0 = (POppfLegemiddelpakning_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numPakning_0_0_0 = header->numPakning;
+            offset += ((size_t) numPakning_0_0_0) * sizeof(*pakning_0_0_0);
+        }
         {
             auto off = offset % alignment;
             if (off != 0) {
@@ -144,25 +160,15 @@ void FestDeserializer::Init() {
                 offset += off;
             }
         }
-        pakning = (POppfLegemiddelpakning *) (void *) (((uint8_t *) mapping) + offset);
-        numPakning = header->numPakning;
-        offset += ((size_t) numPakning) * sizeof(*pakning);
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
-        }
-    }
-    legemiddelVirkestoff = (POppfLegemiddelVirkestoff *) (void *) (((uint8_t *) mapping) + offset);
-    numLegemiddelVirkestoff = header->numLegemiddelVirkestoff;
-    offset += ((size_t) numLegemiddelVirkestoff) * sizeof(*legemiddelVirkestoff);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+        legemiddelVirkestoff_0_0_0 = (POppfLegemiddelVirkestoff_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+        numLegemiddelVirkestoff_0_0_0 = header->numLegemiddelVirkestoff;
+        offset += ((size_t) numLegemiddelVirkestoff_0_0_0) * sizeof(*legemiddelVirkestoff_0_0_0);
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
     }
     medForbrMatr = (POppfMedForbrMatr *) (void *) (((uint8_t *) mapping) + offset);
@@ -195,14 +201,16 @@ void FestDeserializer::Init() {
             offset += off;
         }
     }
-    legemiddeldose = (POppfLegemiddeldose *) (void *) (((uint8_t *) mapping) + offset);
-    numLegemiddeldose = header->numLegemiddeldose;
-    offset += ((size_t) numLegemiddeldose) * sizeof(*legemiddeldose);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+    if (versionMajor < 2) {
+        legemiddeldose_0_0_0 = (POppfLegemiddeldose_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+        numLegemiddeldose_0_0_0 = header->numLegemiddeldose;
+        offset += ((size_t) numLegemiddeldose_0_0_0) * sizeof(*legemiddeldose_0_0_0);
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
     }
     virkestoffMedStyrke = (POppfVirkestoffMedStyrke *) (void *) (((uint8_t *) mapping) + offset);
@@ -215,29 +223,31 @@ void FestDeserializer::Init() {
             offset += off;
         }
     }
-    virkestoff = (POppfVirkestoff *) (void *) (((uint8_t *) mapping) + offset);
-    numVirkestoff = header->numVirkestoff;
-    offset += ((size_t) numVirkestoff) * sizeof(*virkestoff);
-    if (versionMajor == 0) {
+    if (versionMajor < 2) {
+        virkestoff_0_0_0 = (POppfVirkestoff_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+        numVirkestoff_0_0_0 = header->numVirkestoff;
+        offset += ((size_t) numVirkestoff_0_0_0) * sizeof(*virkestoff_0_0_0);
+        if (versionMajor == 0) {
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            kodeverk_0_0_0 = (POppfKodeverk_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numKodeverk_0_0_0 = header->numKodeverk;
+            offset += ((size_t) numKodeverk_0_0_0) * sizeof(*kodeverk_0_0_0);
+        } else {
+            kodeverk_0_0_0 = nullptr;
+            numKodeverk_0_0_0 = 0;
+        }
         {
             auto off = offset % alignment;
             if (off != 0) {
                 off = alignment - off;
                 offset += off;
             }
-        }
-        kodeverk_0_0_0 = (POppfKodeverk_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
-        numKodeverk_0_0_0 = header->numKodeverk;
-        offset += ((size_t) numKodeverk_0_0_0) * sizeof(*kodeverk_0_0_0);
-    } else {
-        kodeverk_0_0_0 = nullptr;
-        numKodeverk_0_0_0 = 0;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
         }
     }
     refusjon = (POppfRefusjon *) (void *) (((uint8_t *) mapping) + offset);
@@ -260,14 +270,16 @@ void FestDeserializer::Init() {
             offset += off;
         }
     }
-    varselSlv = (POppfVarselSlv *) (void *) (((uint8_t *) mapping) + offset);
-    numVarselSlv = header->numVarselSlv;
-    offset += ((size_t) numVarselSlv) * sizeof(*varselSlv);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+    if (versionMajor < 2) {
+        varselSlv_0_0_0 = (POppfVarselSlv_0_0_0 *)(void *)(((uint8_t *) mapping) + offset);
+        numVarselSlv_0_0_0 = header->numVarselSlv;
+        offset += ((size_t) numVarselSlv_0_0_0) * sizeof(*varselSlv_0_0_0);
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
     }
     byttegruppe = (POppfByttegruppe *) (void *) (((uint8_t *) mapping) + offset);
@@ -320,14 +332,16 @@ void FestDeserializer::Init() {
             offset += off;
         }
     }
-    festUuidList = (const PFestId *) (void *) (((uint8_t *) mapping) + offset);
-    numFestUuidList = header->numUuidLists;
-    offset += ((size_t) numFestUuidList) * sizeof(*festUuidList);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            offset += off;
+    if (versionMajor < 2) {
+        festUuidList_0_0_0 = (const PFestId *) (void *) (((uint8_t *) mapping) + offset);
+        numFestUuidList_0_0_0 = header->numUuidLists;
+        offset += ((size_t) numFestUuidList_0_0_0) * sizeof(*festUuidList_0_0_0);
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                offset += off;
+            }
         }
     }
     valueWithCodesetList = (const PValueWithCodeset *) (void *) (((uint8_t *) mapping) + offset);
@@ -617,9 +631,9 @@ void FestDeserializer::Init() {
                     offset += off;
                 }
             }
-            pakning = (const POppfLegemiddelpakning *) (void *) (((uint8_t *) mapping) + offset);
-            numPakning = secondHeader->numPakning;
-            offset += ((size_t) numPakning) * sizeof(*pakning);
+            pakning_0_0_0 = (const POppfLegemiddelpakning_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numPakning_0_0_0 = secondHeader->numPakning_0_3_0;
+            offset += ((size_t) numPakning_0_0_0) * sizeof(*pakning_0_0_0);
             {
                 auto off = offset % alignment;
                 if (off != 0) {
@@ -654,6 +668,111 @@ void FestDeserializer::Init() {
             numFests_V_0_3_0 = 0;
             uint32List = nullptr;
             numUint32List = 0;
+        }
+        if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            festUuidList_0_4_0 = (const PFestId *) (void *) (((uint8_t *) mapping) + offset);
+            numFestUuidList_0_4_0 = secondHeader->numFestUuidList;
+            offset += ((size_t) numFestUuidList_0_4_0) * sizeof(*festUuidList_0_4_0);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            merkevare_0_4_0 = (const POppfLegemiddelMerkevare_0_4_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numMerkevare_0_4_0 = secondHeader->numMerkevare;
+            offset += ((size_t) numMerkevare_0_4_0) * sizeof(*merkevare_0_4_0);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            legemiddelVirkestoff_0_4_0 = (const POppfLegemiddelVirkestoff_0_4_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numLegemiddelVirkestoff_0_4_0 = secondHeader->numLegemiddelVirkestoff;
+            offset += ((size_t) numLegemiddelVirkestoff_0_4_0) * sizeof(*legemiddelVirkestoff_0_4_0);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            pakning_0_4_0 = (const POppfLegemiddelpakning_0_4_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numPakning_0_4_0 = secondHeader->numPakning_0_4_0;
+            offset += ((size_t) numPakning_0_4_0) * sizeof(*pakning_0_4_0);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            legemiddeldose_0_4_0 = (const POppfLegemiddeldose_0_4_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numLegemiddeldose_0_4_0 = secondHeader->numLegemiddeldose;
+            offset += ((size_t) numLegemiddeldose_0_4_0) * sizeof(*legemiddeldose_0_4_0);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            virkestoff_0_4_0 = (const POppfVirkestoff_0_4_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numVirkestoff_0_4_0 = secondHeader->numVirkestoff;
+            offset += ((size_t) numVirkestoff_0_4_0) * sizeof(*virkestoff_0_4_0);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            varselSlv_0_4_0 = (const POppfVarselSlv_0_4_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numVarselSlv_0_4_0 = secondHeader->numVarselSlv;
+            offset += ((size_t) numVarselSlv_0_4_0) * sizeof(*varselSlv_0_4_0);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            fests_V_0_4_0 = (const PFest_V_0_4_0 *) (void *) (((uint8_t *) mapping) + offset);
+            numFests_V_0_4_0 = secondHeader->numFests;
+            offset += sizeof(*fests_V_0_4_0) * ((size_t)numFests_V_0_4_0);
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    offset += off;
+                }
+            }
+            if (fullySupportedVersion && offset != trailerOffset) {
+                std::cerr << "Final offset of " << offset << " does not match trailer offset of " << trailerOffset << "\n";
+                throw PackException("Size of data was not what was expected for this version");
+            }
+        } else {
+            merkevare_0_4_0 = nullptr;
+            numMerkevare_0_4_0 = 0;
+            legemiddelVirkestoff_0_4_0 = nullptr;
+            numLegemiddelVirkestoff_0_4_0 = 0;
+            pakning_0_4_0 = nullptr;
+            numPakning_0_4_0 = 0;
+            legemiddeldose_0_4_0 = nullptr;
+            numLegemiddeldose_0_4_0 = 0;
+            varselSlv_0_4_0 = nullptr;
+            numVarselSlv_0_4_0 = 0;
+            numFests_V_0_4_0 = 0;
         }
     } else {
         refusjonskodeList = nullptr;
@@ -693,28 +812,100 @@ int FestDeserializer::GetVersionPatch() const {
     return versionPatch;
 }
 
+std::vector<POppfLegemiddelMerkevare_0_0_0> FestDeserializer::GetLegemiddelMerkevare_0_0_0() const {
+    std::vector<POppfLegemiddelMerkevare_0_0_0> result{};
+    ForEachMerkevare_0_0_0([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfLegemiddelMerkevare_0_4_0> FestDeserializer::GetLegemiddelMerkevare_0_4_0() const {
+    std::vector<POppfLegemiddelMerkevare_0_4_0> result{};
+    ForEachMerkevare_0_4_0([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
 std::vector<POppfLegemiddelMerkevare> FestDeserializer::GetLegemiddelMerkevare() const {
-    std::vector<POppfLegemiddelMerkevare> result{};
-    ForEachMerkevare([&result] (const auto &oppf) {
+    std::vector<POppfLegemiddelMerkevare> dst{};
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        auto src = GetLegemiddelMerkevare_0_4_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    } else {
+        auto src = GetLegemiddelMerkevare_0_0_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    }
+    return dst;
+}
+
+std::vector<POppfLegemiddelpakning_0_0_0> FestDeserializer::GetLegemiddelPakning_0_0_0() const {
+    std::vector<POppfLegemiddelpakning_0_0_0> result{};
+    ForEachPakning_0_0_0([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfLegemiddelpakning_0_4_0> FestDeserializer::GetLegemiddelPakning_0_4_0() const {
+    std::vector<POppfLegemiddelpakning_0_4_0> result{};
+    ForEachPakning_0_4_0([&result] (const auto &oppf) {
         result.emplace_back(oppf);
     });
     return result;
 }
 
 std::vector<POppfLegemiddelpakning> FestDeserializer::GetLegemiddelPakning() const {
-    std::vector<POppfLegemiddelpakning> result{};
-    ForEachPakning([&result] (const auto &oppf) {
+    std::vector<POppfLegemiddelpakning> dst{};
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        auto src = GetLegemiddelPakning_0_4_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    } else {
+        auto src = GetLegemiddelPakning_0_0_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    }
+    return dst;
+}
+
+std::vector<POppfLegemiddelVirkestoff_0_0_0> FestDeserializer::GetLegemiddelVirkestoff_0_0_0() const {
+    std::vector<POppfLegemiddelVirkestoff_0_0_0> result{};
+    ForEachLegemiddelVirkestoff_0_0_0([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfLegemiddelVirkestoff_0_4_0> FestDeserializer::GetLegemiddelVirkestoff_0_4_0() const {
+    std::vector<POppfLegemiddelVirkestoff_0_4_0> result{};
+    ForEachLegemiddelVirkestoff_0_4_0([&result] (const auto &oppf) {
         result.emplace_back(oppf);
     });
     return result;
 }
 
 std::vector<POppfLegemiddelVirkestoff> FestDeserializer::GetLegemiddelVirkestoff() const {
-    std::vector<POppfLegemiddelVirkestoff> result{};
-    ForEachLegemiddelVirkestoff([&result] (const auto &oppf) {
-        result.emplace_back(oppf);
-    });
-    return result;
+    std::vector<POppfLegemiddelVirkestoff> dst{};
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        auto src = GetLegemiddelVirkestoff_0_4_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    } else {
+        auto src = GetLegemiddelVirkestoff_0_0_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    }
+    return dst;
 }
 
 std::vector<POppfMedForbrMatr> FestDeserializer::GetMedForbrMatr() const {
@@ -741,12 +932,36 @@ std::vector<POppfBrystprotese> FestDeserializer::GetBrystprotese() const {
     return result;
 }
 
-std::vector<POppfLegemiddeldose> FestDeserializer::GetLegemiddeldose() const {
-    std::vector<POppfLegemiddeldose> result{};
-    ForEachLegemiddeldose([&result] (const auto &oppf) {
+std::vector<POppfLegemiddeldose_0_0_0> FestDeserializer::GetLegemiddeldose_0_0_0() const {
+    std::vector<POppfLegemiddeldose_0_0_0> result{};
+    ForEachLegemiddeldose_0_0_0([&result] (const auto &oppf) {
         result.emplace_back(oppf);
     });
     return result;
+}
+
+std::vector<POppfLegemiddeldose_0_4_0> FestDeserializer::GetLegemiddeldose_0_4_0() const {
+    std::vector<POppfLegemiddeldose_0_4_0> result{};
+    ForEachLegemiddeldose_0_4_0([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
+std::vector<POppfLegemiddeldose> FestDeserializer::GetLegemiddeldose() const {
+    std::vector<POppfLegemiddeldose> dst{};
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        auto src = GetLegemiddeldose_0_4_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    } else {
+        auto src = GetLegemiddeldose_0_0_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    }
+    return dst;
 }
 
 std::vector<POppfVirkestoffMedStyrke> FestDeserializer::GetVirkestoffMedStyrke() const {
@@ -757,12 +972,36 @@ std::vector<POppfVirkestoffMedStyrke> FestDeserializer::GetVirkestoffMedStyrke()
     return result;
 }
 
-std::vector<POppfVirkestoff> FestDeserializer::GetVirkestoff() const {
-    std::vector<POppfVirkestoff> result{};
-    for (std::remove_const<typeof(numVirkestoff)>::type i = 0; i < numVirkestoff; i++) {
-        result.emplace_back(this->virkestoff[i]);
+std::vector<POppfVirkestoff_0_0_0> FestDeserializer::GetVirkestoff_0_0_0() const {
+    std::vector<POppfVirkestoff_0_0_0> result{};
+    for (std::remove_const<typeof(numVirkestoff_0_0_0)>::type i = 0; i < numVirkestoff_0_0_0; i++) {
+        result.emplace_back(this->virkestoff_0_0_0[i]);
     }
     return result;
+}
+
+std::vector<POppfVirkestoff_0_4_0> FestDeserializer::GetVirkestoff_0_4_0() const {
+    std::vector<POppfVirkestoff_0_4_0> result{};
+    for (std::remove_const<typeof(numVirkestoff_0_4_0)>::type i = 0; i < numVirkestoff_0_4_0; i++) {
+        result.emplace_back(this->virkestoff_0_4_0[i]);
+    }
+    return result;
+}
+
+std::vector<POppfVirkestoff> FestDeserializer::GetVirkestoff() const {
+    std::vector<POppfVirkestoff> dst{};
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        auto src = GetVirkestoff_0_4_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    } else {
+        auto src = GetVirkestoff_0_0_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    }
+    return dst;
 }
 
 std::vector<POppfRefusjon> FestDeserializer::GetOppfRefusjon() const {
@@ -869,13 +1108,30 @@ std::vector<FestUuid> FestDeserializer::GetFestIds() const {
     return uuids;
 }
 
-std::vector<PFestId> FestDeserializer::GetFestIdLists() const {
+std::vector<PFestId> FestDeserializer::GetFestIdLists_0_0_0() const {
     std::vector<PFestId> festIds{};
-    festIds.reserve(numFestUuidList);
-    for (std::remove_const<typeof(numFestUuidList)>::type i = 0; i < numFestUuidList; i++) {
-        festIds.emplace_back(this->festUuidList[i]);
+    festIds.reserve(numFestUuidList_0_0_0);
+    for (std::remove_const<typeof(numFestUuidList_0_0_0)>::type i = 0; i < numFestUuidList_0_0_0; i++) {
+        festIds.emplace_back(this->festUuidList_0_0_0[i]);
     }
     return festIds;
+}
+
+std::vector<PFestId> FestDeserializer::GetFestIdLists_0_4_0() const {
+    std::vector<PFestId> festIds{};
+    festIds.reserve(numFestUuidList_0_4_0);
+    for (std::remove_const<typeof(numFestUuidList_0_4_0)>::type i = 0; i < numFestUuidList_0_4_0; i++) {
+        festIds.emplace_back(this->festUuidList_0_4_0[i]);
+    }
+    return festIds;
+}
+
+std::vector<PFestId> FestDeserializer::GetFestIdLists() const {
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        return GetFestIdLists_0_4_0();
+    } else {
+        return GetFestIdLists_0_0_0();
+    }
 }
 
 std::vector<PRefusjon> FestDeserializer::GetRefusjon() const {
@@ -1029,21 +1285,81 @@ std::vector<PString> FestDeserializer::GetStringList() const {
     return strings;
 }
 
+void FestDeserializer::ForEachMerkevare_0_0_0(const std::function<void(const POppfLegemiddelMerkevare_0_0_0 &)> &func) const {
+    for (std::remove_const<typeof(numMerkevare_0_0_0)>::type i = 0; i < numMerkevare_0_0_0; i++) {
+        func(this->merkevare_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachMerkevare_0_4_0(const std::function<void(const POppfLegemiddelMerkevare_0_4_0 &)> &func) const {
+    for (std::remove_const<typeof(numMerkevare_0_4_0)>::type i = 0; i < numMerkevare_0_4_0; i++) {
+        func(this->merkevare_0_4_0[i]);
+    }
+}
+
 void FestDeserializer::ForEachMerkevare(const std::function<void(const POppfLegemiddelMerkevare &)> &func) const {
-    for (std::remove_const<typeof(numMerkevare)>::type i = 0; i < numMerkevare; i++) {
-        func(this->merkevare[i]);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        ForEachMerkevare_0_4_0([&func] (const POppfLegemiddelMerkevare_0_4_0 &src) {
+            POppfLegemiddelMerkevare dst{src};
+            func(dst);
+        });
+    } else {
+        ForEachMerkevare_0_0_0([&func] (const POppfLegemiddelMerkevare_0_0_0 &src) {
+            POppfLegemiddelMerkevare dst{src};
+            func(dst);
+        });
+    }
+}
+
+void FestDeserializer::ForEachPakning_0_0_0(const std::function<void(const POppfLegemiddelpakning_0_0_0 &)> &func) const {
+    for (std::remove_const<typeof(numPakning_0_0_0)>::type i = 0; i < numPakning_0_0_0; i++) {
+        func(this->pakning_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachPakning_0_4_0(const std::function<void(const POppfLegemiddelpakning_0_4_0 &)> &func) const {
+    for (std::remove_const<typeof(numPakning_0_4_0)>::type i = 0; i < numPakning_0_4_0; i++) {
+        func(this->pakning_0_4_0[i]);
     }
 }
 
 void FestDeserializer::ForEachPakning(const std::function<void(const POppfLegemiddelpakning &)> &func) const {
-    for (std::remove_const<typeof(numPakning)>::type i = 0; i < numPakning; i++) {
-        func(this->pakning[i]);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        ForEachPakning_0_4_0([&func] (const POppfLegemiddelpakning_0_4_0 &src) {
+            POppfLegemiddelpakning dst{src};
+            func(dst);
+        });
+    } else {
+        ForEachPakning_0_0_0([&func] (const POppfLegemiddelpakning_0_0_0 &src) {
+            POppfLegemiddelpakning dst{src};
+            func(dst);
+        });
+    }
+}
+
+void FestDeserializer::ForEachLegemiddelVirkestoff_0_0_0(const std::function<void(const POppfLegemiddelVirkestoff_0_0_0 &)> &func) const {
+    for (std::remove_const<typeof(numLegemiddelVirkestoff_0_0_0)>::type i = 0; i < numLegemiddelVirkestoff_0_0_0; i++) {
+        func(this->legemiddelVirkestoff_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachLegemiddelVirkestoff_0_4_0(const std::function<void(const POppfLegemiddelVirkestoff_0_4_0 &)> &func) const {
+    for (std::remove_const<typeof(numLegemiddelVirkestoff_0_4_0)>::type i = 0; i < numLegemiddelVirkestoff_0_4_0; i++) {
+        func(this->legemiddelVirkestoff_0_4_0[i]);
     }
 }
 
 void FestDeserializer::ForEachLegemiddelVirkestoff(const std::function<void(const POppfLegemiddelVirkestoff &)> &func) const {
-    for (std::remove_const<typeof(numLegemiddelVirkestoff)>::type i = 0; i < numLegemiddelVirkestoff; i++) {
-        func(this->legemiddelVirkestoff[i]);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        ForEachLegemiddelVirkestoff_0_4_0([&func] (const POppfLegemiddelVirkestoff_0_4_0 &src) {
+            POppfLegemiddelVirkestoff dst{src};
+            func(dst);
+        });
+    } else {
+        ForEachLegemiddelVirkestoff_0_0_0([&func] (const POppfLegemiddelVirkestoff_0_0_0 &src) {
+            POppfLegemiddelVirkestoff dst{src};
+            func(dst);
+        });
     }
 }
 
@@ -1065,9 +1381,29 @@ void FestDeserializer::ForEachBrystprotese(const std::function<void(const POppfB
     }
 }
 
+void FestDeserializer::ForEachLegemiddeldose_0_0_0(const std::function<void(const POppfLegemiddeldose_0_0_0 &)> &func) const {
+    for (std::remove_const<typeof(numLegemiddeldose_0_0_0)>::type i = 0; i < numLegemiddeldose_0_0_0; i++) {
+        func(this->legemiddeldose_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachLegemiddeldose_0_4_0(const std::function<void(const POppfLegemiddeldose_0_4_0 &)> &func) const {
+    for (std::remove_const<typeof(numLegemiddeldose_0_4_0)>::type i = 0; i < numLegemiddeldose_0_4_0; i++) {
+        func(this->legemiddeldose_0_4_0[i]);
+    }
+}
+
 void FestDeserializer::ForEachLegemiddeldose(const std::function<void(const POppfLegemiddeldose &)> &func) const {
-    for (std::remove_const<typeof(numLegemiddeldose)>::type i = 0; i < numLegemiddeldose; i++) {
-        func(this->legemiddeldose[i]);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        ForEachLegemiddeldose_0_4_0([&func] (const POppfLegemiddeldose_0_4_0 &src) {
+            POppfLegemiddeldose dst{src};
+            func(dst);
+        });
+    } else {
+        ForEachLegemiddeldose_0_0_0([&func] (const POppfLegemiddeldose_0_0_0 &src) {
+            POppfLegemiddeldose dst{src};
+            func(dst);
+        });
     }
 }
 
@@ -1077,9 +1413,29 @@ void FestDeserializer::ForEachVirkestoffMedStyrke(const std::function<void(const
     }
 }
 
+void FestDeserializer::ForEachVirkestoff_0_0_0(const std::function<void(const POppfVirkestoff_0_0_0 &)> &func) const {
+    for (std::remove_const<typeof(numVirkestoff_0_0_0)>::type i = 0; i < numVirkestoff_0_0_0; i++) {
+        func(this->virkestoff_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachVirkestoff_0_4_0(const std::function<void(const POppfVirkestoff_0_4_0 &)> &func) const {
+    for (std::remove_const<typeof(numVirkestoff_0_4_0)>::type i = 0; i < numVirkestoff_0_4_0; i++) {
+        func(this->virkestoff_0_4_0[i]);
+    }
+}
+
 void FestDeserializer::ForEachVirkestoff(const std::function<void(const POppfVirkestoff &)> &func) const {
-    for (std::remove_const<typeof(numVirkestoff)>::type i = 0; i < numVirkestoff; i++) {
-        func(this->virkestoff[i]);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        ForEachVirkestoff_0_4_0([&func] (const POppfVirkestoff_0_4_0 &src) {
+            POppfVirkestoff dst{src};
+            func(dst);
+        });
+    } else {
+        ForEachVirkestoff_0_0_0([&func] (const POppfVirkestoff_0_0_0 &src) {
+            POppfVirkestoff dst{src};
+            func(dst);
+        });
     }
 }
 
@@ -1121,9 +1477,29 @@ void FestDeserializer::ForEachVilkar(const std::function<void(const POppfVilkar 
     }
 }
 
+void FestDeserializer::ForEachVarselSlv_0_0_0(const std::function<void(const POppfVarselSlv_0_0_0 &)> &func) const {
+    for (std::remove_const<typeof(numVarselSlv_0_0_0)>::type i = 0; i < numVarselSlv_0_0_0; i++) {
+        func(this->varselSlv_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachVarselSlv_0_4_0(const std::function<void(const POppfVarselSlv_0_4_0 &)> &func) const {
+    for (std::remove_const<typeof(numVarselSlv_0_4_0)>::type i = 0; i < numVarselSlv_0_4_0; i++) {
+        func(this->varselSlv_0_4_0[i]);
+    }
+}
+
 void FestDeserializer::ForEachVarselSlv(const std::function<void(const POppfVarselSlv &)> &func) const {
-    for (std::remove_const<typeof(numVarselSlv)>::type i = 0; i < numVarselSlv; i++) {
-        func(this->varselSlv[i]);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        ForEachVarselSlv_0_4_0([&func] (const auto &src) {
+            POppfVarselSlv dst{src};
+            func(dst);
+        });
+    } else {
+        ForEachVarselSlv_0_0_0([&func] (const auto &src) {
+            POppfVarselSlv dst{src};
+            func(dst);
+        });
     }
 }
 
@@ -1169,8 +1545,19 @@ void FestDeserializer::ForEachFests_V_0_3_0(const std::function<void(const PFest
     }
 }
 
+void FestDeserializer::ForEachFests_V_0_4_0(const std::function<void(const PFest_V_0_4_0 &)> &func) const {
+    for (std::remove_const<typeof(numFests_V_0_4_0)>::type i = 0; i < numFests_V_0_4_0; i++) {
+        func(this->fests_V_0_4_0[i]);
+    }
+}
+
 void FestDeserializer::ForEachFests(const std::function<void(const PFest &)> &func) const {
-    if (GetVersionMajor() > 0 || GetVersionMinor() > 2) {
+    if ((GetVersionMajor() > 0 && GetVersionMinor() > 0) || (GetVersionMajor() == 0 && GetVersionMinor() > 3)) {
+        ForEachFests_V_0_4_0([func] (const PFest_V_0_4_0 &festV) {
+            PFest fest{festV};
+            func(fest);
+        });
+    } else if (GetVersionMajor() > 0 || GetVersionMinor() > 2) {
         ForEachFests_V_0_3_0([func] (const PFest_V_0_3_0 &festV) {
             PFest fest{festV};
             func(fest);
@@ -1200,8 +1587,14 @@ FestVectors FestDeserializer::Unpack(const PFest_V_0_3_0 &pFest) const {
     return {pFest, Unpack(pFest.dato), uint16List, numUint16List, uint32List, numUint32List};
 }
 
+FestVectors FestDeserializer::Unpack(const PFest_V_0_4_0 &pFest) const {
+    return {pFest, Unpack(pFest.dato), uint16List, numUint16List, uint32List, numUint32List};
+}
+
 FestVectors FestDeserializer::Unpack(const PFest &fest) const {
-    if (std::holds_alternative<PFest_V_0_3_0>(fest)) {
+    if (std::holds_alternative<PFest_V_0_4_0>(fest)) {
+        return Unpack(std::get<PFest_V_0_4_0>(fest));
+    } else if (std::holds_alternative<PFest_V_0_3_0>(fest)) {
         return Unpack(std::get<PFest_V_0_3_0>(fest));
     } else if (std::holds_alternative<PFest_V_0_2_0>(fest)) {
         return Unpack(std::get<PFest_V_0_2_0>(fest));
@@ -1246,16 +1639,40 @@ FestUuid FestDeserializer::Unpack(PFestId festId) const {
     }
 }
 
+OppfLegemiddelMerkevare FestDeserializer::Unpack(const POppfLegemiddelMerkevare_0_0_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelMerkevare_0_0_0>(poppf))};
+}
+
+OppfLegemiddelMerkevare FestDeserializer::Unpack(const POppfLegemiddelMerkevare_0_4_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelMerkevare_0_4_0>(poppf))};
+}
+
 OppfLegemiddelMerkevare FestDeserializer::Unpack(const POppfLegemiddelMerkevare &poppf) const {
-    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelMerkevare>(poppf))};
+    return {Unpack(static_cast<const POppf &>(poppf)), Unpack(static_cast<const PLegemiddelMerkevare &>(poppf))};
+}
+
+OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning_0_0_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelpakning_0_0_0>(poppf))};
+}
+
+OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning_0_4_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelpakning_0_4_0>(poppf))};
 }
 
 OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning &poppf) const {
-    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelpakning>(poppf))};
+    return {Unpack(static_cast<const POppf &>(poppf)), Unpack(static_cast<const PLegemiddelpakning &>(poppf))};
+}
+
+OppfLegemiddelVirkestoff FestDeserializer::Unpack(const POppfLegemiddelVirkestoff_0_0_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PLegemiddelVirkestoff_0_0_0>(poppf))};
+}
+
+OppfLegemiddelVirkestoff FestDeserializer::Unpack(const POppfLegemiddelVirkestoff_0_4_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PLegemiddelVirkestoff_0_4_0>(poppf))};
 }
 
 OppfLegemiddelVirkestoff FestDeserializer::Unpack(const POppfLegemiddelVirkestoff &poppf) const {
-    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PLegemiddelVirkestoff>(poppf))};
+    return {Unpack(static_cast<const POppf &>(poppf)), Unpack(static_cast<const PLegemiddelVirkestoff &>(poppf))};
 }
 
 OppfMedForbrMatr FestDeserializer::Unpack(const POppfMedForbrMatr &poppf) const {
@@ -1270,16 +1687,32 @@ OppfBrystprotese FestDeserializer::Unpack(const POppfBrystprotese &poppf) const 
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PBrystprotese>(poppf))};
 }
 
+OppfLegemiddeldose FestDeserializer::Unpack(const POppfLegemiddeldose_0_0_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PLegemiddeldose_0_0_0>(poppf))};
+}
+
+OppfLegemiddeldose FestDeserializer::Unpack(const POppfLegemiddeldose_0_4_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PLegemiddeldose_0_4_0>(poppf))};
+}
+
 OppfLegemiddeldose FestDeserializer::Unpack(const POppfLegemiddeldose &poppf) const {
-    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PLegemiddeldose>(poppf))};
+    return {Unpack(static_cast<const POppf &>(poppf)), Unpack(static_cast<const PLegemiddeldose &>(poppf))};
 }
 
 OppfVirkestoffMedStyrke FestDeserializer::Unpack(const POppfVirkestoffMedStyrke &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVirkestoffMedStyrke>(poppf))};
 }
 
+OppfVirkestoff FestDeserializer::Unpack(const POppfVirkestoff_0_0_0 &poppf) const {
+    return {Unpack(static_cast<const POppf &>(poppf)), Unpack(static_cast<const PVirkestoff_0_0_0 &>(poppf))};
+}
+
+OppfVirkestoff FestDeserializer::Unpack(const POppfVirkestoff_0_4_0 &poppf) const {
+    return {Unpack(static_cast<const POppf &>(poppf)), Unpack(static_cast<const PVirkestoff_0_4_0 &>(poppf))};
+}
+
 OppfVirkestoff FestDeserializer::Unpack(const POppfVirkestoff &poppf) const {
-    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVirkestoff>(poppf))};
+    return {Unpack(static_cast<const POppf &>(poppf)), Unpack(static_cast<const PVirkestoff &>(poppf))};
 }
 
 OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk_0_0_0 &poppf) const {
@@ -1320,8 +1753,20 @@ OppfVilkar FestDeserializer::Unpack(const POppfVilkar &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVilkar>(poppf))};
 }
 
+OppfVarselSlv FestDeserializer::Unpack(const POppfVarselSlv_0_0_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVarselSlv_0_0_0>(poppf))};
+}
+
+OppfVarselSlv FestDeserializer::Unpack(const POppfVarselSlv_0_4_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVarselSlv_0_4_0>(poppf))};
+}
+
 OppfVarselSlv FestDeserializer::Unpack(const POppfVarselSlv &poppf) const {
-    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PVarselSlv>(poppf))};
+    if (std::holds_alternative<PVarselSlv_0_4_0>(poppf)) {
+        return {Unpack(static_cast<const POppf &>(poppf)), Unpack(std::get<PVarselSlv_0_4_0>(poppf))};
+    } else {
+        return {Unpack(static_cast<const POppf &>(poppf)), Unpack(std::get<PVarselSlv_0_0_0>(poppf))};
+    }
 }
 
 OppfByttegruppe FestDeserializer::Unpack(const POppfByttegruppe &poppf) const {
@@ -1345,7 +1790,7 @@ Oppf FestDeserializer::Unpack(const POppf &poppf) const {
     return {Unpack(poppf.id).ToString(), Unpack(poppf.tidspunkt), status};
 }
 
-LegemiddelMerkevare FestDeserializer::Unpack(const PLegemiddelMerkevare &pmerkevare) const {
+LegemiddelMerkevare FestDeserializer::Unpack(const PLegemiddelMerkevare_0_0_0 &pmerkevare) const {
     std::vector<Reseptgyldighet> reseptgyldighet{};
     {
         auto rg = Unpack(reseptgyldighetList, numReseptgyldighet, pmerkevare.reseptgyldighet);
@@ -1355,13 +1800,13 @@ LegemiddelMerkevare FestDeserializer::Unpack(const PLegemiddelMerkevare &pmerkev
     }
     std::vector<std::string> sortertVirkestoffUtenStyrke{};
     {
-        auto sv = Unpack(festUuidList, numFestUuidList, pmerkevare.sortertVirkestoffUtenStyrke);
+        auto sv = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, pmerkevare.sortertVirkestoffUtenStyrke);
         for (const auto &v : sv) {
             sortertVirkestoffUtenStyrke.push_back(Unpack(v).ToString());
         }
     }
     return {
-        Unpack(static_cast<PLegemiddel>(pmerkevare)),
+        Unpack(static_cast<PLegemiddel_0_0_0>(pmerkevare)),
         {Unpack(pmerkevare.preparattype)},
         Unpack(pmerkevare.id).ToString(),
         Unpack(pmerkevare.varenavn),
@@ -1377,7 +1822,48 @@ LegemiddelMerkevare FestDeserializer::Unpack(const PLegemiddelMerkevare &pmerkev
     };
 }
 
-Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning &ppakning) const {
+LegemiddelMerkevare FestDeserializer::Unpack(const PLegemiddelMerkevare_0_4_0 &pmerkevare) const {
+    std::vector<Reseptgyldighet> reseptgyldighet{};
+    {
+        auto rg = Unpack(reseptgyldighetList, numReseptgyldighet, pmerkevare.reseptgyldighet);
+        for (const auto &r : rg) {
+            reseptgyldighet.push_back(Unpack(r));
+        }
+    }
+    std::vector<std::string> sortertVirkestoffUtenStyrke{};
+    {
+        auto sv = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, pmerkevare.sortertVirkestoffUtenStyrke);
+        for (const auto &v : sv) {
+            sortertVirkestoffUtenStyrke.push_back(Unpack(v).ToString());
+        }
+    }
+    return {
+            Unpack(static_cast<PLegemiddel_0_4_0>(pmerkevare)),
+            {Unpack(pmerkevare.preparattype)},
+            Unpack(pmerkevare.id).ToString(),
+            Unpack(pmerkevare.varenavn),
+            Unpack(pmerkevare.legemiddelformLang),
+            Unpack(pmerkevare.produsent),
+            reseptgyldighet,
+            FromRaw(pmerkevare.varseltrekant),
+            Unpack(pmerkevare.referanseprodukt),
+            Unpack(pmerkevare.preparatomtaleavsnitt),
+            {Unpack(pmerkevare.smak)},
+            sortertVirkestoffUtenStyrke,
+            {Unpack(pmerkevare.vaksinestandard)}
+    };
+}
+
+LegemiddelMerkevare FestDeserializer::Unpack(const PLegemiddelMerkevare &pmerkevare) const {
+    const std::variant<PLegemiddelMerkevare_0_4_0,PLegemiddelMerkevare_0_0_0> &p = pmerkevare;
+    if (std::holds_alternative<PLegemiddelMerkevare_0_4_0>(p)) {
+        return Unpack(std::get<PLegemiddelMerkevare_0_4_0>(p));
+    } else {
+        return Unpack(std::get<PLegemiddelMerkevare_0_0_0>(p));
+    };
+}
+
+Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning_0_0_0 &ppakning) const {
     std::vector<Pakningsinfo> pakningsinfo{};
     {
         auto list = Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
@@ -1395,7 +1881,7 @@ Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning &ppakning) c
         }
     }
     return {
-            Unpack(static_cast<PLegemiddelCore>(ppakning)),
+            Unpack(static_cast<PLegemiddelCore_0_0_0>(ppakning)),
             {Unpack(ppakning.preparattype)},
             Unpack(ppakning.id).ToString(),
             Unpack(ppakning.varenr),
@@ -1411,7 +1897,50 @@ Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning &ppakning) c
     };
 }
 
-LegemiddelVirkestoff FestDeserializer::Unpack(const PLegemiddelVirkestoff &pvirkestoff) const {
+Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning_0_4_0 &ppakning) const {
+    std::vector<Pakningsinfo> pakningsinfo{};
+    {
+        auto list = Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
+        for (const auto &ppi : list) {
+            auto pi = Unpack(ppi);
+            pakningsinfo.push_back(pi);
+        }
+    }
+    std::vector<PrisVare> prisVare{};
+    {
+        auto list = Unpack(prisVareList, numPrisVare, ppakning.prisVare);
+        for (const auto &ppv : list) {
+            auto pv = Unpack(ppv);
+            prisVare.push_back(pv);
+        }
+    }
+    return {
+            Unpack(static_cast<PLegemiddelCore_0_4_0>(ppakning)),
+            {Unpack(ppakning.preparattype)},
+            Unpack(ppakning.id).ToString(),
+            Unpack(ppakning.varenr),
+            {Unpack(ppakning.oppbevaring)},
+            pakningsinfo,
+            Unpack(ppakning.markedsforingsinfo),
+            Unpack(ppakning.ean),
+            prisVare,
+            Unpack(ppakning.refusjon),
+            Unpack(ppakning.pakningByttegruppe),
+            Unpack(ppakning.preparatomtaleavsnitt),
+            ppakning.ikkeKonservering
+    };
+}
+
+Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning &pl) const {
+    const std::variant<PLegemiddelpakning_0_0_0,PLegemiddelpakning_0_4_0> &p = pl;
+    if (std::holds_alternative<PLegemiddelpakning_0_4_0>(p)) {
+        return Unpack(std::get<PLegemiddelpakning_0_4_0>(p));
+    } else {
+        return Unpack(std::get<PLegemiddelpakning_0_0_0>(p));
+    }
+}
+
+LegemiddelVirkestoff FestDeserializer::Unpack(const PLegemiddelVirkestoff_0_0_0 &pvirkestoff) const {
     std::vector<Refusjon> refusjon{};
     {
         auto list = Unpack(this->refusjonList, numRefusjonList, pvirkestoff.refusjon);
@@ -1421,26 +1950,67 @@ LegemiddelVirkestoff FestDeserializer::Unpack(const PLegemiddelVirkestoff &pvirk
     }
     std::vector<std::string> refLegemiddelMerkevare{};
     {
-        auto list = Unpack(festUuidList, numFestUuidList, pvirkestoff.refLegemiddelMerkevare);
+        auto list = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, pvirkestoff.refLegemiddelMerkevare);
         for (const auto &id : list) {
             refLegemiddelMerkevare.emplace_back(Unpack(id).ToString());
         }
     }
     std::vector<std::string> refPakning{};
     {
-        auto list = Unpack(festUuidList, numFestUuidList, pvirkestoff.refPakning);
+        auto list = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, pvirkestoff.refPakning);
         for (const auto &id : list) {
             refPakning.emplace_back(Unpack(id).ToString());
         }
     }
     return {
-        Unpack(static_cast<PLegemiddel>(pvirkestoff)),
+        Unpack(static_cast<PLegemiddel_0_0_0>(pvirkestoff)),
         Unpack(pvirkestoff.id).ToString(),
         refusjon,
         refLegemiddelMerkevare,
         refPakning,
         {Unpack(pvirkestoff.forskrivningsenhetResept)}
     };
+}
+
+LegemiddelVirkestoff FestDeserializer::Unpack(const PLegemiddelVirkestoff_0_4_0 &pvirkestoff) const {
+    std::vector<Refusjon> refusjon{};
+    {
+        auto list = Unpack(this->refusjonList, numRefusjonList, pvirkestoff.refusjon);
+        for (const auto &item : list) {
+            refusjon.emplace_back(Unpack(item));
+        }
+    }
+    std::vector<std::string> refLegemiddelMerkevare{};
+    {
+        auto list = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, pvirkestoff.refLegemiddelMerkevare);
+        for (const auto &id : list) {
+            refLegemiddelMerkevare.emplace_back(Unpack(id).ToString());
+        }
+    }
+    std::vector<std::string> refPakning{};
+    {
+        auto list = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, pvirkestoff.refPakning);
+        for (const auto &id : list) {
+            refPakning.emplace_back(Unpack(id).ToString());
+        }
+    }
+    return {
+            Unpack(static_cast<PLegemiddel_0_4_0>(pvirkestoff)),
+            Unpack(pvirkestoff.id).ToString(),
+            refusjon,
+            refLegemiddelMerkevare,
+            refPakning,
+            {Unpack(pvirkestoff.forskrivningsenhetResept)}
+    };
+}
+
+LegemiddelVirkestoff FestDeserializer::Unpack(const PLegemiddelVirkestoff &pvirkestoff) const {
+    const std::variant<PLegemiddelVirkestoff_0_4_0,PLegemiddelVirkestoff_0_0_0> &p = pvirkestoff;
+    if (std::holds_alternative<PLegemiddelVirkestoff_0_4_0>(p)) {
+        return Unpack(std::get<PLegemiddelVirkestoff_0_4_0>(p));
+    } else {
+        return Unpack(std::get<PLegemiddelVirkestoff_0_0_0>(p));
+    }
 }
 
 Handelsvare FestDeserializer::Unpack(const PHandelsvare &pHandelsvare) const {
@@ -1461,17 +2031,17 @@ Handelsvare FestDeserializer::Unpack(const PHandelsvare &pHandelsvare) const {
     };
 }
 
-Legemiddeldose FestDeserializer::Unpack(const PLegemiddeldose &pLegemiddeldose) const {
+Legemiddeldose FestDeserializer::Unpack(const PLegemiddeldose_0_0_0 &pLegemiddeldose) const {
     std::vector<std::string> refLegemiddelMerkevare{};
     {
-        auto list = Unpack(festUuidList, numFestUuidList, pLegemiddeldose.refLegemiddelMerkevare);
+        auto list = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, pLegemiddeldose.refLegemiddelMerkevare);
         for (const auto &pid : list) {
             refLegemiddelMerkevare.emplace_back(Unpack(pid).ToString());
         }
     }
     std::vector<std::string> refPakning{};
     {
-        auto list = Unpack(festUuidList, numFestUuidList, pLegemiddeldose.refPakning);
+        auto list = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, pLegemiddeldose.refPakning);
         for (const auto &pid : list) {
             refPakning.emplace_back(Unpack(pid).ToString());
         }
@@ -1484,7 +2054,7 @@ Legemiddeldose FestDeserializer::Unpack(const PLegemiddeldose &pLegemiddeldose) 
         }
     }
     return {
-        Unpack(static_cast<PLegemiddelCore>(pLegemiddeldose)),
+        Unpack(static_cast<PLegemiddelCore_0_0_0>(pLegemiddeldose)),
         {Unpack(pLegemiddeldose.preparattype)},
         Unpack(pLegemiddeldose.id).ToString(),
         Unpack(pLegemiddeldose.lmrLopenr),
@@ -1494,6 +2064,50 @@ Legemiddeldose FestDeserializer::Unpack(const PLegemiddeldose &pLegemiddeldose) 
         pakningskomponent,
         Unpack(pLegemiddeldose.pakningstype)
     };
+}
+
+Legemiddeldose FestDeserializer::Unpack(const PLegemiddeldose_0_4_0 &pLegemiddeldose) const {
+    std::vector<std::string> refLegemiddelMerkevare{};
+    {
+        auto list = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, pLegemiddeldose.refLegemiddelMerkevare);
+        for (const auto &pid : list) {
+            refLegemiddelMerkevare.emplace_back(Unpack(pid).ToString());
+        }
+    }
+    std::vector<std::string> refPakning{};
+    {
+        auto list = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, pLegemiddeldose.refPakning);
+        for (const auto &pid : list) {
+            refPakning.emplace_back(Unpack(pid).ToString());
+        }
+    }
+    std::vector<PakningskomponentInfo> pakningskomponent{};
+    {
+        auto list = Unpack(pakningskomponentInfoList, numPakningskomponentInfo, pLegemiddeldose.pakningskomponent);
+        for (const auto &item : list) {
+            pakningskomponent.emplace_back(Unpack(item));
+        }
+    }
+    return {
+            Unpack(static_cast<PLegemiddelCore_0_4_0>(pLegemiddeldose)),
+            {Unpack(pLegemiddeldose.preparattype)},
+            Unpack(pLegemiddeldose.id).ToString(),
+            Unpack(pLegemiddeldose.lmrLopenr),
+            Unpack(pLegemiddeldose.mengde),
+            refLegemiddelMerkevare,
+            refPakning,
+            pakningskomponent,
+            Unpack(pLegemiddeldose.pakningstype)
+    };
+}
+
+Legemiddeldose FestDeserializer::Unpack(const PLegemiddeldose &pLegemiddeldose) const {
+    const std::variant<PLegemiddeldose_0_0_0,PLegemiddeldose_0_4_0> &p = pLegemiddeldose;
+    if (std::holds_alternative<PLegemiddeldose_0_4_0>(p)) {
+        return Unpack(std::get<PLegemiddeldose_0_4_0>(p));
+    } else {
+        return Unpack(std::get<PLegemiddeldose_0_0_0>(p));
+    }
 }
 
 VirkestoffMedStyrke FestDeserializer::Unpack(const PVirkestoffMedStyrke &pVirkestoffMedStyrke) const {
@@ -1510,10 +2124,10 @@ VirkestoffMedStyrke FestDeserializer::Unpack(const PVirkestoffMedStyrke &pVirkes
     };
 }
 
-Virkestoff FestDeserializer::Unpack(const PVirkestoff &pVirkestoff) const {
+Virkestoff FestDeserializer::Unpack(const PVirkestoff_0_0_0 &pVirkestoff) const {
     std::vector<std::string> refVirkestoff{};
     {
-        auto list = Unpack(festUuidList, numFestUuidList, pVirkestoff.refVirkestoff);
+        auto list = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, pVirkestoff.refVirkestoff);
         for (const auto &id : list) {
             refVirkestoff.emplace_back(Unpack(id).ToString());
         }
@@ -1524,6 +2138,30 @@ Virkestoff FestDeserializer::Unpack(const PVirkestoff &pVirkestoff) const {
         Unpack(pVirkestoff.navnEngelsk),
         refVirkestoff
     };
+}
+
+Virkestoff FestDeserializer::Unpack(const PVirkestoff_0_4_0 &pVirkestoff) const {
+    std::vector<std::string> refVirkestoff{};
+    {
+        auto list = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, pVirkestoff.refVirkestoff);
+        for (const auto &id : list) {
+            refVirkestoff.emplace_back(Unpack(id).ToString());
+        }
+    }
+    return {
+            Unpack(pVirkestoff.id).ToString(),
+            Unpack(pVirkestoff.navn),
+            Unpack(pVirkestoff.navnEngelsk),
+            refVirkestoff
+    };
+}
+
+Virkestoff FestDeserializer::Unpack(const PVirkestoff &pVirkestoff) const {
+    if (std::holds_alternative<PVirkestoff_0_4_0>(pVirkestoff)) {
+        return Unpack(std::get<PVirkestoff_0_4_0>(pVirkestoff));
+    } else {
+        return Unpack(std::get<PVirkestoff_0_0_0>(pVirkestoff));
+    }
 }
 
 Info FestDeserializer::Unpack(const PInfo &pInfo) const {
@@ -1556,7 +2194,7 @@ Vilkar FestDeserializer::Unpack(const PVilkar &pVilkar) const {
     };
 }
 
-VarselSlv FestDeserializer::Unpack(const PVarselSlv &pVarselSlv) const {
+VarselSlv FestDeserializer::Unpack(const PVarselSlv_0_0_0 &pVarselSlv) const {
     std::vector<Visningsregel> visningsregel{};
     {
         auto list = Unpack(valueWithCodesetList, numValueWithCodesetList, pVarselSlv.visningsregel);
@@ -1573,6 +2211,33 @@ VarselSlv FestDeserializer::Unpack(const PVarselSlv &pVarselSlv) const {
         Unpack(pVarselSlv.lenke),
         Unpack(pVarselSlv.referanseelement)
     };
+}
+
+VarselSlv FestDeserializer::Unpack(const PVarselSlv_0_4_0 &pVarselSlv) const {
+    std::vector<Visningsregel> visningsregel{};
+    {
+        auto list = Unpack(valueWithCodesetList, numValueWithCodesetList, pVarselSlv.visningsregel);
+        for (const auto &item : list) {
+            visningsregel.emplace_back(Unpack(item));
+        }
+    }
+    return {
+            Unpack(pVarselSlv.type),
+            Unpack(pVarselSlv.overskrift),
+            Unpack(pVarselSlv.varseltekst),
+            visningsregel,
+            Unpack(pVarselSlv.fraDato),
+            Unpack(pVarselSlv.lenke),
+            Unpack(pVarselSlv.referanseelement)
+    };
+}
+
+VarselSlv FestDeserializer::Unpack(const PVarselSlv &pVarselSlv) const {
+    if (std::holds_alternative<PVarselSlv_0_4_0>(pVarselSlv)) {
+        return Unpack(std::get<PVarselSlv_0_4_0>(pVarselSlv));
+    } else {
+        return Unpack(std::get<PVarselSlv_0_0_0>(pVarselSlv));
+    }
 }
 
 Byttegruppe FestDeserializer::Unpack(const PByttegruppe &pByttegruppe) const {
@@ -1640,26 +2305,49 @@ Kortdose FestDeserializer::Unpack(const PKortdose &pKortdose) const {
     };
 }
 
-Legemiddel FestDeserializer::Unpack(const PLegemiddel &pLegemiddel) const {
+Legemiddel FestDeserializer::Unpack(const PLegemiddel_0_0_0 &pLegemiddel) const {
     std::vector<std::string> sortertVirkestoffMedStyrke{};
     {
-        auto sv = Unpack(festUuidList, numFestUuidList, pLegemiddel.sortertVirkestoffMedStyrke);
+        auto sv = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, pLegemiddel.sortertVirkestoffMedStyrke);
         for (const auto &v : sv) {
             sortertVirkestoffMedStyrke.push_back(Unpack(v).ToString());
         }
     }
     return {
-        Unpack(static_cast<PLegemiddelCore>(pLegemiddel)),
+        Unpack(static_cast<PLegemiddelCore_0_0_0>(pLegemiddel)),
         Unpack(pLegemiddel.administreringLegemiddel),
         sortertVirkestoffMedStyrke
     };
 }
 
+Legemiddel FestDeserializer::Unpack(const PLegemiddel_0_4_0 &pLegemiddel) const {
+    std::vector<std::string> sortertVirkestoffMedStyrke{};
+    {
+        auto sv = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, pLegemiddel.sortertVirkestoffMedStyrke);
+        for (const auto &v : sv) {
+            sortertVirkestoffMedStyrke.push_back(Unpack(v).ToString());
+        }
+    }
+    return {
+            Unpack(static_cast<PLegemiddelCore_0_4_0>(pLegemiddel)),
+            Unpack(pLegemiddel.administreringLegemiddel),
+            sortertVirkestoffMedStyrke
+    };
+}
 
-LegemiddelCore FestDeserializer::Unpack(const PLegemiddelCore &pLegemiddelCore) const {
+Legemiddel FestDeserializer::Unpack(const PLegemiddel &pLegemiddel) const {
+    const std::variant<PLegemiddel_0_0_0,PLegemiddel_0_4_0> &v = pLegemiddel;
+    if (std::holds_alternative<PLegemiddel_0_4_0>(v)) {
+        return Unpack(std::get<PLegemiddel_0_4_0>(v));
+    } else {
+        return Unpack(std::get<PLegemiddel_0_0_0>(v));
+    }
+}
+
+LegemiddelCore FestDeserializer::Unpack(const PLegemiddelCore_0_0_0 &pLegemiddelCore) const {
     std::vector<std::string> refVilkar{};
     {
-        auto rv = Unpack(festUuidList, numFestUuidList, pLegemiddelCore.refVilkar);
+        auto rv = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, pLegemiddelCore.refVilkar);
         for (const auto &v : rv) {
             refVilkar.push_back(Unpack(v).ToString());
         }
@@ -1668,6 +2356,28 @@ LegemiddelCore FestDeserializer::Unpack(const PLegemiddelCore &pLegemiddelCore) 
             {Unpack(pLegemiddelCore.reseptgruppe)}, {Unpack(pLegemiddelCore.legemiddelformKort)},
             refVilkar, {Unpack(pLegemiddelCore.typeSoknadSlv)}, FromRaw(pLegemiddelCore.opioidsoknad),
             {Unpack(pLegemiddelCore.svartTrekant)}};
+}
+
+LegemiddelCore FestDeserializer::Unpack(const PLegemiddelCore_0_4_0 &pLegemiddelCore) const {
+    std::vector<std::string> refVilkar{};
+    {
+        auto rv = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, pLegemiddelCore.refVilkar);
+        for (const auto &v : rv) {
+            refVilkar.push_back(Unpack(v).ToString());
+        }
+    }
+    return {{Unpack(pLegemiddelCore.atc)}, Unpack(pLegemiddelCore.navnFormStyrke),
+            {Unpack(pLegemiddelCore.reseptgruppe)}, {Unpack(pLegemiddelCore.legemiddelformKort)},
+            refVilkar, {Unpack(pLegemiddelCore.typeSoknadSlv)}, FromRaw(pLegemiddelCore.opioidsoknad),
+            {Unpack(pLegemiddelCore.svartTrekant)}};
+}
+
+LegemiddelCore FestDeserializer::Unpack(const PLegemiddelCore &pLegemiddelCore) const {
+    if (std::holds_alternative<PLegemiddelCore_0_4_0>(pLegemiddelCore)) {
+        return Unpack(std::get<PLegemiddelCore_0_4_0>(pLegemiddelCore));
+    } else {
+        return Unpack(std::get<PLegemiddelCore_0_0_0>(pLegemiddelCore));
+    }
 }
 
 AdministreringLegemiddel FestDeserializer::Unpack(const PAdministreringLegemiddel &pAdministreringLegemiddel) const {
@@ -1933,10 +2643,10 @@ StrukturertVilkar FestDeserializer::Unpack(const PStrukturertVilkar &pStrukturer
     };
 }
 
-Referanseelement FestDeserializer::Unpack(const PReferanseelement &pReferanseelement) const {
+Referanseelement FestDeserializer::Unpack(const PReferanseelement_0_0_0 &pReferanseelement) const {
     std::vector<std::string> refs{};
     {
-        auto list = Unpack(festUuidList, numFestUuidList, pReferanseelement.refs);
+        auto list = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, pReferanseelement.refs);
         for (const auto &item : list) {
             refs.emplace_back(Unpack(item).ToString());
         }
@@ -1945,6 +2655,28 @@ Referanseelement FestDeserializer::Unpack(const PReferanseelement &pReferanseele
         Unpack(pReferanseelement.klasse),
         refs
     };
+}
+
+Referanseelement FestDeserializer::Unpack(const PReferanseelement_0_4_0 &pReferanseelement) const {
+    std::vector<std::string> refs{};
+    {
+        auto list = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, pReferanseelement.refs);
+        for (const auto &item : list) {
+            refs.emplace_back(Unpack(item).ToString());
+        }
+    }
+    return {
+            Unpack(pReferanseelement.klasse),
+            refs
+    };
+}
+
+Referanseelement FestDeserializer::Unpack(const PReferanseelement &pReferanseelement) const {
+    if (std::holds_alternative<PReferanseelement_0_4_0>(pReferanseelement)) {
+        return Unpack(std::get<PReferanseelement_0_4_0>(pReferanseelement));
+    } else {
+        return Unpack(std::get<PReferanseelement_0_0_0>(pReferanseelement));
+    }
 }
 
 Referanse FestDeserializer::Unpack(const PReferanse &pReferanse) const {
@@ -2018,8 +2750,21 @@ Lenke FestDeserializer::Unpack(const PLenke &lenke) const {
     return {Unpack(lenke.beskrivelse), Unpack(lenke.www)};
 }
 
-std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemiddelpakning &ppakning) const {
+std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemiddelpakning_0_0_0 &ppakning) const {
     return Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
+}
+
+std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemiddelpakning_0_4_0 &ppakning) const {
+    return Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
+}
+
+std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemiddelpakning &lp) const {
+    const std::variant<PLegemiddelpakning_0_0_0,PLegemiddelpakning_0_4_0> &p = lp;
+    if (std::holds_alternative<PLegemiddelpakning_0_4_0>(p)) {
+        return GetPakningsinfoList(std::get<PLegemiddelpakning_0_4_0>(p));
+    } else {
+        return GetPakningsinfoList(std::get<PLegemiddelpakning_0_0_0>(p));
+    }
 }
 
 std::vector<PElement_0_0_0> FestDeserializer::GetElementList(const POppfKodeverk_0_0_0 &pkodeverk) const {
@@ -2051,12 +2796,32 @@ std::vector<PElement> FestDeserializer::GetElementList(const POppfKodeverk &kode
 std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems32 &items) const {
     std::vector<FestUuid> ids{};
     {
-        auto pf = Unpack(festUuidList, numFestUuidList, items);
+        auto pf = Unpack(festUuidList_0_0_0, numFestUuidList_0_0_0, items);
         for (const auto &pid : pf) {
             ids.emplace_back(Unpack(pid));
         }
     }
     return ids;
+}
+
+std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems64 &items) const {
+    std::vector<FestUuid> ids{};
+    {
+        auto pf = Unpack(festUuidList_0_4_0, numFestUuidList_0_4_0, items);
+        for (const auto &pid : pf) {
+            ids.emplace_back(Unpack(pid));
+        }
+    }
+    return ids;
+}
+
+std::vector<FestUuid>
+FestDeserializer::GetFestUuids(const std::variant<GenericListItems32, GenericListItems64> &v) const {
+    if (std::holds_alternative<GenericListItems64>(v)) {
+        return GetFestUuids(std::get<GenericListItems64>(v));
+    } else {
+        return GetFestUuids(std::get<GenericListItems32>(v));
+    }
 }
 
 void Quota(std::vector<FestDbQuota> &quotas, const std::string &name, size_t num, size_t compatMax=std::numeric_limits<uint16_t>::max(), size_t hardMax=std::numeric_limits<uint16_t>::max()) {
@@ -2078,26 +2843,33 @@ constexpr uint64_t min(uint64_t first, uint64_t second) {
 
 std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
     std::vector<FestDbQuota> quotas{};
-    Quota(quotas, "Merkevare", numMerkevare);
-    Quota(quotas, "Pakning", numPakning, min(GenericListItems64::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()));
-    Quota(quotas, "Legemiddel virkestoff", numLegemiddelVirkestoff);
+    Quota(quotas, "Merkevare 0.0.0", numMerkevare_0_0_0);
+    Quota(quotas, "Merkevare 0.4.0", numMerkevare_0_4_0, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());
+    Quota(quotas, "Pakning 0.0.0", numPakning_0_0_0, min(GenericListItems64::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()));
+    Quota(quotas, "Pakning 0.4.0", numPakning_0_4_0, min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()), min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()));
+    Quota(quotas, "Legemiddel virkestoff 0.0.0", numLegemiddelVirkestoff_0_0_0);
+    Quota(quotas, "Legemiddel virkestoff 0.4.0", numLegemiddelVirkestoff_0_4_0, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());
     Quota(quotas, "Med forbr matr", numMedForbrMatr);
     Quota(quotas, "Naringsmiddel", numNaringsmiddel);
     Quota(quotas, "Brystprotese", numBrystprotese);
-    Quota(quotas, "Legemiddeldose", numLegemiddeldose);
+    Quota(quotas, "Legemiddeldose 0.0.0", numLegemiddeldose_0_0_0);
+    Quota(quotas, "Legemiddeldose 0.4.0", numLegemiddeldose_0_4_0, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());
     Quota(quotas, "Virkestoff med styrke", numVirkestoffMedStyrke);
-    Quota(quotas, "Virkestoff", numVirkestoff);
+    Quota(quotas, "Virkestoff v0.0.0", numVirkestoff_0_0_0);
+    Quota(quotas, "Virkestoff v0.4.0", numVirkestoff_0_4_0, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());
     Quota(quotas, "Kodeverk v0.0.0", numKodeverk_0_0_0);
     Quota(quotas, "Kodeverk v0.3.0", numKodeverk_0_3_0);
     Quota(quotas, "Refusjon", numRefusjon);
     Quota(quotas, "Vilkar", numVilkar);
-    Quota(quotas, "Varsel slv", numVarselSlv);
+    Quota(quotas, "Varsel slv v0.0.0", numVarselSlv_0_0_0);
+    Quota(quotas, "Varsel slv v0.4.0", numVarselSlv_0_4_0, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());
     Quota(quotas, "Byttegruppe", numByttegruppe);
     Quota(quotas, "Interaksjon", numInteraksjon);
     Quota(quotas, "Interaksjon ikke vurdert", numInteraksjonIkkeVurdert);
     Quota(quotas, "Str dosering", numStrDosering);
     Quota(quotas, "Fest UUID", numFestUuid, 16777215, 16777215);
-    Quota(quotas, "Fest UUID list", numFestUuidList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Fest UUID list 0.0.0", numFestUuidList_0_0_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Fest UUID list 0.4.0", numFestUuidList_0_4_0, min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()), min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()));
     Quota(quotas, "Value with codeset list", numValueWithCodesetList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Reseptgyldighet", numReseptgyldighet, min(GenericListItems32::max_address, 255), min(GenericListItems32::max_address, 255));
     Quota(quotas, "Pakningskomponent", numPakningskomponent, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
@@ -2123,6 +2895,7 @@ std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
     Quota(quotas, "FEST Versions 0.0.0", numFests_V_0_0_0, 1023, 1023);
     Quota(quotas, "FEST Versions 0.2.0", numFests_V_0_2_0, std::numeric_limits<uint16_t>::max(), std::numeric_limits<uint16_t>::max());
     Quota(quotas, "FEST Versions 0.3.0", numFests_V_0_3_0, std::numeric_limits<uint16_t>::max(), std::numeric_limits<uint16_t>::max());
+    Quota(quotas, "FEST Versions 0.4.0", numFests_V_0_4_0, std::numeric_limits<uint16_t>::max(), std::numeric_limits<uint16_t>::max());
     Quota(quotas, "String list", numStringList);
     Quota(quotas, "Stringblock", stringblocksize, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());
     return quotas;

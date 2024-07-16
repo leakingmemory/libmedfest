@@ -51,7 +51,7 @@ int main() {
         "ID_212709D3-4175-4F7E-BC65-C3D8ED04196B"
     };
     std::vector<FestUuid> uuidblock{};
-    FestUuidList_0_4_0 festUuidList{uuidblock};
+    FestUuidList_0_0_0 festUuidList{uuidblock};
     auto l1 = festUuidList.StoreList(list1);
     auto s1 = festUuidList.GetStorageBlock().size();
     if (s1 != 1) {

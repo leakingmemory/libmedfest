@@ -11,10 +11,15 @@ target_include_directories(pfestidtest PRIVATE ../../../include)
 target_link_libraries(pfestidtest PRIVATE medfest)
 target_include_directories(pfestidtest PRIVATE ../../../include)
 
+add_executable(festuuidlisttest_0_0_0 FestUuidListTest_0_0_0.cpp)
+target_include_directories(festuuidlisttest_0_0_0 PRIVATE ../../../include)
+target_link_libraries(festuuidlisttest_0_0_0 PRIVATE medfest)
+
 add_executable(festuuidlisttest FestUuidListTest.cpp)
 target_include_directories(festuuidlisttest PRIVATE ../../../include)
 target_link_libraries(festuuidlisttest PRIVATE medfest)
 
 add_test(PStringTest pstringtest)
 add_test(PFestIdTest pfestidtest)
+add_test(FestUuidListTest_0_0_0 festuuidlisttest_0_0_0)
 add_test(FestUuidListTest festuuidlisttest)

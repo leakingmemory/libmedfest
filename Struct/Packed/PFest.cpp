@@ -19,13 +19,13 @@ static std::vector<uint16_t> ClipTo16bit(const std::vector<uint32_t> &src) {
 
 PFest_V_0_0_0::PFest_V_0_0_0(const FestData &festData, Uint16List_V_0_0_0 &uint16List, std::string &strblock, std::map<std::string, uint32_t> &cache) :
         dato(festData.dato, strblock, cache),
-        legemiddelMerkevare(uint16List.StoreList(festData.legemiddelMerkevare)),
-        legemiddelpakning(uint16List.StoreList(ClipTo16bit(festData.legemiddelpakning))),
-        legemiddelVirkestoff(uint16List.StoreList(festData.legemiddelVirkestoff)),
+        legemiddelMerkevare(uint16List.StoreList(festData.legemiddelMerkevare_0_0_0)),
+        legemiddelpakning(uint16List.StoreList(ClipTo16bit(festData.legemiddelpakning_0_0_0))),
+        legemiddelVirkestoff(uint16List.StoreList(festData.legemiddelVirkestoff_0_0_0)),
         medForbrMatr(uint16List.StoreList(festData.medForbrMatr)),
         naringsmiddel(uint16List.StoreList(festData.naringsmiddel)),
         brystprotese(uint16List.StoreList(festData.brystprotese)),
-        legemiddeldose(uint16List.StoreList(festData.legemiddeldose)),
+        legemiddeldose(uint16List.StoreList(festData.legemiddeldose_0_0_0)),
         virkestoffMedStyrke(uint16List.StoreList(festData.virkestoffMedStyrke)),
         virkestoff(uint16List.StoreList(festData.virkestoff)),
         kodeverk(uint16List.StoreList(festData.kodeverk_0_0_0)),
@@ -61,15 +61,15 @@ strDosering(legacy.strDosering.CastToWider<GenericListItems64>())
 {
 }
 
-PFest_V_0_2_0_or_later::PFest_V_0_2_0_or_later(const FestData &festData, GenericListItems64 legemiddelpakning, GenericListItems64 kodeverk, Uint16List &uint16List, std::string &strblock, std::map<std::string, uint32_t> &cache) :
+PFest_V_0_2_0_or_later::PFest_V_0_2_0_or_later(const FestData &festData, GenericListItems64 legemiddelMerkevare, GenericListItems64 legemiddelpakning, GenericListItems64 legemiddelVirkestoff, GenericListItems64 legemiddeldose, GenericListItems64 kodeverk, Uint16List &uint16List, std::string &strblock, std::map<std::string, uint32_t> &cache) :
         dato(festData.dato, strblock, cache),
-        legemiddelMerkevare(uint16List.StoreList(festData.legemiddelMerkevare)),
+        legemiddelMerkevare(legemiddelMerkevare),
         legemiddelpakning(legemiddelpakning),
-        legemiddelVirkestoff(uint16List.StoreList(festData.legemiddelVirkestoff)),
+        legemiddelVirkestoff(legemiddelVirkestoff),
         medForbrMatr(uint16List.StoreList(festData.medForbrMatr)),
         naringsmiddel(uint16List.StoreList(festData.naringsmiddel)),
         brystprotese(uint16List.StoreList(festData.brystprotese)),
-        legemiddeldose(uint16List.StoreList(festData.legemiddeldose)),
+        legemiddeldose(legemiddeldose),
         virkestoffMedStyrke(uint16List.StoreList(festData.virkestoffMedStyrke)),
         virkestoff(uint16List.StoreList(festData.virkestoff)),
         kodeverk(kodeverk),
@@ -90,7 +90,10 @@ PFest_V_0_2_0::PFest_V_0_2_0(const FestData &festData, Uint16List &uint16NewList
                              std::map<std::string, uint32_t> &cache) :
         PFest_V_0_2_0_or_later(
                 festData,
-                uint16NewList.StoreList(ClipTo16bit(festData.legemiddelpakning)),
+                uint16NewList.StoreList(festData.legemiddelMerkevare_0_0_0),
+                uint16NewList.StoreList(ClipTo16bit(festData.legemiddelpakning_0_0_0)),
+                uint16NewList.StoreList(festData.legemiddelVirkestoff_0_0_0),
+                uint16NewList.StoreList(festData.legemiddeldose_0_0_0),
                 uint16NewList.StoreList(festData.kodeverk_0_0_0),
                 uint16NewList,
                 strblock,
@@ -102,7 +105,10 @@ PFest_V_0_3_0::PFest_V_0_3_0(const FestData &festData, Uint32List &uint32List, U
                                       std::map<std::string, uint32_t> &cache) :
         PFest_V_0_2_0_or_later(
                 festData,
-                uint32List.StoreList(festData.legemiddelpakning),
+                uint16List.StoreList(festData.legemiddelMerkevare_0_0_0),
+                uint32List.StoreList(festData.legemiddelpakning_0_0_0),
+                uint16List.StoreList(festData.legemiddelVirkestoff_0_0_0),
+                uint16List.StoreList(festData.legemiddeldose_0_0_0),
                 uint16List.StoreList(festData.kodeverk_0_3_0),
                 uint16List,
                 strblock,
@@ -110,6 +116,24 @@ PFest_V_0_3_0::PFest_V_0_3_0(const FestData &festData, Uint32List &uint32List, U
                 ){
 }
 
-PFest::PFest(const PFest_V_0_0_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0>(fest) {}
-PFest::PFest(const PFest_V_0_2_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0>(fest) {}
-PFest::PFest(const PFest_V_0_3_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0>(fest) {}
+PFest_V_0_4_0::PFest_V_0_4_0(const PFest_V_0_3_0 &legacy) : PFest_V_0_2_0_or_later(legacy) {}
+
+PFest_V_0_4_0::PFest_V_0_4_0(const FestData &festData, Uint32List &uint32List, Uint16List &uint16List, std::string &strblock,
+                             std::map<std::string, uint32_t> &cache) :
+        PFest_V_0_2_0_or_later(
+                festData,
+                uint16List.StoreList(festData.legemiddelMerkevare_0_4_0),
+                uint32List.StoreList(festData.legemiddelpakning_0_4_0),
+                uint16List.StoreList(festData.legemiddelVirkestoff_0_4_0),
+                uint16List.StoreList(festData.legemiddeldose_0_4_0),
+                uint16List.StoreList(festData.kodeverk_0_3_0),
+                uint16List,
+                strblock,
+                cache
+        ){
+}
+
+PFest::PFest(const PFest_V_0_0_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0,PFest_V_0_4_0>(fest) {}
+PFest::PFest(const PFest_V_0_2_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0,PFest_V_0_4_0>(fest) {}
+PFest::PFest(const PFest_V_0_3_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0,PFest_V_0_4_0>(fest) {}
+PFest::PFest(const PFest_V_0_4_0 &fest) : std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0,PFest_V_0_4_0>(fest) {}

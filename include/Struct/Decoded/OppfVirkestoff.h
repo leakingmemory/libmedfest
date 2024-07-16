@@ -9,10 +9,12 @@
 #include "Virkestoff.h"
 #include "Oppf.h"
 
-class POppfVirkestoff;
+class POppfVirkestoff_0_0_0;
+class POppfVirkestoff_0_4_0;
 
 class OppfVirkestoff : public Oppf {
-    friend POppfVirkestoff;
+    friend POppfVirkestoff_0_0_0;
+    friend POppfVirkestoff_0_4_0;
 private:
     Virkestoff virkestoff;
 public:

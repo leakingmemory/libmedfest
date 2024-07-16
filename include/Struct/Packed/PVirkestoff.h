@@ -9,24 +9,47 @@
 #include "PFestId.h"
 #include "PString.h"
 #include <vector>
+#include <variant>
 
 class FestDeserializer;
 class Virkestoff;
-class FestUuidList;
+class FestUuidList_0_0_0;
+class FestUuidList_0_4_0;
 class FestUuid;
+class PVirkestoff_0_4_0;
 
-class PVirkestoff {
+class PVirkestoff_0_0_0 {
     friend FestDeserializer;
+    friend PVirkestoff_0_4_0;
 private:
     GenericListItems32 refVirkestoff;
     PFestId id;
     PString navn;
     PString navnEngelsk;
 public:
-    PVirkestoff(const Virkestoff &, FestUuidList &festUuidList, std::vector<FestUuid> &idblock, std::string &strblock,
+    PVirkestoff_0_0_0(const Virkestoff &, FestUuidList_0_0_0 &festUuidList, std::vector<FestUuid> &idblock, std::string &strblock,
                 std::map<std::string,uint32_t> &cache);
-    bool operator == (const PVirkestoff &) const;
+    bool operator == (const PVirkestoff_0_0_0 &) const;
 };
 
+class PVirkestoff_0_4_0 {
+    friend FestDeserializer;
+private:
+    GenericListItems64 refVirkestoff;
+    PFestId id;
+    PString navn;
+    PString navnEngelsk;
+public:
+    PVirkestoff_0_4_0(const Virkestoff &, FestUuidList_0_4_0 &festUuidList, std::vector<FestUuid> &idblock, std::string &strblock,
+                std::map<std::string,uint32_t> &cache);
+    PVirkestoff_0_4_0(const PVirkestoff_0_0_0 &);
+    bool operator == (const PVirkestoff_0_4_0 &) const;
+};
+
+class PVirkestoff : public std::variant<PVirkestoff_0_0_0,PVirkestoff_0_4_0> {
+public:
+    PVirkestoff(const PVirkestoff_0_0_0 &);
+    PVirkestoff(const PVirkestoff_0_4_0 &);
+};
 
 #endif //LEGEMFEST_PVIRKESTOFF_H

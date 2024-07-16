@@ -10,18 +10,38 @@
 
 class FestDeserializer;
 class Legemiddel;
-class FestUuidList;
+class FestUuidList_0_0_0;
+class FestUuidList_0_4_0;
+class PLegemiddel_0_4_0;
 
-class PLegemiddel : public PLegemiddelCore {
+class PLegemiddel_0_0_0 : public PLegemiddelCore_0_0_0 {
     friend FestDeserializer;
+    friend PLegemiddel_0_4_0;
 private:
     PAdministreringLegemiddel administreringLegemiddel;
     GenericListItems32 sortertVirkestoffMedStyrke;
 public:
-    PLegemiddel(const Legemiddel &legemiddel, std::string &strblock, std::map<std::string,uint32_t> &cache,
-                FestUuidList &festUuidList, ValueWithCodesetList &valueWithCodesetList);
-    bool operator == (const PLegemiddel &) const;
+    PLegemiddel_0_0_0(const Legemiddel &legemiddel, std::string &strblock, std::map<std::string,uint32_t> &cache,
+                FestUuidList_0_0_0 &festUuidList, ValueWithCodesetList &valueWithCodesetList);
+    bool operator == (const PLegemiddel_0_0_0 &) const;
 };
 
+class PLegemiddel_0_4_0 : public PLegemiddelCore_0_4_0 {
+    friend FestDeserializer;
+private:
+    PAdministreringLegemiddel administreringLegemiddel;
+    GenericListItems64 sortertVirkestoffMedStyrke;
+public:
+    PLegemiddel_0_4_0(const Legemiddel &legemiddel, std::string &strblock, std::map<std::string,uint32_t> &cache,
+                FestUuidList_0_4_0 &festUuidList, ValueWithCodesetList &valueWithCodesetList);
+    PLegemiddel_0_4_0(const PLegemiddel_0_0_0 &);
+    bool operator == (const PLegemiddel_0_4_0 &) const;
+};
+
+class PLegemiddel : public PLegemiddelCore, public std::variant<PLegemiddel_0_0_0,PLegemiddel_0_4_0> {
+public:
+    PLegemiddel(const PLegemiddel_0_0_0 &);
+    PLegemiddel(const PLegemiddel_0_4_0 &);
+};
 
 #endif //LEGEMFEST_PLEGEMIDDEL_H

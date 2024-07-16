@@ -44,28 +44,97 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     festSerializer.stringblock.clear();
     festSerializer.stringblock.append(stringblock, stringblocksize);
     PL(festSerializer.festidblock, festUuid, numFestUuid);
-    PL(festSerializer.legemiddelMerkevare, merkevare, numMerkevare);
-    PL(festSerializer.legemiddelpakning, pakning, numPakning);
-    PL(festSerializer.legemiddelVirkestoff, legemiddelVirkestoff, numLegemiddelVirkestoff);
+    PL(festSerializer.legemiddelMerkevare_0_0_0, merkevare_0_0_0, numMerkevare_0_0_0);
+    PL(festSerializer.legemiddelpakning_0_0_0, pakning_0_0_0, numPakning_0_0_0);
+    PL(festSerializer.legemiddelVirkestoff_0_0_0, legemiddelVirkestoff_0_0_0, numLegemiddelVirkestoff_0_0_0);
+    PL(festSerializer.legemiddeldose_0_0_0, legemiddeldose_0_0_0, numLegemiddeldose_0_0_0);
+    PL(festSerializer.virkestoff_0_0_0, virkestoff_0_0_0, numVirkestoff_0_0_0);
+    PL(festSerializer.varselSlv_0_0_0, varselSlv_0_0_0, numVarselSlv_0_0_0);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        PL(festSerializer.legemiddelMerkevare_0_4_0, merkevare_0_4_0, numMerkevare_0_4_0);
+        PL(festSerializer.legemiddelpakning_0_4_0, pakning_0_4_0, numPakning_0_4_0);
+        PL(festSerializer.legemiddelVirkestoff_0_4_0, legemiddelVirkestoff_0_4_0, numLegemiddelVirkestoff_0_4_0);
+        PL(festSerializer.legemiddeldose_0_4_0, legemiddeldose_0_4_0, numLegemiddeldose_0_4_0);
+        PL(festSerializer.virkestoff_0_4_0, virkestoff_0_4_0, numVirkestoff_0_4_0);
+        PL(festSerializer.varselSlv_0_4_0, varselSlv_0_4_0, numVarselSlv_0_4_0);
+    } else {
+        {
+            std::function<POppfLegemiddelMerkevare_0_4_0 (const POppfLegemiddelMerkevare_0_0_0 &)> convert{[this, &festSerializer](const POppfLegemiddelMerkevare_0_0_0 &src) {
+                POppfLegemiddelMerkevare_0_4_0 dst{src};
+                return dst;
+            }};
+            PL(festSerializer.legemiddelMerkevare_0_4_0, merkevare_0_0_0, numMerkevare_0_0_0, convert);
+        }
+        {
+            std::function<POppfLegemiddelpakning_0_4_0 (const POppfLegemiddelpakning_0_0_0 &)> convert{[this, &festSerializer](const POppfLegemiddelpakning_0_0_0 &src) {
+                POppfLegemiddelpakning_0_4_0 dst{src};
+                return dst;
+            }};
+            PL(festSerializer.legemiddelpakning_0_4_0, pakning_0_0_0, numPakning_0_0_0, convert);
+        }
+        {
+            std::function<POppfLegemiddelVirkestoff_0_4_0 (const POppfLegemiddelVirkestoff_0_0_0 &)> convert{[this, &festSerializer](const POppfLegemiddelVirkestoff_0_0_0 &src) {
+                POppfLegemiddelVirkestoff_0_4_0 dst{src};
+                return dst;
+            }};
+            PL(festSerializer.legemiddelVirkestoff_0_4_0, legemiddelVirkestoff_0_0_0, numLegemiddelVirkestoff_0_0_0, convert);
+        }
+        {
+            std::function<POppfLegemiddeldose_0_4_0 (const POppfLegemiddeldose_0_0_0 &)> convert{[](const POppfLegemiddeldose_0_0_0 &src) {
+                POppfLegemiddeldose_0_4_0 dst{src};
+                return dst;
+            }};
+            PL(festSerializer.legemiddeldose_0_4_0, legemiddeldose_0_0_0, numLegemiddeldose_0_0_0, convert);
+        }
+        {
+            std::function<POppfVirkestoff_0_4_0 (const POppfVirkestoff_0_0_0 &)> convert{[] (const POppfVirkestoff_0_0_0 &src) -> POppfVirkestoff_0_4_0 {
+                POppfVirkestoff_0_4_0 dst{src};
+                return dst;
+            }};
+            PL(festSerializer.virkestoff_0_4_0, virkestoff_0_0_0, numVirkestoff_0_0_0, convert);
+        }
+        {
+            std::function<POppfVarselSlv_0_4_0 (const POppfVarselSlv_0_0_0 &)> convert{[] (const POppfVarselSlv_0_0_0 &src) -> POppfVarselSlv_0_4_0 {
+                POppfVarselSlv_0_4_0 dst{src};
+                return dst;
+            }};
+            PL(festSerializer.varselSlv_0_4_0, varselSlv_0_0_0, numVarselSlv_0_0_0, convert);
+        }
+    }
     PL(festSerializer.medForbrMatr, medForbrMatr, numMedForbrMatr);
     PL(festSerializer.naringsmiddel, naringsmiddel, numNaringsmiddel);
     PL(festSerializer.brystprotese, brystprotese, numBrystprotese);
-    PL(festSerializer.legemiddeldose, legemiddeldose, numLegemiddeldose);
     PL(festSerializer.virkestoffMedStyrke, virkestoffMedStyrke, numVirkestoffMedStyrke);
-    PL(festSerializer.virkestoff, virkestoff, numVirkestoff);
     PL(festSerializer.kodeverk_0_0_0, kodeverk_0_0_0, numKodeverk_0_0_0);
     PL(festSerializer.refusjon, refusjon, numRefusjon);
     PL(festSerializer.vilkar, vilkar, numVilkar);
-    PL(festSerializer.varselSlv, varselSlv, numVarselSlv);
     PL(festSerializer.byttegruppe, byttegruppe, numByttegruppe);
     PL(festSerializer.interaksjon, interaksjon, numInteraksjon);
     PL(festSerializer.interaksjonIkkeVurdert, interaksjonIkkeVurdert, numInteraksjonIkkeVurdert);
     PL(festSerializer.strDosering, strDosering, numStrDosering);
     PL(festSerializer.fests_V_0_0_0, fests_V_0_0_0, numFests_V_0_0_0);
-    if (versionMajor > 0 || versionMinor >= 3) {
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        PL(festSerializer.fests_V_0_4_0, fests_V_0_4_0, numFests_V_0_4_0);
+        PL(festSerializer.fests_V_0_3_0, fests_V_0_3_0, numFests_V_0_3_0);
+        PL(festSerializer.fests_V_0_2_0, fests_V_0_2_0, numFests_V_0_2_0);
+    } else if (versionMajor > 0 || versionMinor >= 3) {
+        {
+            std::function<PFest_V_0_4_0 (const PFest_V_0_3_0 &)> convert{[this, &festSerializer](const PFest_V_0_3_0 &src) {
+                PFest_V_0_4_0 dst{src};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_0_4_0, fests_V_0_3_0, numFests_V_0_3_0, convert);
+        }
         PL(festSerializer.fests_V_0_3_0, fests_V_0_3_0, numFests_V_0_3_0);
         PL(festSerializer.fests_V_0_2_0, fests_V_0_2_0, numFests_V_0_2_0);
     } else if (versionMinor >= 2) {
+        {
+            std::function<PFest_V_0_4_0 (const PFest_V_0_2_0 &)> convert{[this, &festSerializer](const PFest_V_0_2_0 &src) {
+                PFest_V_0_4_0 dst{src, *this, festSerializer.uint32List};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_0_4_0, fests_V_0_2_0, numFests_V_0_2_0, convert);
+        }
         {
             std::function<PFest_V_0_3_0 (const PFest_V_0_2_0 &)> convert{[this, &festSerializer](const PFest_V_0_2_0 &src) {
                 PFest_V_0_3_0 dst{src, *this, festSerializer.uint32List};
@@ -75,6 +144,13 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
         }
         PL(festSerializer.fests_V_0_2_0, fests_V_0_2_0, numFests_V_0_2_0);
     } else {
+        {
+            std::function<PFest_V_0_4_0 (const PFest_V_0_0_0 &)> convert{[this, &festSerializer](const PFest_V_0_0_0 &src) {
+                PFest_V_0_4_0 dst{src, *this, festSerializer.uint32List};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_0_4_0, fests_V_0_0_0, numFests_V_0_0_0, convert);
+        }
         {
             std::function<PFest_V_0_3_0 (const PFest_V_0_0_0 &)> convert{[this, &festSerializer](const PFest_V_0_0_0 &src) {
                 PFest_V_0_3_0 dst{src, *this, festSerializer.uint32List};
@@ -91,7 +167,13 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
         }
     }
     FestDeserializerPreloader preloader{};
-    preloader.Preload(festSerializer.festUuidList, festUuidList, numFestUuidList);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        preloader.Preload(festSerializer.festUuidList_0_0_0, festUuidList_0_0_0, numFestUuidList_0_0_0);
+        preloader.Preload(festSerializer.festUuidList_0_4_0, festUuidList_0_4_0, numFestUuidList_0_4_0);
+    } else {
+        preloader.Preload(festSerializer.festUuidList_0_0_0, festUuidList_0_0_0, numFestUuidList_0_0_0);
+        preloader.Preload(festSerializer.festUuidList_0_4_0, festUuidList_0_0_0, numFestUuidList_0_0_0);
+    }
     preloader.Preload(festSerializer.valueWithCodesetList, valueWithCodesetList, numValueWithCodesetList);
     preloader.Preload(festSerializer.reseptgyldighetList, reseptgyldighetList, numReseptgyldighet);
     preloader.Preload(festSerializer.pakningskomponentList, pakningskomponentList, numPakningskomponent);

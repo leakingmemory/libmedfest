@@ -26,7 +26,7 @@ class POppfKodeverk;
 class FestVectors {
 private:
     std::string dato;
-    const std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0> festV;
+    const std::variant<PFest_V_0_0_0,PFest_V_0_2_0,PFest_V_0_3_0,PFest_V_0_4_0> festV;
     const uint16_t* legemiddelMerkevare;
     const uint16_t* legemiddelpakning_0_0_0;
     const uint32_t* legemiddelpakning_0_3_0;
@@ -49,6 +49,7 @@ public:
     FestVectors(const PFest_V_0_0_0 &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List);
     FestVectors(const PFest_V_0_2_0 &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List);
     FestVectors(const PFest_V_0_3_0 &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List, const uint32_t *uint32List, size_t sizeUint32List);
+    FestVectors(const PFest_V_0_4_0 &, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List, const uint32_t *uint32List, size_t sizeUint32List);
     [[nodiscard]] std::string GetDato() const;
     [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning> GetLegemiddelPakning(const FestDeserializer &) const;

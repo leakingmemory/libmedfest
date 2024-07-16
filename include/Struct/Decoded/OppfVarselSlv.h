@@ -8,10 +8,12 @@
 #include "Oppf.h"
 #include "VarselSlv.h"
 
-class POppfVarselSlv;
+class POppfVarselSlv_0_4_0;
+class POppfVarselSlv_0_0_0;
 
 class OppfVarselSlv : public Oppf {
-    friend POppfVarselSlv;
+    friend POppfVarselSlv_0_4_0;
+    friend POppfVarselSlv_0_0_0;
 private:
     VarselSlv varselSlv;
 public:

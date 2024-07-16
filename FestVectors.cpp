@@ -110,6 +110,47 @@ FestVectors::FestVectors(const PFest_V_0_3_0 &fest, const std::string &dato, con
     CheckRange<&PFest_V_0_2_0_or_later::strDosering>(fest, sizeUint16List);
 }
 
+FestVectors::FestVectors(const PFest_V_0_4_0 &fest, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List, const uint32_t *uint32List, size_t sizeUint32List) :
+        festV(fest),
+        dato(dato),
+        legemiddelMerkevare(&(uint16List[fest.legemiddelMerkevare.start])),
+        legemiddelpakning_0_0_0(nullptr),
+        legemiddelpakning_0_3_0(&(uint32List[fest.legemiddelpakning.start])),
+        legemiddelVirkestoff(&(uint16List[fest.legemiddelVirkestoff.start])),
+        medForbrMatr(&(uint16List[fest.medForbrMatr.start])),
+        naringsmiddel(&(uint16List[fest.naringsmiddel.start])),
+        brystprotese(&(uint16List[fest.brystprotese.start])),
+        legemiddeldose(&(uint16List[fest.legemiddeldose.start])),
+        virkestoffMedStyrke(&(uint16List[fest.virkestoffMedStyrke.start])),
+        virkestoff(&(uint16List[fest.virkestoff.start])),
+        kodeverk(&(uint16List[fest.kodeverk.start])),
+        refusjon(&(uint16List[fest.refusjon.start])),
+        vilkar(&(uint16List[fest.vilkar.start])),
+        varselSlv(&(uint16List[fest.varselSlv.start])),
+        byttegruppe(&(uint16List[fest.byttegruppe.start])),
+        interaksjon(&(uint16List[fest.interaksjon.start])),
+        interaksjonIkkeVurdert(&(uint16List[fest.interaksjonIkkeVurdert.start])),
+        strDosering(&(uint16List[fest.strDosering.start]))
+{
+    CheckRange<&PFest_V_0_2_0_or_later::legemiddelMerkevare>(static_cast<const PFest_V_0_2_0_or_later &>(fest), sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::legemiddelpakning>(fest, sizeUint32List);
+    CheckRange<&PFest_V_0_2_0_or_later::legemiddelVirkestoff>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::medForbrMatr>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::naringsmiddel>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::brystprotese>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::legemiddeldose>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::virkestoffMedStyrke>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::virkestoff>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::kodeverk>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::refusjon>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::vilkar>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::varselSlv>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::byttegruppe>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::interaksjon>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::interaksjonIkkeVurdert>(fest, sizeUint16List);
+    CheckRange<&PFest_V_0_2_0_or_later::strDosering>(fest, sizeUint16List);
+}
+
 FestVectors::FestVectors(const PFest_V_0_0_0 &fest, const std::string &dato, const uint16_t *uint16List, size_t sizeUint16List) :
     festV(fest),
     dato(dato),
@@ -182,8 +223,23 @@ template <typename T, typename I> std::vector<T> ObjectsAsVector(const std::vect
     return result;
 }
 
+template <typename O, typename T, typename I> std::vector<O> ObjectsAsVector(const std::vector<T> &objects, const std::vector<I> &indices) {
+    std::vector<O> result{};
+    for (const I &index : indices) {
+        if (index < 0 || index >= objects.size()) {
+            throw PackException("Index out of range");
+        }
+        result.push_back(objects[index]);
+    }
+    return result;
+}
+
 #define AsVector(name, listFunc) { \
-    if (std::holds_alternative<PFest_V_0_3_0>(festV)) {               \
+    if (std::holds_alternative<PFest_V_0_4_0>(festV)) {               \
+        auto indices = ItemsAsVector(name, std::get<PFest_V_0_4_0>(festV).name); \
+        auto objects = festDeserializer.listFunc(); \
+        return ObjectsAsVector(objects, indices);              \
+    } else if (std::holds_alternative<PFest_V_0_3_0>(festV)) {               \
         auto indices = ItemsAsVector(name, std::get<PFest_V_0_3_0>(festV).name); \
         auto objects = festDeserializer.listFunc(); \
         return ObjectsAsVector(objects, indices);              \
@@ -199,27 +255,76 @@ template <typename T, typename I> std::vector<T> ObjectsAsVector(const std::vect
 }
 
 std::vector<POppfLegemiddelMerkevare> FestVectors::GetLegemiddelMerkevare(const FestDeserializer &festDeserializer) const {
-    AsVector(legemiddelMerkevare, GetLegemiddelMerkevare);
+    std::vector<POppfLegemiddelMerkevare> oppfs{};
+    if (std::holds_alternative<PFest_V_0_4_0>(festV)) {
+        auto indices = ItemsAsVector(legemiddelMerkevare, std::get<PFest_V_0_4_0>(festV).legemiddelMerkevare);
+        auto objects = festDeserializer.GetLegemiddelMerkevare_0_4_0();
+        auto intermediate = ObjectsAsVector(objects, indices);
+        oppfs.reserve(intermediate.size());
+        for (const auto &oppf : intermediate) {
+            oppfs.emplace_back(oppf);
+        }
+    } else {
+        std::vector<POppfLegemiddelMerkevare_0_0_0> raw{};
+        if (std::holds_alternative<PFest_V_0_3_0>(festV)) {
+            auto indices = ItemsAsVector(legemiddelMerkevare, std::get<PFest_V_0_3_0>(festV).legemiddelMerkevare);
+            auto objects = festDeserializer.GetLegemiddelMerkevare_0_0_0();
+            raw = ObjectsAsVector(objects, indices);
+        } else if (std::holds_alternative<PFest_V_0_2_0>(festV)) {
+            auto indices = ItemsAsVector(legemiddelMerkevare, std::get<PFest_V_0_2_0>(festV).legemiddelMerkevare);
+            auto objects = festDeserializer.GetLegemiddelMerkevare_0_0_0();
+            raw = ObjectsAsVector(objects, indices);
+        } else {
+            auto indices = ItemsAsVector(legemiddelMerkevare, std::get<PFest_V_0_0_0>(festV).legemiddelMerkevare);
+            auto objects = festDeserializer.GetLegemiddelMerkevare_0_0_0();
+            raw = ObjectsAsVector(objects, indices);
+        }
+        oppfs.reserve(raw.size());
+        for (const auto &r : raw) {
+            oppfs.emplace_back(r);
+        }
+    }
+    return oppfs;
 }
 
 std::vector<POppfLegemiddelpakning> FestVectors::GetLegemiddelPakning(const FestDeserializer &festDeserializer) const {
-    if (std::holds_alternative<PFest_V_0_3_0>(festV)) {
+    if (std::holds_alternative<PFest_V_0_4_0>(festV)) {
+        auto indices = ItemsAsVector(legemiddelpakning_0_3_0, std::get<PFest_V_0_4_0>(festV).legemiddelpakning);
+        auto objects = festDeserializer.GetLegemiddelPakning_0_4_0();
+        return ObjectsAsVector<POppfLegemiddelpakning>(objects, indices);
+    } else if (std::holds_alternative<PFest_V_0_3_0>(festV)) {
         auto indices = ItemsAsVector(legemiddelpakning_0_3_0, std::get<PFest_V_0_3_0>(festV).legemiddelpakning);
-        auto objects = festDeserializer.GetLegemiddelPakning();
-        return ObjectsAsVector(objects, indices);
+        auto objects = festDeserializer.GetLegemiddelPakning_0_0_0();
+        return ObjectsAsVector<POppfLegemiddelpakning>(objects, indices);
     } else if (std::holds_alternative<PFest_V_0_2_0>(festV)) {
         auto indices = ItemsAsVector(legemiddelpakning_0_0_0, std::get<PFest_V_0_2_0>(festV).legemiddelpakning);
-        auto objects = festDeserializer.GetLegemiddelPakning();
-        return ObjectsAsVector(objects, indices);
+        auto objects = festDeserializer.GetLegemiddelPakning_0_0_0();
+        return ObjectsAsVector<POppfLegemiddelpakning>(objects, indices);
     } else {
         auto indices = ItemsAsVector(legemiddelpakning_0_0_0, std::get<PFest_V_0_0_0>(festV).legemiddelpakning);
-        auto objects = festDeserializer.GetLegemiddelPakning();
-        return ObjectsAsVector(objects, indices);
+        auto objects = festDeserializer.GetLegemiddelPakning_0_0_0();
+        return ObjectsAsVector<POppfLegemiddelpakning>(objects, indices);
     }
 }
 
 std::vector<POppfLegemiddelVirkestoff> FestVectors::GetLegemiddelVirkestoff(const FestDeserializer &festDeserializer) const {
-    AsVector(legemiddelVirkestoff, GetLegemiddelVirkestoff);
+    if (std::holds_alternative<PFest_V_0_4_0>(festV)) {
+        auto indices = ItemsAsVector(legemiddelVirkestoff, std::get<PFest_V_0_4_0>(festV).legemiddelVirkestoff);
+        auto objects = festDeserializer.GetLegemiddelVirkestoff_0_4_0();
+        return ObjectsAsVector<POppfLegemiddelVirkestoff>(objects, indices);
+    } else if (std::holds_alternative<PFest_V_0_3_0>(festV)) {
+        auto indices = ItemsAsVector(legemiddelVirkestoff, std::get<PFest_V_0_3_0>(festV).legemiddelVirkestoff);
+        auto objects = festDeserializer.GetLegemiddelVirkestoff_0_0_0();
+        return ObjectsAsVector<POppfLegemiddelVirkestoff>(objects, indices);
+    } else if (std::holds_alternative<PFest_V_0_2_0>(festV)) {
+        auto indices = ItemsAsVector(legemiddelVirkestoff, std::get<PFest_V_0_2_0>(festV).legemiddelVirkestoff);
+        auto objects = festDeserializer.GetLegemiddelVirkestoff_0_0_0();
+        return ObjectsAsVector<POppfLegemiddelVirkestoff>(objects, indices);
+    } else {
+        auto indices = ItemsAsVector(legemiddelVirkestoff, std::get<PFest_V_0_0_0>(festV).legemiddelVirkestoff);
+        auto objects = festDeserializer.GetLegemiddelVirkestoff_0_0_0();
+        return ObjectsAsVector<POppfLegemiddelVirkestoff>(objects, indices);
+    }
 }
 
 std::vector<POppfMedForbrMatr> FestVectors::GetMedForbrMatr(const FestDeserializer &festDeserializer) const {
@@ -235,7 +340,23 @@ std::vector<POppfBrystprotese> FestVectors::GetBrystprotese(const FestDeserializ
 }
 
 std::vector<POppfLegemiddeldose> FestVectors::GetLegemiddeldose(const FestDeserializer &festDeserializer) const {
-    AsVector(legemiddeldose, GetLegemiddeldose);
+    if (std::holds_alternative<PFest_V_0_4_0>(festV)) {
+        auto indices = ItemsAsVector(legemiddeldose, std::get<PFest_V_0_4_0>(festV).legemiddeldose);
+        auto objects = festDeserializer.GetLegemiddeldose_0_4_0();
+        return ObjectsAsVector<POppfLegemiddeldose>(objects, indices);
+    } else if (std::holds_alternative<PFest_V_0_3_0>(festV)) {
+        auto indices = ItemsAsVector(legemiddeldose, std::get<PFest_V_0_3_0>(festV).legemiddeldose);
+        auto objects = festDeserializer.GetLegemiddeldose_0_0_0();
+        return ObjectsAsVector<POppfLegemiddeldose>(objects, indices);
+    } else if (std::holds_alternative<PFest_V_0_2_0>(festV)) {
+        auto indices = ItemsAsVector(legemiddeldose, std::get<PFest_V_0_2_0>(festV).legemiddeldose);
+        auto objects = festDeserializer.GetLegemiddeldose_0_0_0();
+        return ObjectsAsVector<POppfLegemiddeldose>(objects, indices);
+    } else {
+        auto indices = ItemsAsVector(legemiddeldose, std::get<PFest_V_0_0_0>(festV).legemiddeldose);
+        auto objects = festDeserializer.GetLegemiddeldose_0_0_0();
+        return ObjectsAsVector<POppfLegemiddeldose>(objects, indices);
+    }
 }
 
 std::vector<POppfVirkestoffMedStyrke> FestVectors::GetVirkestoffMedStyrke(const FestDeserializer &festDeserializer) const {
@@ -243,7 +364,23 @@ std::vector<POppfVirkestoffMedStyrke> FestVectors::GetVirkestoffMedStyrke(const 
 }
 
 std::vector<POppfVirkestoff> FestVectors::GetVirkestoff(const FestDeserializer &festDeserializer) const {
-    AsVector(virkestoff, GetVirkestoff);
+    if (std::holds_alternative<PFest_V_0_4_0>(festV)) {
+        auto indices = ItemsAsVector(virkestoff, std::get<PFest_V_0_4_0>(festV).virkestoff);
+        auto objects = festDeserializer.GetVirkestoff_0_4_0();
+        return ObjectsAsVector<POppfVirkestoff>(objects, indices);
+    } else if (std::holds_alternative<PFest_V_0_3_0>(festV)) {
+        auto indices = ItemsAsVector(virkestoff, std::get<PFest_V_0_3_0>(festV).virkestoff);
+        auto objects = festDeserializer.GetVirkestoff_0_0_0();
+        return ObjectsAsVector<POppfVirkestoff>(objects, indices);
+    } else if (std::holds_alternative<PFest_V_0_2_0>(festV)) {
+        auto indices = ItemsAsVector(virkestoff, std::get<PFest_V_0_2_0>(festV).virkestoff);
+        auto objects = festDeserializer.GetVirkestoff_0_0_0();
+        return ObjectsAsVector<POppfVirkestoff>(objects, indices);
+    } else {
+        auto indices = ItemsAsVector(virkestoff, std::get<PFest_V_0_0_0>(festV).virkestoff);
+        auto objects = festDeserializer.GetVirkestoff_0_0_0();
+        return ObjectsAsVector<POppfVirkestoff>(objects, indices);
+    }
 }
 
 std::vector<POppfRefusjon> FestVectors::GetRefusjon(const FestDeserializer &festDeserializer) const {

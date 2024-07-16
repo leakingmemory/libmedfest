@@ -114,7 +114,7 @@ struct FestSecondHeader_0_2_0 {
     uint16_t reservedZ;
 } __attribute__((__packed__));
 
-struct FestSecondHeader {
+struct FestSecondHeader_0_3_0 {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
@@ -126,6 +126,27 @@ struct FestSecondHeader {
     uint32_t numTermList;
     uint32_t numUint32List;
     uint32_t numPakning;
+} __attribute__((__packed__));
+
+struct FestSecondHeader {
+    uint64_t magic;
+    uint32_t stringblockSize;
+    uint16_t secondHeaderSize;
+    uint16_t numRefusjonskode;
+    uint32_t numUint16NewList;
+    uint16_t numFests;
+    uint16_t numKodeverk;
+    uint32_t numElementList;
+    uint32_t numTermList;
+    uint32_t numUint32List;
+    uint32_t numPakning_0_3_0;
+    uint32_t numPakning_0_4_0;
+    uint32_t numMerkevare;
+    uint32_t numLegemiddelVirkestoff;
+    uint32_t numLegemiddeldose;
+    uint32_t numFestUuidList;
+    uint32_t numVirkestoff;
+    uint32_t numVarselSlv;
 } __attribute__((__packed__));
 
 struct FestTrailer {
@@ -143,7 +164,8 @@ private:
     std::string stringblock{};
     std::map<std::string,uint32_t> stringblockCache{};
     std::vector<FestUuid> festidblock{};
-    FestUuidList festUuidList{festidblock};
+    FestUuidList_0_0_0 festUuidList_0_0_0{festidblock};
+    FestUuidList_0_4_0 festUuidList_0_4_0{festidblock};
     ValueWithCodesetList valueWithCodesetList{};
     ReseptgyldighetList reseptgyldighetList{};
     PakningskomponentList pakningskomponentList{};
@@ -167,20 +189,26 @@ private:
     Uint16List uint16List{};
     Uint32List uint32List{};
     StringList stringList{};
-    std::vector<POppfLegemiddelMerkevare> legemiddelMerkevare{};
-    std::vector<POppfLegemiddelpakning> legemiddelpakning{};
-    std::vector<POppfLegemiddelVirkestoff> legemiddelVirkestoff{};
+    std::vector<POppfLegemiddelMerkevare_0_0_0> legemiddelMerkevare_0_0_0{};
+    std::vector<POppfLegemiddelMerkevare_0_4_0> legemiddelMerkevare_0_4_0{};
+    std::vector<POppfLegemiddelpakning_0_0_0> legemiddelpakning_0_0_0{};
+    std::vector<POppfLegemiddelpakning_0_4_0> legemiddelpakning_0_4_0{};
+    std::vector<POppfLegemiddelVirkestoff_0_0_0> legemiddelVirkestoff_0_0_0{};
+    std::vector<POppfLegemiddelVirkestoff_0_4_0> legemiddelVirkestoff_0_4_0{};
     std::vector<POppfMedForbrMatr> medForbrMatr{};
     std::vector<POppfNaringsmiddel> naringsmiddel{};
     std::vector<POppfBrystprotese> brystprotese{};
-    std::vector<POppfLegemiddeldose> legemiddeldose{};
+    std::vector<POppfLegemiddeldose_0_0_0> legemiddeldose_0_0_0{};
+    std::vector<POppfLegemiddeldose_0_4_0> legemiddeldose_0_4_0{};
     std::vector<POppfVirkestoffMedStyrke> virkestoffMedStyrke{};
-    std::vector<POppfVirkestoff> virkestoff{};
+    std::vector<POppfVirkestoff_0_0_0> virkestoff_0_0_0{};
+    std::vector<POppfVirkestoff_0_4_0> virkestoff_0_4_0{};
     std::vector<POppfKodeverk_0_0_0> kodeverk_0_0_0{};
     std::vector<POppfKodeverk_0_3_0> kodeverk_0_3_0{};
     std::vector<POppfRefusjon> refusjon{};
     std::vector<POppfVilkar> vilkar{};
-    std::vector<POppfVarselSlv> varselSlv{};
+    std::vector<POppfVarselSlv_0_0_0> varselSlv_0_0_0{};
+    std::vector<POppfVarselSlv_0_4_0> varselSlv_0_4_0{};
     std::vector<POppfByttegruppe> byttegruppe{};
     std::vector<POppfInteraksjon> interaksjon{};
     std::vector<POppfInteraksjonIkkeVurdert> interaksjonIkkeVurdert{};
@@ -188,6 +216,7 @@ private:
     std::vector<PFest_V_0_0_0> fests_V_0_0_0{};
     std::vector<PFest_V_0_2_0> fests_V_0_2_0{};
     std::vector<PFest_V_0_3_0> fests_V_0_3_0{};
+    std::vector<PFest_V_0_4_0> fests_V_0_4_0{};
     std::map<std::string,std::shared_ptr<FestData>> festMap{};
     int percentDone;
     int minimumMajorVersion;

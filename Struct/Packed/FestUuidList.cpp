@@ -4,7 +4,7 @@
 
 #include <Struct/Packed/FestUuidList.h>
 
-GenericListItems32 FestUuidList::StoreList(const std::vector<std::string> &ids) {
+GenericListItems32 FestUuidList_0_0_0::StoreList(const std::vector<std::string> &ids) {
     if (ids.size() <= 0) {
         return {.start = 0, .size = 0};
     }
@@ -15,7 +15,7 @@ GenericListItems32 FestUuidList::StoreList(const std::vector<std::string> &ids) 
     return GenericListStorage32<PFestId>::StoreList(packed);
 }
 
-std::vector<std::string> FestUuidList::RetrieveList(const GenericListItems32 &litems) const {
+std::vector<std::string> FestUuidList_0_0_0::RetrieveList(const GenericListItems32 &litems) const {
     if (litems.size <= 0) {
         return {};
     }
@@ -30,10 +30,44 @@ std::vector<std::string> FestUuidList::RetrieveList(const GenericListItems32 &li
     return result;
 }
 
-std::vector<PFestId> FestUuidList::GetStorageBlock() const {
+std::vector<PFestId> FestUuidList_0_0_0::GetStorageBlock() const {
     return GetList();
 }
 
-size_t FestUuidList::size() const {
+size_t FestUuidList_0_0_0::size() const {
+    return GetSize();
+}
+
+GenericListItems64 FestUuidList_0_4_0::StoreList(const std::vector<std::string> &ids) {
+    if (ids.size() <= 0) {
+        return {.start = 0, .size = 0};
+    }
+    std::vector<PFestId> packed{};
+    for (const auto &id : ids) {
+        packed.emplace_back(id, uuidblock);
+    }
+    return GenericListStorage64<PFestId>::StoreList(packed);
+}
+
+std::vector<std::string> FestUuidList_0_4_0::RetrieveList(const GenericListItems64 &litems) const {
+    if (litems.size <= 0) {
+        return {};
+    }
+    std::vector<std::string> result{};
+    {
+        auto packed = GenericListStorage64<PFestId>::RetrieveList(litems);
+        for (const auto &p : packed) {
+            auto id = p.ToString(uuidblock);
+            result.emplace_back(id);
+        }
+    }
+    return result;
+}
+
+std::vector<PFestId> FestUuidList_0_4_0::GetStorageBlock() const {
+    return GetList();
+}
+
+size_t FestUuidList_0_4_0::size() const {
     return GetSize();
 }

@@ -9,10 +9,12 @@
 #include "Legemiddeldose.h"
 #include "Oppf.h"
 
-class POppfLegemiddeldose;
+class POppfLegemiddeldose_0_0_0;
+class POppfLegemiddeldose_0_4_0;
 
 class OppfLegemiddeldose : public Oppf {
-    friend POppfLegemiddeldose;
+    friend POppfLegemiddeldose_0_0_0;
+    friend POppfLegemiddeldose_0_4_0;
 private:
     Legemiddeldose legemiddeldose;
 public:

@@ -9,3 +9,9 @@ target_include_directories(serializedeserializetests PRIVATE ../include)
 target_link_libraries(serializedeserializetests PRIVATE medfest)
 
 add_test(SerializeDeserializeTests serializedeserializetests)
+
+add_executable(fileimporttest FileImportTest.cpp)
+target_include_directories(fileimporttest PRIVATE ../include)
+target_link_libraries(fileimporttest PRIVATE medfest)
+
+add_test(FileImportTest fileimporttest)

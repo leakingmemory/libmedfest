@@ -10,7 +10,7 @@
 constexpr uint64_t magicConst  = 0xFE5700000025;
 constexpr uint64_t versionMask = 0x0000FFFFFF00;
 
-constexpr uint64_t GetMagicNumbber(uint8_t major = 0, uint8_t minor = 4, uint8_t patch = 0) {
+constexpr uint64_t GetMagicNumbber(uint8_t major = 1, uint8_t minor = 2, uint8_t patch = 0) {
     uint64_t majorConst{((uint64_t) major) << 24};
     uint64_t minorConst{((uint64_t) minor) << 16};
     uint64_t patchConst{((uint64_t) patch) << 8};

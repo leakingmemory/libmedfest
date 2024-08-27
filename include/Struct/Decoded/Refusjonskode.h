@@ -9,12 +9,14 @@
 #include "RefRefusjonsvilkar.h"
 #include <vector>
 
-class PRefusjonskode;
 class PRefusjonskode_0_0_0;
+class PRefusjonskode_0_1_0;
+class PRefusjonskode_1_2_0;
 
 class Refusjonskode {
-    friend PRefusjonskode;
     friend PRefusjonskode_0_0_0;
+    friend PRefusjonskode_0_1_0;
+    friend PRefusjonskode_1_2_0;
 private:
     ValueWithCodeSet refusjonskode;
     std::string gyldigFraDato;

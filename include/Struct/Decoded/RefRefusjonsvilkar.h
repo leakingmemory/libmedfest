@@ -11,11 +11,13 @@ class RefRefusjonsvilkar {
 private:
     std::string id;
     std::string fraDato;
+    std::string tilDato;
 public:
-    RefRefusjonsvilkar() : id(), fraDato() {}
-    RefRefusjonsvilkar(const std::string &id, const std::string &fraDato) : id(id), fraDato(fraDato) {}
+    RefRefusjonsvilkar() : id(), fraDato(), tilDato() {}
+    RefRefusjonsvilkar(const std::string &id, const std::string &fraDato, const std::string &tilDato) : id(id), fraDato(fraDato), tilDato(tilDato) {}
     [[nodiscard]] std::string GetId() const;
     [[nodiscard]] std::string GetFraDato() const;
+    [[nodiscard]] std::string GetTilDato() const;
 };
 
 

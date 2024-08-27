@@ -8,6 +8,7 @@
 #include <Fest/XMLObject.h>
 #include "XmlRefVilkar.h"
 #include "XmlFraDato.h"
+#include "XmlTilDato.h"
 #include <Struct/Decoded/RefRefusjonsvilkar.h>
 #include <vector>
 #include <memory>
@@ -28,7 +29,7 @@ public:
 };
 
 class XmlRefRefusjonsvilkarObject : public XMLObject, public XmlRefusjonsvilkarMergeable, public XmlRefVilkar,
-                                    public XmlFraDato {
+                                    public XmlFraDato, public XmlTilDato {
 private:
     std::shared_ptr<XmlRefRefusjonsvilkar> parent;
 public:

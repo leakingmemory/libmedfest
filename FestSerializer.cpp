@@ -54,8 +54,8 @@ bool FestSerializer::Write(uint64_t magic) {
     if (dbVersion.major > 1) {
         throw PackException("Output version above 1.X.X is not supported");
     }
-    if (dbVersion.major == 1 && dbVersion.minor > 1) {
-        throw PackException("Output version above 1.0.X is not supported");
+    if (dbVersion.major == 1 && dbVersion.minor > 2) {
+        throw PackException("Output version above 1.2.X is not supported");
     }
     if (dbVersion.major == 0 && dbVersion.minor > 4) {
         throw PackException("Output version major 0 with minor > 4 (0.4.X) is not supported");
@@ -163,14 +163,20 @@ bool FestSerializer::Write(uint64_t magic) {
     if (kodeverk_0_3_0.size() >= (1 << 16)) {
         throw PackException("Max kodeverk v0.3.0 list size");
     }
-    if (refRefusjonsvilkarList.size() >= (1 << 16)) {
-        throw PackException("Max ref refusjonsvilkar list");
+    if (refRefusjonsvilkarList_0_0_0.size() >= (1 << 16)) {
+        throw PackException("Max ref refusjonsvilkar list (v0.0.0)");
+    }
+    if (refRefusjonsvilkarList_1_2_0.size() >= (1 << 16)) {
+        throw PackException("Max ref refusjonsvilkar list (v1.2.0)");
     }
     if (dbVersion.major == 0 && refusjonskodeList_0_0_0.size() >= (1 << 16)) {
         throw PackException("Max refusjonskode 0.0.0 list");
     }
-    if (refusjonskodeList.size() >= (1 << 16)) {
-        throw PackException("Max refusjonskode list");
+    if (refusjonskodeList_0_1_0.size() >= (1 << 16)) {
+        throw PackException("Max refusjonskode 0.1.0 list");
+    }
+    if (refusjonskodeList_1_2_0.size() >= (1 << 16)) {
+        throw PackException("Max refusjonskode 1.2.0 list");
     }
     if (refusjon.size() >= (1 << 16)) {
         throw PackException("Max oppf refusjon size\n");
@@ -252,7 +258,7 @@ bool FestSerializer::Write(uint64_t magic) {
         .numVirkestoff = (uint16_t) (dbVersion.major <= 1 ? virkestoff_0_0_0.size() : 0),
         .numElement = (uint16_t) (dbVersion.major == 0 ? elementList_0_0_0.size() : 0),
         .numKodeverk = (uint16_t) (dbVersion.major == 0 ? kodeverk_0_0_0.size() : 0),
-        .numRefRefusjonsvilkar = (uint16_t) refRefusjonsvilkarList.size(),
+        .numRefRefusjonsvilkar_0_0_0 = (uint16_t) refRefusjonsvilkarList_0_0_0.size(),
         .numRefusjonskode_0_0_0 = (uint16_t) (dbVersion.major == 0 ? refusjonskodeList_0_0_0.size() : 0),
         .numRefusjon = (uint16_t) refusjon.size(),
         .numVilkar = (uint16_t) vilkar.size(),
@@ -681,20 +687,22 @@ bool FestSerializer::Write(uint64_t magic) {
             offset += size;
         }
     }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+    if (dbVersion.major < 2) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
         }
-    }
-    {
-        auto list = refRefusjonsvilkarList.GetStorageList();
-        auto *ptr = list.data();
-        auto size = list.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
+        {
+            auto list = refRefusjonsvilkarList_0_0_0.GetStorageList();
+            auto *ptr = list.data();
+            auto size = list.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
     }
     if (dbVersion.major == 0) {
         {
@@ -870,8 +878,11 @@ bool FestSerializer::Write(uint64_t magic) {
         if (stringblock.size() > std::numeric_limits<uint32_t>::max()) {
             throw PackException("Stringblock size overshoot (v0.1.0)");
         }
-        if (refusjonskodeList.size() > std::numeric_limits<uint16_t>::max()) {
+        if (refusjonskodeList_0_1_0.size() > std::numeric_limits<uint16_t>::max()) {
             throw PackException("Refusjonskode list size overshoot (v0.1.0)");
+        }
+        if (refRefusjonsvilkarList_1_2_0.size() > std::numeric_limits<uint16_t>::max()) {
+            throw PackException("Refusjonskode list size overshoot (v1.2.0)");
         }
         if (dbVersion.major == 0 && dbVersion.minor > 2 && fests_V_0_2_0.size() != fests_V_0_3_0.size()) {
             throw PackException("Size mismatch V 0.2.0 vs. 0.3.0");
@@ -880,7 +891,7 @@ bool FestSerializer::Write(uint64_t magic) {
             .magic = firstHeader.magic,
             .stringblockSize = (uint32_t) stringblock.size(),
             .secondHeaderSize = sizeof(FestSecondHeader),
-            .numRefusjonskode = (uint16_t) refusjonskodeList.size(),
+            .numRefusjonskode_0_1_0 = (uint16_t) refusjonskodeList_0_1_0.size(),
             .numUint16NewList = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 1 ? uint16List.size() : 0),
             .numFests = (uint16_t) (dbVersion.major == 0 ? (dbVersion.minor > 1 ? fests_V_0_2_0.size() : 0) : fests_V_0_3_0.size()),
             .numKodeverk = (uint16_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? kodeverk_0_3_0.size() : 0),
@@ -894,7 +905,9 @@ bool FestSerializer::Write(uint64_t magic) {
             .numLegemiddeldose = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddeldose_0_4_0.size() : 0),
             .numFestUuidList = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? festUuidList_0_4_0.size() : 0),
             .numVirkestoff = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? virkestoff_0_4_0.size() : 0),
-            .numVarselSlv = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? varselSlv_0_4_0.size() : 0)
+            .numVarselSlv = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? varselSlv_0_4_0.size() : 0),
+            .numRefRefusjonsvilkar_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refRefusjonsvilkarList_1_2_0.size() : 0),
+            .numRefusjonskode_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refusjonskodeList_1_2_0.size() : 0)
         };
         output->write((char *) (void *) &secondHeader, sizeof(secondHeader));
         offset += sizeof(secondHeader);
@@ -907,7 +920,7 @@ bool FestSerializer::Write(uint64_t magic) {
             }
         }
         {
-            auto list = refusjonskodeList.GetStorageList();
+            auto list = refusjonskodeList_0_1_0.GetStorageList();
             auto *ptr = list.data();
             auto size = list.size() * sizeof(*ptr);
             output->write((char *) (void *) ptr, size);
@@ -1166,6 +1179,38 @@ bool FestSerializer::Write(uint64_t magic) {
                 }
             }
         }
+        if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1)) {
+            {
+                auto list = refRefusjonsvilkarList_1_2_0.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto list = refusjonskodeList_1_2_0.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+        }
         output->write((char *) (void *) &trailer, sizeof(trailer));
     }
     auto fs = std::dynamic_pointer_cast<std::ofstream>(output);
@@ -1193,7 +1238,7 @@ int FestSerializer::GetHighestSupportedMajorVersion() {
 
 int FestSerializer::GetHighestSupportedMinorVersion(int major) {
     if (major == 1) {
-        return 1;
+        return 2;
     } else if (major == 0) {
         return 4;
     } else {
@@ -1308,7 +1353,12 @@ bool FestSerializer::Visit(const std::string &fest, const OppfKodeverk &kodeverk
 }
 
 bool FestSerializer::Visit(const std::string &fest, const OppfRefusjon &refusjon) {
-    auto index = Add(this->refusjon, {refusjon, refusjonskodeList_0_0_0, refusjonskodeList, refRefusjonsvilkarList, stringList, festidblock, stringblock, stringblockCache});
+    uint16_t index;
+    if (minimumMajorVersion > 0) {
+        index = Add(this->refusjon, {refusjon, refusjonskodeList_0_1_0, refusjonskodeList_1_2_0, refRefusjonsvilkarList_0_0_0, refRefusjonsvilkarList_1_2_0, stringList, festidblock, stringblock, stringblockCache});
+    } else {
+        index = Add(this->refusjon, {refusjon, refusjonskodeList_0_0_0, refusjonskodeList_0_1_0, refusjonskodeList_1_2_0, refRefusjonsvilkarList_0_0_0, refRefusjonsvilkarList_1_2_0, stringList, festidblock, stringblock, stringblockCache});
+    }
     Add(fest, [index] (FestData &f) { f.refusjon.emplace_back(index); });
     return true;
 }

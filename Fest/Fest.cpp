@@ -127,6 +127,10 @@ void Fest::Add(const OppfKodeverk &oppf) {
     oppfKodeverk.emplace_back(oppf);
 }
 
+void Fest::Add(const OppfRefusjon &oppf) {
+    oppfRefusjon.emplace_back(oppf);
+}
+
 void Fest::Add(const XmlOppfKodeverk &oppf) {
     oppfKodeverk.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetInfo(), oppf.GetElement());
 }

@@ -86,7 +86,7 @@ void FestDeserializer::Init() {
             throw PackException("Major version of file");
         }
         if ((version.major == 0 && version.minor > 4) ||
-            (version.major == 1 && version.minor > 1)) {
+            (version.major == 1 && version.minor > 2)) {
             std::cerr << "Warning: Version " << ((int) version.major) << "." << ((int) version.minor) << " contains unsupported data (ignored)\n";
             fullySupportedVersion = false;
         }
@@ -429,9 +429,9 @@ void FestDeserializer::Init() {
             offset += off;
         }
     }
-    refRefusjonsvilkarList = (const PRefRefusjonsvilkar *) (void *) (((uint8_t *) mapping) + offset);
-    numRefRefusjonsvilkar = header->numRefRefusjonsvilkar;
-    offset += ((size_t) numRefRefusjonsvilkar) * sizeof(*refRefusjonsvilkarList);
+    refRefusjonsvilkarList_0_0_0 = (const PRefRefusjonsvilkar_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+    numRefRefusjonsvilkar_0_0_0 = header->numRefRefusjonsvilkar_0_0_0;
+    offset += ((size_t) numRefRefusjonsvilkar_0_0_0) * sizeof(*refRefusjonsvilkarList_0_0_0);
     if (versionMajor == 0) {
         {
             auto off = offset % alignment;
@@ -555,9 +555,9 @@ void FestDeserializer::Init() {
         }
         stringblocksize = secondHeader->stringblockSize;
         offset = secondDataOffset;
-        refusjonskodeList = (const PRefusjonskode *) (void *) (((uint8_t *) mapping) + offset);
-        numRefusjonskode = secondHeader->numRefusjonskode;
-        offset += ((size_t) numRefusjonskode) * sizeof(*refusjonskodeList);
+        refusjonskodeList_0_1_0 = (const PRefusjonskode_0_1_0 *) (void *) (((uint8_t *) mapping) + offset);
+        numRefusjonskode_0_1_0 = secondHeader->numRefusjonskode_0_1_0;
+        offset += ((size_t) numRefusjonskode_0_1_0) * sizeof(*refusjonskodeList_0_1_0);
         if (offset > mapsize) {
             throw PackException("Refusjonskode list overflow (v0.1.0)");
         }
@@ -757,6 +757,37 @@ void FestDeserializer::Init() {
                     offset += off;
                 }
             }
+            if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 1)) {
+                refRefusjonsvilkarList_1_2_0 = (const PRefRefusjonsvilkar_1_2_0 *) (void *) (((uint8_t *) mapping) + offset);
+                numRefRefusjonsvilkar_1_2_0 = secondHeader->numRefRefusjonsvilkar_1_2_0;
+                offset += ((size_t) numRefRefusjonsvilkar_1_2_0) * sizeof(*refRefusjonsvilkarList_1_2_0);
+                if (offset > mapsize) {
+                    throw PackException("RefRefusjonsvilkar list overflow (v1.2.0)");
+                }
+                {
+                    auto off = offset % alignment;
+                    if (off != 0) {
+                        off = alignment - off;
+                        offset += off;
+                    }
+                }
+                refusjonskodeList_1_2_0 = (const PRefusjonskode_1_2_0 *) (void *) (((uint8_t *) mapping) + offset);
+                numRefusjonskode_1_2_0 = secondHeader->numRefusjonskode_1_2_0;
+                offset += ((size_t) numRefusjonskode_1_2_0) * sizeof(*refusjonskodeList_1_2_0);
+                if (offset > mapsize) {
+                    throw PackException("Refusjonskode list overflow (v1.2.0)");
+                }
+                {
+                    auto off = offset % alignment;
+                    if (off != 0) {
+                        off = alignment - off;
+                        offset += off;
+                    }
+                }
+            } else {
+                refusjonskodeList_1_2_0 = nullptr;
+                numRefusjonskode_1_2_0 = 0;
+            }
             if (fullySupportedVersion && offset != trailerOffset) {
                 std::cerr << "Final offset of " << offset << " does not match trailer offset of " << trailerOffset << "\n";
                 throw PackException("Size of data was not what was expected for this version");
@@ -775,8 +806,8 @@ void FestDeserializer::Init() {
             numFests_V_0_4_0 = 0;
         }
     } else {
-        refusjonskodeList = nullptr;
-        numRefusjonskode = 0;
+        refusjonskodeList_0_1_0 = nullptr;
+        numRefusjonskode_0_1_0 = 0;
         uint16List = nullptr;
         numUint16List = 0;
         fests_V_0_2_0 = nullptr;
@@ -1179,13 +1210,40 @@ std::vector<PElement> FestDeserializer::GetElement() const {
     return element;
 }
 
-std::vector<PRefRefusjonsvilkar> FestDeserializer::GetRefRefusjonsvilkar() const {
-    std::vector<PRefRefusjonsvilkar> refRefusjonsvilkar{};
-    refRefusjonsvilkar.reserve(numRefRefusjonsvilkar);
-    for (std::remove_const<typeof(numRefRefusjonsvilkar)>::type i = 0; i < numRefRefusjonsvilkar; i++) {
-        refRefusjonsvilkar.emplace_back(this->refRefusjonsvilkarList[i]);
+std::vector<PRefRefusjonsvilkar_0_0_0> FestDeserializer::GetRefRefusjonsvilkar_0_0_0() const {
+    std::vector<PRefRefusjonsvilkar_0_0_0> refRefusjonsvilkar{};
+    refRefusjonsvilkar.reserve(numRefRefusjonsvilkar_0_0_0);
+    for (std::remove_const<typeof(numRefRefusjonsvilkar_0_0_0)>::type i = 0; i < numRefRefusjonsvilkar_0_0_0; i++) {
+        refRefusjonsvilkar.emplace_back(this->refRefusjonsvilkarList_0_0_0[i]);
     }
     return refRefusjonsvilkar;
+}
+
+std::vector<PRefRefusjonsvilkar_1_2_0> FestDeserializer::GetRefRefusjonsvilkar_1_2_0() const {
+    std::vector<PRefRefusjonsvilkar_1_2_0> refRefusjonsvilkar{};
+    refRefusjonsvilkar.reserve(numRefRefusjonsvilkar_1_2_0);
+    for (std::remove_const<typeof(numRefRefusjonsvilkar_1_2_0)>::type i = 0; i < numRefRefusjonsvilkar_1_2_0; i++) {
+        refRefusjonsvilkar.emplace_back(this->refRefusjonsvilkarList_1_2_0[i]);
+    }
+    return refRefusjonsvilkar;
+}
+
+std::vector<PRefRefusjonsvilkar> FestDeserializer::GetRefRefusjonsvilkar() const {
+    std::vector<PRefRefusjonsvilkar> varList{};
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 1)) {
+        auto v1_2_0List = GetRefRefusjonsvilkar_1_2_0();
+        varList.reserve(v1_2_0List.size());
+        for (const auto &v : v1_2_0List) {
+            varList.emplace_back(v);
+        }
+    } else {
+        auto v0_0_0List = GetRefRefusjonsvilkar_0_0_0();
+        varList.reserve(v0_0_0List.size());
+        for (const auto &v : v0_0_0List) {
+            varList.emplace_back(v);
+        }
+    }
+    return varList;
 }
 
 std::vector<PRefusjonskode_0_0_0> FestDeserializer::GetRefusjonskode_0_0_0() const {
@@ -1197,29 +1255,46 @@ std::vector<PRefusjonskode_0_0_0> FestDeserializer::GetRefusjonskode_0_0_0() con
     return refusjonskode;
 }
 
-std::vector<PRefusjonskode> FestDeserializer::GetRefusjonskode_0_1_0() const {
-    std::vector<PRefusjonskode> refusjonskode{};
-    refusjonskode.reserve(numRefusjonskode);
-    for (std::remove_const<typeof(numRefusjonskode)>::type i = 0; i < numRefusjonskode; i++) {
-        refusjonskode.emplace_back(this->refusjonskodeList[i]);
+std::vector<PRefusjonskode_0_1_0> FestDeserializer::GetRefusjonskode_0_1_0() const {
+    std::vector<PRefusjonskode_0_1_0> refusjonskode{};
+    refusjonskode.reserve(numRefusjonskode_0_1_0);
+    for (std::remove_const<typeof(numRefusjonskode_0_1_0)>::type i = 0; i < numRefusjonskode_0_1_0; i++) {
+        refusjonskode.emplace_back(this->refusjonskodeList_0_1_0[i]);
+    }
+    return refusjonskode;
+}
+
+std::vector<PRefusjonskode_1_2_0> FestDeserializer::GetRefusjonskode_1_2_0() const {
+    std::vector<PRefusjonskode_1_2_0> refusjonskode{};
+    refusjonskode.reserve(numRefusjonskode_1_2_0);
+    for (std::remove_const<typeof(numRefusjonskode_1_2_0)>::type i = 0; i < numRefusjonskode_1_2_0; i++) {
+        refusjonskode.emplace_back(this->refusjonskodeList_1_2_0[i]);
     }
     return refusjonskode;
 }
 
 std::vector<PRefusjonskode> FestDeserializer::GetRefusjonskode() const {
-    std::vector<PRefusjonskode> refusjonskode{};
-    if (numRefusjonskode > 0) {
-        refusjonskode.reserve(numRefusjonskode);
-        for (std::remove_const<typeof(numRefusjonskode)>::type i = 0; i < numRefusjonskode; i++) {
-            refusjonskode.emplace_back(this->refusjonskodeList[i]);
+    std::vector<PRefusjonskode> varList{};
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 1)) {
+        auto v1_2_0List = GetRefusjonskode_1_2_0();
+        varList.reserve(v1_2_0List.size());
+        for (const auto &v : v1_2_0List) {
+            varList.emplace_back(v);
         }
-        return refusjonskode;
+    } else if (versionMajor > 0 || versionMinor > 0) {
+        auto v0_1_0List = GetRefusjonskode_0_1_0();
+        varList.reserve(v0_1_0List.size());
+        for (const auto &v : v0_1_0List) {
+            varList.emplace_back(v);
+        }
+    } else {
+        auto v0_0_0List = GetRefusjonskode_0_0_0();
+        varList.reserve(v0_0_0List.size());
+        for (const auto &v : v0_0_0List) {
+            varList.emplace_back(v);
+        }
     }
-    refusjonskode.reserve(numRefusjonskode_0_0_0);
-    for (std::remove_const<typeof(numRefusjonskode_0_0_0)>::type i = 0; i < numRefusjonskode_0_0_0; i++) {
-        refusjonskode.emplace_back(this->refusjonskodeList_0_0_0[i]);
-    }
-    return refusjonskode;
+    return varList;
 }
 
 std::vector<PReferanse> FestDeserializer::GetReferanse() const {
@@ -2547,11 +2622,28 @@ Term FestDeserializer::Unpack(const PTerm &pTerm) const {
    };
 }
 
-RefRefusjonsvilkar FestDeserializer::Unpack(const PRefRefusjonsvilkar &pref) const {
+RefRefusjonsvilkar FestDeserializer::Unpack(const PRefRefusjonsvilkar_0_0_0 &pref) const {
     return {
         Unpack(pref.id).ToString(),
-        Unpack(pref.fraDato)
+        Unpack(pref.fraDato),
+        {}
     };
+}
+
+RefRefusjonsvilkar FestDeserializer::Unpack(const PRefRefusjonsvilkar_1_2_0 &pref) const {
+    return {
+            Unpack(pref.id).ToString(),
+            Unpack(pref.fraDato),
+            Unpack(pref.tilDato)
+    };
+}
+
+RefRefusjonsvilkar FestDeserializer::Unpack(const PRefRefusjonsvilkar &pref) const {
+    if (std::holds_alternative<PRefRefusjonsvilkar_1_2_0>(pref)) {
+        return Unpack(std::get<PRefRefusjonsvilkar_1_2_0>(pref));
+    } else {
+        return Unpack(std::get<PRefRefusjonsvilkar_0_0_0>(pref));
+    }
 }
 
 Refusjonskode FestDeserializer::Unpack(const PRefusjonskode_0_0_0 &pref) const {
@@ -2564,7 +2656,7 @@ Refusjonskode FestDeserializer::Unpack(const PRefusjonskode_0_0_0 &pref) const {
     }
     std::vector<RefRefusjonsvilkar> refusjonsvilkar{};
     {
-        auto list = Unpack(refRefusjonsvilkarList, numRefRefusjonsvilkar, pref.refusjonsvilkar);
+        auto list = Unpack(refRefusjonsvilkarList_0_0_0, numRefRefusjonsvilkar_0_0_0, pref.refusjonsvilkar);
         for (const auto &pr : list) {
             refusjonsvilkar.emplace_back(Unpack(pr));
         }
@@ -2579,7 +2671,7 @@ Refusjonskode FestDeserializer::Unpack(const PRefusjonskode_0_0_0 &pref) const {
     };
 }
 
-Refusjonskode FestDeserializer::Unpack(const PRefusjonskode &pref) const {
+Refusjonskode FestDeserializer::Unpack(const PRefusjonskode_0_1_0 &pref) const {
     std::vector<std::string> underterm{};
     {
         auto list = Unpack(stringList, numStringList, pref.underterm);
@@ -2589,7 +2681,7 @@ Refusjonskode FestDeserializer::Unpack(const PRefusjonskode &pref) const {
     }
     std::vector<RefRefusjonsvilkar> refusjonsvilkar{};
     {
-        auto list = Unpack(refRefusjonsvilkarList, numRefRefusjonsvilkar, pref.refusjonsvilkar);
+        auto list = Unpack(refRefusjonsvilkarList_0_0_0, numRefRefusjonsvilkar_0_0_0, pref.refusjonsvilkar);
         for (const auto &pr : list) {
             refusjonsvilkar.emplace_back(Unpack(pr));
         }
@@ -2604,10 +2696,50 @@ Refusjonskode FestDeserializer::Unpack(const PRefusjonskode &pref) const {
     };
 }
 
+Refusjonskode FestDeserializer::Unpack(const PRefusjonskode_1_2_0 &pref) const {
+    std::vector<std::string> underterm{};
+    {
+        auto list = Unpack(stringList, numStringList, pref.underterm);
+        for (const auto &put : list) {
+            underterm.emplace_back(Unpack(put));
+        }
+    }
+    std::vector<RefRefusjonsvilkar> refusjonsvilkar{};
+    {
+        auto list = Unpack(refRefusjonsvilkarList_1_2_0, numRefRefusjonsvilkar_1_2_0, pref.refusjonsvilkar);
+        for (const auto &pr : list) {
+            refusjonsvilkar.emplace_back(Unpack(pr));
+        }
+    }
+    return {
+            Unpack(pref.refusjonskode),
+            Unpack(pref.gyldigFraDato),
+            Unpack(pref.forskrivesTilDato),
+            Unpack(pref.utleveresTilDato),
+            underterm,
+            refusjonsvilkar
+    };
+}
+
+Refusjonskode FestDeserializer::Unpack(const PRefusjonskode &pref) const {
+    if (std::holds_alternative<PRefusjonskode_1_2_0>(pref)) {
+        return Unpack(std::get<PRefusjonskode_1_2_0>(pref));
+    } else if (std::holds_alternative<PRefusjonskode_0_1_0>(pref)) {
+        return Unpack(std::get<PRefusjonskode_0_1_0>(pref));
+    } else {
+        return Unpack(std::get<PRefusjonskode_0_0_0>(pref));
+    }
+}
+
 Refusjonsgruppe FestDeserializer::Unpack(const PRefusjonsgruppe &pRefusjonsgruppe) const {
     std::vector<Refusjonskode> refusjonskode{};
-    if (versionMajor > 0 || versionMinor > 0) {
-        auto list = Unpack(refusjonskodeList, numRefusjonskode, pRefusjonsgruppe.refusjonskode);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 1)) {
+        auto list = Unpack(refusjonskodeList_1_2_0, numRefusjonskode_1_2_0, pRefusjonsgruppe.refusjonskode);
+        for (const auto &item : list) {
+            refusjonskode.emplace_back(Unpack(item));
+        }
+    } else if (versionMajor > 0 || versionMinor > 0) {
+        auto list = Unpack(refusjonskodeList_0_1_0, numRefusjonskode_0_1_0, pRefusjonsgruppe.refusjonskode);
         for (const auto &item : list) {
             refusjonskode.emplace_back(Unpack(item));
         }
@@ -2880,9 +3012,11 @@ std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
     Quota(quotas, "Element 0.0.0", numElement_0_0_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Element 0.3.0", numElement_0_3_0, min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()), min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()));
     Quota(quotas, "Term", numTerm, min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()), min(GenericListItems64::max_address, std::numeric_limits<uint32_t>::max()));
-    Quota(quotas, "Ref refusjonsvilkar", numRefRefusjonsvilkar, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Ref refusjonsvilkar 0.0.0", numRefRefusjonsvilkar_0_0_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Ref refusjonsvilkar 1.2.0", numRefRefusjonsvilkar_1_2_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Refusjonskode 0.0.0", numRefusjonskode_0_0_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
-    Quota(quotas, "Refusjonskode", numRefusjonskode, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Refusjonskode 0.1.0", numRefusjonskode_0_1_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
+    Quota(quotas, "Refusjonskode 1.2.0", numRefusjonskode_1_2_0, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Referanse list", numReferanseList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Substansgruppe list", numSubstansgruppeList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));
     Quota(quotas, "Substans list", numSubstansList, min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()), min(GenericListItems32::max_address, std::numeric_limits<uint16_t>::max()));

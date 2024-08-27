@@ -19,13 +19,21 @@ public:
     size_t size() const;
 };
 
-class RefusjonskodeList : private GenericListStorage32<PRefusjonskode> {
+class RefusjonskodeList_0_1_0 : private GenericListStorage32<PRefusjonskode_0_1_0> {
     friend FestDeserializerPreloader;
 public:
-    GenericListItems32 StoreList(const std::vector<PRefusjonskode> &list);
-    std::vector<PRefusjonskode> GetStorageList() const;
+    GenericListItems32 StoreList(const std::vector<PRefusjonskode_0_1_0> &list, uint32_t start);
+    GenericListItems32 StoreList(const std::vector<PRefusjonskode_0_1_0> &list);
+    std::vector<PRefusjonskode_0_1_0> GetStorageList() const;
     size_t size() const;
 };
 
+class RefusjonskodeList_1_2_0 : private GenericListStorage32<PRefusjonskode_1_2_0> {
+    friend FestDeserializerPreloader;
+public:
+    GenericListItems32 StoreList(const std::vector<PRefusjonskode_1_2_0> &list);
+    std::vector<PRefusjonskode_1_2_0> GetStorageList() const;
+    size_t size() const;
+};
 
 #endif //LEGEMFEST_REFUSJONSKODELIST_H

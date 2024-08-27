@@ -213,6 +213,7 @@ std::shared_ptr<Fest> FestObjectStream::read() {
     parser.AddHandler("Underterm", std::make_shared<XmlUndertermHandler>());
     parser.AddHandler("Refusjonsvilkar", std::make_shared<XmlRefusjonsvilkarHandler>());
     parser.AddHandler("FraDato", std::make_shared<XmlFraDatoHandler>());
+    parser.AddHandler("TilDato", std::make_shared<XmlTilDatoHandler>());
     parser.AddHandler("KatVilkar", std::make_shared<KatVilkarHandler>());
     parser.AddHandler("OppfVilkar", std::make_shared<OppfVilkarHandler>());
     parser.AddHandler("Vilkar", std::make_shared<XmlVilkarHandler>());

@@ -78,7 +78,7 @@ struct FestFirstHeader {
     uint16_t numVirkestoff;
     uint16_t numElement;
     uint16_t numKodeverk;
-    uint16_t numRefRefusjonsvilkar;
+    uint16_t numRefRefusjonsvilkar_0_0_0;
     uint16_t numRefusjonskode_0_0_0;
     uint16_t numRefusjon;
     uint16_t numVilkar;
@@ -128,7 +128,7 @@ struct FestSecondHeader_0_3_0 {
     uint32_t numPakning;
 } __attribute__((__packed__));
 
-struct FestSecondHeader {
+struct FestSecondHeader_1_1_0 {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
@@ -147,6 +147,29 @@ struct FestSecondHeader {
     uint32_t numFestUuidList;
     uint32_t numVirkestoff;
     uint32_t numVarselSlv;
+} __attribute__((__packed__));
+
+struct FestSecondHeader {
+    uint64_t magic;
+    uint32_t stringblockSize;
+    uint16_t secondHeaderSize;
+    uint16_t numRefusjonskode_0_1_0;
+    uint32_t numUint16NewList;
+    uint16_t numFests;
+    uint16_t numKodeverk;
+    uint32_t numElementList;
+    uint32_t numTermList;
+    uint32_t numUint32List;
+    uint32_t numPakning_0_3_0;
+    uint32_t numPakning_0_4_0;
+    uint32_t numMerkevare;
+    uint32_t numLegemiddelVirkestoff;
+    uint32_t numLegemiddeldose;
+    uint32_t numFestUuidList;
+    uint32_t numVirkestoff;
+    uint32_t numVarselSlv;
+    uint16_t numRefRefusjonsvilkar_1_2_0;
+    uint16_t numRefusjonskode_1_2_0;
 } __attribute__((__packed__));
 
 struct FestTrailer {
@@ -176,9 +199,11 @@ private:
     ElementList_0_0_0 elementList_0_0_0{};
     ElementList_0_3_0 elementList_0_3_0{};
     TermList termList{};
-    RefRefusjonsvilkarList refRefusjonsvilkarList{};
+    RefRefusjonsvilkarList_0_0_0 refRefusjonsvilkarList_0_0_0{};
+    RefRefusjonsvilkarList_1_2_0 refRefusjonsvilkarList_1_2_0{};
     RefusjonskodeList_0_0_0 refusjonskodeList_0_0_0{};
-    RefusjonskodeList refusjonskodeList{};
+    RefusjonskodeList_0_1_0 refusjonskodeList_0_1_0{};
+    RefusjonskodeList_1_2_0 refusjonskodeList_1_2_0{};
     ReferanseList referanseList{};
     SubstansgruppeList substansgruppeList{};
     SubstansList substansList{};

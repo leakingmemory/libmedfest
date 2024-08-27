@@ -16,7 +16,8 @@ private:
     bool kreverVarekobling : 1;
     bool kreverVedtak : 1;
 public:
-    PRefusjonshjemmel(const Refusjonshjemmel &, RefusjonskodeList_0_0_0 &, RefusjonskodeList &, RefRefusjonsvilkarList &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    PRefusjonshjemmel(const Refusjonshjemmel &, RefusjonskodeList_0_0_0 &, RefusjonskodeList_0_1_0 &, RefusjonskodeList_1_2_0 &, RefRefusjonsvilkarList_0_0_0 &, RefRefusjonsvilkarList_1_2_0 &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    PRefusjonshjemmel(const Refusjonshjemmel &, RefusjonskodeList_0_1_0 &, RefusjonskodeList_1_2_0 &, RefRefusjonsvilkarList_0_0_0 &, RefRefusjonsvilkarList_1_2_0 &, StringList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PRefusjonshjemmel &) const;
 };
 

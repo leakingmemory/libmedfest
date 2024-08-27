@@ -11,3 +11,7 @@ std::string RefRefusjonsvilkar::GetId() const {
 std::string RefRefusjonsvilkar::GetFraDato() const {
     return fraDato;
 }
+
+std::string RefRefusjonsvilkar::GetTilDato() const {
+    return tilDato;
+}

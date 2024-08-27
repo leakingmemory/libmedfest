@@ -31,7 +31,7 @@ bool XmlRefRefusjonsvilkarObject::Merge() {
         }
         id = ids[0];
     }
-    parent->AddRefusjonsvilkar({id, GetFraDato()});
+    parent->AddRefusjonsvilkar({id, GetFraDato(), GetTilDato()});
     return true;
 }
 

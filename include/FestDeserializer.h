@@ -390,6 +390,10 @@ public:
     [[nodiscard]] std::vector<PElement_0_0_0> GetElementList(const POppfKodeverk_0_0_0 &) const;
     [[nodiscard]] std::vector<PElement_0_3_0> GetElementList(const POppfKodeverk_0_3_0 &) const;
     [[nodiscard]] std::vector<PElement> GetElementList(const POppfKodeverk &) const;
+    [[nodiscard]] std::vector<PReseptgyldighet> GetReseptgyldighetList(const PLegemiddelMerkevare_0_0_0 &) const;
+    [[nodiscard]] std::vector<PReseptgyldighet> GetReseptgyldighetList(const PLegemiddelMerkevare_0_4_0 &) const;
+    [[nodiscard]] std::vector<PReseptgyldighet> GetReseptgyldighetList(const PLegemiddelMerkevare &) const;
+    [[nodiscard]] std::vector<FestUuid> GetRefMerkevare(const PLegemiddelVirkestoff &pvirkestoff) const;
     [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems32 &) const;
     [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems64 &) const;
     [[nodiscard]] std::vector<FestUuid> GetFestUuids(const std::variant<GenericListItems32,GenericListItems64> &) const;

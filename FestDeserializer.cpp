@@ -2925,6 +2925,34 @@ std::vector<PElement> FestDeserializer::GetElementList(const POppfKodeverk &kode
     return element;
 }
 
+std::vector<PReseptgyldighet> FestDeserializer::GetReseptgyldighetList(const PLegemiddelMerkevare_0_4_0 &pmerkevare) const {
+    return Unpack(reseptgyldighetList, numReseptgyldighet, pmerkevare.reseptgyldighet);;
+}
+
+std::vector<PReseptgyldighet> FestDeserializer::GetReseptgyldighetList(const PLegemiddelMerkevare_0_0_0 &pmerkevare) const {
+    return Unpack(reseptgyldighetList, numReseptgyldighet, pmerkevare.reseptgyldighet);;
+}
+
+std::vector<PReseptgyldighet> FestDeserializer::GetReseptgyldighetList(const PLegemiddelMerkevare &pmerkevare) const {
+    const auto &pvar = static_cast<const std::variant<PLegemiddelMerkevare_0_4_0,PLegemiddelMerkevare_0_0_0> &>(pmerkevare);
+    if (std::holds_alternative<PLegemiddelMerkevare_0_4_0>(pvar)) {
+        return GetReseptgyldighetList(std::get<PLegemiddelMerkevare_0_4_0>(pvar));
+    } else {
+        return GetReseptgyldighetList(std::get<PLegemiddelMerkevare_0_0_0>(pvar));
+    }
+}
+
+std::vector<FestUuid> FestDeserializer::GetRefMerkevare(const PLegemiddelVirkestoff &pvirkestoff) const {
+    const auto &pvar = static_cast<std::variant<PLegemiddelVirkestoff_0_4_0,PLegemiddelVirkestoff_0_0_0>>(pvirkestoff);
+    if (std::holds_alternative<PLegemiddelVirkestoff_0_4_0>(pvar)) {
+        auto pv = std::get<PLegemiddelVirkestoff_0_4_0>(pvar);
+        return GetFestUuids(pv.GetRefLegemiddelMerkevare());
+    } else {
+        auto pv = std::get<PLegemiddelVirkestoff_0_0_0>(pvar);
+        return GetFestUuids(pv.GetRefLegemiddelMerkevare());
+    }
+}
+
 std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems32 &items) const {
     std::vector<FestUuid> ids{};
     {

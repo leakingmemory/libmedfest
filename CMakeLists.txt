@@ -24,7 +24,7 @@ add_subdirectory(Test)
 
 add_library(medfest SHARED FestZip.cpp libzip_zip.cpp libzip_file.cpp FestObjectStream.cpp XMLParser.cpp
         FestSerializer.cpp FestDeserializer.cpp FestVectors.cpp FestDeserializer_Preload.cpp)
-set_target_properties(medfest PROPERTIES SOVERSION 7 VERSION 7.0.0)
+set_target_properties(medfest PROPERTIES SOVERSION 8 VERSION 8.0.0)
 include_directories(medfest include)
 include_directories(medfest ${libzip_INCLUDE_DIRS} )
 

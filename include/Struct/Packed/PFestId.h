@@ -16,6 +16,16 @@ private:
     uint32_t id;
 public:
     PFestId(const std::string &id, std::vector<FestUuid> &uuidblock, bool caseSensitive = true);
+    constexpr PFestId(const PFestId &id) : id(id.id) {}
+    constexpr PFestId(PFestId &&id) : id(id.id) {}
+    constexpr PFestId & operator = (const PFestId &cp) {
+        id = cp.id;
+        return *this;
+    }
+    constexpr PFestId & operator = (PFestId &&mv) {
+        id = mv.id;
+        return *this;
+    }
     [[nodiscard]] bool IsEmpty() const;
     [[nodiscard]] FestUuid GetFestId(const std::vector<FestUuid> &uuidblock) const;
     [[nodiscard]] std::string ToString(const std::vector<FestUuid> &uuidblock) const;

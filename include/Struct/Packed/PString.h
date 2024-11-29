@@ -20,12 +20,22 @@ public:
 private:
     Type offset;
 public:
-    PString() : offset(Max) {}
+    constexpr PString() : offset(Max) {}
     PString(const std::string &str, std::string &textblock, std::map<std::string,uint32_t> &cache);
-    explicit PString(uint32_t offset) : offset(offset) {}
+    constexpr explicit PString(uint32_t offset) : offset(offset) {}
+    constexpr PString(const PString &cp) : offset(cp.offset) {}
+    constexpr PString(PString &&mv) : offset(mv.offset) {}
+    constexpr PString & operator = (const PString &cp) {
+        offset = cp.offset;
+        return *this;
+    }
+    constexpr PString & operator = (PString &&mv) {
+        offset = mv.offset;
+        return *this;
+    }
     [[nodiscard]] std::string ToString(const char *textblock, size_t size) const;
     [[nodiscard]] std::string ToString(const std::string &textblock) const;
-    bool operator == (const PString other) const {
+    constexpr bool operator == (const PString other) const {
         return offset == other.offset;
     }
 };

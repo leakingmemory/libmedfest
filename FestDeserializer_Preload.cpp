@@ -43,6 +43,16 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     festSerializer.minimumMajorVersion = versionMajor;
     festSerializer.stringblock.clear();
     festSerializer.stringblock.append(stringblock, stringblocksize);
+    FestDeserializerPreloader preloader{};
+    preloader.Preload(static_cast<GenericListStorage32<uint16_t> &>(festSerializer.uint16List_V_0_0_0), uint16List_V_0_0_0, numUint16List_V_0_0_0);
+    if (versionMajor > 0 || versionMinor >= 2) {
+        preloader.Preload(festSerializer.uint16List, uint16List, numUint16List);
+    } else {
+        preloader.Preload(festSerializer.uint16List, uint16List_V_0_0_0, numUint16List_V_0_0_0);
+    }
+    if (versionMajor > 0 || versionMinor >= 3) {
+        preloader.Preload(festSerializer.uint32List, uint32List, numUint32List);
+    }
     PL(festSerializer.festidblock, festUuid, numFestUuid);
     PL(festSerializer.legemiddelMerkevare_0_0_0, merkevare_0_0_0, numMerkevare_0_0_0);
     PL(festSerializer.legemiddelpakning_0_0_0, pakning_0_0_0, numPakning_0_0_0);
@@ -50,8 +60,23 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     PL(festSerializer.legemiddeldose_0_0_0, legemiddeldose_0_0_0, numLegemiddeldose_0_0_0);
     PL(festSerializer.virkestoff_0_0_0, virkestoff_0_0_0, numVirkestoff_0_0_0);
     PL(festSerializer.varselSlv_0_0_0, varselSlv_0_0_0, numVarselSlv_0_0_0);
-    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 2)) {
         PL(festSerializer.legemiddelMerkevare_0_4_0, merkevare_0_4_0, numMerkevare_0_4_0);
+        PL(festSerializer.legemiddelpakning_1_3_0, pakning_1_3_0, numPakning_1_3_0);
+        PL(festSerializer.legemiddelpakning_0_4_0, pakning_0_4_0, numPakning_0_4_0);
+        PL(festSerializer.legemiddelVirkestoff_0_4_0, legemiddelVirkestoff_0_4_0, numLegemiddelVirkestoff_0_4_0);
+        PL(festSerializer.legemiddeldose_0_4_0, legemiddeldose_0_4_0, numLegemiddeldose_0_4_0);
+        PL(festSerializer.virkestoff_0_4_0, virkestoff_0_4_0, numVirkestoff_0_4_0);
+        PL(festSerializer.varselSlv_0_4_0, varselSlv_0_4_0, numVarselSlv_0_4_0);
+    } else if ((versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        PL(festSerializer.legemiddelMerkevare_0_4_0, merkevare_0_4_0, numMerkevare_0_4_0);
+        {
+            std::function<POppfLegemiddelpakning_1_3_0 (const POppfLegemiddelpakning_0_4_0 &)> convert{[this, &festSerializer](const POppfLegemiddelpakning_0_4_0 &src) {
+                POppfLegemiddelpakning_1_3_0 dst{src, festSerializer.refusjonList};
+                return dst;
+            }};
+            PL(festSerializer.legemiddelpakning_1_3_0, pakning_0_4_0, numPakning_0_4_0, convert);
+        }
         PL(festSerializer.legemiddelpakning_0_4_0, pakning_0_4_0, numPakning_0_4_0);
         PL(festSerializer.legemiddelVirkestoff_0_4_0, legemiddelVirkestoff_0_4_0, numLegemiddelVirkestoff_0_4_0);
         PL(festSerializer.legemiddeldose_0_4_0, legemiddeldose_0_4_0, numLegemiddeldose_0_4_0);
@@ -64,6 +89,13 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
                 return dst;
             }};
             PL(festSerializer.legemiddelMerkevare_0_4_0, merkevare_0_0_0, numMerkevare_0_0_0, convert);
+        }
+        {
+            std::function<POppfLegemiddelpakning_1_3_0 (const POppfLegemiddelpakning_0_0_0 &)> convert{[this, &festSerializer](const POppfLegemiddelpakning_0_0_0 &src) {
+                POppfLegemiddelpakning_1_3_0 dst{src, festSerializer.refusjonList};
+                return dst;
+            }};
+            PL(festSerializer.legemiddelpakning_1_3_0, pakning_0_0_0, numPakning_0_0_0, convert);
         }
         {
             std::function<POppfLegemiddelpakning_0_4_0 (const POppfLegemiddelpakning_0_0_0 &)> convert{[this, &festSerializer](const POppfLegemiddelpakning_0_0_0 &src) {
@@ -113,11 +145,30 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     PL(festSerializer.interaksjonIkkeVurdert, interaksjonIkkeVurdert, numInteraksjonIkkeVurdert);
     PL(festSerializer.strDosering, strDosering, numStrDosering);
     PL(festSerializer.fests_V_0_0_0, fests_V_0_0_0, numFests_V_0_0_0);
-    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 2)) {
+        PL(festSerializer.fests_V_1_3_0, fests_V_1_3_0, numFests_V_1_3_0);
+        PL(festSerializer.fests_V_0_4_0, fests_V_0_4_0, numFests_V_0_4_0);
+        PL(festSerializer.fests_V_0_3_0, fests_V_0_3_0, numFests_V_0_3_0);
+        PL(festSerializer.fests_V_0_2_0, fests_V_0_2_0, numFests_V_0_2_0);
+    } else if ((versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        {
+            std::function<PFest_V_1_3_0 (const PFest_V_0_4_0 &)> convert{[this, &festSerializer](const PFest_V_0_4_0 &src) {
+                PFest_V_1_3_0 dst{src, *this, festSerializer.uint32List};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_1_3_0, fests_V_0_4_0, numFests_V_0_4_0, convert);
+        }
         PL(festSerializer.fests_V_0_4_0, fests_V_0_4_0, numFests_V_0_4_0);
         PL(festSerializer.fests_V_0_3_0, fests_V_0_3_0, numFests_V_0_3_0);
         PL(festSerializer.fests_V_0_2_0, fests_V_0_2_0, numFests_V_0_2_0);
     } else if (versionMajor > 0 || versionMinor >= 3) {
+        {
+            std::function<PFest_V_1_3_0 (const PFest_V_0_3_0 &)> convert{[this, &festSerializer](const PFest_V_0_3_0 &src) {
+                PFest_V_1_3_0 dst{src, *this, festSerializer.uint32List};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_1_3_0, fests_V_0_3_0, numFests_V_0_3_0, convert);
+        }
         {
             std::function<PFest_V_0_4_0 (const PFest_V_0_3_0 &)> convert{[this, &festSerializer](const PFest_V_0_3_0 &src) {
                 PFest_V_0_4_0 dst{src};
@@ -128,6 +179,13 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
         PL(festSerializer.fests_V_0_3_0, fests_V_0_3_0, numFests_V_0_3_0);
         PL(festSerializer.fests_V_0_2_0, fests_V_0_2_0, numFests_V_0_2_0);
     } else if (versionMinor >= 2) {
+        {
+            std::function<PFest_V_1_3_0 (const PFest_V_0_2_0 &)> convert{[this, &festSerializer](const PFest_V_0_2_0 &src) {
+                PFest_V_1_3_0 dst{src, *this, festSerializer.uint32List};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_1_3_0, fests_V_0_2_0, numFests_V_0_2_0, convert);
+        }
         {
             std::function<PFest_V_0_4_0 (const PFest_V_0_2_0 &)> convert{[this, &festSerializer](const PFest_V_0_2_0 &src) {
                 PFest_V_0_4_0 dst{src, *this, festSerializer.uint32List};
@@ -144,6 +202,13 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
         }
         PL(festSerializer.fests_V_0_2_0, fests_V_0_2_0, numFests_V_0_2_0);
     } else {
+        {
+            std::function<PFest_V_1_3_0 (const PFest_V_0_0_0 &)> convert{[this, &festSerializer](const PFest_V_0_0_0 &src) {
+                PFest_V_1_3_0 dst{src, *this, festSerializer.uint32List};
+                return dst;
+            }};
+            PL(festSerializer.fests_V_1_3_0, fests_V_0_0_0, numFests_V_0_0_0, convert);
+        }
         {
             std::function<PFest_V_0_4_0 (const PFest_V_0_0_0 &)> convert{[this, &festSerializer](const PFest_V_0_0_0 &src) {
                 PFest_V_0_4_0 dst{src, *this, festSerializer.uint32List};
@@ -166,7 +231,6 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
             PL(festSerializer.fests_V_0_2_0, fests_V_0_0_0, numFests_V_0_0_0, convert);
         }
     }
-    FestDeserializerPreloader preloader{};
     if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
         preloader.Preload(festSerializer.festUuidList_0_0_0, festUuidList_0_0_0, numFestUuidList_0_0_0);
         preloader.Preload(festSerializer.festUuidList_0_4_0, festUuidList_0_4_0, numFestUuidList_0_4_0);
@@ -238,15 +302,6 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     preloader.Preload(festSerializer.doseFastTidspunktList, doseFastTidspunktList, numDoseFastTidspunktList);
     preloader.Preload(festSerializer.doseringList, doseringList, numDoseringList);
     preloader.Preload(festSerializer.legemiddelforbrukList, legemiddelforbrukList, numLegemiddelforbrukList);
-    preloader.Preload(static_cast<GenericListStorage32<uint16_t> &>(festSerializer.uint16List_V_0_0_0), uint16List_V_0_0_0, numUint16List_V_0_0_0);
-    if (versionMajor > 0 || versionMinor >= 2) {
-        preloader.Preload(festSerializer.uint16List, uint16List, numUint16List);
-    } else {
-        preloader.Preload(festSerializer.uint16List, uint16List_V_0_0_0, numUint16List_V_0_0_0);
-    }
-    if (versionMajor > 0 || versionMinor >= 3) {
-        preloader.Preload(festSerializer.uint32List, uint32List, numUint32List);
-    }
     preloader.Preload(festSerializer.stringList, stringList, numStringList);
     for (const auto &pstr : GetStrings()) {
         std::string str = Unpack(pstr);

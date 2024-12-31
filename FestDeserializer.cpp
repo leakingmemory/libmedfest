@@ -86,7 +86,7 @@ void FestDeserializer::Init() {
             throw PackException("Major version of file");
         }
         if ((version.major == 0 && version.minor > 4) ||
-            (version.major == 1 && version.minor > 2)) {
+            (version.major == 1 && version.minor > 3)) {
             std::cerr << "Warning: Version " << ((int) version.major) << "." << ((int) version.minor) << " contains unsupported data (ignored)\n";
             fullySupportedVersion = false;
         }
@@ -784,6 +784,28 @@ void FestDeserializer::Init() {
                         offset += off;
                     }
                 }
+                if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 2)) {
+                    fests_V_1_3_0 = (const PFest_V_1_3_0 *) (void *) (((uint8_t *) mapping) + offset);
+                    numFests_V_1_3_0 = secondHeader->numFests;
+                    offset += sizeof(*fests_V_1_3_0) * ((size_t)numFests_V_1_3_0);
+                    {
+                        auto off = offset % alignment;
+                        if (off != 0) {
+                            off = alignment - off;
+                            offset += off;
+                        }
+                    }
+                    pakning_1_3_0 = (const POppfLegemiddelpakning_1_3_0 *) (void *) (((uint8_t *) mapping) + offset);
+                    numPakning_1_3_0 = secondHeader->numPakning_1_3_0;
+                    offset += ((size_t) numPakning_1_3_0) * sizeof(*pakning_1_3_0);
+                    {
+                        auto off = offset % alignment;
+                        if (off != 0) {
+                            off = alignment - off;
+                            offset += off;
+                        }
+                    }
+                }
             } else {
                 refusjonskodeList_1_2_0 = nullptr;
                 numRefusjonskode_1_2_0 = 0;
@@ -891,9 +913,22 @@ std::vector<POppfLegemiddelpakning_0_4_0> FestDeserializer::GetLegemiddelPakning
     return result;
 }
 
+std::vector<POppfLegemiddelpakning_1_3_0> FestDeserializer::GetLegemiddelPakning_1_3_0() const {
+    std::vector<POppfLegemiddelpakning_1_3_0> result{};
+    ForEachPakning_1_3_0([&result] (const auto &oppf) {
+        result.emplace_back(oppf);
+    });
+    return result;
+}
+
 std::vector<POppfLegemiddelpakning> FestDeserializer::GetLegemiddelPakning() const {
     std::vector<POppfLegemiddelpakning> dst{};
-    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 2)) {
+        auto src = GetLegemiddelPakning_1_3_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    } else if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
         auto src = GetLegemiddelPakning_0_4_0();
         for (const auto &s : src) {
             dst.emplace_back(s);
@@ -1398,8 +1433,19 @@ void FestDeserializer::ForEachPakning_0_4_0(const std::function<void(const POppf
     }
 }
 
+void FestDeserializer::ForEachPakning_1_3_0(const std::function<void(const POppfLegemiddelpakning_1_3_0 &)> &func) const {
+    for (std::remove_const<typeof(numPakning_1_3_0)>::type i = 0; i < numPakning_1_3_0; i++) {
+        func(this->pakning_1_3_0[i]);
+    }
+}
+
 void FestDeserializer::ForEachPakning(const std::function<void(const POppfLegemiddelpakning &)> &func) const {
-    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 2)) {
+        ForEachPakning_1_3_0([&func] (const POppfLegemiddelpakning_1_3_0 &src) {
+            POppfLegemiddelpakning dst{src};
+            func(dst);
+        });
+    } else if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
         ForEachPakning_0_4_0([&func] (const POppfLegemiddelpakning_0_4_0 &src) {
             POppfLegemiddelpakning dst{src};
             func(dst);
@@ -1626,8 +1672,19 @@ void FestDeserializer::ForEachFests_V_0_4_0(const std::function<void(const PFest
     }
 }
 
+void FestDeserializer::ForEachFests_V_1_3_0(const std::function<void(const PFest_V_1_3_0 &)> &func) const {
+    for (std::remove_const<typeof(numFests_V_1_3_0)>::type i = 0; i < numFests_V_1_3_0; i++) {
+        func(this->fests_V_1_3_0[i]);
+    }
+}
+
 void FestDeserializer::ForEachFests(const std::function<void(const PFest &)> &func) const {
-    if ((GetVersionMajor() > 0 && GetVersionMinor() > 0) || (GetVersionMajor() == 0 && GetVersionMinor() > 3)) {
+    if (GetVersionMajor() > 1 || (GetVersionMajor() == 1 && GetVersionMinor() > 2)) {
+        ForEachFests_V_1_3_0([func] (const PFest_V_1_3_0 &festV) {
+            PFest fest{festV};
+            func(fest);
+        });
+    } else if ((GetVersionMajor() > 0 && GetVersionMinor() > 0) || (GetVersionMajor() == 0 && GetVersionMinor() > 3)) {
         ForEachFests_V_0_4_0([func] (const PFest_V_0_4_0 &festV) {
             PFest fest{festV};
             func(fest);
@@ -1666,8 +1723,14 @@ FestVectors FestDeserializer::Unpack(const PFest_V_0_4_0 &pFest) const {
     return {pFest, Unpack(pFest.dato), uint16List, numUint16List, uint32List, numUint32List};
 }
 
+FestVectors FestDeserializer::Unpack(const PFest_V_1_3_0 &pFest) const {
+    return {pFest, Unpack(pFest.dato), uint16List, numUint16List, uint32List, numUint32List};
+}
+
 FestVectors FestDeserializer::Unpack(const PFest &fest) const {
-    if (std::holds_alternative<PFest_V_0_4_0>(fest)) {
+    if (std::holds_alternative<PFest_V_1_3_0>(fest)) {
+        return Unpack(std::get<PFest_V_1_3_0>(fest));
+    } else if (std::holds_alternative<PFest_V_0_4_0>(fest)) {
         return Unpack(std::get<PFest_V_0_4_0>(fest));
     } else if (std::holds_alternative<PFest_V_0_3_0>(fest)) {
         return Unpack(std::get<PFest_V_0_3_0>(fest));
@@ -1732,6 +1795,10 @@ OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning_0_0_
 
 OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning_0_4_0 &poppf) const {
     return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelpakning_0_4_0>(poppf))};
+}
+
+OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning_1_3_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<PLegemiddelpakning_1_3_0>(poppf))};
 }
 
 OppfLegemiddelpakning FestDeserializer::Unpack(const POppfLegemiddelpakning &poppf) const {
@@ -1965,7 +2032,7 @@ Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning_0_0_0 &ppakn
             Unpack(ppakning.markedsforingsinfo),
             Unpack(ppakning.ean),
             prisVare,
-            Unpack(ppakning.refusjon),
+            { Unpack(ppakning.refusjon) },
             Unpack(ppakning.pakningByttegruppe),
             Unpack(ppakning.preparatomtaleavsnitt),
             ppakning.ikkeKonservering
@@ -1999,7 +2066,48 @@ Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning_0_4_0 &ppakn
             Unpack(ppakning.markedsforingsinfo),
             Unpack(ppakning.ean),
             prisVare,
-            Unpack(ppakning.refusjon),
+            { Unpack(ppakning.refusjon) },
+            Unpack(ppakning.pakningByttegruppe),
+            Unpack(ppakning.preparatomtaleavsnitt),
+            ppakning.ikkeKonservering
+    };
+}
+
+Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning_1_3_0 &ppakning) const {
+    std::vector<Pakningsinfo> pakningsinfo{};
+    {
+        auto list = Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
+        for (const auto &ppi : list) {
+            auto pi = Unpack(ppi);
+            pakningsinfo.push_back(pi);
+        }
+    }
+    std::vector<PrisVare> prisVare{};
+    {
+        auto list = Unpack(prisVareList, numPrisVare, ppakning.prisVare);
+        for (const auto &ppv : list) {
+            auto pv = Unpack(ppv);
+            prisVare.push_back(pv);
+        }
+    }
+    std::vector<Refusjon> refusjon{};
+    {
+        auto list = Unpack(refusjonList, numRefusjonList, ppakning.refusjon);
+        for (const auto &r : list) {
+            refusjon.push_back(Unpack(r));
+        }
+    }
+    return {
+            Unpack(static_cast<PLegemiddelCore_0_4_0>(ppakning)),
+            {Unpack(ppakning.preparattype)},
+            Unpack(ppakning.id).ToString(),
+            Unpack(ppakning.varenr),
+            {Unpack(ppakning.oppbevaring)},
+            pakningsinfo,
+            Unpack(ppakning.markedsforingsinfo),
+            Unpack(ppakning.ean),
+            prisVare,
+            refusjon,
             Unpack(ppakning.pakningByttegruppe),
             Unpack(ppakning.preparatomtaleavsnitt),
             ppakning.ikkeKonservering
@@ -2007,8 +2115,10 @@ Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning_0_4_0 &ppakn
 }
 
 Legemiddelpakning FestDeserializer::Unpack(const PLegemiddelpakning &pl) const {
-    const std::variant<PLegemiddelpakning_0_0_0,PLegemiddelpakning_0_4_0> &p = pl;
-    if (std::holds_alternative<PLegemiddelpakning_0_4_0>(p)) {
+    const std::variant<PLegemiddelpakning_0_0_0,PLegemiddelpakning_0_4_0,PLegemiddelpakning_1_3_0> &p = pl;
+    if (std::holds_alternative<PLegemiddelpakning_1_3_0>(p)) {
+        return Unpack(std::get<PLegemiddelpakning_1_3_0>(p));
+    } else if (std::holds_alternative<PLegemiddelpakning_0_4_0>(p)) {
         return Unpack(std::get<PLegemiddelpakning_0_4_0>(p));
     } else {
         return Unpack(std::get<PLegemiddelpakning_0_0_0>(p));
@@ -2891,8 +3001,10 @@ std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemidd
 }
 
 std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemiddelpakning &lp) const {
-    const std::variant<PLegemiddelpakning_0_0_0,PLegemiddelpakning_0_4_0> &p = lp;
-    if (std::holds_alternative<PLegemiddelpakning_0_4_0>(p)) {
+    const std::variant<PLegemiddelpakning_0_0_0,PLegemiddelpakning_0_4_0,PLegemiddelpakning_1_3_0> &p = lp;
+    if (std::holds_alternative<PLegemiddelpakning_1_3_0>(p)) {
+        return GetPakningsinfoList(std::get<PLegemiddelpakning_1_3_0>(p));
+    } else if (std::holds_alternative<PLegemiddelpakning_0_4_0>(p)) {
         return GetPakningsinfoList(std::get<PLegemiddelpakning_0_4_0>(p));
     } else {
         return GetPakningsinfoList(std::get<PLegemiddelpakning_0_0_0>(p));

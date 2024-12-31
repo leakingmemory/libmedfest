@@ -41,10 +41,38 @@ bool POppfLegemiddelpakning_0_4_0::operator==(const POppfLegemiddelpakning_0_4_0
            static_cast<const PLegemiddelpakning_0_4_0>(*this) == static_cast<const PLegemiddelpakning_0_4_0>(other);
 }
 
+POppfLegemiddelpakning_1_3_0::POppfLegemiddelpakning_1_3_0(const OppfLegemiddelpakning &oppf,
+                                                           PakningskomponentList &pakningskomponentList,
+                                                           PakningsinfoList &pakningsinfoList,
+                                                           PrisVareList &prisVareList, StringList &stringList, FestUuidList_0_4_0 &festUuidList,
+                                                           std::vector<FestUuid> &uuidblock, std::string &strblock,
+                                                           std::map<std::string,uint32_t> &cache, RefusjonList &refusjonList) :
+        POppf(oppf, uuidblock, strblock, cache),
+        PLegemiddelpakning_1_3_0(oppf.GetLegemiddelpakning(), pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList, uuidblock, strblock, cache, refusjonList)
+{
+}
+
+POppfLegemiddelpakning_1_3_0::POppfLegemiddelpakning_1_3_0(const POppfLegemiddelpakning_0_4_0 &poppf, RefusjonList &refusjonList) :
+        POppf(poppf),
+        PLegemiddelpakning_1_3_0(poppf, refusjonList) {}
+
+POppfLegemiddelpakning_1_3_0::POppfLegemiddelpakning_1_3_0(const POppfLegemiddelpakning_0_0_0 &poppf, RefusjonList &refusjonList) :
+        POppf(poppf),
+        PLegemiddelpakning_1_3_0(poppf, refusjonList) {}
+
+bool POppfLegemiddelpakning_1_3_0::operator==(const POppfLegemiddelpakning_1_3_0 &other) const {
+    return static_cast<const POppf>(*this) == static_cast<const POppf>(other) &&
+           static_cast<const PLegemiddelpakning_1_3_0>(*this) == static_cast<const PLegemiddelpakning_1_3_0>(other);
+}
+
 POppfLegemiddelpakning::POppfLegemiddelpakning(const POppfLegemiddelpakning_0_0_0 &p) : POppf(p),
                                                                                                 PLegemiddelpakning(p) {
 }
 
 POppfLegemiddelpakning::POppfLegemiddelpakning(const POppfLegemiddelpakning_0_4_0 &p) : POppf(p),
                                                                                                 PLegemiddelpakning(p) {
+}
+
+POppfLegemiddelpakning::POppfLegemiddelpakning(const POppfLegemiddelpakning_1_3_0 &p) : POppf(p),
+                                                                                        PLegemiddelpakning(p) {
 }

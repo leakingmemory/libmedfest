@@ -59,6 +59,7 @@ struct FestDbQuota {
 class FestDeserializer {
     friend PFest_V_0_3_0;
     friend PFest_V_0_4_0;
+    friend PFest_V_1_3_0;
 private:
     void *mapping;
     size_t mapsize;
@@ -69,6 +70,7 @@ private:
     const POppfLegemiddelMerkevare_0_4_0 *merkevare_0_4_0;
     const POppfLegemiddelpakning_0_0_0 *pakning_0_0_0;
     const POppfLegemiddelpakning_0_4_0 *pakning_0_4_0;
+    const POppfLegemiddelpakning_1_3_0 *pakning_1_3_0;
     const POppfLegemiddelVirkestoff_0_0_0 *legemiddelVirkestoff_0_0_0;
     const POppfLegemiddelVirkestoff_0_4_0 *legemiddelVirkestoff_0_4_0;
     const POppfMedForbrMatr *medForbrMatr;
@@ -120,12 +122,14 @@ private:
     const PFest_V_0_2_0 *fests_V_0_2_0;
     const PFest_V_0_3_0 *fests_V_0_3_0;
     const PFest_V_0_4_0 *fests_V_0_4_0;
+    const PFest_V_1_3_0 *fests_V_1_3_0;
     const PString *stringList;
     const char *stringblock;
     size_t numMerkevare_0_0_0;
     size_t numMerkevare_0_4_0;
     size_t numPakning_0_0_0;
     size_t numPakning_0_4_0;
+    size_t numPakning_1_3_0;
     size_t numLegemiddelVirkestoff_0_0_0;
     size_t numLegemiddelVirkestoff_0_4_0;
     size_t numMedForbrMatr;
@@ -177,6 +181,7 @@ private:
     size_t numFests_V_0_2_0;
     size_t numFests_V_0_3_0;
     size_t numFests_V_0_4_0;
+    size_t numFests_V_1_3_0;
     size_t numStringList;
     size_t stringblocksize;
 public:
@@ -192,6 +197,7 @@ public:
     [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare() const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning_0_0_0> GetLegemiddelPakning_0_0_0() const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning_0_4_0> GetLegemiddelPakning_0_4_0() const;
+    [[nodiscard]] std::vector<POppfLegemiddelpakning_1_3_0> GetLegemiddelPakning_1_3_0() const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning> GetLegemiddelPakning() const;
     [[nodiscard]] std::vector<POppfLegemiddelVirkestoff_0_0_0> GetLegemiddelVirkestoff_0_0_0() const;
     [[nodiscard]] std::vector<POppfLegemiddelVirkestoff_0_4_0> GetLegemiddelVirkestoff_0_4_0() const;
@@ -243,6 +249,7 @@ public:
     void ForEachMerkevare(const std::function<void (const POppfLegemiddelMerkevare &)> &) const;
     void ForEachPakning_0_0_0(const std::function<void (const POppfLegemiddelpakning_0_0_0 &)> &) const;
     void ForEachPakning_0_4_0(const std::function<void (const POppfLegemiddelpakning_0_4_0 &)> &) const;
+    void ForEachPakning_1_3_0(const std::function<void (const POppfLegemiddelpakning_1_3_0 &)> &) const;
     void ForEachPakning(const std::function<void (const POppfLegemiddelpakning &)> &) const;
     void ForEachLegemiddelVirkestoff_0_0_0(const std::function<void (const POppfLegemiddelVirkestoff_0_0_0 &)> &) const;
     void ForEachLegemiddelVirkestoff_0_4_0(const std::function<void (const POppfLegemiddelVirkestoff_0_4_0 &)> &) const;
@@ -273,11 +280,13 @@ public:
     void ForEachFests_V_0_2_0(const std::function<void (const PFest_V_0_2_0 &)> &) const;
     void ForEachFests_V_0_3_0(const std::function<void (const PFest_V_0_3_0 &)> &) const;
     void ForEachFests_V_0_4_0(const std::function<void (const PFest_V_0_4_0 &)> &) const;
+    void ForEachFests_V_1_3_0(const std::function<void (const PFest_V_1_3_0 &)> &) const;
     void ForEachFests(const std::function<void (const PFest &)> &) const;
     [[nodiscard]] FestVectors Unpack(const PFest_V_0_0_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest_V_0_2_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest_V_0_3_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest_V_0_4_0 &) const;
+    [[nodiscard]] FestVectors Unpack(const PFest_V_1_3_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
@@ -290,6 +299,7 @@ public:
     [[nodiscard]] OppfLegemiddelMerkevare Unpack(const POppfLegemiddelMerkevare &poppf) const;
     [[nodiscard]] OppfLegemiddelpakning Unpack(const POppfLegemiddelpakning_0_0_0 &poppf) const;
     [[nodiscard]] OppfLegemiddelpakning Unpack(const POppfLegemiddelpakning_0_4_0 &poppf) const;
+    [[nodiscard]] OppfLegemiddelpakning Unpack(const POppfLegemiddelpakning_1_3_0 &poppf) const;
     [[nodiscard]] OppfLegemiddelpakning Unpack(const POppfLegemiddelpakning &poppf) const;
     [[nodiscard]] OppfLegemiddelVirkestoff Unpack(const POppfLegemiddelVirkestoff_0_0_0 &poppf) const;
     [[nodiscard]] OppfLegemiddelVirkestoff Unpack(const POppfLegemiddelVirkestoff_0_4_0 &poppf) const;
@@ -322,6 +332,7 @@ public:
     [[nodiscard]] LegemiddelMerkevare Unpack(const PLegemiddelMerkevare &pmerkevare) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning_0_0_0 &ppakning) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning_0_4_0 &ppakning) const;
+    [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning_1_3_0 &ppakning) const;
     [[nodiscard]] Legemiddelpakning Unpack(const PLegemiddelpakning &ppakning) const;
     [[nodiscard]] LegemiddelVirkestoff Unpack(const PLegemiddelVirkestoff_0_0_0 &pvirkestoff) const;
     [[nodiscard]] LegemiddelVirkestoff Unpack(const PLegemiddelVirkestoff_0_4_0 &pvirkestoff) const;

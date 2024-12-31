@@ -37,10 +37,23 @@ public:
     bool operator == (const POppfLegemiddelpakning_0_4_0 &) const;
 };
 
+class POppfLegemiddelpakning_1_3_0 : public POppf, public PLegemiddelpakning_1_3_0 {
+    friend FestDeserializer;
+public:
+    POppfLegemiddelpakning_1_3_0(const OppfLegemiddelpakning &, PakningskomponentList &pakningskomponentList,
+                                 PakningsinfoList &pakningsinfoList,
+                                 PrisVareList &prisVareList, StringList &, FestUuidList_0_4_0 &, std::vector<FestUuid> &uuidblock,
+                                 std::string &strblock, std::map<std::string,uint32_t> &cache, RefusjonList &refusjonList);
+    POppfLegemiddelpakning_1_3_0(const POppfLegemiddelpakning_0_4_0 &, RefusjonList &refusjonList);
+    POppfLegemiddelpakning_1_3_0(const POppfLegemiddelpakning_0_0_0 &, RefusjonList &refusjonList);
+    bool operator == (const POppfLegemiddelpakning_1_3_0 &) const;
+};
+
 class POppfLegemiddelpakning : public POppf, public PLegemiddelpakning {
 public:
     POppfLegemiddelpakning(const POppfLegemiddelpakning_0_0_0 &);
     POppfLegemiddelpakning(const POppfLegemiddelpakning_0_4_0 &);
+    POppfLegemiddelpakning(const POppfLegemiddelpakning_1_3_0 &);
 };
 
 #endif //LEGEMFEST_POPPFLEGEMIDDELPAKNING_H

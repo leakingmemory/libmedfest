@@ -151,7 +151,7 @@ static OppfLegemiddelpakning GetLegemiddelpakning1() {
         {"2023-06-15", "", "", ""},
         "",
         {},
-        {},
+        {{{}, "2020-01-01", "2024-12-31", "2024-12-31"}, {{}, "2025-01-01", "", ""}},
         {},
         {},
         false
@@ -357,6 +357,40 @@ void AssertEqual(const std::string &value, const std::string &expected) {
     }
 }
 
+void AssertFest1NewTermsV1_3_0(const FestDeserializer &festDeserializer, const FestVectors &fest1) {
+    AssertEqual(fest1.GetDato(), festVersion1);
+    auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializer);
+    AssertSize(merkevarer1, 1);
+    auto pmerkevare1 = merkevarer1[0];
+    auto merkevare1 = festDeserializer.Unpack(pmerkevare1);
+    AssertEqual(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
+                "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+    auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializer);
+    AssertSize(pakninger1, 1);
+    auto ppakning1 = pakninger1[0];
+    auto pakning1 = festDeserializer.Unpack(ppakning1);
+    AssertEqual(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+    auto refusjon = pakning1.GetLegemiddelpakning().GetRefusjonList();
+    AssertSize(refusjon, 2);
+    AssertEqual(refusjon[0].GetGyldigFraDato(), "2020-01-01");
+    AssertEqual(refusjon[0].GetForskrivesTilDato(), "2024-12-31");
+    AssertEqual(refusjon[0].GetUtleveresTilDato(), "2024-12-31");
+    AssertEqual(refusjon[1].GetGyldigFraDato(), "2025-01-01");
+    AssertEqual(refusjon[1].GetForskrivesTilDato(), "");
+    AssertEqual(refusjon[1].GetUtleveresTilDato(), "");
+    auto kodeverk1 = fest1.GetKodeverk(festDeserializer);
+    AssertSize(kodeverk1, 1);
+    auto atc1 = festDeserializer.Unpack(kodeverk1[0]);
+    AssertEqual(atc1.GetInfo().GetKortnavn(), "ATC");
+    auto atc1element = atc1.GetElement();
+    AssertSize(atc1element, 2);
+    auto atc1element0term = atc1element[0].GetTermList();
+    AssertSize(atc1element0term, 2);
+    AssertEqual(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
+    AssertEqual(atc1element0term[1].GetTerm(), "Covid-19, RNA-basert vaksine");
+    AssertEqual(atc1element[1].GetKode(), "A11HA03");
+}
+
 void AssertFest1NewTerms(const FestDeserializer &festDeserializer, const FestVectors &fest1) {
     AssertEqual(fest1.GetDato(), festVersion1);
     auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializer);
@@ -370,6 +404,11 @@ void AssertFest1NewTerms(const FestDeserializer &festDeserializer, const FestVec
     auto ppakning1 = pakninger1[0];
     auto pakning1 = festDeserializer.Unpack(ppakning1);
     AssertEqual(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
+    auto refusjon = pakning1.GetLegemiddelpakning().GetRefusjonList();
+    AssertSize(refusjon, 1);
+    AssertEqual(refusjon[0].GetGyldigFraDato(), "2025-01-01");
+    AssertEqual(refusjon[0].GetForskrivesTilDato(), "");
+    AssertEqual(refusjon[0].GetUtleveresTilDato(), "");
     auto kodeverk1 = fest1.GetKodeverk(festDeserializer);
     AssertSize(kodeverk1, 1);
     auto atc1 = festDeserializer.Unpack(kodeverk1[0]);
@@ -495,6 +534,8 @@ void AssertOppfRefusjonNew(const FestDeserializer &festDeserializer, const FestV
 int main() {
     std::string emptyDb = WriteFest([] (auto &) {});
     std::cout << "Empty DB size " << emptyDb.size() << "\n";
+    std::string emptyDb_1_3_0 = WriteFestVersion([] (auto &) {}, 1, 3, 0);
+    std::cout << "Empty DB v1.3.0 size " << emptyDb_1_3_0.size() << "\n";
     std::string emptyDb_1_2_0 = WriteFestVersion([] (auto &) {}, 1, 2, 0);
     std::cout << "Empty DB v1.2.0 size " << emptyDb_1_2_0.size() << "\n";
     std::string emptyDb_1_1_0 = WriteFestVersion([] (auto &) {}, 1, 1, 0);
@@ -518,6 +559,10 @@ int main() {
         AssertTrue(serializer.Serialize(festInput1));
     });
     std::cout << "DB 1 size " << fest1Db.size() << "\n";
+    std::string fest1Db_1_3_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
+        AssertTrue(serializer.Serialize(festInput1));
+    }, 1, 3, 0);
+    std::cout << "DB 1 v1.2.0 size " << fest1Db_1_3_0.size() << "\n";
     std::string fest1Db_1_2_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
         AssertTrue(serializer.Serialize(festInput1));
     }, 1, 2, 0);
@@ -554,8 +599,16 @@ int main() {
     {
         FestDeserializer festDeserializer{emptyDb.data(), emptyDb.size()};
         {
-            AssertVersion(festDeserializer, 1, 2, 0);
+            AssertVersion(festDeserializer, 1, 3, 0);
             auto festVectors = GetFestVectors(festDeserializer);
+            AssertSize(festVectors, 0);
+        }
+    }
+    {
+        FestDeserializer festDeserializer_1_3_0{emptyDb_1_3_0.data(), emptyDb_1_3_0.size()};
+        {
+            AssertVersion(festDeserializer_1_3_0, 1, 3, 0);
+            auto festVectors = GetFestVectors(festDeserializer_1_3_0);
             AssertSize(festVectors, 0);
         }
     }
@@ -626,33 +679,22 @@ int main() {
 
     FestDeserializer festDeserializerDb1{fest1Db.data(), fest1Db.size()};
     {
-        AssertVersion(festDeserializerDb1, 1, 2, 0);
+        AssertVersion(festDeserializerDb1, 1, 3, 0);
         auto festVectors = GetFestVectors(festDeserializerDb1);
         AssertSize(festVectors, 1);
         auto fest1 = festVectors[0];
-        AssertEquals(fest1.GetDato(), festVersion1);
-        auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb1);
-        AssertSize(merkevarer1, 1);
-        auto pmerkevare1 = merkevarer1[0];
-        auto merkevare1 = festDeserializerDb1.Unpack(pmerkevare1);
-        AssertEquals(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
-        auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb1);
-        AssertSize(pakninger1, 1);
-        auto ppakning1 = pakninger1[0];
-        auto pakning1 = festDeserializerDb1.Unpack(ppakning1);
-        AssertEquals("Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg", pakning1.GetLegemiddelpakning().GetNavnFormStyrke());
-        auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb1);
-        AssertSize(kodeverk1, 1);
-        auto atc1 = festDeserializerDb1.Unpack(kodeverk1[0]);
-        AssertEquals("ATC", atc1.GetInfo().GetKortnavn());
-        auto atc1element = atc1.GetElement();
-        AssertSize(atc1element, 2);
-        auto atc1element0term = atc1element[0].GetTermList();
-        AssertSize(atc1element0term, 2);
-        AssertEquals("Covid-19, RNA-based vaccine", atc1element0term[0].GetTerm());
-        AssertEquals("Covid-19, RNA-basert vaksine", atc1element0term[1].GetTerm());
-        AssertEquals("A11HA03", atc1element[1].GetKode());
+        AssertFest1NewTermsV1_3_0(festDeserializerDb1, fest1);
         AssertOppfRefusjonNew(festDeserializerDb1, fest1);
+    }
+    FestDeserializer festDeserializerDb1_1_3_0{fest1Db_1_3_0.data(), fest1Db_1_3_0.size()};
+    {
+        AssertVersion(festDeserializerDb1_1_3_0, 1, 3, 0);
+        auto festVectors = GetFestVectors(festDeserializerDb1_1_3_0);
+        AssertSize(festVectors, 1);
+        auto fest1 = festVectors[0];
+        AssertEquals(festVersion1, fest1.GetDato());
+        AssertFest1NewTermsV1_3_0(festDeserializerDb1_1_3_0, fest1);
+        AssertOppfRefusjonNew(festDeserializerDb1_1_3_0, fest1);
     }
     FestDeserializer festDeserializerDb1_1_2_0{fest1Db_1_2_0.data(), fest1Db_1_2_0.size()};
     {
@@ -880,6 +922,12 @@ int main() {
             AssertTrue(serializer.Serialize(festInput2));
         });
         std::cout << "DB 2 size " << fest2Db.size() << "\n";
+        std::string fest2Db_1_3_0 = WriteFestVersion(
+                [&festDeserializerDb1_1_3_0, &festInput2](FestSerializer &serializer) {
+                    festDeserializerDb1_1_3_0.Preload(serializer);
+                    AssertTrue(serializer.Serialize(festInput2));
+                }, 1, 3, 0);
+        std::cout << "DB 2 v1.3.0 size " << fest2Db_1_3_0.size() << "\n";
         std::string fest2Db_1_2_0 = WriteFestVersion(
                 [&festDeserializerDb1_1_2_0, &festInput2](FestSerializer &serializer) {
                     festDeserializerDb1_1_2_0.Preload(serializer);
@@ -932,7 +980,7 @@ int main() {
         {
             FestDeserializer festDeserializerDb2{fest2Db.data(), fest2Db.size()};
             {
-                AssertVersion(festDeserializerDb2, 1, 2, 0);
+                AssertVersion(festDeserializerDb2, 1, 3, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb2);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -987,60 +1035,19 @@ int main() {
             }
         }
         {
-            FestDeserializer festDeserializerDb2_1_1_0{fest2Db_1_1_0.data(), fest2Db_1_1_0.size()};
+            FestDeserializer festDeserializerDb2_1_3_0{fest2Db_1_3_0.data(), fest2Db_1_3_0.size()};
             {
-                AssertVersion(festDeserializerDb2_1_1_0, 1, 1, 0);
-                auto festVectors = GetFestVectors(festDeserializerDb2_1_1_0);
+                AssertVersion(festDeserializerDb2_1_3_0, 1, 3, 0);
+                auto festVectors = GetFestVectors(festDeserializerDb2_1_3_0);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
                 auto fest2 = festVectors[1];
                 AssertEqual(fest1.GetDato(), festVersion1);
                 AssertEqual(fest2.GetDato(), festVersion2);
-                auto merkevarer1 = fest1.GetLegemiddelMerkevare(festDeserializerDb2_1_1_0);
-                auto merkevarer2 = fest2.GetLegemiddelMerkevare(festDeserializerDb2_1_1_0);
-                AssertSize(merkevarer1, 1);
-                AssertSize(merkevarer2, 1);
-                auto pmerkevare1 = merkevarer1[0];
-                auto merkevare1 = festDeserializerDb2_1_1_0.Unpack(pmerkevare1);
-                AssertEqual(merkevare1.GetLegemiddelMerkevare().GetNavnFormStyrke(),
-                             "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
-                auto pmerkevare2 = merkevarer2[0];
-                auto merkevare2 = festDeserializerDb2_1_1_0.Unpack(pmerkevare2);
-                AssertEqual(merkevare2.GetLegemiddelMerkevare().GetNavnFormStyrke(), "Tiberal tab 500 mg");
-                auto pakninger1 = fest1.GetLegemiddelPakning(festDeserializerDb2_1_1_0);
-                auto pakninger2 = fest2.GetLegemiddelPakning(festDeserializerDb2_1_1_0);
-                AssertSize(pakninger1, 1);
-                AssertSize(pakninger2, 1);
-                auto ppakning1 = pakninger1[0];
-                auto pakning1 = festDeserializerDb2_1_1_0.Unpack(ppakning1);
-                AssertEqual(pakning1.GetLegemiddelpakning().GetNavnFormStyrke(), "Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg");
-                auto ppakning2 = pakninger2[0];
-                auto pakning2 = festDeserializerDb2_1_1_0.Unpack(ppakning2);
-                AssertEqual(pakning2.GetLegemiddelpakning().GetNavnFormStyrke(), "Tiberal tab 500 mg");
-                auto kodeverk1 = fest1.GetKodeverk(festDeserializerDb2_1_1_0);
-                auto kodeverk2 = fest2.GetKodeverk(festDeserializerDb2_1_1_0);
-                AssertSize(kodeverk1, 1);
-                AssertSize(kodeverk2, 1);
-                auto atc1 = festDeserializerDb2_1_1_0.Unpack(kodeverk1[0]);
-                auto atc2 = festDeserializerDb2_1_1_0.Unpack(kodeverk2[0]);
-                AssertEquals(atc1.GetInfo().GetKortnavn(), "ATC");
-                AssertEquals(atc2.GetInfo().GetKortnavn(), "ATC");
-                auto atc1element = atc1.GetElement();
-                auto atc2element = atc2.GetElement();
-                AssertSize(atc1element, 2);
-                AssertSize(atc2element, 2);
-                auto atc1element0term = atc1element[0].GetTermList();
-                auto atc2element0term = atc2element[0].GetTermList();
-                AssertSize(atc1element0term, 2);
-                AssertSize(atc2element0term, 2);
-                AssertEqual(atc1element0term[0].GetTerm(), "Covid-19, RNA-based vaccine");
-                AssertEqual(atc1element0term[1].GetTerm(), "Covid-19, RNA-basert vaksine");
-                AssertEqual(atc2element0term[0].GetTerm(), "Tocopherol (vit E)");
-                AssertEqual(atc2element0term[1].GetTerm(), "Tokoferol (Vit E)");
-                AssertEqual(atc1element[1].GetKode(), "A11HA03");
-                AssertEqual(atc2element[1].GetKode(), "C01DX16");
-                AssertOppfRefusjonOld(festDeserializerDb2_1_1_0, fest1);
-                AssertOppfRefusjonOld(festDeserializerDb2_1_1_0, fest2);
+                AssertFest1NewTermsV1_3_0(festDeserializerDb2_1_3_0, fest1);
+                AssertFest2NewTerms(festDeserializerDb2_1_3_0, fest2);
+                AssertOppfRefusjonNew(festDeserializerDb2_1_3_0, fest1);
+                AssertOppfRefusjonNew(festDeserializerDb2_1_3_0, fest2);
             }
         }
         {
@@ -1058,8 +1065,6 @@ int main() {
                 AssertOppfRefusjonNew(festDeserializerDb2_1_2_0, fest1);
                 AssertOppfRefusjonNew(festDeserializerDb2_1_2_0, fest2);
             }
-        }
-        {
             FestDeserializer festDeserializerDb2_1_1_0{fest2Db_1_1_0.data(), fest2Db_1_1_0.size()};
             {
                 AssertVersion(festDeserializerDb2_1_1_0, 1, 1, 0);
@@ -1644,6 +1649,11 @@ int main() {
                     AssertOppfRefusjonOld(festDeserializerDb3_0_0_0_to_0_4, fest2);
                 }
             }
+            std::string fest3Db_1_2_0_to_latest = WriteFest(
+                    [&festDeserializerDb2_1_2_0](FestSerializer &serializer) {
+                        festDeserializerDb2_1_2_0.Preload(serializer);
+                    });
+            std::cout << "DB 3 upgraded from v1.2.0 size " << fest3Db_1_2_0_to_latest.size() << "\n";
             std::string fest3Db_1_1_0_to_latest = WriteFest(
                     [&festDeserializerDb2_1_1_0](FestSerializer &serializer) {
                         festDeserializerDb2_1_1_0.Preload(serializer);
@@ -1680,10 +1690,27 @@ int main() {
                     });
             std::cout << "DB 3 upgraded from v0.0.0 size " << fest3Db_0_0_0_to_latest.size() << "\n";
             {
+                FestDeserializer festDeserializerDb3_1_2_0_to_latest{fest3Db_1_2_0_to_latest.data(),
+                                                                     fest3Db_1_2_0_to_latest.size()};
+                {
+                    AssertVersion(festDeserializerDb3_1_2_0_to_latest, 1, 3, 0);
+                    auto festVectors = GetFestVectors(festDeserializerDb3_1_2_0_to_latest);
+                    AssertSize(festVectors, 2);
+                    auto fest1 = festVectors[0];
+                    auto fest2 = festVectors[1];
+                    AssertEqual(fest1.GetDato(), festVersion1);
+                    AssertEqual(fest2.GetDato(), festVersion2);
+                    AssertFest1NewTerms(festDeserializerDb3_1_2_0_to_latest, fest1);
+                    AssertFest2NewTerms(festDeserializerDb3_1_2_0_to_latest, fest2);
+                    AssertOppfRefusjonNew(festDeserializerDb3_1_2_0_to_latest, fest1);
+                    AssertOppfRefusjonNew(festDeserializerDb3_1_2_0_to_latest, fest2);
+                }
+            }
+            {
                 FestDeserializer festDeserializerDb3_1_1_0_to_latest{fest3Db_1_1_0_to_latest.data(),
                                                                      fest3Db_1_1_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_1_1_0_to_latest, 1, 2, 0);
+                    AssertVersion(festDeserializerDb3_1_1_0_to_latest, 1, 3, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_1_1_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1700,7 +1727,7 @@ int main() {
                 FestDeserializer festDeserializerDb3_1_0_0_to_latest{fest3Db_1_0_0_to_latest.data(),
                                                                      fest3Db_1_0_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_1_0_0_to_latest, 1, 2, 0);
+                    AssertVersion(festDeserializerDb3_1_0_0_to_latest, 1, 3, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_1_0_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1717,7 +1744,7 @@ int main() {
                 FestDeserializer festDeserializerDb3_0_4_0_to_latest{fest3Db_0_4_0_to_latest.data(),
                                                                      fest3Db_0_4_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_4_0_to_latest, 1, 2, 0);
+                    AssertVersion(festDeserializerDb3_0_4_0_to_latest, 1, 3, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_4_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1734,7 +1761,7 @@ int main() {
                 FestDeserializer festDeserializerDb3_0_3_0_to_latest{fest3Db_0_3_0_to_latest.data(),
                                                                      fest3Db_0_3_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_3_0_to_latest, 1, 2, 0);
+                    AssertVersion(festDeserializerDb3_0_3_0_to_latest, 1, 3, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_3_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1792,7 +1819,7 @@ int main() {
                 FestDeserializer festDeserializerDb3_0_2_0_to_latest{fest3Db_0_2_0_to_latest.data(),
                                                                      fest3Db_0_2_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_2_0_to_latest, 1, 2, 0);
+                    AssertVersion(festDeserializerDb3_0_2_0_to_latest, 1, 3, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_2_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1848,7 +1875,7 @@ int main() {
                 FestDeserializer festDeserializerDb3_0_1_0_to_latest{fest3Db_0_1_0_to_latest.data(),
                                                                      fest3Db_0_1_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_1_0_to_latest, 1, 2, 0);
+                    AssertVersion(festDeserializerDb3_0_1_0_to_latest, 1, 3, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_1_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1904,7 +1931,7 @@ int main() {
                 FestDeserializer festDeserializerDb3_0_0_0_to_latest{fest3Db_0_0_0_to_latest.data(),
                                                                      fest3Db_0_0_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_0_0_to_latest, 1, 2, 0);
+                    AssertVersion(festDeserializerDb3_0_0_0_to_latest, 1, 3, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_0_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -2212,6 +2239,12 @@ int main() {
                 AssertOppfRefusjonOld(festDeserializerDb4_0_0_0_to_0_4, fest2);
             }
         }
+        std::string fest4Db_1_2_0_to_latest = WriteFest(
+                [&festDeserializerDb1_1_2_0, &festInput2](FestSerializer &serializer) {
+                    festDeserializerDb1_1_2_0.Preload(serializer);
+                    AssertTrue(serializer.Serialize(festInput2));
+                });
+        std::cout << "DB 4 upgraded from v1.2.0 size " << fest4Db_1_2_0_to_latest.size() << "\n";
         std::string fest4Db_1_1_0_to_latest = WriteFest(
                 [&festDeserializerDb1_1_1_0, &festInput2](FestSerializer &serializer) {
                     festDeserializerDb1_1_1_0.Preload(serializer);
@@ -2255,10 +2288,27 @@ int main() {
                 });
         std::cout << "DB 4 upgraded from v0.0.0 size " << fest4Db_0_0_0_to_latest.size() << "\n";
         {
+            FestDeserializer festDeserializerDb4_1_2_0_to_latest{fest4Db_1_2_0_to_latest.data(),
+                                                                 fest4Db_1_2_0_to_latest.size()};
+            {
+                AssertVersion(festDeserializerDb4_1_2_0_to_latest, 1, 3, 0);
+                auto festVectors = GetFestVectors(festDeserializerDb4_1_2_0_to_latest);
+                AssertSize(festVectors, 2);
+                auto fest1 = festVectors[0];
+                auto fest2 = festVectors[1];
+                AssertEqual(fest1.GetDato(), festVersion1);
+                AssertEqual(fest2.GetDato(), festVersion2);
+                AssertFest1NewTerms(festDeserializerDb4_1_2_0_to_latest, fest1);
+                AssertFest2NewTerms(festDeserializerDb4_1_2_0_to_latest, fest2);
+                AssertOppfRefusjonNew(festDeserializerDb4_1_2_0_to_latest, fest1);
+                AssertOppfRefusjonNew(festDeserializerDb4_1_2_0_to_latest, fest2);
+            }
+        }
+        {
             FestDeserializer festDeserializerDb4_1_1_0_to_latest{fest4Db_1_1_0_to_latest.data(),
                                                                  fest4Db_1_1_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_1_1_0_to_latest, 1, 2, 0);
+                AssertVersion(festDeserializerDb4_1_1_0_to_latest, 1, 3, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_1_1_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2275,7 +2325,7 @@ int main() {
             FestDeserializer festDeserializerDb4_1_0_0_to_latest{fest4Db_1_0_0_to_latest.data(),
                                                                  fest4Db_1_0_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_1_0_0_to_latest, 1, 2, 0);
+                AssertVersion(festDeserializerDb4_1_0_0_to_latest, 1, 3, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_1_0_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2292,7 +2342,7 @@ int main() {
             FestDeserializer festDeserializerDb4_0_4_0_to_latest{fest4Db_0_4_0_to_latest.data(),
                                                                  fest4Db_0_4_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_4_0_to_latest, 1, 2, 0);
+                AssertVersion(festDeserializerDb4_0_4_0_to_latest, 1, 3, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_4_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2350,7 +2400,7 @@ int main() {
             FestDeserializer festDeserializerDb4_0_3_0_to_latest{fest4Db_0_3_0_to_latest.data(),
                                                                  fest4Db_0_3_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_3_0_to_latest, 1, 2, 0);
+                AssertVersion(festDeserializerDb4_0_3_0_to_latest, 1, 3, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_3_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2408,7 +2458,7 @@ int main() {
             FestDeserializer festDeserializerDb4_0_2_0_to_latest{fest4Db_0_2_0_to_latest.data(),
                                                                  fest4Db_0_2_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_2_0_to_latest, 1, 2, 0);
+                AssertVersion(festDeserializerDb4_0_2_0_to_latest, 1, 3, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_2_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2465,7 +2515,7 @@ int main() {
             FestDeserializer festDeserializerDb4_0_1_0_to_latest{fest4Db_0_1_0_to_latest.data(),
                                                                  fest4Db_0_1_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_1_0_to_latest, 1, 2, 0);
+                AssertVersion(festDeserializerDb4_0_1_0_to_latest, 1, 3, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_1_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2522,7 +2572,7 @@ int main() {
             FestDeserializer festDeserializerDb4_0_0_0_to_latest{fest4Db_0_0_0_to_latest.data(),
                                                                  fest4Db_0_0_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_0_0_to_latest, 1, 2, 0);
+                AssertVersion(festDeserializerDb4_0_0_0_to_latest, 1, 3, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_0_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];

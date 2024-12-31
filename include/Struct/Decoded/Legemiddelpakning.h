@@ -27,7 +27,7 @@ private:
     Markedsforingsinfo markedsforingsinfo;
     std::string ean;
     std::vector<PrisVare> prisVare;
-    Refusjon refusjon;
+    std::vector<Refusjon> refusjon;
     PakningByttegruppe pakningByttegruppe;
     Preparatomtaleavsnitt preparatomtaleavsnitt;
     bool ikkeKonservering;
@@ -38,7 +38,7 @@ public:
     Legemiddelpakning(const LegemiddelCore &legemiddelCore, const Preparattype &preparattype, const std::string &id,
                       const std::string &varenr, const Oppbevaring &oppbevaring,
                       const std::vector<Pakningsinfo> &pakningsinfo, const Markedsforingsinfo &markedsforingsinfo,
-                      const std::string &ean, const std::vector<PrisVare> &prisVare, const Refusjon &refusjon,
+                      const std::string &ean, const std::vector<PrisVare> &prisVare, const std::vector<Refusjon> &refusjon,
                       const PakningByttegruppe &pakningByttegruppe, const Preparatomtaleavsnitt &preparatomtaleavsnitt,
                       bool ikkeKonservering) :
             LegemiddelCore(legemiddelCore), preparattype(preparattype), id(id), varenr(varenr), oppbevaring(oppbevaring),
@@ -53,7 +53,11 @@ public:
     [[nodiscard]] Markedsforingsinfo GetMarkedsforingsinfo() const;
     [[nodiscard]] std::string GetEan() const;
     [[nodiscard]] std::vector<PrisVare> GetPrisVare() const;
+
+    [[deprecated]]
     [[nodiscard]] Refusjon GetRefusjon() const;
+
+    [[nodiscard]] std::vector<Refusjon> GetRefusjonList() const;
     [[nodiscard]] PakningByttegruppe GetPakningByttegruppe() const;
     [[nodiscard]] Preparatomtaleavsnitt GetPreparatomtaleavsnitt() const;
     [[nodiscard]] bool GetIkkeKonservering() const;

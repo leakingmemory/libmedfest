@@ -149,6 +149,29 @@ struct FestSecondHeader_1_1_0 {
     uint32_t numVarselSlv;
 } __attribute__((__packed__));
 
+struct FestSecondHeader_1_2_0 {
+    uint64_t magic;
+    uint32_t stringblockSize;
+    uint16_t secondHeaderSize;
+    uint16_t numRefusjonskode_0_1_0;
+    uint32_t numUint16NewList;
+    uint16_t numFests;
+    uint16_t numKodeverk;
+    uint32_t numElementList;
+    uint32_t numTermList;
+    uint32_t numUint32List;
+    uint32_t numPakning_0_3_0;
+    uint32_t numPakning_0_4_0;
+    uint32_t numMerkevare;
+    uint32_t numLegemiddelVirkestoff;
+    uint32_t numLegemiddeldose;
+    uint32_t numFestUuidList;
+    uint32_t numVirkestoff;
+    uint32_t numVarselSlv;
+    uint16_t numRefRefusjonsvilkar_1_2_0;
+    uint16_t numRefusjonskode_1_2_0;
+} __attribute__((__packed__));
+
 struct FestSecondHeader {
     uint64_t magic;
     uint32_t stringblockSize;
@@ -170,6 +193,7 @@ struct FestSecondHeader {
     uint32_t numVarselSlv;
     uint16_t numRefRefusjonsvilkar_1_2_0;
     uint16_t numRefusjonskode_1_2_0;
+    uint32_t numPakning_1_3_0;
 } __attribute__((__packed__));
 
 struct FestTrailer {
@@ -218,6 +242,7 @@ private:
     std::vector<POppfLegemiddelMerkevare_0_4_0> legemiddelMerkevare_0_4_0{};
     std::vector<POppfLegemiddelpakning_0_0_0> legemiddelpakning_0_0_0{};
     std::vector<POppfLegemiddelpakning_0_4_0> legemiddelpakning_0_4_0{};
+    std::vector<POppfLegemiddelpakning_1_3_0> legemiddelpakning_1_3_0{};
     std::vector<POppfLegemiddelVirkestoff_0_0_0> legemiddelVirkestoff_0_0_0{};
     std::vector<POppfLegemiddelVirkestoff_0_4_0> legemiddelVirkestoff_0_4_0{};
     std::vector<POppfMedForbrMatr> medForbrMatr{};
@@ -242,6 +267,7 @@ private:
     std::vector<PFest_V_0_2_0> fests_V_0_2_0{};
     std::vector<PFest_V_0_3_0> fests_V_0_3_0{};
     std::vector<PFest_V_0_4_0> fests_V_0_4_0{};
+    std::vector<PFest_V_1_3_0> fests_V_1_3_0{};
     std::map<std::string,std::shared_ptr<FestData>> festMap{};
     int percentDone;
     int minimumMajorVersion;
@@ -278,6 +304,22 @@ private:
             throw PackException("List size out of bounds");
         }
         return (uint16_t) sz;
+    }
+    template <class T> uint32_t Add32(std::vector<T> &list, const T &obj) {
+        for (typename std::remove_const<typeof(list.size())>::type i = 0; i < list.size(); i++) {
+            if (list[i] == obj) {
+                if (i >= std::numeric_limits<uint32_t>::max()) {
+                    throw PackException("List size out of bounds");
+                }
+                return (uint32_t) i;
+            }
+        }
+        auto sz = list.size();
+        list.emplace_back(obj);
+        if (sz >= std::numeric_limits<uint32_t>::max()) {
+            throw PackException("List size out of bounds");
+        }
+        return (uint32_t) sz;
     }
     void Add(const std::string &, const std::function<void (FestData &)> &);
 

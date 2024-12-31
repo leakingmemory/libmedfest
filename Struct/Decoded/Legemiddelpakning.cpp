@@ -37,6 +37,13 @@ std::vector<PrisVare> Legemiddelpakning::GetPrisVare() const {
 }
 
 Refusjon Legemiddelpakning::GetRefusjon() const {
+    if (refusjon.empty()) {
+        return {};
+    }
+    return refusjon.back();
+}
+
+std::vector<Refusjon> Legemiddelpakning::GetRefusjonList() const {
     return refusjon;
 }
 

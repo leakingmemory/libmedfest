@@ -41,6 +41,7 @@ bool FestSerializer::Serialize(const Fest &fest) {
         fests_V_0_2_0.emplace_back(festInst, uint16List, stringblock, stringblockCache);
         fests_V_0_3_0.emplace_back(festInst, uint32List, uint16List, stringblock, stringblockCache);
         fests_V_0_4_0.emplace_back(festInst, uint32List, uint16List, stringblock, stringblockCache);
+        fests_V_1_3_0.emplace_back(festInst, uint32List, uint16List, stringblock, stringblockCache);
     }
     return result;
 }
@@ -54,8 +55,8 @@ bool FestSerializer::Write(uint64_t magic) {
     if (dbVersion.major > 1) {
         throw PackException("Output version above 1.X.X is not supported");
     }
-    if (dbVersion.major == 1 && dbVersion.minor > 2) {
-        throw PackException("Output version above 1.2.X is not supported");
+    if (dbVersion.major == 1 && dbVersion.minor > 3) {
+        throw PackException("Output version above 1.3.X is not supported");
     }
     if (dbVersion.major == 0 && dbVersion.minor > 4) {
         throw PackException("Output version major 0 with minor > 4 (0.4.X) is not supported");
@@ -907,7 +908,8 @@ bool FestSerializer::Write(uint64_t magic) {
             .numVirkestoff = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? virkestoff_0_4_0.size() : 0),
             .numVarselSlv = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? varselSlv_0_4_0.size() : 0),
             .numRefRefusjonsvilkar_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refRefusjonsvilkarList_1_2_0.size() : 0),
-            .numRefusjonskode_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refusjonskodeList_1_2_0.size() : 0)
+            .numRefusjonskode_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refusjonskodeList_1_2_0.size() : 0),
+            .numPakning_1_3_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 2) ? legemiddelpakning_1_3_0.size() : 0)
         };
         output->write((char *) (void *) &secondHeader, sizeof(secondHeader));
         offset += sizeof(secondHeader);
@@ -1211,6 +1213,37 @@ bool FestSerializer::Write(uint64_t magic) {
                 }
             }
         }
+        if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 2)) {
+            {
+                auto *ptr = fests_V_1_3_0.data();
+                auto size = fests_V_1_3_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddelpakning_1_3_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+        }
         output->write((char *) (void *) &trailer, sizeof(trailer));
     }
     auto fs = std::dynamic_pointer_cast<std::ofstream>(output);
@@ -1238,7 +1271,7 @@ int FestSerializer::GetHighestSupportedMajorVersion() {
 
 int FestSerializer::GetHighestSupportedMinorVersion(int major) {
     if (major == 1) {
-        return 2;
+        return 3;
     } else if (major == 0) {
         return 4;
     } else {
@@ -1285,9 +1318,11 @@ bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelMerkevar
 
 bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelpakning &pakning) {
     auto index_0_0_0 = Add(this->legemiddelpakning_0_0_0, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList_0_0_0, festidblock, stringblock, stringblockCache});
-    auto index_0_4_0 = Add(this->legemiddelpakning_0_4_0, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
+    auto index_0_4_0 = Add32(this->legemiddelpakning_0_4_0, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
+    auto index_1_3_0 = Add32(this->legemiddelpakning_1_3_0, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache, refusjonList});
     Add(fest, [index_0_0_0] (FestData &f) { f.legemiddelpakning_0_0_0.emplace_back(index_0_0_0); });
     Add(fest, [index_0_4_0] (FestData &f) { f.legemiddelpakning_0_4_0.emplace_back(index_0_4_0); });
+    Add(fest, [index_1_3_0] (FestData &f) { f.legemiddelpakning_1_3_0.emplace_back(index_1_3_0); });
     return true;
 }
 

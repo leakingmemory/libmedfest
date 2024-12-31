@@ -38,16 +38,6 @@ void XmlLegemiddelpakning::SetIkkeKonservering(bool ikkeKonservering) {
 }
 
 bool XmlLegemiddelpakning::Merge() {
-    Refusjon refusjon{};
-    {
-        auto refusjonListe = GetRefusjon();
-        if (!refusjonListe.empty()) {
-            if (refusjonListe.size() != 1) {
-                std::cerr << "Error: Legemiddelpakning: Duplicate Refusjon\n";
-                return false;
-            }
-        }
-    }
     oppfLegemiddelpakning->SetLegemiddelpakning({{
             GetAtc(),
             GetNavnFormStyrke(),
@@ -66,7 +56,7 @@ bool XmlLegemiddelpakning::Merge() {
         markedsforingsinfo,
         ean,
         GetPrisVare(),
-        refusjon,
+        GetRefusjon(),
         pakningByttegruppe,
         GetPreparatomtaleavsnitt(),
         ikkeKonservering

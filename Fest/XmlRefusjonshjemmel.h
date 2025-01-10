@@ -19,14 +19,14 @@ private:
     ValueWithCodeSet refusjonshjemmel{};
     MaybeBoolean kreverVarekobling{MaybeBoolean::UNSPECIFIED};
     MaybeBoolean kreverVedtak{MaybeBoolean::UNSPECIFIED};
-    Refusjonsgruppe refusjongruppe{};
+    std::vector<Refusjonsgruppe> refusjongruppe{};
 public:
     XmlRefusjonshjemmel(std::shared_ptr<XmlOppfRefusjon> parent) : parent(parent) {}
     std::string GetName() const override;
     void SetRefusjonshjemmel(const ValueWithCodeSet &refusjonshjemmel);
     void SetKreverVarekobling(bool kreverVarekobling);
     void SetKreverVedtak(bool kreverVedtak);
-    void SetRefusjonsgruppe(const Refusjonsgruppe &refusjonsgruppe);
+    void AddRefusjonsgruppe(const Refusjonsgruppe &refusjonsgruppe);
     bool Merge();
 };
 

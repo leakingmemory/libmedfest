@@ -86,7 +86,7 @@ void FestDeserializer::Init() {
             throw PackException("Major version of file");
         }
         if ((version.major == 0 && version.minor > 4) ||
-            (version.major == 1 && version.minor > 3)) {
+            (version.major == 1 && version.minor > 4)) {
             std::cerr << "Warning: Version " << ((int) version.major) << "." << ((int) version.minor) << " contains unsupported data (ignored)\n";
             fullySupportedVersion = false;
         }
@@ -250,9 +250,9 @@ void FestDeserializer::Init() {
             }
         }
     }
-    refusjon = (POppfRefusjon *) (void *) (((uint8_t *) mapping) + offset);
-    numRefusjon = header->numRefusjon;
-    offset += ((size_t) numRefusjon) * sizeof(*refusjon);
+    refusjon_0_0_0 = (POppfRefusjon_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
+    numRefusjon_0_0_0 = header->numRefusjon;
+    offset += ((size_t) numRefusjon_0_0_0) * sizeof(*refusjon_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -806,6 +806,28 @@ void FestDeserializer::Init() {
                         }
                     }
                 }
+                if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 3)) {
+                    refusjon_1_4_0 = (const POppfRefusjon_1_4_0 *) (void *) (((uint8_t *) mapping) + offset);
+                    numRefusjon_1_4_0 = secondHeader->numRefusjon_1_4_0;
+                    offset += ((size_t) numRefusjon_1_4_0) * sizeof(*refusjon_1_4_0);
+                    {
+                        auto off = offset % alignment;
+                        if (off != 0) {
+                            off = alignment - off;
+                            offset += off;
+                        }
+                    }
+                    refusjonsgruppeList = (const PRefusjonsgruppe *) (void *) (((uint8_t *) mapping) + offset);
+                    numRefusjonsgruppeList = secondHeader->numRefusjonsgruppeList;
+                    offset += ((size_t) numRefusjonsgruppeList) * sizeof(*refusjonsgruppeList);
+                    {
+                        auto off = offset % alignment;
+                        if (off != 0) {
+                            off = alignment - off;
+                            offset += off;
+                        }
+                    }
+                }
             } else {
                 refusjonskodeList_1_2_0 = nullptr;
                 numRefusjonskode_1_2_0 = 0;
@@ -1070,12 +1092,36 @@ std::vector<POppfVirkestoff> FestDeserializer::GetVirkestoff() const {
     return dst;
 }
 
-std::vector<POppfRefusjon> FestDeserializer::GetOppfRefusjon() const {
-    std::vector<POppfRefusjon> result{};
-    for (std::remove_const<typeof(numRefusjon)>::type i = 0; i < numRefusjon; i++) {
-        result.emplace_back(this->refusjon[i]);
+std::vector<POppfRefusjon_0_0_0> FestDeserializer::GetOppfRefusjon_0_0_0() const {
+    std::vector<POppfRefusjon_0_0_0> result{};
+    for (std::remove_const<typeof(numRefusjon_0_0_0)>::type i = 0; i < numRefusjon_0_0_0; i++) {
+        result.emplace_back(this->refusjon_0_0_0[i]);
     }
     return result;
+}
+
+std::vector<POppfRefusjon_1_4_0> FestDeserializer::GetOppfRefusjon_1_4_0() const {
+    std::vector<POppfRefusjon_1_4_0> result{};
+    for (std::remove_const<typeof(numRefusjon_1_4_0)>::type i = 0; i < numRefusjon_1_4_0; i++) {
+        result.emplace_back(this->refusjon_1_4_0[i]);
+    }
+    return result;
+}
+
+std::vector<POppfRefusjon> FestDeserializer::GetOppfRefusjon() const {
+    std::vector<POppfRefusjon> dst{};
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 3)) {
+        auto src = GetOppfRefusjon_1_4_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    } else {
+        auto src = GetOppfRefusjon_0_0_0();
+        for (const auto &s : src) {
+            dst.emplace_back(s);
+        }
+    }
+    return dst;
 }
 
 std::vector<POppfKodeverk_0_0_0> FestDeserializer::GetOppfKodeverk_0_0_0() const {
@@ -1586,9 +1632,29 @@ void FestDeserializer::ForEachKodeverk(const std::function<void(const POppfKodev
     }
 }
 
+void FestDeserializer::ForEachRefusjon_0_0_0(const std::function<void(const POppfRefusjon_0_0_0 &)> &func) const {
+    for (std::remove_const<decltype(numRefusjon_0_0_0)>::type i = 0; i < numRefusjon_0_0_0; i++) {
+        func(this->refusjon_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachRefusjon_1_4_0(const std::function<void(const POppfRefusjon_1_4_0 &)> &func) const {
+    for (std::remove_const<decltype(numRefusjon_1_4_0)>::type i = 0; i < numRefusjon_1_4_0; i++) {
+        func(this->refusjon_1_4_0[i]);
+    }
+}
+
 void FestDeserializer::ForEachRefusjon(const std::function<void(const POppfRefusjon &)> &func) const {
-    for (std::remove_const<typeof(numRefusjon)>::type i = 0; i < numRefusjon; i++) {
-        func(this->refusjon[i]);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 3)) {
+        ForEachRefusjon_1_4_0([&func] (const POppfRefusjon_1_4_0 &src) {
+            POppfRefusjon dst{src};
+            func(dst);
+        });
+    } else {
+        ForEachRefusjon_0_0_0([&func] (const POppfRefusjon_0_0_0 &src) {
+            POppfRefusjon dst{src};
+            func(dst);
+        });
     }
 }
 
@@ -1887,8 +1953,20 @@ OppfKodeverk FestDeserializer::Unpack(const POppfKodeverk &poppf) const {
     }
 }
 
+OppfRefusjon FestDeserializer::Unpack(const POppfRefusjon_0_0_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PRefusjonshjemmel_0_0_0>(poppf))};
+}
+
+OppfRefusjon FestDeserializer::Unpack(const POppfRefusjon_1_4_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PRefusjonshjemmel_1_4_0>(poppf))};
+}
+
 OppfRefusjon FestDeserializer::Unpack(const POppfRefusjon &poppf) const {
-    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PRefusjonshjemmel>(poppf))};
+    if (std::holds_alternative<POppfRefusjon_1_4_0>(poppf)) {
+        return Unpack(std::get<POppfRefusjon_1_4_0>(poppf));
+    } else {
+        return Unpack(std::get<POppfRefusjon_0_0_0>(poppf));
+    }
 }
 
 OppfVilkar FestDeserializer::Unpack(const POppfVilkar &poppf) const {
@@ -2358,13 +2436,38 @@ Info FestDeserializer::Unpack(const PInfo &pInfo) const {
     };
 }
 
-Refusjonshjemmel FestDeserializer::Unpack(const PRefusjonshjemmel &pRefusjonshjemmel) const {
+Refusjonshjemmel FestDeserializer::Unpack(const PRefusjonshjemmel_0_0_0 &pRefusjonshjemmel) const {
     return {
         Unpack(pRefusjonshjemmel.refusjonshjemmel),
         pRefusjonshjemmel.kreverVarekobling,
         pRefusjonshjemmel.kreverVedtak,
-        Unpack(static_cast<const PRefusjonsgruppe>(pRefusjonshjemmel))
+        { Unpack(static_cast<const PRefusjonsgruppe &>(pRefusjonshjemmel)) }
     };
+}
+
+Refusjonshjemmel FestDeserializer::Unpack(const PRefusjonshjemmel_1_4_0 &pRefusjonshjemmel) const {
+    std::vector<Refusjonsgruppe> refusjonsgruppe{};
+    {
+        auto list = Unpack(refusjonsgruppeList, numRefusjonsgruppeList, pRefusjonshjemmel.refusjonsgruppe);
+        for (const auto &item : list) {
+            refusjonsgruppe.emplace_back(Unpack(item));
+        }
+    }
+    return {
+            Unpack(pRefusjonshjemmel.refusjonshjemmel),
+            pRefusjonshjemmel.kreverVarekobling,
+            pRefusjonshjemmel.kreverVedtak,
+            refusjonsgruppe
+    };
+}
+
+Refusjonshjemmel FestDeserializer::Unpack(const PRefusjonshjemmel &pRefusjonshjemmel) const {
+    const std::variant<PRefusjonshjemmel_0_0_0,PRefusjonshjemmel_1_4_0> &p = pRefusjonshjemmel;
+    if (std::holds_alternative<PRefusjonshjemmel_1_4_0>(p)) {
+        return Unpack(std::get<PRefusjonshjemmel_1_4_0>(p));
+    } else {
+        return Unpack(std::get<PRefusjonshjemmel_0_0_0>(p));
+    }
 }
 
 Vilkar FestDeserializer::Unpack(const PVilkar &pVilkar) const {
@@ -3131,7 +3234,8 @@ std::vector<FestDbQuota> FestDeserializer::GetQuotas() const {
     Quota(quotas, "Virkestoff v0.4.0", numVirkestoff_0_4_0, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());
     Quota(quotas, "Kodeverk v0.0.0", numKodeverk_0_0_0);
     Quota(quotas, "Kodeverk v0.3.0", numKodeverk_0_3_0);
-    Quota(quotas, "Refusjon", numRefusjon);
+    Quota(quotas, "Refusjon v0.0.0", numRefusjon_0_0_0);
+    Quota(quotas, "Refusjon v1.4.0", numRefusjon_1_4_0);
     Quota(quotas, "Vilkar", numVilkar);
     Quota(quotas, "Varsel slv v0.0.0", numVarselSlv_0_0_0);
     Quota(quotas, "Varsel slv v0.4.0", numVarselSlv_0_4_0, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint32_t>::max());

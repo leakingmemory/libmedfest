@@ -8,25 +8,28 @@
 #include "ValueWithCodeSet.h"
 #include "Refusjonsgruppe.h"
 
-class PRefusjonshjemmel;
+class PRefusjonshjemmel_0_0_0;
+class PRefusjonshjemmel_1_4_0;
 
 class Refusjonshjemmel {
-    friend PRefusjonshjemmel;
+    friend PRefusjonshjemmel_0_0_0;
+    friend PRefusjonshjemmel_1_4_0;
 private:
     ValueWithCodeSet refusjonshjemmel;
     bool kreverVarekobling;
     bool kreverVedtak;
-    Refusjonsgruppe refusjonsgruppe;
+    std::vector<Refusjonsgruppe> refusjonsgruppe;
 public:
     Refusjonshjemmel() : refusjonshjemmel(), kreverVarekobling(), kreverVedtak(), refusjonsgruppe() {}
     Refusjonshjemmel(const ValueWithCodeSet &refusjonshjemmel, bool kreverVarekobling, bool kreverVedtak,
-                     const Refusjonsgruppe &refusjonsgruppe) :
+                     const std::vector<Refusjonsgruppe> &refusjonsgruppe) :
             refusjonshjemmel(refusjonshjemmel), kreverVarekobling(kreverVarekobling), kreverVedtak(kreverVedtak),
             refusjonsgruppe(refusjonsgruppe) {}
     [[nodiscard]] ValueWithCodeSet GetRefusjonshjemmel() const;
     [[nodiscard]] bool GetKreverVarekobling() const;
     [[nodiscard]] bool GetKreverVedtak() const;
-    [[nodiscard]] Refusjonsgruppe GetRefusjonsgruppe() const;
+    [[nodiscard]] std::vector<Refusjonsgruppe> GetRefusjonsgruppeList() const;
+    [[nodiscard]] [[deprecated]] Refusjonsgruppe GetRefusjonsgruppe() const;
 };
 
 

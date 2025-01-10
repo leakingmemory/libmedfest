@@ -55,7 +55,7 @@ bool FestSerializer::Write(uint64_t magic) {
     if (dbVersion.major > 1) {
         throw PackException("Output version above 1.X.X is not supported");
     }
-    if (dbVersion.major == 1 && dbVersion.minor > 3) {
+    if (dbVersion.major == 1 && dbVersion.minor > 4) {
         throw PackException("Output version above 1.3.X is not supported");
     }
     if (dbVersion.major == 0 && dbVersion.minor > 4) {
@@ -179,8 +179,11 @@ bool FestSerializer::Write(uint64_t magic) {
     if (refusjonskodeList_1_2_0.size() >= (1 << 16)) {
         throw PackException("Max refusjonskode 1.2.0 list");
     }
-    if (refusjon.size() >= (1 << 16)) {
-        throw PackException("Max oppf refusjon size\n");
+    if (refusjon_0_0_0.size() >= (1 << 16)) {
+        throw PackException("Max oppf refusjon 0.0.0 size\n");
+    }
+    if (refusjon_1_4_0.size() >= std::numeric_limits<uint32_t>::max()) {
+        throw PackException("Max oppf refusjon 1.4.0 size\n");
     }
     if (vilkar.size() >= (1 << 16)) {
         throw PackException("Max oppf vilkar size\n");
@@ -261,7 +264,7 @@ bool FestSerializer::Write(uint64_t magic) {
         .numKodeverk = (uint16_t) (dbVersion.major == 0 ? kodeverk_0_0_0.size() : 0),
         .numRefRefusjonsvilkar_0_0_0 = (uint16_t) refRefusjonsvilkarList_0_0_0.size(),
         .numRefusjonskode_0_0_0 = (uint16_t) (dbVersion.major == 0 ? refusjonskodeList_0_0_0.size() : 0),
-        .numRefusjon = (uint16_t) refusjon.size(),
+        .numRefusjon = (uint16_t) refusjon_0_0_0.size(),
         .numVilkar = (uint16_t) vilkar.size(),
         .numVarselSlv = (uint16_t) varselSlv_0_0_0.size(),
         .numByttegruppe = (uint16_t) byttegruppe.size(),
@@ -444,8 +447,8 @@ bool FestSerializer::Write(uint64_t magic) {
         }
     }
     {
-        auto *ptr = refusjon.data();
-        auto size = refusjon.size() * sizeof(*ptr);
+        auto *ptr = refusjon_0_0_0.data();
+        auto size = refusjon_0_0_0.size() * sizeof(*ptr);
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -909,7 +912,9 @@ bool FestSerializer::Write(uint64_t magic) {
             .numVarselSlv = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? varselSlv_0_4_0.size() : 0),
             .numRefRefusjonsvilkar_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refRefusjonsvilkarList_1_2_0.size() : 0),
             .numRefusjonskode_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refusjonskodeList_1_2_0.size() : 0),
-            .numPakning_1_3_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 2) ? legemiddelpakning_1_3_0.size() : 0)
+            .numPakning_1_3_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 2) ? legemiddelpakning_1_3_0.size() : 0),
+            .numRefusjon_1_4_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 3) ? refusjon_1_4_0.size() : 0),
+            .numRefusjonsgruppeList = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 3) ? refusjonsgruppeList.size() : 0)
         };
         output->write((char *) (void *) &secondHeader, sizeof(secondHeader));
         offset += sizeof(secondHeader);
@@ -1244,6 +1249,37 @@ bool FestSerializer::Write(uint64_t magic) {
                 }
             }
         }
+        if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 3)) {
+            {
+                auto *ptr = refusjon_1_4_0.data();
+                auto size = refusjon_1_4_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto list = refusjonsgruppeList.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+        }
         output->write((char *) (void *) &trailer, sizeof(trailer));
     }
     auto fs = std::dynamic_pointer_cast<std::ofstream>(output);
@@ -1271,7 +1307,7 @@ int FestSerializer::GetHighestSupportedMajorVersion() {
 
 int FestSerializer::GetHighestSupportedMinorVersion(int major) {
     if (major == 1) {
-        return 3;
+        return 4;
     } else if (major == 0) {
         return 4;
     } else {
@@ -1388,11 +1424,20 @@ bool FestSerializer::Visit(const std::string &fest, const OppfKodeverk &kodeverk
 }
 
 bool FestSerializer::Visit(const std::string &fest, const OppfRefusjon &refusjon) {
-    uint16_t index;
+    uint32_t index2;
     if (minimumMajorVersion > 0) {
-        index = Add(this->refusjon, {refusjon, refusjonskodeList_0_1_0, refusjonskodeList_1_2_0, refRefusjonsvilkarList_0_0_0, refRefusjonsvilkarList_1_2_0, stringList, festidblock, stringblock, stringblockCache});
+        index2 = Add(this->refusjon_1_4_0, {refusjon, refusjonskodeList_0_1_0, refusjonskodeList_1_2_0, refRefusjonsvilkarList_0_0_0, refRefusjonsvilkarList_1_2_0, refusjonsgruppeList, stringList, festidblock, stringblock, stringblockCache});
     } else {
-        index = Add(this->refusjon, {refusjon, refusjonskodeList_0_0_0, refusjonskodeList_0_1_0, refusjonskodeList_1_2_0, refRefusjonsvilkarList_0_0_0, refRefusjonsvilkarList_1_2_0, stringList, festidblock, stringblock, stringblockCache});
+        index2 = Add(this->refusjon_1_4_0, {refusjon, refusjonskodeList_0_0_0, refusjonskodeList_0_1_0, refusjonskodeList_1_2_0, refRefusjonsvilkarList_0_0_0, refRefusjonsvilkarList_1_2_0, refusjonsgruppeList, stringList, festidblock, stringblock, stringblockCache});
+    }
+    uint16_t index = (uint16_t) index2;
+    if (minimumMajorVersion > 0) {
+        index = Add(this->refusjon_0_0_0, {refusjon, refusjonskodeList_0_1_0, refusjonskodeList_1_2_0, refRefusjonsvilkarList_0_0_0, refRefusjonsvilkarList_1_2_0, stringList, festidblock, stringblock, stringblockCache}, index);
+    } else {
+        index = Add(this->refusjon_0_0_0, {refusjon, refusjonskodeList_0_0_0, refusjonskodeList_0_1_0, refusjonskodeList_1_2_0, refRefusjonsvilkarList_0_0_0, refRefusjonsvilkarList_1_2_0, stringList, festidblock, stringblock, stringblockCache}, index);
+    }
+    if (index2 != index) {
+        throw PackException("Index v1.4.0 is off (OppfRefusjon)");
     }
     Add(fest, [index] (FestData &f) { f.refusjon.emplace_back(index); });
     return true;

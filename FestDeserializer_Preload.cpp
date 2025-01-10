@@ -138,7 +138,17 @@ void FestDeserializer::Preload(FestSerializer &festSerializer) const {
     PL(festSerializer.brystprotese, brystprotese, numBrystprotese);
     PL(festSerializer.virkestoffMedStyrke, virkestoffMedStyrke, numVirkestoffMedStyrke);
     PL(festSerializer.kodeverk_0_0_0, kodeverk_0_0_0, numKodeverk_0_0_0);
-    PL(festSerializer.refusjon, refusjon, numRefusjon);
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor >= 4)) {
+        preloader.Preload(festSerializer.refusjonsgruppeList, refusjonsgruppeList, numRefusjonsgruppeList);
+        PL(festSerializer.refusjon_1_4_0, refusjon_1_4_0, numRefusjon_1_4_0);
+    } else {
+        std::function<POppfRefusjon_1_4_0 (const POppfRefusjon_0_0_0 &)> convert{[&festSerializer] (const POppfRefusjon_0_0_0 &src) -> POppfRefusjon_1_4_0 {
+            POppfRefusjon_1_4_0 dst{src, festSerializer.refusjonsgruppeList};
+            return dst;
+        }};
+        PL(festSerializer.refusjon_1_4_0, refusjon_0_0_0, numRefusjon_0_0_0, convert);
+    }
+    PL(festSerializer.refusjon_0_0_0, refusjon_0_0_0, numRefusjon_0_0_0);
     PL(festSerializer.vilkar, vilkar, numVilkar);
     PL(festSerializer.byttegruppe, byttegruppe, numByttegruppe);
     PL(festSerializer.interaksjon, interaksjon, numInteraksjon);

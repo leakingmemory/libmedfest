@@ -9,10 +9,12 @@
 #include "Oppf.h"
 #include "Refusjonshjemmel.h"
 
-class POppfRefusjon;
+class POppfRefusjon_0_0_0;
+class POppfRefusjon_1_4_0;
 
 class OppfRefusjon : public Oppf {
-    friend POppfRefusjon;
+    friend POppfRefusjon_0_0_0;
+    friend POppfRefusjon_1_4_0;
 private:
     Refusjonshjemmel refusjonshjemmel;
 public:

@@ -39,7 +39,7 @@ bool XmlRefusjonsgruppe::Merge() {
             std::cerr << "Error: Not specified KreverRefusjonskode\n";
             return false;
     }
-    parent->SetRefusjonsgruppe({GetId(), gruppeNr, GetAtc(), refusjonsberettigetBruk, refusjonskode, GetRefVilkar(),
+    parent->AddRefusjonsgruppe({GetId(), gruppeNr, GetAtc(), refusjonsberettigetBruk, refusjonskode, GetRefVilkar(),
                                 kreverRefusjonskode});
     return true;
 }

@@ -461,8 +461,30 @@ std::vector<POppfVirkestoff> FestVectors::GetVirkestoff(const FestDeserializer &
     }
 }
 
+std::vector<POppfRefusjon_0_0_0> FestVectors::GetRefusjon_0_0_0(const FestDeserializer &festDeserializer) const {
+    AsVector(refusjon, GetOppfRefusjon_0_0_0);
+}
+
+std::vector<POppfRefusjon_1_4_0> FestVectors::GetRefusjon_1_4_0(const FestDeserializer &festDeserializer) const {
+    AsVector(refusjon, GetOppfRefusjon_1_4_0);
+}
+
 std::vector<POppfRefusjon> FestVectors::GetRefusjon(const FestDeserializer &festDeserializer) const {
-    AsVector(refusjon, GetOppfRefusjon);
+    std::vector<POppfRefusjon> result{};
+    if (festDeserializer.GetVersionMajor() > 1 || (festDeserializer.GetVersionMajor() == 1 && festDeserializer.GetVersionMinor() >= 4)) {
+        auto raw = GetRefusjon_1_4_0(festDeserializer);
+        result.reserve(raw.size());
+        for (const auto &r : raw) {
+            result.emplace_back(r);
+        }
+    } else {
+        auto raw = GetRefusjon_0_0_0(festDeserializer);
+        result.reserve(raw.size());
+        for (const auto &r : raw) {
+            result.emplace_back(r);
+        }
+    }
+    return result;
 }
 
 std::vector<POppfKodeverk_0_0_0> FestVectors::GetKodeverk_0_0_0(const FestDeserializer &festDeserializer) const {

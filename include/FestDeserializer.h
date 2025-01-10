@@ -83,7 +83,8 @@ private:
     const POppfVirkestoff_0_4_0 *virkestoff_0_4_0;
     const POppfKodeverk_0_0_0 *kodeverk_0_0_0;
     const POppfKodeverk_0_3_0 *kodeverk_0_3_0;
-    const POppfRefusjon *refusjon;
+    const POppfRefusjon_0_0_0 *refusjon_0_0_0;
+    const POppfRefusjon_1_4_0 *refusjon_1_4_0;
     const POppfVilkar *vilkar;
     const POppfVarselSlv_0_0_0 *varselSlv_0_0_0;
     const POppfVarselSlv_0_4_0 *varselSlv_0_4_0;
@@ -124,6 +125,7 @@ private:
     const PFest_V_0_4_0 *fests_V_0_4_0;
     const PFest_V_1_3_0 *fests_V_1_3_0;
     const PString *stringList;
+    const PRefusjonsgruppe *refusjonsgruppeList;
     const char *stringblock;
     size_t numMerkevare_0_0_0;
     size_t numMerkevare_0_4_0;
@@ -142,7 +144,8 @@ private:
     size_t numVirkestoff_0_4_0;
     size_t numKodeverk_0_0_0;
     size_t numKodeverk_0_3_0;
-    size_t numRefusjon;
+    size_t numRefusjon_0_0_0;
+    size_t numRefusjon_1_4_0;
     size_t numVilkar;
     size_t numVarselSlv_0_0_0;
     size_t numVarselSlv_0_4_0;
@@ -183,6 +186,7 @@ private:
     size_t numFests_V_0_4_0;
     size_t numFests_V_1_3_0;
     size_t numStringList;
+    size_t numRefusjonsgruppeList;
     size_t stringblocksize;
 public:
     FestDeserializer(const std::string &filename);
@@ -212,6 +216,8 @@ public:
     [[nodiscard]] std::vector<POppfVirkestoff_0_0_0> GetVirkestoff_0_0_0() const;
     [[nodiscard]] std::vector<POppfVirkestoff_0_4_0> GetVirkestoff_0_4_0() const;
     [[nodiscard]] std::vector<POppfVirkestoff> GetVirkestoff() const;
+    [[nodiscard]] std::vector<POppfRefusjon_0_0_0> GetOppfRefusjon_0_0_0() const;
+    [[nodiscard]] std::vector<POppfRefusjon_1_4_0> GetOppfRefusjon_1_4_0() const;
     [[nodiscard]] std::vector<POppfRefusjon> GetOppfRefusjon() const;
     [[nodiscard]] std::vector<POppfKodeverk_0_0_0> GetOppfKodeverk_0_0_0() const;
     [[nodiscard]] std::vector<POppfKodeverk_0_3_0> GetOppfKodeverk_0_3_0() const;
@@ -267,6 +273,8 @@ public:
     void ForEachKodeverk_0_0_0(const std::function<void (const POppfKodeverk_0_0_0 &)> &) const;
     void ForEachKodeverk_0_3_0(const std::function<void (const POppfKodeverk_0_3_0 &)> &) const;
     void ForEachKodeverk(const std::function<void (const POppfKodeverk &)> &) const;
+    void ForEachRefusjon_0_0_0(const std::function<void (const POppfRefusjon_0_0_0 &)> &) const;
+    void ForEachRefusjon_1_4_0(const std::function<void (const POppfRefusjon_1_4_0 &)> &) const;
     void ForEachRefusjon(const std::function<void (const POppfRefusjon &)> &) const;
     void ForEachVilkar(const std::function<void (const POppfVilkar &)> &) const;
     void ForEachVarselSlv_0_0_0(const std::function<void (const POppfVarselSlv_0_0_0 &)> &) const;
@@ -317,6 +325,8 @@ public:
     [[nodiscard]] OppfKodeverk Unpack(const POppfKodeverk_0_0_0 &poppf) const;
     [[nodiscard]] OppfKodeverk Unpack(const POppfKodeverk_0_3_0 &poppf) const;
     [[nodiscard]] OppfKodeverk Unpack(const POppfKodeverk &poppf) const;
+    [[nodiscard]] OppfRefusjon Unpack(const POppfRefusjon_0_0_0 &poppf) const;
+    [[nodiscard]] OppfRefusjon Unpack(const POppfRefusjon_1_4_0 &poppf) const;
     [[nodiscard]] OppfRefusjon Unpack(const POppfRefusjon &poppf) const;
     [[nodiscard]] OppfVilkar Unpack(const POppfVilkar &poppf) const;
     [[nodiscard]] OppfVarselSlv Unpack(const POppfVarselSlv_0_0_0 &poppf) const;
@@ -346,6 +356,8 @@ public:
     [[nodiscard]] Virkestoff Unpack(const PVirkestoff_0_4_0 &pVirkestoff) const;
     [[nodiscard]] Virkestoff Unpack(const PVirkestoff &pVirkestoff) const;
     [[nodiscard]] Info Unpack(const PInfo &pInfo) const;
+    [[nodiscard]] Refusjonshjemmel Unpack(const PRefusjonshjemmel_0_0_0 &pRefusjonshjemmel) const;
+    [[nodiscard]] Refusjonshjemmel Unpack(const PRefusjonshjemmel_1_4_0 &pRefusjonshjemmel) const;
     [[nodiscard]] Refusjonshjemmel Unpack(const PRefusjonshjemmel &pRefusjonshjemmel) const;
     [[nodiscard]] Vilkar Unpack(const PVilkar &pVilkar) const;
     [[nodiscard]] VarselSlv Unpack(const PVarselSlv_0_0_0 &pVarselSlv) const;

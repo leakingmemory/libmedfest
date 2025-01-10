@@ -16,6 +16,13 @@ bool Refusjonshjemmel::GetKreverVedtak() const {
     return kreverVedtak;
 }
 
-Refusjonsgruppe Refusjonshjemmel::GetRefusjonsgruppe() const {
+std::vector<Refusjonsgruppe> Refusjonshjemmel::GetRefusjonsgruppeList() const {
     return refusjonsgruppe;
+}
+
+Refusjonsgruppe Refusjonshjemmel::GetRefusjonsgruppe() const {
+    if (!refusjonsgruppe.empty()) {
+        return refusjonsgruppe.back();
+    }
+    return {};
 }

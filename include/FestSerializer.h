@@ -44,6 +44,7 @@
 #include "Struct/Packed/PackException.h"
 #include "Struct/Packed/Uint16List.h"
 #include "Struct/Packed/Uint32List.h"
+#include "Struct/Packed/RefusjonsgruppeList.h"
 #include "Struct/Packed/PFest.h"
 #include "FestData.h"
 #include "DbVersion.h"
@@ -172,6 +173,30 @@ struct FestSecondHeader_1_2_0 {
     uint16_t numRefusjonskode_1_2_0;
 } __attribute__((__packed__));
 
+struct FestSecondHeader_1_3_0 {
+    uint64_t magic;
+    uint32_t stringblockSize;
+    uint16_t secondHeaderSize;
+    uint16_t numRefusjonskode_0_1_0;
+    uint32_t numUint16NewList;
+    uint16_t numFests;
+    uint16_t numKodeverk;
+    uint32_t numElementList;
+    uint32_t numTermList;
+    uint32_t numUint32List;
+    uint32_t numPakning_0_3_0;
+    uint32_t numPakning_0_4_0;
+    uint32_t numMerkevare;
+    uint32_t numLegemiddelVirkestoff;
+    uint32_t numLegemiddeldose;
+    uint32_t numFestUuidList;
+    uint32_t numVirkestoff;
+    uint32_t numVarselSlv;
+    uint16_t numRefRefusjonsvilkar_1_2_0;
+    uint16_t numRefusjonskode_1_2_0;
+    uint32_t numPakning_1_3_0;
+} __attribute__((__packed__));
+
 struct FestSecondHeader {
     uint64_t magic;
     uint32_t stringblockSize;
@@ -194,6 +219,8 @@ struct FestSecondHeader {
     uint16_t numRefRefusjonsvilkar_1_2_0;
     uint16_t numRefusjonskode_1_2_0;
     uint32_t numPakning_1_3_0;
+    uint32_t numRefusjon_1_4_0;
+    uint32_t numRefusjonsgruppeList;
 } __attribute__((__packed__));
 
 struct FestTrailer {
@@ -238,6 +265,7 @@ private:
     Uint16List uint16List{};
     Uint32List uint32List{};
     StringList stringList{};
+    RefusjonsgruppeList refusjonsgruppeList{};
     std::vector<POppfLegemiddelMerkevare_0_0_0> legemiddelMerkevare_0_0_0{};
     std::vector<POppfLegemiddelMerkevare_0_4_0> legemiddelMerkevare_0_4_0{};
     std::vector<POppfLegemiddelpakning_0_0_0> legemiddelpakning_0_0_0{};
@@ -255,7 +283,8 @@ private:
     std::vector<POppfVirkestoff_0_4_0> virkestoff_0_4_0{};
     std::vector<POppfKodeverk_0_0_0> kodeverk_0_0_0{};
     std::vector<POppfKodeverk_0_3_0> kodeverk_0_3_0{};
-    std::vector<POppfRefusjon> refusjon{};
+    std::vector<POppfRefusjon_0_0_0> refusjon_0_0_0{};
+    std::vector<POppfRefusjon_1_4_0> refusjon_1_4_0{};
     std::vector<POppfVilkar> vilkar{};
     std::vector<POppfVarselSlv_0_0_0> varselSlv_0_0_0{};
     std::vector<POppfVarselSlv_0_4_0> varselSlv_0_4_0{};
@@ -289,8 +318,8 @@ public:
     int GetHighestSupportedMajorVersion();
     int GetHighestSupportedMinorVersion(int major);
 private:
-    template <class T> uint16_t Add(std::vector<T> &list, const T &obj) {
-        for (typename std::remove_const<typeof(list.size())>::type i = 0; i < list.size(); i++) {
+    template <class T> uint16_t Add(std::vector<T> &list, const T &obj, typename std::remove_const<decltype(list.size())>::type hint = 0) {
+        for (typename std::remove_const<decltype(list.size())>::type i = hint; i < list.size(); i++) {
             if (list[i] == obj) {
                 if (i >= (1 << 16)) {
                     throw PackException("List size out of bounds");

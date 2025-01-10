@@ -21,8 +21,8 @@ void XmlRefusjonshjemmel::SetKreverVedtak(bool kreverVedtak) {
     this->kreverVedtak = kreverVedtak ? MaybeBoolean::MTRUE : MaybeBoolean::MFALSE;
 }
 
-void XmlRefusjonshjemmel::SetRefusjonsgruppe(const Refusjonsgruppe &refusjonsgruppe) {
-    this->refusjongruppe = refusjonsgruppe;
+void XmlRefusjonshjemmel::AddRefusjonsgruppe(const Refusjonsgruppe &refusjonsgruppe) {
+    this->refusjongruppe.emplace_back(refusjonsgruppe);
 }
 
 bool XmlRefusjonshjemmel::Merge() {

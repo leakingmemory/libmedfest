@@ -1962,10 +1962,11 @@ OppfRefusjon FestDeserializer::Unpack(const POppfRefusjon_1_4_0 &poppf) const {
 }
 
 OppfRefusjon FestDeserializer::Unpack(const POppfRefusjon &poppf) const {
-    if (std::holds_alternative<POppfRefusjon_1_4_0>(poppf)) {
-        return Unpack(std::get<POppfRefusjon_1_4_0>(poppf));
+    const std::variant<POppfRefusjon_0_0_0,POppfRefusjon_1_4_0> &v = poppf;
+    if (std::holds_alternative<POppfRefusjon_1_4_0>(v)) {
+        return Unpack(std::get<POppfRefusjon_1_4_0>(v));
     } else {
-        return Unpack(std::get<POppfRefusjon_0_0_0>(poppf));
+        return Unpack(std::get<POppfRefusjon_0_0_0>(v));
     }
 }
 

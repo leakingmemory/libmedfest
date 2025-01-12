@@ -6,6 +6,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if (WIN32)
    add_compile_options(/bigobj)
+   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 else()
    add_compile_options(-fPIC)
    find_package(PkgConfig)

@@ -22,7 +22,7 @@ bool AssertMatch(const std::vector<std::string> &l1, const std::vector<std::stri
         PrintMismatch(l1, l2);
         return false;
     }
-    for (typeof(size) i = 0; i < size; i++) {
+    for (decltype(size) i = 0; i < size; i++) {
         if (l1[i] != l2[i]) {
             PrintMismatch(l1, l2);
             return false;

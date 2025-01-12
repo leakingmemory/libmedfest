@@ -10,12 +10,12 @@
 
 template <typename T> concept XmlSorterbarIterator = requires (T iter) {
     { iter->GetSortering() } -> std::convertible_to<int>;
-    { ++iter } -> std::convertible_to<typeof(iter)>;
+    { ++iter } -> std::convertible_to<decltype(iter)>;
 };
 
 template <typename T> concept PointerXmlSorterbarIterator = requires (T iter) {
     { (*iter)->GetSortering() } -> std::convertible_to<int>;
-    { ++iter } -> std::convertible_to<typeof(iter)>;
+    { ++iter } -> std::convertible_to<decltype(iter)>;
 };
 
 class XmlSortering {

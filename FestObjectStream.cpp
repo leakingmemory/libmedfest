@@ -283,7 +283,7 @@ std::shared_ptr<Fest> FestObjectStream::read() {
     parser.AddHandler("DagerPa", std::make_shared<XmlDagerPaHandler>());
     parser.AddHandler("DagerAv", std::make_shared<XmlDagerAvHandler>());
     const auto totalSize = source->size();
-    std::remove_const<typeof(totalSize)>::type countSize = 0;
+    std::remove_const<decltype(totalSize)>::type countSize = 0;
     do {
         int num = source->read(&(buf[0]), sizeof(buf));
         if (num < 0) {

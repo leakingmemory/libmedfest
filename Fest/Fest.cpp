@@ -187,7 +187,7 @@ bool Fest::Accept(FestVisitor &visitor) const {
             + oppfInteraksjon.size()
             + oppfInteraksjonIkkeVurdert.size()
             + oppfStrDosering.size();
-    typeof(total) done = 0;
+    decltype(total) done = 0;
     for (const auto &merkevare : oppfLegemiddelMerkevare) {
         if (!visitor.Visit(hentetDato, merkevare)) {
             return false;

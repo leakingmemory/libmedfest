@@ -10,7 +10,7 @@ PFestId::PFestId(const std::string &id, std::vector<FestUuid> &uuidblock, bool c
         return;
     }
     FestUuid festId{id, caseSensitive};
-    for (typeof(uuidblock.size()) i = 0; i < uuidblock.size(); i++) {
+    for (decltype(uuidblock.size()) i = 0; i < uuidblock.size(); i++) {
         if (festId == uuidblock[i]) {
             this->id = i + 1;
             return;

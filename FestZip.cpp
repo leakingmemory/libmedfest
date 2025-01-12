@@ -16,7 +16,7 @@ std::shared_ptr<libzip_file> FestZip::GetXmlFile() {
     std::string xmlname{};
     {
         auto num = z->NumEntries();
-        for (typeof(num) i = 0; i < num; i++) {
+        for (decltype(num) i = 0; i < num; i++) {
             std::string filename = z->Filename(i);
             {
                 std::string filename_lower{filename};

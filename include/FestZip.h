@@ -6,6 +6,7 @@
 #define LEGEMFEST_FESTZIP_H
 
 #include <memory>
+#include <string>
 
 class libzip_zip;
 class libzip_file;

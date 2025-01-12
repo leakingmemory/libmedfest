@@ -5,6 +5,7 @@
 #ifndef LEGEMFEST_GENERICLISTSTORAGE_H
 #define LEGEMFEST_GENERICLISTSTORAGE_H
 
+#include "Struct/Packed/packed.h"
 #include <concepts>
 #include <cstdint>
 #include <vector>
@@ -24,7 +25,11 @@ template <typename T> concept GenericListItemType = requires (T tp) {
     { std::declval<typename T::int_type>() } -> std::convertible_to<int>;
 };
 
-template <typename T, int sizeBits> struct GenericListItems {
+template <typename T, int sizeBits>
+#ifdef _MSC_VER
+__pragma( pack(push, 1) )
+#endif
+struct GenericListItems {
     typedef T int_type;
     constexpr static int total_bits = sizeof(int_type) * 8;
     constexpr static int size_bits = sizeBits;
@@ -44,7 +49,13 @@ template <typename T, int sizeBits> struct GenericListItems {
         return  start == other.start &&
                 size == other.size;
     }
-} __attribute__((__packed__));
+}
+#ifdef _MSC_VER
+__pragma( pack(pop) )
+#else
+__attribute__((__packed__))
+#endif
+;
 
 typedef GenericListItems<uint32_t,14> GenericListItems32;
 

@@ -6,6 +6,7 @@
 #define LEGEMFEST_FESTSERIALIZER_H
 
 #include "Fest/Fest.h"
+#include "Struct/Packed/packed.h"
 #include "Struct/Packed/FestUuid.h"
 #include "Struct/Packed/FestUuidList.h"
 #include "Struct/Packed/StringList.h"
@@ -56,7 +57,7 @@
 
 constexpr uint8_t alignment = 16;
 
-struct FestFirstHeader {
+PACK(struct FestFirstHeader {
     uint64_t magic;
     uint32_t numUuids : 24;
     uint8_t numReseptgyldighet;
@@ -96,16 +97,16 @@ struct FestFirstHeader {
     uint16_t numStrDosering;
     uint32_t numUint16List : 22;
     uint16_t numFests : 10;
-} __attribute__((__packed__));
+});
 
-struct FestSecondHeaderV0_1_0 {
+PACK(struct FestSecondHeaderV0_1_0 {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
     uint16_t numRefusjonskode;
-} __attribute__((__packed__));
+});
 
-struct FestSecondHeader_0_2_0 {
+PACK(struct FestSecondHeader_0_2_0 {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
@@ -113,9 +114,9 @@ struct FestSecondHeader_0_2_0 {
     uint32_t numUint16NewList;
     uint16_t numFests;
     uint16_t reservedZ;
-} __attribute__((__packed__));
+});
 
-struct FestSecondHeader_0_3_0 {
+PACK(struct FestSecondHeader_0_3_0 {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
@@ -127,9 +128,9 @@ struct FestSecondHeader_0_3_0 {
     uint32_t numTermList;
     uint32_t numUint32List;
     uint32_t numPakning;
-} __attribute__((__packed__));
+});
 
-struct FestSecondHeader_1_1_0 {
+PACK(struct FestSecondHeader_1_1_0 {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
@@ -148,9 +149,9 @@ struct FestSecondHeader_1_1_0 {
     uint32_t numFestUuidList;
     uint32_t numVirkestoff;
     uint32_t numVarselSlv;
-} __attribute__((__packed__));
+});
 
-struct FestSecondHeader_1_2_0 {
+PACK(struct FestSecondHeader_1_2_0 {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
@@ -171,7 +172,7 @@ struct FestSecondHeader_1_2_0 {
     uint32_t numVarselSlv;
     uint16_t numRefRefusjonsvilkar_1_2_0;
     uint16_t numRefusjonskode_1_2_0;
-} __attribute__((__packed__));
+});
 
 struct FestSecondHeader_1_3_0 {
     uint64_t magic;
@@ -197,7 +198,7 @@ struct FestSecondHeader_1_3_0 {
     uint32_t numPakning_1_3_0;
 } __attribute__((__packed__));
 
-struct FestSecondHeader {
+PACK(struct FestSecondHeader {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
@@ -221,13 +222,13 @@ struct FestSecondHeader {
     uint32_t numPakning_1_3_0;
     uint32_t numRefusjon_1_4_0;
     uint32_t numRefusjonsgruppeList;
-} __attribute__((__packed__));
+});
 
-struct FestTrailer {
+PACK(struct FestTrailer {
     uint32_t reserved;
     uint32_t secondHeaderOffset;
     uint64_t magic;
-} __attribute__((__packed__));
+});
 
 class FestDeserializer;
 
@@ -335,7 +336,7 @@ private:
         return (uint16_t) sz;
     }
     template <class T> uint32_t Add32(std::vector<T> &list, const T &obj) {
-        for (typename std::remove_const<typeof(list.size())>::type i = 0; i < list.size(); i++) {
+        for (typename std::remove_const<decltype(list.size())>::type i = 0; i < list.size(); i++) {
             if (list[i] == obj) {
                 if (i >= std::numeric_limits<uint32_t>::max()) {
                     throw PackException("List size out of bounds");

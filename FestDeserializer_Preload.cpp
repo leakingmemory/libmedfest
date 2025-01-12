@@ -7,14 +7,14 @@
 
 template <class T> void PL(std::vector<T> &serializer, const T *deserializer, size_t num) {
     serializer.reserve(num);
-    for (typeof(num) i = 0; i < num; i++) {
+    for (decltype(num) i = 0; i < num; i++) {
         serializer.emplace_back(deserializer[i]);
     }
 }
 
 template <class T, class S> void PL(std::vector<T> &serializer, const S *deserializer, size_t num, const std::function<T (const S &)> &convert) {
     serializer.reserve(num);
-    for (typeof(num) i = 0; i < num; i++) {
+    for (decltype(num) i = 0; i < num; i++) {
         T obj = convert(deserializer[i]);
         serializer.emplace_back(obj);
     }

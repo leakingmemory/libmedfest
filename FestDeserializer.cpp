@@ -2,6 +2,10 @@
 // Created by sigsegv on 1/13/23.
 //
 
+#ifdef WIN32
+#define FEST_SERIALIZER_USE_STD_CXX_FILEIO
+#endif
+
 #include "FestDeserializer.h"
 #include "FestSerializer.h"
 #include "FestVectors.h"
@@ -9,12 +13,30 @@
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
+#ifdef FEST_SERIALIZER_USE_STD_CXX_FILEIO
+#include <fstream>
+#else
 #include <unistd.h>
 #include <sys/mman.h>
+#endif
 #include <iostream>
 #include <type_traits>
 
 FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullptr), mapsize(0) {
+#ifdef FEST_SERIALIZER_USE_STD_CXX_FILEIO
+    std::ifstream inputFile(filename, std::ios_base::binary);
+    inputFile.seekg(0, std::ios_base::end);
+    mapsize = inputFile.tellg();
+    inputFile.seekg(0, std::ios_base::beg);
+    mapping = malloc(mapsize);
+    if (mapping == nullptr) {
+        std::cerr << "Error: Unable to allocate memory for reading file\n";
+        inputFile.close();
+        throw PackException("Allocate memory");
+    }
+    inputFile.read(reinterpret_cast<char*>(mapping), mapsize);
+    inputFile.close();
+#else
     auto fd = open(filename.c_str(), O_RDONLY);
     if (fd < 0) {
         std::cerr << "Error: Open file: " << filename << ": " << strerror(errno) << "\n";
@@ -38,11 +60,20 @@ FestDeserializer::FestDeserializer(const std::string &filename) : mapping(nullpt
     if (close(fd) != 0) {
         std::cerr << "Error: Close file: " << strerror(errno) << "\n";
     }
+#endif
     Init();
 }
 
 FestDeserializer::FestDeserializer(const void *data, size_t size) {
     mapsize = size;
+#ifdef FEST_SERIALIZER_USE_STD_CXX_FILEIO
+    mapping = malloc(mapsize);
+    if (mapping == nullptr) {
+        std::cerr << "Error: Unable to allocate memory for input data\n";
+        throw PackException("Allocate memory");
+    }
+    memcpy(mapping, data, size);
+#else
     mapping = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     if (mapping == MAP_FAILED) {
         std::cerr << "Error: Map failed: " << strerror(errno) << "\n";
@@ -51,6 +82,7 @@ FestDeserializer::FestDeserializer(const void *data, size_t size) {
     }
     memcpy(mapping, data, size);
     mprotect(mapping, size, PROT_READ);
+#endif
     Init();
 }
 
@@ -871,7 +903,11 @@ void FestDeserializer::Init() {
 
 FestDeserializer::~FestDeserializer() {
     if (mapping != nullptr) {
+#ifdef FEST_SERIALIZER_USE_STD_CXX_FILEIO
+        free(mapping);
+#else
         munmap(mapping, mapsize);
+#endif
     }
 }
 
@@ -1054,7 +1090,7 @@ std::vector<POppfLegemiddeldose> FestDeserializer::GetLegemiddeldose() const {
 
 std::vector<POppfVirkestoffMedStyrke> FestDeserializer::GetVirkestoffMedStyrke() const {
     std::vector<POppfVirkestoffMedStyrke> result{};
-    for (std::remove_const<typeof(numVirkestoffMedStyrke)>::type i = 0; i < numVirkestoffMedStyrke; i++) {
+    for (std::remove_const<decltype(numVirkestoffMedStyrke)>::type i = 0; i < numVirkestoffMedStyrke; i++) {
         result.emplace_back(this->virkestoffMedStyrke[i]);
     }
     return result;
@@ -1062,7 +1098,7 @@ std::vector<POppfVirkestoffMedStyrke> FestDeserializer::GetVirkestoffMedStyrke()
 
 std::vector<POppfVirkestoff_0_0_0> FestDeserializer::GetVirkestoff_0_0_0() const {
     std::vector<POppfVirkestoff_0_0_0> result{};
-    for (std::remove_const<typeof(numVirkestoff_0_0_0)>::type i = 0; i < numVirkestoff_0_0_0; i++) {
+    for (std::remove_const<decltype(numVirkestoff_0_0_0)>::type i = 0; i < numVirkestoff_0_0_0; i++) {
         result.emplace_back(this->virkestoff_0_0_0[i]);
     }
     return result;
@@ -1070,7 +1106,7 @@ std::vector<POppfVirkestoff_0_0_0> FestDeserializer::GetVirkestoff_0_0_0() const
 
 std::vector<POppfVirkestoff_0_4_0> FestDeserializer::GetVirkestoff_0_4_0() const {
     std::vector<POppfVirkestoff_0_4_0> result{};
-    for (std::remove_const<typeof(numVirkestoff_0_4_0)>::type i = 0; i < numVirkestoff_0_4_0; i++) {
+    for (std::remove_const<decltype(numVirkestoff_0_4_0)>::type i = 0; i < numVirkestoff_0_4_0; i++) {
         result.emplace_back(this->virkestoff_0_4_0[i]);
     }
     return result;
@@ -1126,7 +1162,7 @@ std::vector<POppfRefusjon> FestDeserializer::GetOppfRefusjon() const {
 
 std::vector<POppfKodeverk_0_0_0> FestDeserializer::GetOppfKodeverk_0_0_0() const {
     std::vector<POppfKodeverk_0_0_0> result{};
-    for (std::remove_const<typeof(numKodeverk_0_0_0)>::type i = 0; i < numKodeverk_0_0_0; i++) {
+    for (std::remove_const<decltype(numKodeverk_0_0_0)>::type i = 0; i < numKodeverk_0_0_0; i++) {
         result.emplace_back(this->kodeverk_0_0_0[i]);
     }
     return result;
@@ -1134,7 +1170,7 @@ std::vector<POppfKodeverk_0_0_0> FestDeserializer::GetOppfKodeverk_0_0_0() const
 
 std::vector<POppfKodeverk_0_3_0> FestDeserializer::GetOppfKodeverk_0_3_0() const {
     std::vector<POppfKodeverk_0_3_0> result{};
-    for (std::remove_const<typeof(numKodeverk_0_3_0)>::type i = 0; i < numKodeverk_0_3_0; i++) {
+    for (std::remove_const<decltype(numKodeverk_0_3_0)>::type i = 0; i < numKodeverk_0_3_0; i++) {
         result.emplace_back(this->kodeverk_0_3_0[i]);
     }
     return result;
@@ -1160,7 +1196,7 @@ std::vector<PString> FestDeserializer::GetStrings() const {
 std::vector<PPrisVare> FestDeserializer::GetPrisVare() const {
     std::vector<PPrisVare> prisVare{};
     prisVare.reserve(numPrisVare);
-    for (std::remove_const<typeof(numPrisVare)>::type i = 0; i < numPrisVare; i++) {
+    for (std::remove_const<decltype(numPrisVare)>::type i = 0; i < numPrisVare; i++) {
         prisVare.emplace_back(this->prisVareList[i]);
     }
     return prisVare;
@@ -1169,7 +1205,7 @@ std::vector<PPrisVare> FestDeserializer::GetPrisVare() const {
 std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfo() const {
     std::vector<PPakningsinfo> pakningsinfo{};
     pakningsinfo.reserve(numPakningsinfo);
-    for (std::remove_const<typeof(numPakningsinfo)>::type i = 0; i < numPakningsinfo; i++) {
+    for (std::remove_const<decltype(numPakningsinfo)>::type i = 0; i < numPakningsinfo; i++) {
         pakningsinfo.emplace_back(this->pakningsinfoList[i]);
     }
     return pakningsinfo;
@@ -1178,7 +1214,7 @@ std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfo() const {
 std::vector<PPakningskomponent> FestDeserializer::GetPakningskomponent() const {
     std::vector<PPakningskomponent> pakningskomponent{};
     pakningskomponent.reserve(numPakningskomponent);
-    for (std::remove_const<typeof(numPakningskomponent)>::type i = 0; i < numPakningskomponent; i++) {
+    for (std::remove_const<decltype(numPakningskomponent)>::type i = 0; i < numPakningskomponent; i++) {
         pakningskomponent.emplace_back(this->pakningskomponentList[i]);
     }
     return pakningskomponent;
@@ -1187,7 +1223,7 @@ std::vector<PPakningskomponent> FestDeserializer::GetPakningskomponent() const {
 std::vector<PPakningskomponentInfo> FestDeserializer::GetPakningskomponentInfo() const {
     std::vector<PPakningskomponentInfo> pakningskomponentInfo{};
     pakningskomponentInfo.reserve(numPakningskomponentInfo);
-    for (std::remove_const<typeof(numPakningskomponentInfo)>::type i = 0; i < numPakningskomponentInfo; i++) {
+    for (std::remove_const<decltype(numPakningskomponentInfo)>::type i = 0; i < numPakningskomponentInfo; i++) {
         pakningskomponentInfo.emplace_back(this->pakningskomponentInfoList[i]);
     }
     return pakningskomponentInfo;
@@ -1196,7 +1232,7 @@ std::vector<PPakningskomponentInfo> FestDeserializer::GetPakningskomponentInfo()
 std::vector<PReseptgyldighet> FestDeserializer::GetReseptgyldighet() const {
     std::vector<PReseptgyldighet> reseptgyldighet{};
     reseptgyldighet.reserve(numReseptgyldighet);
-    for (std::remove_const<typeof(numReseptgyldighet)>::type i = 0; i < numReseptgyldighet; i++) {
+    for (std::remove_const<decltype(numReseptgyldighet)>::type i = 0; i < numReseptgyldighet; i++) {
         reseptgyldighet.emplace_back(this->reseptgyldighetList[i]);
     }
     return reseptgyldighet;
@@ -1205,7 +1241,7 @@ std::vector<PReseptgyldighet> FestDeserializer::GetReseptgyldighet() const {
 std::vector<PValueWithCodeset> FestDeserializer::GetValueWithCodeset() const {
     std::vector<PValueWithCodeset> valueWithCodeset{};
     valueWithCodeset.reserve(numValueWithCodesetList);
-    for (std::remove_const<typeof(numValueWithCodesetList)>::type i = 0; i < numValueWithCodesetList; i++) {
+    for (std::remove_const<decltype(numValueWithCodesetList)>::type i = 0; i < numValueWithCodesetList; i++) {
         valueWithCodeset.emplace_back(this->valueWithCodesetList[i]);
     }
     return valueWithCodeset;
@@ -1214,7 +1250,7 @@ std::vector<PValueWithCodeset> FestDeserializer::GetValueWithCodeset() const {
 std::vector<FestUuid> FestDeserializer::GetFestIds() const {
     std::vector<FestUuid> uuids{};
     uuids.reserve(numFestUuid);
-    for (std::remove_const<typeof(numFestUuid)>::type i = 0; i < numFestUuid; i++) {
+    for (std::remove_const<decltype(numFestUuid)>::type i = 0; i < numFestUuid; i++) {
         uuids.emplace_back(festUuid[i]);
     }
     return uuids;
@@ -1223,7 +1259,7 @@ std::vector<FestUuid> FestDeserializer::GetFestIds() const {
 std::vector<PFestId> FestDeserializer::GetFestIdLists_0_0_0() const {
     std::vector<PFestId> festIds{};
     festIds.reserve(numFestUuidList_0_0_0);
-    for (std::remove_const<typeof(numFestUuidList_0_0_0)>::type i = 0; i < numFestUuidList_0_0_0; i++) {
+    for (std::remove_const<decltype(numFestUuidList_0_0_0)>::type i = 0; i < numFestUuidList_0_0_0; i++) {
         festIds.emplace_back(this->festUuidList_0_0_0[i]);
     }
     return festIds;
@@ -1232,7 +1268,7 @@ std::vector<PFestId> FestDeserializer::GetFestIdLists_0_0_0() const {
 std::vector<PFestId> FestDeserializer::GetFestIdLists_0_4_0() const {
     std::vector<PFestId> festIds{};
     festIds.reserve(numFestUuidList_0_4_0);
-    for (std::remove_const<typeof(numFestUuidList_0_4_0)>::type i = 0; i < numFestUuidList_0_4_0; i++) {
+    for (std::remove_const<decltype(numFestUuidList_0_4_0)>::type i = 0; i < numFestUuidList_0_4_0; i++) {
         festIds.emplace_back(this->festUuidList_0_4_0[i]);
     }
     return festIds;
@@ -1249,7 +1285,7 @@ std::vector<PFestId> FestDeserializer::GetFestIdLists() const {
 std::vector<PRefusjon> FestDeserializer::GetRefusjon() const {
     std::vector<PRefusjon> refusjon{};
     refusjon.reserve(numRefusjonList);
-    for (std::remove_const<typeof(numRefusjonList)>::type i = 0; i < numRefusjonList; i++) {
+    for (std::remove_const<decltype(numRefusjonList)>::type i = 0; i < numRefusjonList; i++) {
         refusjon.emplace_back(this->refusjonList[i]);
     }
     return refusjon;
@@ -1258,7 +1294,7 @@ std::vector<PRefusjon> FestDeserializer::GetRefusjon() const {
 std::vector<PElement_0_0_0> FestDeserializer::GetElement_0_0_0() const {
     std::vector<PElement_0_0_0> element{};
     element.reserve(numElement_0_0_0);
-    for (std::remove_const<typeof(numElement_0_0_0)>::type i = 0; i < numElement_0_0_0; i++) {
+    for (std::remove_const<decltype(numElement_0_0_0)>::type i = 0; i < numElement_0_0_0; i++) {
         element.emplace_back(this->elementList_0_0_0[i]);
     }
     return element;
@@ -1267,7 +1303,7 @@ std::vector<PElement_0_0_0> FestDeserializer::GetElement_0_0_0() const {
 std::vector<PElement_0_3_0> FestDeserializer::GetElement_0_3_0() const {
     std::vector<PElement_0_3_0> element{};
     element.reserve(numElement_0_3_0);
-    for (std::remove_const<typeof(numElement_0_3_0)>::type i = 0; i < numElement_0_3_0; i++) {
+    for (std::remove_const<decltype(numElement_0_3_0)>::type i = 0; i < numElement_0_3_0; i++) {
         element.emplace_back(this->elementList_0_3_0[i]);
     }
     return element;
@@ -1294,7 +1330,7 @@ std::vector<PElement> FestDeserializer::GetElement() const {
 std::vector<PRefRefusjonsvilkar_0_0_0> FestDeserializer::GetRefRefusjonsvilkar_0_0_0() const {
     std::vector<PRefRefusjonsvilkar_0_0_0> refRefusjonsvilkar{};
     refRefusjonsvilkar.reserve(numRefRefusjonsvilkar_0_0_0);
-    for (std::remove_const<typeof(numRefRefusjonsvilkar_0_0_0)>::type i = 0; i < numRefRefusjonsvilkar_0_0_0; i++) {
+    for (std::remove_const<decltype(numRefRefusjonsvilkar_0_0_0)>::type i = 0; i < numRefRefusjonsvilkar_0_0_0; i++) {
         refRefusjonsvilkar.emplace_back(this->refRefusjonsvilkarList_0_0_0[i]);
     }
     return refRefusjonsvilkar;
@@ -1303,7 +1339,7 @@ std::vector<PRefRefusjonsvilkar_0_0_0> FestDeserializer::GetRefRefusjonsvilkar_0
 std::vector<PRefRefusjonsvilkar_1_2_0> FestDeserializer::GetRefRefusjonsvilkar_1_2_0() const {
     std::vector<PRefRefusjonsvilkar_1_2_0> refRefusjonsvilkar{};
     refRefusjonsvilkar.reserve(numRefRefusjonsvilkar_1_2_0);
-    for (std::remove_const<typeof(numRefRefusjonsvilkar_1_2_0)>::type i = 0; i < numRefRefusjonsvilkar_1_2_0; i++) {
+    for (std::remove_const<decltype(numRefRefusjonsvilkar_1_2_0)>::type i = 0; i < numRefRefusjonsvilkar_1_2_0; i++) {
         refRefusjonsvilkar.emplace_back(this->refRefusjonsvilkarList_1_2_0[i]);
     }
     return refRefusjonsvilkar;
@@ -1330,7 +1366,7 @@ std::vector<PRefRefusjonsvilkar> FestDeserializer::GetRefRefusjonsvilkar() const
 std::vector<PRefusjonskode_0_0_0> FestDeserializer::GetRefusjonskode_0_0_0() const {
     std::vector<PRefusjonskode_0_0_0> refusjonskode{};
     refusjonskode.reserve(numRefusjonskode_0_0_0);
-    for (std::remove_const<typeof(numRefusjonskode_0_0_0)>::type i = 0; i < numRefusjonskode_0_0_0; i++) {
+    for (std::remove_const<decltype(numRefusjonskode_0_0_0)>::type i = 0; i < numRefusjonskode_0_0_0; i++) {
         refusjonskode.emplace_back(this->refusjonskodeList_0_0_0[i]);
     }
     return refusjonskode;
@@ -1339,7 +1375,7 @@ std::vector<PRefusjonskode_0_0_0> FestDeserializer::GetRefusjonskode_0_0_0() con
 std::vector<PRefusjonskode_0_1_0> FestDeserializer::GetRefusjonskode_0_1_0() const {
     std::vector<PRefusjonskode_0_1_0> refusjonskode{};
     refusjonskode.reserve(numRefusjonskode_0_1_0);
-    for (std::remove_const<typeof(numRefusjonskode_0_1_0)>::type i = 0; i < numRefusjonskode_0_1_0; i++) {
+    for (std::remove_const<decltype(numRefusjonskode_0_1_0)>::type i = 0; i < numRefusjonskode_0_1_0; i++) {
         refusjonskode.emplace_back(this->refusjonskodeList_0_1_0[i]);
     }
     return refusjonskode;
@@ -1348,7 +1384,7 @@ std::vector<PRefusjonskode_0_1_0> FestDeserializer::GetRefusjonskode_0_1_0() con
 std::vector<PRefusjonskode_1_2_0> FestDeserializer::GetRefusjonskode_1_2_0() const {
     std::vector<PRefusjonskode_1_2_0> refusjonskode{};
     refusjonskode.reserve(numRefusjonskode_1_2_0);
-    for (std::remove_const<typeof(numRefusjonskode_1_2_0)>::type i = 0; i < numRefusjonskode_1_2_0; i++) {
+    for (std::remove_const<decltype(numRefusjonskode_1_2_0)>::type i = 0; i < numRefusjonskode_1_2_0; i++) {
         refusjonskode.emplace_back(this->refusjonskodeList_1_2_0[i]);
     }
     return refusjonskode;
@@ -1381,7 +1417,7 @@ std::vector<PRefusjonskode> FestDeserializer::GetRefusjonskode() const {
 std::vector<PReferanse> FestDeserializer::GetReferanse() const {
     std::vector<PReferanse> referanse{};
     referanse.reserve(numReferanseList);
-    for (std::remove_const<typeof(numReferanseList)>::type i = 0; i < numReferanseList; i++) {
+    for (std::remove_const<decltype(numReferanseList)>::type i = 0; i < numReferanseList; i++) {
         referanse.emplace_back(this->referanseList[i]);
     }
     return referanse;
@@ -1390,7 +1426,7 @@ std::vector<PReferanse> FestDeserializer::GetReferanse() const {
 std::vector<PSubstansgruppe> FestDeserializer::GetSubstansgruppe() const {
     std::vector<PSubstansgruppe> substansgruppe{};
     substansgruppe.reserve(numSubstansgruppeList);
-    for (std::remove_const<typeof(numSubstansgruppeList)>::type i = 0; i < numSubstansgruppeList; i++) {
+    for (std::remove_const<decltype(numSubstansgruppeList)>::type i = 0; i < numSubstansgruppeList; i++) {
         substansgruppe.emplace_back(this->substansgruppeList[i]);
     }
     return substansgruppe;
@@ -1399,7 +1435,7 @@ std::vector<PSubstansgruppe> FestDeserializer::GetSubstansgruppe() const {
 std::vector<PSubstans> FestDeserializer::GetSubstans() const {
     std::vector<PSubstans> substans{};
     substans.reserve(numSubstansList);
-    for (std::remove_const<typeof(numSubstansList)>::type i = 0; i < numSubstansList; i++) {
+    for (std::remove_const<decltype(numSubstansList)>::type i = 0; i < numSubstansList; i++) {
         substans.emplace_back(this->substansList[i]);
     }
     return substans;
@@ -1408,7 +1444,7 @@ std::vector<PSubstans> FestDeserializer::GetSubstans() const {
 std::vector<PDoseFastTidspunkt> FestDeserializer::GetDoseFastTidspunkt() const {
     std::vector<PDoseFastTidspunkt> doseFastTidspunkt{};
     doseFastTidspunkt.reserve(numDoseFastTidspunktList);
-    for (std::remove_const<typeof(numDoseFastTidspunktList)>::type i = 0; i < numDoseFastTidspunktList; i++) {
+    for (std::remove_const<decltype(numDoseFastTidspunktList)>::type i = 0; i < numDoseFastTidspunktList; i++) {
         doseFastTidspunkt.emplace_back(this->doseFastTidspunktList[i]);
     }
     return doseFastTidspunkt;
@@ -1417,7 +1453,7 @@ std::vector<PDoseFastTidspunkt> FestDeserializer::GetDoseFastTidspunkt() const {
 std::vector<PDosering> FestDeserializer::GetDosering() const {
     std::vector<PDosering> dosering{};
     dosering.reserve(numDoseringList);
-    for (std::remove_const<typeof(numDoseringList)>::type i = 0; i < numDoseringList; i++) {
+    for (std::remove_const<decltype(numDoseringList)>::type i = 0; i < numDoseringList; i++) {
         dosering.emplace_back(this->doseringList[0]);
     }
     return dosering;
@@ -1426,7 +1462,7 @@ std::vector<PDosering> FestDeserializer::GetDosering() const {
 std::vector<PLegemiddelforbruk> FestDeserializer::GetLegemiddelforbruk() const {
     std::vector<PLegemiddelforbruk> legemiddelforbruk{};
     legemiddelforbruk.reserve(numLegemiddelforbrukList);
-    for (std::remove_const<typeof(numLegemiddelforbrukList)>::type i = 0; i < numLegemiddelforbrukList; i++) {
+    for (std::remove_const<decltype(numLegemiddelforbrukList)>::type i = 0; i < numLegemiddelforbrukList; i++) {
         legemiddelforbruk.emplace_back(this->legemiddelforbrukList[i]);
     }
     return legemiddelforbruk;
@@ -1435,20 +1471,20 @@ std::vector<PLegemiddelforbruk> FestDeserializer::GetLegemiddelforbruk() const {
 std::vector<PString> FestDeserializer::GetStringList() const {
     std::vector<PString> strings{};
     strings.reserve(numStringList);
-    for (std::remove_const<typeof(numStringList)>::type i = 0; i < numStringList; i++) {
+    for (std::remove_const<decltype(numStringList)>::type i = 0; i < numStringList; i++) {
         strings.emplace_back(this->stringList[i]);
     }
     return strings;
 }
 
 void FestDeserializer::ForEachMerkevare_0_0_0(const std::function<void(const POppfLegemiddelMerkevare_0_0_0 &)> &func) const {
-    for (std::remove_const<typeof(numMerkevare_0_0_0)>::type i = 0; i < numMerkevare_0_0_0; i++) {
+    for (std::remove_const<decltype(numMerkevare_0_0_0)>::type i = 0; i < numMerkevare_0_0_0; i++) {
         func(this->merkevare_0_0_0[i]);
     }
 }
 
 void FestDeserializer::ForEachMerkevare_0_4_0(const std::function<void(const POppfLegemiddelMerkevare_0_4_0 &)> &func) const {
-    for (std::remove_const<typeof(numMerkevare_0_4_0)>::type i = 0; i < numMerkevare_0_4_0; i++) {
+    for (std::remove_const<decltype(numMerkevare_0_4_0)>::type i = 0; i < numMerkevare_0_4_0; i++) {
         func(this->merkevare_0_4_0[i]);
     }
 }
@@ -1468,19 +1504,19 @@ void FestDeserializer::ForEachMerkevare(const std::function<void(const POppfLege
 }
 
 void FestDeserializer::ForEachPakning_0_0_0(const std::function<void(const POppfLegemiddelpakning_0_0_0 &)> &func) const {
-    for (std::remove_const<typeof(numPakning_0_0_0)>::type i = 0; i < numPakning_0_0_0; i++) {
+    for (std::remove_const<decltype(numPakning_0_0_0)>::type i = 0; i < numPakning_0_0_0; i++) {
         func(this->pakning_0_0_0[i]);
     }
 }
 
 void FestDeserializer::ForEachPakning_0_4_0(const std::function<void(const POppfLegemiddelpakning_0_4_0 &)> &func) const {
-    for (std::remove_const<typeof(numPakning_0_4_0)>::type i = 0; i < numPakning_0_4_0; i++) {
+    for (std::remove_const<decltype(numPakning_0_4_0)>::type i = 0; i < numPakning_0_4_0; i++) {
         func(this->pakning_0_4_0[i]);
     }
 }
 
 void FestDeserializer::ForEachPakning_1_3_0(const std::function<void(const POppfLegemiddelpakning_1_3_0 &)> &func) const {
-    for (std::remove_const<typeof(numPakning_1_3_0)>::type i = 0; i < numPakning_1_3_0; i++) {
+    for (std::remove_const<decltype(numPakning_1_3_0)>::type i = 0; i < numPakning_1_3_0; i++) {
         func(this->pakning_1_3_0[i]);
     }
 }
@@ -1505,13 +1541,13 @@ void FestDeserializer::ForEachPakning(const std::function<void(const POppfLegemi
 }
 
 void FestDeserializer::ForEachLegemiddelVirkestoff_0_0_0(const std::function<void(const POppfLegemiddelVirkestoff_0_0_0 &)> &func) const {
-    for (std::remove_const<typeof(numLegemiddelVirkestoff_0_0_0)>::type i = 0; i < numLegemiddelVirkestoff_0_0_0; i++) {
+    for (std::remove_const<decltype(numLegemiddelVirkestoff_0_0_0)>::type i = 0; i < numLegemiddelVirkestoff_0_0_0; i++) {
         func(this->legemiddelVirkestoff_0_0_0[i]);
     }
 }
 
 void FestDeserializer::ForEachLegemiddelVirkestoff_0_4_0(const std::function<void(const POppfLegemiddelVirkestoff_0_4_0 &)> &func) const {
-    for (std::remove_const<typeof(numLegemiddelVirkestoff_0_4_0)>::type i = 0; i < numLegemiddelVirkestoff_0_4_0; i++) {
+    for (std::remove_const<decltype(numLegemiddelVirkestoff_0_4_0)>::type i = 0; i < numLegemiddelVirkestoff_0_4_0; i++) {
         func(this->legemiddelVirkestoff_0_4_0[i]);
     }
 }
@@ -1531,31 +1567,31 @@ void FestDeserializer::ForEachLegemiddelVirkestoff(const std::function<void(cons
 }
 
 void FestDeserializer::ForEachMedForbrMatr(const std::function<void(const POppfMedForbrMatr &)> &func) const {
-    for (std::remove_const<typeof(numMedForbrMatr)>::type i = 0; i < numMedForbrMatr; i++) {
+    for (std::remove_const<decltype(numMedForbrMatr)>::type i = 0; i < numMedForbrMatr; i++) {
         func(this->medForbrMatr[i]);
     }
 }
 
 void FestDeserializer::ForEachNaringsmiddel(const std::function<void(const POppfNaringsmiddel &)> &func) const {
-    for (std::remove_const<typeof(numNaringsmiddel)>::type i = 0; i < numNaringsmiddel; i++) {
+    for (std::remove_const<decltype(numNaringsmiddel)>::type i = 0; i < numNaringsmiddel; i++) {
         func(this->naringsmiddel[i]);
     }
 }
 
 void FestDeserializer::ForEachBrystprotese(const std::function<void(const POppfBrystprotese &)> &func) const {
-    for (std::remove_const<typeof(numBrystprotese)>::type i = 0; i < numBrystprotese; i++) {
+    for (std::remove_const<decltype(numBrystprotese)>::type i = 0; i < numBrystprotese; i++) {
         func(this->brystprotese[i]);
     }
 }
 
 void FestDeserializer::ForEachLegemiddeldose_0_0_0(const std::function<void(const POppfLegemiddeldose_0_0_0 &)> &func) const {
-    for (std::remove_const<typeof(numLegemiddeldose_0_0_0)>::type i = 0; i < numLegemiddeldose_0_0_0; i++) {
+    for (std::remove_const<decltype(numLegemiddeldose_0_0_0)>::type i = 0; i < numLegemiddeldose_0_0_0; i++) {
         func(this->legemiddeldose_0_0_0[i]);
     }
 }
 
 void FestDeserializer::ForEachLegemiddeldose_0_4_0(const std::function<void(const POppfLegemiddeldose_0_4_0 &)> &func) const {
-    for (std::remove_const<typeof(numLegemiddeldose_0_4_0)>::type i = 0; i < numLegemiddeldose_0_4_0; i++) {
+    for (std::remove_const<decltype(numLegemiddeldose_0_4_0)>::type i = 0; i < numLegemiddeldose_0_4_0; i++) {
         func(this->legemiddeldose_0_4_0[i]);
     }
 }
@@ -1575,19 +1611,19 @@ void FestDeserializer::ForEachLegemiddeldose(const std::function<void(const POpp
 }
 
 void FestDeserializer::ForEachVirkestoffMedStyrke(const std::function<void(const POppfVirkestoffMedStyrke &)> &func) const {
-    for (std::remove_const<typeof(numVirkestoffMedStyrke)>::type i = 0; i < numVirkestoffMedStyrke; i++) {
+    for (std::remove_const<decltype(numVirkestoffMedStyrke)>::type i = 0; i < numVirkestoffMedStyrke; i++) {
         func(this->virkestoffMedStyrke[i]);
     }
 }
 
 void FestDeserializer::ForEachVirkestoff_0_0_0(const std::function<void(const POppfVirkestoff_0_0_0 &)> &func) const {
-    for (std::remove_const<typeof(numVirkestoff_0_0_0)>::type i = 0; i < numVirkestoff_0_0_0; i++) {
+    for (std::remove_const<decltype(numVirkestoff_0_0_0)>::type i = 0; i < numVirkestoff_0_0_0; i++) {
         func(this->virkestoff_0_0_0[i]);
     }
 }
 
 void FestDeserializer::ForEachVirkestoff_0_4_0(const std::function<void(const POppfVirkestoff_0_4_0 &)> &func) const {
-    for (std::remove_const<typeof(numVirkestoff_0_4_0)>::type i = 0; i < numVirkestoff_0_4_0; i++) {
+    for (std::remove_const<decltype(numVirkestoff_0_4_0)>::type i = 0; i < numVirkestoff_0_4_0; i++) {
         func(this->virkestoff_0_4_0[i]);
     }
 }
@@ -1607,13 +1643,13 @@ void FestDeserializer::ForEachVirkestoff(const std::function<void(const POppfVir
 }
 
 void FestDeserializer::ForEachKodeverk_0_0_0(const std::function<void(const POppfKodeverk_0_0_0 &)> &func) const {
-    for (std::remove_const<typeof(numKodeverk_0_0_0)>::type i = 0; i < numKodeverk_0_0_0; i++) {
+    for (std::remove_const<decltype(numKodeverk_0_0_0)>::type i = 0; i < numKodeverk_0_0_0; i++) {
         func(this->kodeverk_0_0_0[i]);
     }
 }
 
 void FestDeserializer::ForEachKodeverk_0_3_0(const std::function<void(const POppfKodeverk_0_3_0 &)> &func) const {
-    for (std::remove_const<typeof(numKodeverk_0_3_0)>::type i = 0; i < numKodeverk_0_3_0; i++) {
+    for (std::remove_const<decltype(numKodeverk_0_3_0)>::type i = 0; i < numKodeverk_0_3_0; i++) {
         func(this->kodeverk_0_3_0[i]);
     }
 }
@@ -1659,19 +1695,19 @@ void FestDeserializer::ForEachRefusjon(const std::function<void(const POppfRefus
 }
 
 void FestDeserializer::ForEachVilkar(const std::function<void(const POppfVilkar &)> &func) const {
-    for (std::remove_const<typeof(numVilkar)>::type i = 0; i < numVilkar; i++) {
+    for (std::remove_const<decltype(numVilkar)>::type i = 0; i < numVilkar; i++) {
         func(this->vilkar[i]);
     }
 }
 
 void FestDeserializer::ForEachVarselSlv_0_0_0(const std::function<void(const POppfVarselSlv_0_0_0 &)> &func) const {
-    for (std::remove_const<typeof(numVarselSlv_0_0_0)>::type i = 0; i < numVarselSlv_0_0_0; i++) {
+    for (std::remove_const<decltype(numVarselSlv_0_0_0)>::type i = 0; i < numVarselSlv_0_0_0; i++) {
         func(this->varselSlv_0_0_0[i]);
     }
 }
 
 void FestDeserializer::ForEachVarselSlv_0_4_0(const std::function<void(const POppfVarselSlv_0_4_0 &)> &func) const {
-    for (std::remove_const<typeof(numVarselSlv_0_4_0)>::type i = 0; i < numVarselSlv_0_4_0; i++) {
+    for (std::remove_const<decltype(numVarselSlv_0_4_0)>::type i = 0; i < numVarselSlv_0_4_0; i++) {
         func(this->varselSlv_0_4_0[i]);
     }
 }
@@ -1691,55 +1727,55 @@ void FestDeserializer::ForEachVarselSlv(const std::function<void(const POppfVars
 }
 
 void FestDeserializer::ForEachByttegruppe(const std::function<void(const POppfByttegruppe &)> &func) const {
-    for (std::remove_const<typeof(numByttegruppe)>::type i = 0; i < numByttegruppe; i++) {
+    for (std::remove_const<decltype(numByttegruppe)>::type i = 0; i < numByttegruppe; i++) {
         func(this->byttegruppe[i]);
     }
 }
 
 void FestDeserializer::ForEachInteraksjon(const std::function<void(const POppfInteraksjon &)> &func) const {
-    for (std::remove_const<typeof(numInteraksjon)>::type i = 0; i < numInteraksjon; i++) {
+    for (std::remove_const<decltype(numInteraksjon)>::type i = 0; i < numInteraksjon; i++) {
         func(this->interaksjon[i]);
     }
 }
 
 void FestDeserializer::ForEachInteraksjonIkkeVurdert(const std::function<void(const POppfInteraksjonIkkeVurdert &)> &func) const {
-    for (std::remove_const<typeof(numInteraksjonIkkeVurdert)>::type i = 0; i < numInteraksjonIkkeVurdert; i++) {
+    for (std::remove_const<decltype(numInteraksjonIkkeVurdert)>::type i = 0; i < numInteraksjonIkkeVurdert; i++) {
         func(this->interaksjonIkkeVurdert[i]);
     }
 }
 
 void FestDeserializer::ForEachStrDosering(const std::function<void(const POppfStrDosering &)> &func) const {
-    for (std::remove_const<typeof(numStrDosering)>::type i = 0; i < numStrDosering; i++) {
+    for (std::remove_const<decltype(numStrDosering)>::type i = 0; i < numStrDosering; i++) {
         func(this->strDosering[i]);
     }
 }
 
 void FestDeserializer::ForEachFests_V_0_0_0(const std::function<void(const PFest_V_0_0_0 &)> &func) const {
-    for (std::remove_const<typeof(numFests_V_0_0_0)>::type i = 0; i < numFests_V_0_0_0; i++) {
+    for (std::remove_const<decltype(numFests_V_0_0_0)>::type i = 0; i < numFests_V_0_0_0; i++) {
         func(this->fests_V_0_0_0[i]);
     }
 }
 
 void FestDeserializer::ForEachFests_V_0_2_0(const std::function<void(const PFest_V_0_2_0 &)> &func) const {
-    for (std::remove_const<typeof(numFests_V_0_2_0)>::type i = 0; i < numFests_V_0_2_0; i++) {
+    for (std::remove_const<decltype(numFests_V_0_2_0)>::type i = 0; i < numFests_V_0_2_0; i++) {
         func(this->fests_V_0_2_0[i]);
     }
 }
 
 void FestDeserializer::ForEachFests_V_0_3_0(const std::function<void(const PFest_V_0_3_0 &)> &func) const {
-    for (std::remove_const<typeof(numFests_V_0_3_0)>::type i = 0; i < numFests_V_0_3_0; i++) {
+    for (std::remove_const<decltype(numFests_V_0_3_0)>::type i = 0; i < numFests_V_0_3_0; i++) {
         func(this->fests_V_0_3_0[i]);
     }
 }
 
 void FestDeserializer::ForEachFests_V_0_4_0(const std::function<void(const PFest_V_0_4_0 &)> &func) const {
-    for (std::remove_const<typeof(numFests_V_0_4_0)>::type i = 0; i < numFests_V_0_4_0; i++) {
+    for (std::remove_const<decltype(numFests_V_0_4_0)>::type i = 0; i < numFests_V_0_4_0; i++) {
         func(this->fests_V_0_4_0[i]);
     }
 }
 
 void FestDeserializer::ForEachFests_V_1_3_0(const std::function<void(const PFest_V_1_3_0 &)> &func) const {
-    for (std::remove_const<typeof(numFests_V_1_3_0)>::type i = 0; i < numFests_V_1_3_0; i++) {
+    for (std::remove_const<decltype(numFests_V_1_3_0)>::type i = 0; i < numFests_V_1_3_0; i++) {
         func(this->fests_V_1_3_0[i]);
     }
 }

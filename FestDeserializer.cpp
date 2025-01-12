@@ -560,6 +560,11 @@ void FestDeserializer::Init() {
         fests_V_0_0_0 = (const PFest_V_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
         numFests_V_0_0_0 = header->numFests;
         offset += ((size_t) numFests_V_0_0_0) * sizeof(*fests_V_0_0_0);
+    } else {
+        numUint16List_V_0_0_0 = 0;
+        numFests_V_0_0_0 = 0;
+        uint16List_V_0_0_0 = nullptr;
+        fests_V_0_0_0 = nullptr;
     }
     {
         auto off = offset % alignment;
@@ -618,6 +623,9 @@ void FestDeserializer::Init() {
                 if (offset > mapsize) {
                     throw PackException("Fest list overflow (v0.2.0)");
                 }
+            } else {
+                fests_V_0_2_0 = nullptr;
+                numFests_V_0_2_0 = 0;
             }
         } else {
             uint16List = nullptr;
@@ -1130,7 +1138,7 @@ std::vector<POppfVirkestoff> FestDeserializer::GetVirkestoff() const {
 
 std::vector<POppfRefusjon_0_0_0> FestDeserializer::GetOppfRefusjon_0_0_0() const {
     std::vector<POppfRefusjon_0_0_0> result{};
-    for (std::remove_const<typeof(numRefusjon_0_0_0)>::type i = 0; i < numRefusjon_0_0_0; i++) {
+    for (std::remove_const<decltype(numRefusjon_0_0_0)>::type i = 0; i < numRefusjon_0_0_0; i++) {
         result.emplace_back(this->refusjon_0_0_0[i]);
     }
     return result;
@@ -1138,7 +1146,7 @@ std::vector<POppfRefusjon_0_0_0> FestDeserializer::GetOppfRefusjon_0_0_0() const
 
 std::vector<POppfRefusjon_1_4_0> FestDeserializer::GetOppfRefusjon_1_4_0() const {
     std::vector<POppfRefusjon_1_4_0> result{};
-    for (std::remove_const<typeof(numRefusjon_1_4_0)>::type i = 0; i < numRefusjon_1_4_0; i++) {
+    for (std::remove_const<decltype(numRefusjon_1_4_0)>::type i = 0; i < numRefusjon_1_4_0; i++) {
         result.emplace_back(this->refusjon_1_4_0[i]);
     }
     return result;

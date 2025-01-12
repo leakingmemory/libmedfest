@@ -174,7 +174,7 @@ PACK(struct FestSecondHeader_1_2_0 {
     uint16_t numRefusjonskode_1_2_0;
 });
 
-struct FestSecondHeader_1_3_0 {
+PACK(struct FestSecondHeader_1_3_0 {
     uint64_t magic;
     uint32_t stringblockSize;
     uint16_t secondHeaderSize;
@@ -196,7 +196,7 @@ struct FestSecondHeader_1_3_0 {
     uint16_t numRefRefusjonsvilkar_1_2_0;
     uint16_t numRefusjonskode_1_2_0;
     uint32_t numPakning_1_3_0;
-} __attribute__((__packed__));
+});
 
 PACK(struct FestSecondHeader {
     uint64_t magic;

@@ -409,6 +409,7 @@ public:
     [[nodiscard]] Legemiddelforbruk Unpack(const PLegemiddelforbruk &pLegemiddelforbruk) const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfoList(const PLegemiddelpakning_0_0_0 &) const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfoList(const PLegemiddelpakning_0_4_0 &) const;
+    [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfoList(const PLegemiddelpakning_1_3_0 &) const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfoList(const PLegemiddelpakning &) const;
     [[nodiscard]] std::vector<PElement_0_0_0> GetElementList(const POppfKodeverk_0_0_0 &) const;
     [[nodiscard]] std::vector<PElement_0_3_0> GetElementList(const POppfKodeverk_0_3_0 &) const;

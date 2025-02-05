@@ -3148,6 +3148,10 @@ std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemidd
     return Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
 }
 
+std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemiddelpakning_1_3_0 &ppakning) const {
+    return Unpack(pakningsinfoList, numPakningsinfo, ppakning.pakningsinfo);
+}
+
 std::vector<PPakningsinfo> FestDeserializer::GetPakningsinfoList(const PLegemiddelpakning &lp) const {
     const std::variant<PLegemiddelpakning_0_0_0,PLegemiddelpakning_0_4_0,PLegemiddelpakning_1_3_0> &p = lp;
     if (std::holds_alternative<PLegemiddelpakning_1_3_0>(p)) {

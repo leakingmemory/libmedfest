@@ -442,7 +442,11 @@ std::vector<POppfVirkestoffMedStyrke> FestVectors::GetVirkestoffMedStyrke(const 
 }
 
 std::vector<POppfVirkestoff> FestVectors::GetVirkestoff(const FestDeserializer &festDeserializer) const {
-    if (std::holds_alternative<PFest_V_0_4_0>(festV)) {
+    if (std::holds_alternative<PFest_V_1_3_0>(festV)) {
+        auto indices = ItemsAsVector(virkestoff, std::get<PFest_V_1_3_0>(festV).virkestoff);
+        auto objects = festDeserializer.GetVirkestoff_0_4_0();
+        return ObjectsAsVector<POppfVirkestoff>(objects, indices);
+    } else if (std::holds_alternative<PFest_V_0_4_0>(festV)) {
         auto indices = ItemsAsVector(virkestoff, std::get<PFest_V_0_4_0>(festV).virkestoff);
         auto objects = festDeserializer.GetVirkestoff_0_4_0();
         return ObjectsAsVector<POppfVirkestoff>(objects, indices);

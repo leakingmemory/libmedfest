@@ -5,7 +5,7 @@
 #ifndef LEGEMFEST_GENERICLISTSTORAGE_H
 #define LEGEMFEST_GENERICLISTSTORAGE_H
 
-#include "Struct/Packed/packed.h"
+#include "packed.h"
 #include <concepts>
 #include <cstdint>
 #include <vector>

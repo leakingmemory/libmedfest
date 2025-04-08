@@ -418,6 +418,8 @@ public:
     [[nodiscard]] std::vector<PReseptgyldighet> GetReseptgyldighetList(const PLegemiddelMerkevare_0_4_0 &) const;
     [[nodiscard]] std::vector<PReseptgyldighet> GetReseptgyldighetList(const PLegemiddelMerkevare &) const;
     [[nodiscard]] std::vector<FestUuid> GetRefMerkevare(const PLegemiddelVirkestoff &pvirkestoff) const;
+    [[nodiscard]] std::vector<PFestId> GetSortertVirkestoffMedStyrke(const PLegemiddel &pLegemiddel) const;
+    [[nodiscard]] std::vector<PFestId> GetSortertVirkestoffUtenStyrke(const PLegemiddelMerkevare &pLegemiddelMerkevare) const;
     [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems32 &) const;
     [[nodiscard]] std::vector<FestUuid> GetFestUuids(const GenericListItems64 &) const;
     [[nodiscard]] std::vector<FestUuid> GetFestUuids(const std::variant<GenericListItems32,GenericListItems64> &) const;

@@ -3217,6 +3217,32 @@ std::vector<FestUuid> FestDeserializer::GetRefMerkevare(const PLegemiddelVirkest
     }
 }
 
+std::vector<PFestId> FestDeserializer::GetSortertVirkestoffMedStyrke(const PLegemiddel &pLegemiddel) const {
+    struct {
+        const FestDeserializer *deserializer;
+        std::vector<PFestId> operator () (const PLegemiddel_0_0_0 &pLegemiddel) const {
+            return deserializer->Unpack(deserializer->festUuidList_0_0_0, deserializer->numFestUuidList_0_0_0, pLegemiddel.sortertVirkestoffMedStyrke);
+        }
+        std::vector<PFestId> operator () (const PLegemiddel_0_4_0 &pLegemiddel) const {
+            return deserializer->Unpack(deserializer->festUuidList_0_4_0, deserializer->numFestUuidList_0_4_0, pLegemiddel.sortertVirkestoffMedStyrke);
+        }
+    } visitor{.deserializer = this};
+    return std::visit(visitor, static_cast<const std::variant<PLegemiddel_0_0_0,PLegemiddel_0_4_0> &>(pLegemiddel));
+}
+
+std::vector<PFestId> FestDeserializer::GetSortertVirkestoffUtenStyrke(const PLegemiddelMerkevare &pLegemiddelMerkevare) const {
+    struct {
+        const FestDeserializer *deserializer;
+        std::vector<PFestId> operator () (const PLegemiddelMerkevare_0_0_0 &pLegemiddel) const {
+            return deserializer->Unpack(deserializer->festUuidList_0_0_0, deserializer->numFestUuidList_0_0_0, pLegemiddel.sortertVirkestoffUtenStyrke);
+        }
+        std::vector<PFestId> operator () (const PLegemiddelMerkevare_0_4_0 &pLegemiddel) const {
+            return deserializer->Unpack(deserializer->festUuidList_0_4_0, deserializer->numFestUuidList_0_4_0, pLegemiddel.sortertVirkestoffUtenStyrke);
+        }
+    } visitor{.deserializer = this};
+    return std::visit(visitor, static_cast<const std::variant<PLegemiddelMerkevare_0_4_0,PLegemiddelMerkevare_0_0_0> &>(pLegemiddelMerkevare));
+}
+
 std::vector<FestUuid> FestDeserializer::GetFestUuids(const GenericListItems32 &items) const {
     std::vector<FestUuid> ids{};
     {

@@ -54,7 +54,7 @@ public:
     [[nodiscard]] KanApnes GetKanApnes() const;
     [[nodiscard]] Bolus GetBolus() const;
     [[nodiscard]] InjeksjonshastighetBolus GetInjeksjonshastighetBolus() const;
-    [[nodiscard]] MaybeBoolean GetBlandingsveske();
+    [[nodiscard]] MaybeBoolean GetBlandingsveske() const;
 };
 
 

@@ -24,6 +24,7 @@ public:
     PLegemiddel_0_0_0(const Legemiddel &legemiddel, std::string &strblock, std::map<std::string,uint32_t> &cache,
                 FestUuidList_0_0_0 &festUuidList, ValueWithCodesetList &valueWithCodesetList);
     bool operator == (const PLegemiddel_0_0_0 &) const;
+    PAdministreringLegemiddel GetAdministreringLegemiddel() const;
 };
 
 class PLegemiddel_0_4_0 : public PLegemiddelCore_0_4_0 {
@@ -36,12 +37,14 @@ public:
                 FestUuidList_0_4_0 &festUuidList, ValueWithCodesetList &valueWithCodesetList);
     PLegemiddel_0_4_0(const PLegemiddel_0_0_0 &);
     bool operator == (const PLegemiddel_0_4_0 &) const;
+    PAdministreringLegemiddel GetAdministreringLegemiddel() const;
 };
 
 class PLegemiddel : public PLegemiddelCore, public std::variant<PLegemiddel_0_0_0,PLegemiddel_0_4_0> {
 public:
     PLegemiddel(const PLegemiddel_0_0_0 &);
     PLegemiddel(const PLegemiddel_0_4_0 &);
+    PAdministreringLegemiddel GetAdministreringLegemiddel() const;
 };
 
 #endif //LEGEMFEST_PLEGEMIDDEL_H

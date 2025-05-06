@@ -7,6 +7,7 @@
 
 #include "PValueWithCodeset.h"
 #include "GenericListStorage.h"
+#include "../Decoded/MaybeBoolean.h"
 
 class FestDeserializer;
 class AdministreringLegemiddel;
@@ -31,6 +32,7 @@ public:
     PAdministreringLegemiddel(const AdministreringLegemiddel &administreringLegemiddel, std::string &strblock,
                               std::map<std::string,uint32_t> &cache, ValueWithCodesetList &valueWithCodesetList);
     bool operator == (const PAdministreringLegemiddel &) const;
+    MaybeBoolean IsBlandingsveske() const;
 };
 
 

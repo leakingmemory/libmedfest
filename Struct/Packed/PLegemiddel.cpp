@@ -19,6 +19,10 @@ bool PLegemiddel_0_0_0::operator==(const PLegemiddel_0_0_0 &other) const {
            sortertVirkestoffMedStyrke == other.sortertVirkestoffMedStyrke;
 }
 
+PAdministreringLegemiddel PLegemiddel_0_0_0::GetAdministreringLegemiddel() const {
+    return administreringLegemiddel;
+}
+
 PLegemiddel_0_4_0::PLegemiddel_0_4_0(const Legemiddel &legemiddel, std::string &strblock, std::map<std::string,uint32_t> &cache,
                          FestUuidList_0_4_0 &festUuidList, ValueWithCodesetList &valueWithCodesetList) :
         PLegemiddelCore_0_4_0(legemiddel, strblock, cache, festUuidList),
@@ -31,6 +35,10 @@ PLegemiddel_0_4_0::PLegemiddel_0_4_0(const PLegemiddel_0_0_0 &p) :
         administreringLegemiddel(p.administreringLegemiddel),
         sortertVirkestoffMedStyrke(p.sortertVirkestoffMedStyrke.CastToWider<GenericListItems64>()) {}
 
+PAdministreringLegemiddel PLegemiddel_0_4_0::GetAdministreringLegemiddel() const {
+    return administreringLegemiddel;
+}
+
 bool PLegemiddel_0_4_0::operator==(const PLegemiddel_0_4_0 &other) const {
     return static_cast<const PLegemiddelCore_0_4_0>(*this) == static_cast<const PLegemiddelCore_0_4_0>(other) &&
            administreringLegemiddel == other.administreringLegemiddel &&
@@ -39,3 +47,9 @@ bool PLegemiddel_0_4_0::operator==(const PLegemiddel_0_4_0 &other) const {
 
 PLegemiddel::PLegemiddel(const PLegemiddel_0_0_0 &l) : PLegemiddelCore(l), std::variant<PLegemiddel_0_0_0,PLegemiddel_0_4_0>(l) {}
 PLegemiddel::PLegemiddel(const PLegemiddel_0_4_0 &l) : PLegemiddelCore(l), std::variant<PLegemiddel_0_0_0,PLegemiddel_0_4_0>(l) {}
+
+PAdministreringLegemiddel PLegemiddel::GetAdministreringLegemiddel() const {
+    return std::visit([] (const auto &legemiddel) {
+        return legemiddel.GetAdministreringLegemiddel();
+    }, static_cast<const std::variant<PLegemiddel_0_0_0,PLegemiddel_0_4_0> &>(*this));
+}

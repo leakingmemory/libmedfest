@@ -34,7 +34,7 @@ endif()
 add_library(medfest SHARED FestZip.cpp libzip_zip.cpp libzip_file.cpp FestObjectStream.cpp XMLParser.cpp
         FestSerializer.cpp FestDeserializer.cpp FestVectors.cpp FestDeserializer_Preload.cpp
         include/Struct/Packed/packed.h)
-set_target_properties(medfest PROPERTIES SOVERSION 12 VERSION 12.0.0)
+set_target_properties(medfest PROPERTIES SOVERSION 13 VERSION 13.0.0)
 include_directories(medfest include)
 include_directories(medfest ${libzip_INCLUDE_DIRS} )
 if (WIN32)

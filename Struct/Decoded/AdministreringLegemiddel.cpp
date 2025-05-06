@@ -44,6 +44,6 @@ InjeksjonshastighetBolus AdministreringLegemiddel::GetInjeksjonshastighetBolus()
     return injeksjonshastighetBolus;
 }
 
-MaybeBoolean AdministreringLegemiddel::GetBlandingsveske() {
+MaybeBoolean AdministreringLegemiddel::GetBlandingsveske() const {
     return blandingsveske;
 }

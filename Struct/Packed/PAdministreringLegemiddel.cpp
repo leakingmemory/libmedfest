@@ -18,7 +18,8 @@ PAdministreringLegemiddel::PAdministreringLegemiddel(const AdministreringLegemid
         deling(administreringLegemiddel.GetDeling(), strblock, cache),
         kanApnes(administreringLegemiddel.GetKanApnes(), strblock, cache),
         bolus(administreringLegemiddel.GetBolus(), strblock, cache),
-        injeksjonshastighetBolus(administreringLegemiddel.GetInjeksjonshastighetBolus(), strblock, cache) {
+        injeksjonshastighetBolus(administreringLegemiddel.GetInjeksjonshastighetBolus(), strblock, cache),
+        blandingsveske(ToRaw(administreringLegemiddel.GetBlandingsveske())){
     {
         std::vector<PValueWithCodeset> list{};
         {
@@ -63,4 +64,8 @@ bool PAdministreringLegemiddel::operator==(const PAdministreringLegemiddel &othe
            bolus == other.bolus &&
            injeksjonshastighetBolus == other.injeksjonshastighetBolus &&
            blandingsveske == other.blandingsveske;
+}
+
+MaybeBoolean PAdministreringLegemiddel::IsBlandingsveske() const {
+    return FromRaw(blandingsveske);
 }

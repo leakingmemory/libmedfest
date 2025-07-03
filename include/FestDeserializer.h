@@ -219,8 +219,16 @@ public:
     [[nodiscard]] std::vector<POppfRefusjon_0_0_0> GetOppfRefusjon_0_0_0() const;
     [[nodiscard]] std::vector<POppfRefusjon_1_4_0> GetOppfRefusjon_1_4_0() const;
     [[nodiscard]] std::vector<POppfRefusjon> GetOppfRefusjon() const;
+    [[nodiscard]] std::vector<POppfVilkar> GetOppfVilkar() const;
+    [[nodiscard]] std::vector<POppfVarselSlv_0_4_0> GetVarselSlv_0_4_0() const;
+    [[nodiscard]] std::vector<POppfVarselSlv_0_0_0> GetVarselSlv_0_0_0() const;
+    [[nodiscard]] std::vector<POppfVarselSlv> GetVarselSlv() const;
     [[nodiscard]] std::vector<POppfKodeverk_0_0_0> GetOppfKodeverk_0_0_0() const;
     [[nodiscard]] std::vector<POppfKodeverk_0_3_0> GetOppfKodeverk_0_3_0() const;
+    [[nodiscard]] std::vector<POppfByttegruppe> GetByttegruppe() const;
+    [[nodiscard]] std::vector<POppfInteraksjon> GetInteraksjon() const;
+    [[nodiscard]] std::vector<POppfInteraksjonIkkeVurdert> GetInteraksjonIkkeVurdert() const;
+    [[nodiscard]] std::vector<POppfStrDosering> GetStrDosering() const;
     [[nodiscard]] std::vector<PString> GetStrings() const;
     [[nodiscard]] std::vector<PPrisVare> GetPrisVare() const;
     [[nodiscard]] std::vector<PPakningsinfo> GetPakningsinfo() const;

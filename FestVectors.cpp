@@ -491,6 +491,38 @@ std::vector<POppfRefusjon> FestVectors::GetRefusjon(const FestDeserializer &fest
     return result;
 }
 
+std::vector<POppfVilkar> FestVectors::GetVilkar(const FestDeserializer &festDeserializer) const {
+    AsVector(vilkar, GetOppfVilkar);
+}
+
+std::vector<POppfVarselSlv_0_4_0> FestVectors::GetVarselSlv_0_4_0(const FestDeserializer &festDeserializer) const {
+    AsVector(varselSlv, GetVarselSlv_0_4_0);
+}
+
+std::vector<POppfVarselSlv_0_0_0> FestVectors::GetVarselSlv_0_0_0(const FestDeserializer &festDeserializer) const {
+    AsVector(varselSlv, GetVarselSlv_0_0_0);
+}
+
+std::vector<POppfVarselSlv> FestVectors::GetVarselSlv(const FestDeserializer &festDeserializer) const {
+    std::vector<POppfVarselSlv> result{};
+    if (festDeserializer.GetVersionMajor() > 1 ||
+        (festDeserializer.GetVersionMajor() == 1 && festDeserializer.GetVersionMinor() > 0) ||
+        (festDeserializer.GetVersionMajor() == 0 && festDeserializer.GetVersionMinor() > 3)) {
+        auto varselSlvVec = GetVarselSlv_0_4_0(festDeserializer);
+        result.reserve(varselSlvVec.size());
+        for (const auto &varselSlv : varselSlvVec) {
+            result.emplace_back(varselSlv);
+        }
+    } else {
+        auto varselSlvVec = GetVarselSlv_0_0_0(festDeserializer);
+        result.reserve(varselSlvVec.size());
+        for (const auto &varselSlv : varselSlvVec) {
+            result.emplace_back(varselSlv);
+        }
+    }
+    return result;
+}
+
 std::vector<POppfKodeverk_0_0_0> FestVectors::GetKodeverk_0_0_0(const FestDeserializer &festDeserializer) const {
     AsVector(kodeverk, GetOppfKodeverk_0_0_0);
 }
@@ -515,4 +547,20 @@ std::vector<POppfKodeverk> FestVectors::GetKodeverk(const FestDeserializer &fest
         }
     }
     return kodeverk;
+}
+
+std::vector<POppfByttegruppe> FestVectors::GetByttegruppe(const FestDeserializer &festDeserializer) const {
+    AsVector(byttegruppe, GetByttegruppe);
+}
+
+std::vector<POppfInteraksjon> FestVectors::GetInteraksjon(const FestDeserializer &festDeserializer) const {
+    AsVector(interaksjon, GetInteraksjon);
+}
+
+std::vector <POppfInteraksjonIkkeVurdert> FestVectors::GetInteraksjonIkkeVurdert(const FestDeserializer &festDeserializer) const {
+    AsVector(interaksjonIkkeVurdert, GetInteraksjonIkkeVurdert);
+}
+
+std::vector<POppfStrDosering> FestVectors::GetStrDosering(const FestDeserializer &festDeserializer) const {
+    AsVector(strDosering, GetStrDosering);
 }

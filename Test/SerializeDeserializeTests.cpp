@@ -1088,6 +1088,32 @@ int main() {
         std::cout << "DB 2 v0.0.0 size " << fest2Db_0_0_0.size() << "\n";
 
         {
+            std::string cycledFestDb;
+            {
+                FestDeserializer festDeserializerDb2{fest2Db.data(), fest2Db.size()};
+                Fest fest1Cycle{};
+                Fest fest2Cycle{};
+                {
+                    AssertVersion(festDeserializerDb2, 1, 4, 0);
+                    auto festVectors = GetFestVectors(festDeserializerDb2);
+                    AssertSize(festVectors, 2);
+                    auto fest1 = festVectors[0];
+                    auto fest2 = festVectors[1];
+                    AssertEquals(festVersion1, fest1.GetDato());
+                    AssertEquals(festVersion2, fest2.GetDato());
+                    AssertFest1NewTermsV1_3_0(festDeserializerDb2, fest1);
+                    AssertFest2NewTerms(festDeserializerDb2, fest2);
+                    AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2, fest1);
+                    AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2, fest2);
+
+                    fest1Cycle.From(festDeserializerDb2, fest1);
+                    fest2Cycle.From(festDeserializerDb2, fest2);
+                }
+                cycledFestDb = WriteFest([&fest1Cycle, &fest2Cycle](FestSerializer &serializer) {
+                    serializer.Serialize(fest1Cycle);
+                    serializer.Serialize(fest2Cycle);
+                });
+            }
             FestDeserializer festDeserializerDb2{fest2Db.data(), fest2Db.size()};
             {
                 AssertVersion(festDeserializerDb2, 1, 4, 0);

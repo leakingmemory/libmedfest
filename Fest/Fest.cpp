@@ -3,6 +3,8 @@
 //
 
 #include <Fest/Fest.h>
+#include <FestDeserializer.h>
+#include <FestVectors.h>
 #include "KatLegemiddelMerkevare.h"
 #include "KatLegemiddelVirkestoff.h"
 #include "KatHandelsvare.h"
@@ -34,6 +36,78 @@ void HentetDato::Merge() {
 
 std::string Fest::GetName() const {
     return "FEST";
+}
+
+void Fest::From(const FestDeserializer &festDeserializer, const FestVectors &festVectors) {
+    hentetDato = festVectors.GetDato();
+    for (const auto &pmerkevare : festVectors.GetLegemiddelMerkevare(festDeserializer)) {
+        auto merkevare = festDeserializer.Unpack(pmerkevare);
+        oppfLegemiddelMerkevare.emplace_back(merkevare);
+    }
+    for (const auto &ppakning : festVectors.GetLegemiddelPakning(festDeserializer)) {
+        auto pakning = festDeserializer.Unpack(ppakning);
+        oppfLegemiddelpakning.emplace_back(pakning);
+    }
+    for (const auto &pvirkestoff : festVectors.GetVirkestoff(festDeserializer)) {
+        auto virkestoff = festDeserializer.Unpack(pvirkestoff);
+        oppfVirkestoff.emplace_back(virkestoff);
+    }
+    for (const auto &pvirkestoffMedStyrke : festVectors.GetVirkestoffMedStyrke(festDeserializer)) {
+        auto virkestoffMedStyrke = festDeserializer.Unpack(pvirkestoffMedStyrke);
+        oppfVirkestoffMedStyrke.emplace_back(virkestoffMedStyrke);
+    }
+    for (const auto &plegemiddelVirkestoff : festVectors.GetLegemiddelVirkestoff(festDeserializer)) {
+        auto legemiddelVirkestoff = festDeserializer.Unpack(plegemiddelVirkestoff);
+        oppfLegemiddelVirkestoff.emplace_back(legemiddelVirkestoff);
+    }
+    for (const auto &pmedForbrMatr : festVectors.GetMedForbrMatr(festDeserializer)) {
+        auto medForbrMatr = festDeserializer.Unpack(pmedForbrMatr);
+        oppfMedForbrVare.emplace_back(medForbrMatr);
+    }
+    for (const auto &pnaringsmiddel : festVectors.GetNaringsmiddel(festDeserializer)) {
+        auto naringsmiddel = festDeserializer.Unpack(pnaringsmiddel);
+        oppfNaringsmiddel.emplace_back(naringsmiddel);
+    }
+    for (const auto &pbrystprotese : festVectors.GetBrystprotese(festDeserializer)) {
+        auto brystprotese = festDeserializer.Unpack(pbrystprotese);
+        oppfBrystprotese.emplace_back(brystprotese);
+    }
+    for (const auto &prefusjon : festVectors.GetRefusjon(festDeserializer)) {
+        auto refusjon = festDeserializer.Unpack(prefusjon);
+        oppfRefusjon.emplace_back(refusjon);
+    }
+    for (const auto &pvilkar : festVectors.GetVilkar(festDeserializer)) {
+        auto vilkar = festDeserializer.Unpack(pvilkar);
+        oppfVilkar.emplace_back(vilkar);
+    }
+    for (const auto &pvarselSlv : festVectors.GetVarselSlv(festDeserializer)) {
+        auto varselSlv = festDeserializer.Unpack(pvarselSlv);
+        oppfVarselSlv.emplace_back(varselSlv);
+    }
+    for (const auto &pkodeverk : festVectors.GetKodeverk(festDeserializer)) {
+        auto kodeverk = festDeserializer.Unpack(pkodeverk);
+        oppfKodeverk.emplace_back(kodeverk);
+    }
+    for (const auto &pbyttegruppe : festVectors.GetByttegruppe(festDeserializer)) {
+        auto byttegruppe = festDeserializer.Unpack(pbyttegruppe);
+        oppfByttegruppe.emplace_back(byttegruppe);
+    }
+    for (const auto &plegemiddeldose : festVectors.GetLegemiddeldose(festDeserializer)) {
+        auto legemiddeldose = festDeserializer.Unpack(plegemiddeldose);
+        oppfLegemiddeldose.emplace_back(legemiddeldose);
+    }
+    for (const auto &pinteraksjon : festVectors.GetInteraksjon(festDeserializer)) {
+        auto interaksjon = festDeserializer.Unpack(pinteraksjon);
+        oppfInteraksjon.emplace_back(interaksjon);
+    }
+    for (const auto &pinteraksjonIkkeVurdert : festVectors.GetInteraksjonIkkeVurdert(festDeserializer)) {
+        auto interaksjonIkkeVurdert = festDeserializer.Unpack(pinteraksjonIkkeVurdert);
+        oppfInteraksjonIkkeVurdert.emplace_back(interaksjonIkkeVurdert);
+    }
+    for (const auto &pstrDosering : festVectors.GetStrDosering(festDeserializer)) {
+        auto strDosering = festDeserializer.Unpack(pstrDosering);
+        oppfStrDosering.emplace_back(strDosering);
+    }
 }
 
 void Fest::Add(const OppfLegemiddelMerkevare &oppf) {

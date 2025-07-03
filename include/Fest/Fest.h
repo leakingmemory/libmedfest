@@ -74,6 +74,8 @@ public:
 
 class XmlOppfLegemiddelpakning;
 class XmlOppfVirkestoff;
+class FestDeserializer;
+class FestVectors;
 
 class Fest : public XMLObject {
 private:
@@ -103,6 +105,7 @@ public:
     std::string GetHentetDato() {
         return hentetDato;
     }
+    void From(const FestDeserializer &, const FestVectors &);
     void Add(const OppfLegemiddelMerkevare &);
     void Add(const XmlOppfLegemiddelMerkevare &);
     void Add(const OppfLegemiddelpakning &);

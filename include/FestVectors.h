@@ -21,9 +21,17 @@ class POppfVirkestoff;
 class POppfRefusjon_0_0_0;
 class POppfRefusjon_1_4_0;
 class POppfRefusjon;
+class POppfVilkar;
+class POppfVarselSlv_0_4_0;
+class POppfVarselSlv_0_0_0;
+class POppfVarselSlv;
 class POppfKodeverk_0_0_0;
 class POppfKodeverk_0_3_0;
 class POppfKodeverk;
+class POppfByttegruppe;
+class POppfInteraksjon;
+class POppfInteraksjonIkkeVurdert;
+class POppfStrDosering;
 
 class FestVectors {
 private:
@@ -69,9 +77,17 @@ public:
     [[nodiscard]] std::vector<POppfRefusjon_0_0_0> GetRefusjon_0_0_0(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfRefusjon_1_4_0> GetRefusjon_1_4_0(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfRefusjon> GetRefusjon(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfVilkar> GetVilkar(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfVarselSlv_0_4_0> GetVarselSlv_0_4_0(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfVarselSlv_0_0_0> GetVarselSlv_0_0_0(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfVarselSlv> GetVarselSlv(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfKodeverk_0_0_0> GetKodeverk_0_0_0(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfKodeverk_0_3_0> GetKodeverk_0_3_0(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfKodeverk> GetKodeverk(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfByttegruppe> GetByttegruppe(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfInteraksjon> GetInteraksjon(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfInteraksjonIkkeVurdert> GetInteraksjonIkkeVurdert(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfStrDosering> GetStrDosering(const FestDeserializer &) const;
 };
 
 

@@ -1168,6 +1168,47 @@ std::vector<POppfRefusjon> FestDeserializer::GetOppfRefusjon() const {
     return dst;
 }
 
+std::vector<POppfVilkar> FestDeserializer::GetOppfVilkar() const {
+    std::vector<POppfVilkar> result{};
+    result.reserve(numVilkar);
+    for (std::remove_const<decltype(numVilkar)>::type i = 0; i < numVilkar; i++) {
+        result.emplace_back(this->vilkar[i]);
+    }
+    return result;
+}
+
+std::vector<POppfVarselSlv_0_4_0> FestDeserializer::GetVarselSlv_0_4_0() const {
+    std::vector<POppfVarselSlv_0_4_0> result{};
+    result.reserve(numVarselSlv_0_4_0);
+    for (std::remove_const<decltype(numVarselSlv_0_4_0)>::type i = 0; i < numVarselSlv_0_4_0; i++) {
+        result.emplace_back(this->varselSlv_0_4_0[i]);
+    }
+    return result;
+}
+
+std::vector<POppfVarselSlv_0_0_0> FestDeserializer::GetVarselSlv_0_0_0() const {
+    std::vector<POppfVarselSlv_0_0_0> result{};
+    result.reserve(numVarselSlv_0_0_0);
+    for (std::remove_const<decltype(numVarselSlv_0_0_0)>::type i = 0; i < numVarselSlv_0_0_0; i++) {
+        result.emplace_back(this->varselSlv_0_0_0[i]);
+    }
+    return result;
+}
+
+std::vector<POppfVarselSlv> FestDeserializer::GetVarselSlv() const {
+    std::vector<POppfVarselSlv> dst{};
+    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 0) || (versionMajor == 0 && versionMinor > 3)) {
+        for (const auto &src : GetVarselSlv_0_4_0()) {
+            dst.emplace_back(src);
+        }
+    } else {
+        for (const auto &src : GetVarselSlv_0_0_0()) {
+            dst.emplace_back(src);
+        }
+    }
+    return dst;
+}
+
 std::vector<POppfKodeverk_0_0_0> FestDeserializer::GetOppfKodeverk_0_0_0() const {
     std::vector<POppfKodeverk_0_0_0> result{};
     for (std::remove_const<decltype(numKodeverk_0_0_0)>::type i = 0; i < numKodeverk_0_0_0; i++) {
@@ -1180,6 +1221,42 @@ std::vector<POppfKodeverk_0_3_0> FestDeserializer::GetOppfKodeverk_0_3_0() const
     std::vector<POppfKodeverk_0_3_0> result{};
     for (std::remove_const<decltype(numKodeverk_0_3_0)>::type i = 0; i < numKodeverk_0_3_0; i++) {
         result.emplace_back(this->kodeverk_0_3_0[i]);
+    }
+    return result;
+}
+
+std::vector<POppfByttegruppe> FestDeserializer::GetByttegruppe() const {
+    std::vector<POppfByttegruppe> result{};
+    result.reserve(numByttegruppe);
+    for (std::remove_const<decltype(numByttegruppe)>::type i = 0; i < numByttegruppe; i++) {
+        result.emplace_back(this->byttegruppe[i]);
+    }
+    return result;
+}
+
+std::vector<POppfInteraksjon> FestDeserializer::GetInteraksjon() const {
+    std::vector<POppfInteraksjon> result{};
+    result.reserve(numInteraksjon);
+    for (std::remove_const<decltype(numInteraksjon)>::type i = 0; i < numInteraksjon; i++) {
+        result.emplace_back(this->interaksjon[i]);
+    }
+    return result;
+}
+
+std::vector<POppfInteraksjonIkkeVurdert> FestDeserializer::GetInteraksjonIkkeVurdert() const {
+    std::vector<POppfInteraksjonIkkeVurdert> result{};
+    result.reserve(numInteraksjonIkkeVurdert);
+    for (std::remove_const<decltype(numInteraksjonIkkeVurdert)>::type i = 0; i < numInteraksjonIkkeVurdert; i++) {
+        result.emplace_back(this->interaksjonIkkeVurdert[i]);
+    }
+    return result;
+}
+
+std::vector<POppfStrDosering> FestDeserializer::GetStrDosering() const {
+    std::vector<POppfStrDosering> result{};
+    result.reserve(numStrDosering);
+    for (std::remove_const<decltype(numStrDosering)>::type i = 0; i < numStrDosering; i++) {
+        result.emplace_back(this->strDosering[i]);
     }
     return result;
 }

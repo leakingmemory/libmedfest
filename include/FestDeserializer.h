@@ -48,6 +48,7 @@
 #include "Struct/Packed/PFest.h"
 
 class FestSerializer;
+class FestSerializer_0;
 
 struct FestDbQuota {
     std::string name{};
@@ -88,7 +89,8 @@ private:
     const POppfVilkar *vilkar;
     const POppfVarselSlv_0_0_0 *varselSlv_0_0_0;
     const POppfVarselSlv_0_4_0 *varselSlv_0_4_0;
-    const POppfByttegruppe *byttegruppe;
+    const POppfByttegruppe_0_0_0 *byttegruppe_0_0_0;
+    const POppfByttegruppe_1_5_0 *byttegruppe_1_5_0;
     const POppfInteraksjon *interaksjon;
     const POppfInteraksjonIkkeVurdert *interaksjonIkkeVurdert;
     const POppfStrDosering *strDosering;
@@ -225,7 +227,8 @@ public:
     [[nodiscard]] std::vector<POppfVarselSlv> GetVarselSlv() const;
     [[nodiscard]] std::vector<POppfKodeverk_0_0_0> GetOppfKodeverk_0_0_0() const;
     [[nodiscard]] std::vector<POppfKodeverk_0_3_0> GetOppfKodeverk_0_3_0() const;
-    [[nodiscard]] std::vector<POppfByttegruppe> GetByttegruppe() const;
+    [[nodiscard]] std::vector<POppfByttegruppe_0_0_0> GetByttegruppe_0_0_0() const;
+    [[nodiscard]] std::vector<POppfByttegruppe_1_5_0> GetByttegruppe_1_5_0() const;
     [[nodiscard]] std::vector<POppfInteraksjon> GetInteraksjon() const;
     [[nodiscard]] std::vector<POppfInteraksjonIkkeVurdert> GetInteraksjonIkkeVurdert() const;
     [[nodiscard]] std::vector<POppfStrDosering> GetStrDosering() const;
@@ -288,6 +291,8 @@ public:
     void ForEachVarselSlv_0_0_0(const std::function<void (const POppfVarselSlv_0_0_0 &)> &) const;
     void ForEachVarselSlv_0_4_0(const std::function<void (const POppfVarselSlv_0_4_0 &)> &) const;
     void ForEachVarselSlv(const std::function<void (const POppfVarselSlv &)> &) const;
+    void ForEachByttegruppe_0_0_0(const std::function<void (const POppfByttegruppe_0_0_0 &)> &) const;
+    void ForEachByttegruppe_1_5_0(const std::function<void (const POppfByttegruppe_1_5_0 &)> &) const;
     void ForEachByttegruppe(const std::function<void (const POppfByttegruppe &)> &) const;
     void ForEachInteraksjon(const std::function<void (const POppfInteraksjon &)> &) const;
     void ForEachInteraksjonIkkeVurdert(const std::function<void (const POppfInteraksjonIkkeVurdert &)> &) const;
@@ -340,6 +345,8 @@ public:
     [[nodiscard]] OppfVarselSlv Unpack(const POppfVarselSlv_0_0_0 &poppf) const;
     [[nodiscard]] OppfVarselSlv Unpack(const POppfVarselSlv_0_4_0 &poppf) const;
     [[nodiscard]] OppfVarselSlv Unpack(const POppfVarselSlv &poppf) const;
+    [[nodiscard]] OppfByttegruppe Unpack(const POppfByttegruppe_0_0_0 &poppf) const;
+    [[nodiscard]] OppfByttegruppe Unpack(const POppfByttegruppe_1_5_0 &poppf) const;
     [[nodiscard]] OppfByttegruppe Unpack(const POppfByttegruppe &poppf) const;
     [[nodiscard]] OppfInteraksjon Unpack(const POppfInteraksjon &poppf) const;
     [[nodiscard]] OppfInteraksjonIkkeVurdert Unpack(const POppfInteraksjonIkkeVurdert &poppf) const;
@@ -371,6 +378,8 @@ public:
     [[nodiscard]] VarselSlv Unpack(const PVarselSlv_0_0_0 &pVarselSlv) const;
     [[nodiscard]] VarselSlv Unpack(const PVarselSlv_0_4_0 &pVarselSlv) const;
     [[nodiscard]] VarselSlv Unpack(const PVarselSlv &pVarselSlv) const;
+    [[nodiscard]] Byttegruppe Unpack(const PByttegruppe_0_0_0 &pByttegruppe) const;
+    [[nodiscard]] Byttegruppe Unpack(const PByttegruppe_1_5_0 &pByttegruppe) const;
     [[nodiscard]] Byttegruppe Unpack(const PByttegruppe &pByttegruppe) const;
     [[nodiscard]] Interaksjon Unpack(const PInteraksjon &pInteraksjon) const;
     [[nodiscard]] InteraksjonIkkeVurdert Unpack(const PInteraksjonIkkeVurdert &pInteraksjonIkkeVurdert) const;
@@ -454,6 +463,7 @@ public:
         }
     }
     void Preload(FestSerializer &) const;
+    void Preload(FestSerializer_0 &) const;
 };
 
 

@@ -6,6 +6,7 @@
 #define LEGEMFEST_FESTDATA_H
 
 class FestSerializer;
+class FestSerializer_0;
 class PFest_V_0_0_0;
 class PFest_V_0_2_0_or_later;
 class PFest_V_0_2_0;
@@ -15,6 +16,7 @@ class PFest_V_1_3_0;
 
 class FestData {
     friend FestSerializer;
+    friend FestSerializer_0;
     friend PFest_V_0_0_0;
     friend PFest_V_0_2_0_or_later;
     friend PFest_V_0_2_0;

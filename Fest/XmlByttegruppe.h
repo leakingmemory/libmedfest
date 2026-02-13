@@ -10,13 +10,14 @@
 #include "XmlKode.h"
 #include "XmlContentElement.h"
 #include "XmlGyldigFraDato.h"
+#include "XmlGyldigTilDato.h"
 #include <Struct/Decoded/MaybeBoolean.h>
 #include <memory>
 #include <map>
 
 class XmlOppfByttegruppe;
 
-class XmlByttegruppe : public XMLObject, public FestIdObject, public XmlKode, public XmlGyldigFraDato {
+class XmlByttegruppe : public XMLObject, public FestIdObject, public XmlKode, public XmlGyldigFraDato, public XmlGyldigTilDato {
 private:
     std::shared_ptr<XmlOppfByttegruppe> parent;
     std::string beskrivelseByttbarhet{};

@@ -549,9 +549,33 @@ std::vector<POppfKodeverk> FestVectors::GetKodeverk(const FestDeserializer &fest
     return kodeverk;
 }
 
-std::vector<POppfByttegruppe> FestVectors::GetByttegruppe(const FestDeserializer &festDeserializer) const {
-    AsVector(byttegruppe, GetByttegruppe);
+std::vector<POppfByttegruppe_0_0_0> FestVectors::GetByttegruppe_0_0_0(const FestDeserializer &festDeserializer) const {
+    AsVector(byttegruppe, GetByttegruppe_0_0_0);
 }
+
+std::vector<POppfByttegruppe_1_5_0> FestVectors::GetByttegruppe_1_5_0(const FestDeserializer &festDeserializer) const {
+    AsVector(byttegruppe, GetByttegruppe_1_5_0);
+}
+
+std::vector<POppfByttegruppe> FestVectors::GetByttegruppe(const FestDeserializer &festDeserializer) const {
+    std::vector<POppfByttegruppe> byttegruppe{};
+    if (festDeserializer.GetVersionMajor() > 1 || (festDeserializer.GetVersionMajor() == 1 && festDeserializer.GetVersionMinor() > 4)) {
+        auto byttegruppe_1_5_0 = GetByttegruppe_1_5_0(festDeserializer);
+        byttegruppe.reserve(byttegruppe_1_5_0.size());
+        for (const auto &b : byttegruppe_1_5_0) {
+            byttegruppe.emplace_back(b);
+        }
+    } else {
+        auto byttegruppe_0_0_0 = GetByttegruppe_0_0_0(festDeserializer);
+        byttegruppe.reserve(byttegruppe_0_0_0.size());
+        for (const auto &b : byttegruppe_0_0_0) {
+            byttegruppe.emplace_back(b);
+        }
+    }
+    return byttegruppe;
+}
+
+
 
 std::vector<POppfInteraksjon> FestVectors::GetInteraksjon(const FestDeserializer &festDeserializer) const {
     AsVector(interaksjon, GetInteraksjon);

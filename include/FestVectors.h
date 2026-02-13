@@ -28,6 +28,8 @@ class POppfVarselSlv;
 class POppfKodeverk_0_0_0;
 class POppfKodeverk_0_3_0;
 class POppfKodeverk;
+class POppfByttegruppe_0_0_0;
+class POppfByttegruppe_1_5_0;
 class POppfByttegruppe;
 class POppfInteraksjon;
 class POppfInteraksjonIkkeVurdert;
@@ -84,6 +86,8 @@ public:
     [[nodiscard]] std::vector<POppfKodeverk_0_0_0> GetKodeverk_0_0_0(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfKodeverk_0_3_0> GetKodeverk_0_3_0(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfKodeverk> GetKodeverk(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfByttegruppe_0_0_0> GetByttegruppe_0_0_0(const FestDeserializer &) const;
+    [[nodiscard]] std::vector<POppfByttegruppe_1_5_0> GetByttegruppe_1_5_0(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfByttegruppe> GetByttegruppe(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfInteraksjon> GetInteraksjon(const FestDeserializer &) const;
     [[nodiscard]] std::vector<POppfInteraksjonIkkeVurdert> GetInteraksjonIkkeVurdert(const FestDeserializer &) const;

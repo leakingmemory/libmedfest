@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/9/23.
 //
 
-#ifndef LEGEMFEST_FESTSERIALIZER_H
-#define LEGEMFEST_FESTSERIALIZER_H
+#ifndef LEGEMFEST_FESTSERIALIZER_0_H
+#define LEGEMFEST_FESTSERIALIZER_0_H
 
 #include "Fest/Fest.h"
 #include "FestHeaders.h"
@@ -55,8 +55,7 @@
 #include <map>
 #include <functional>
 
-
-class FestSerializer : private FestVisitor {
+class FestSerializer_0 : private FestVisitor {
     friend FestDeserializer;
 private:
     std::shared_ptr<std::ostream> output;
@@ -113,8 +112,7 @@ private:
     std::vector<POppfVilkar> vilkar{};
     std::vector<POppfVarselSlv_0_0_0> varselSlv_0_0_0{};
     std::vector<POppfVarselSlv_0_4_0> varselSlv_0_4_0{};
-    std::vector<POppfByttegruppe_0_0_0> byttegruppe_0_0_0{};
-    std::vector<POppfByttegruppe_1_5_0> byttegruppe_1_5_0{};
+    std::vector<POppfByttegruppe_0_0_0> byttegruppe{};
     std::vector<POppfInteraksjon> interaksjon{};
     std::vector<POppfInteraksjonIkkeVurdert> interaksjonIkkeVurdert{};
     std::vector<POppfStrDosering> strDosering{};
@@ -127,12 +125,12 @@ private:
     int percentDone;
     int minimumMajorVersion;
 public:
-    FestSerializer(const std::shared_ptr<std::ostream> &output);
-    FestSerializer(const std::string &filename);
-    FestSerializer(const FestSerializer &) = delete;
-    FestSerializer(FestSerializer &&) = delete;
-    FestSerializer &operator =(const FestSerializer &) = delete;
-    FestSerializer &operator =(FestSerializer &&) = delete;
+    FestSerializer_0(const std::shared_ptr<std::ostream> &output);
+    FestSerializer_0(const std::string &filename);
+    FestSerializer_0(const FestSerializer_0 &) = delete;
+    FestSerializer_0(FestSerializer_0 &&) = delete;
+    FestSerializer_0 &operator =(const FestSerializer_0 &) = delete;
+    FestSerializer_0 &operator =(FestSerializer_0 &&) = delete;
     bool is_open() const;
     bool Serialize(const Fest &fest);
 private:
@@ -200,4 +198,4 @@ private:
 };
 
 
-#endif //LEGEMFEST_FESTSERIALIZER_H
+#endif //LEGEMFEST_FESTSERIALIZER_0_H

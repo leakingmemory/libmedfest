@@ -213,6 +213,10 @@ void Fest::Add(const XmlOppfByttegruppe &oppf) {
     oppfByttegruppe.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetByttegruppe());
 }
 
+void Fest::Add(const OppfByttegruppe &byttegruppe) {
+    oppfByttegruppe.emplace_back(byttegruppe);
+}
+
 void Fest::Add(const XmlOppfLegemiddeldose &oppf) {
     oppfLegemiddeldose.emplace_back(oppf.GetId(), oppf.GetTidspunkt(), oppf.GetStatus(), oppf.GetLegemiddeldose());
 }

@@ -120,6 +120,7 @@ public:
     void Add(const OppfRefusjon &);
     void Add(const XmlOppfKodeverk &);
     void Add(const XmlOppfByttegruppe &);
+    void Add(const OppfByttegruppe &);
     void Add(const XmlOppfLegemiddeldose &);
     [[nodiscard]] bool Add(const XmlOppfInteraksjon &);
     void Add(const XmlOppfStrDosering &);

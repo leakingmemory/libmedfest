@@ -3,6 +3,7 @@
 //
 
 #include "FestSerializer.h"
+#include "FestSerializer_0.h"
 #include "FestDeserializer.h"
 #include "FestVectors.h"
 #include <sstream>
@@ -250,6 +251,18 @@ static OppfRefusjon GetRefusjon() {
     return {oppf, refusjonshjemmel};
 }
 
+static OppfByttegruppe GetByttegruppe() {
+    Byttegruppe byttegruppe{
+        "ID_0BE9C3D0-CE36-4562-A57A-79948264E988",
+        {"002900", "EKULIZUMAB KONSENTRAT TIL INFUSJONSVÆSKE, OPPLØSNING, 300 MG, 30 ML (10 MG/ML)"},
+        "2026-01-21",
+        "2029-09-01",
+        "Begrenset bytte ved NMOSD og gMG. Soliris er ikke byttbart med Bekemv og Epysqli ved NMOSD og gMG.",
+        true
+    };
+    return {"ID_217CD21B-21D0-4E1E-BB2A-2FFACA8CB9F5", "2026-01-22T03:10:17", {"A", "Aktiv oppføring"}, byttegruppe};
+}
+
 static Fest GetFest1() {
     Fest fest{};
     fest.SetHentetDato(festVersion1);
@@ -257,6 +270,7 @@ static Fest GetFest1() {
     fest.Add(GetLegemiddelpakning1());
     fest.Add(GetAtc1());
     fest.Add(GetRefusjon());
+    fest.Add(GetByttegruppe());
     return fest;
 }
 
@@ -267,6 +281,7 @@ static Fest GetFest2() {
     fest.Add(GetLegemiddelpakning2());
     fest.Add(GetAtc2());
     fest.Add(GetRefusjon());
+    fest.Add(GetByttegruppe());
     return fest;
 }
 
@@ -284,6 +299,17 @@ static std::string WriteFest(const std::function<void (FestSerializer &)> &func)
 static std::string WriteFestVersion(const std::function<void (FestSerializer &)> &func, uint8_t major, uint8_t minor, uint8_t patch) {
     std::shared_ptr<std::stringstream> sstr = std::make_shared<std::stringstream>();
     FestSerializer festSerializer{sstr};
+    func(festSerializer);
+    if (!festSerializer.WriteVersion(major, minor, patch)) {
+        std::cerr << "Write FEST failed\n";
+        throw std::exception();
+    }
+    return sstr->str();
+}
+
+static std::string WriteFestVersion_0(const std::function<void (FestSerializer_0 &)> &func, uint8_t major, uint8_t minor, uint8_t patch) {
+    std::shared_ptr<std::stringstream> sstr = std::make_shared<std::stringstream>();
+    FestSerializer_0 festSerializer{sstr};
     func(festSerializer);
     if (!festSerializer.WriteVersion(major, minor, patch)) {
         std::cerr << "Write FEST failed\n";
@@ -611,9 +637,51 @@ void AssertOppfRefusjonNew(const FestDeserializer &festDeserializer, const FestV
     AssertEquals("2024-09-01", refVilkar.GetTilDato());
 }
 
+static void AssertByttegruppe(const FestDeserializer &festDeserializer, const FestVectors &fest) {
+    auto refOppf = GetByttegruppe();
+    auto byttegrupper = fest.GetByttegruppe(festDeserializer);
+    AssertEquals(1, byttegrupper.size());
+    auto byttegruppeOppf = festDeserializer.Unpack(byttegrupper[0]);
+    AssertEquals(refOppf.GetId(), byttegruppeOppf.GetId());
+    AssertEquals(refOppf.GetTidspunkt(), byttegruppeOppf.GetTidspunkt());
+    AssertEquals(refOppf.GetStatus().GetValue(), byttegruppeOppf.GetStatus().GetValue());
+    AssertEquals(refOppf.GetStatus().GetDistinguishedName(), byttegruppeOppf.GetStatus().GetDistinguishedName());
+    auto ref = refOppf.GetByttegruppe();
+    auto byttegruppe = byttegruppeOppf.GetByttegruppe();
+    AssertEquals(ref.GetId(), byttegruppe.GetId());
+    AssertEquals(ref.GetKode().GetValue(), byttegruppe.GetKode().GetValue());
+    AssertEquals(ref.GetKode().GetDistinguishedName(), byttegruppe.GetKode().GetDistinguishedName());
+    AssertEquals(ref.GetBeskrivelseByttbarhet(), byttegruppe.GetBeskrivelseByttbarhet());
+    AssertEquals(ref.GetMerknadTilByttbarhet(), byttegruppe.GetMerknadTilByttbarhet());
+    AssertEquals(ref.GetGyldigFraDato(), byttegruppe.GetGyldigFraDato());
+    AssertEquals(ref.GetGyldigTilDato(), byttegruppe.GetGyldigTilDato());
+}
+
+static void AssertByttegruppe_Before_1_5_0(const FestDeserializer &festDeserializer, const FestVectors &fest) {
+    auto refOppf = GetByttegruppe();
+    auto byttegrupper = fest.GetByttegruppe(festDeserializer);
+    AssertEquals(1, byttegrupper.size());
+    auto byttegruppeOppf = festDeserializer.Unpack(byttegrupper[0]);
+    AssertEquals(refOppf.GetId(), byttegruppeOppf.GetId());
+    AssertEquals(refOppf.GetTidspunkt(), byttegruppeOppf.GetTidspunkt());
+    AssertEquals(refOppf.GetStatus().GetValue(), byttegruppeOppf.GetStatus().GetValue());
+    AssertEquals(refOppf.GetStatus().GetDistinguishedName(), byttegruppeOppf.GetStatus().GetDistinguishedName());
+    auto ref = refOppf.GetByttegruppe();
+    auto byttegruppe = byttegruppeOppf.GetByttegruppe();
+    AssertEquals(ref.GetId(), byttegruppe.GetId());
+    AssertEquals(ref.GetKode().GetValue(), byttegruppe.GetKode().GetValue());
+    AssertEquals(ref.GetKode().GetDistinguishedName(), byttegruppe.GetKode().GetDistinguishedName());
+    AssertEquals(ref.GetBeskrivelseByttbarhet(), byttegruppe.GetBeskrivelseByttbarhet());
+    AssertEquals(ref.GetMerknadTilByttbarhet(), byttegruppe.GetMerknadTilByttbarhet());
+    AssertEquals(ref.GetGyldigFraDato(), byttegruppe.GetGyldigFraDato());
+    AssertEquals("", byttegruppe.GetGyldigTilDato());
+}
+
 int main() {
     std::string emptyDb = WriteFest([] (auto &) {});
     std::cout << "Empty DB size " << emptyDb.size() << "\n";
+    std::string emptyDb_1_5_0 = WriteFestVersion([] (auto &) {}, 1, 5, 0);
+    std::cout << "Empty DB v1.5.0 size " << emptyDb_1_5_0.size() << "\n";
     std::string emptyDb_1_4_0 = WriteFestVersion([] (auto &) {}, 1, 4, 0);
     std::cout << "Empty DB v1.4.0 size " << emptyDb_1_4_0.size() << "\n";
     std::string emptyDb_1_3_0 = WriteFestVersion([] (auto &) {}, 1, 3, 0);
@@ -624,15 +692,15 @@ int main() {
     std::cout << "Empty DB v1.1.0 size " << emptyDb_1_1_0.size() << "\n";
     std::string emptyDb_1_0_0 = WriteFestVersion([] (auto &) {}, 1, 0, 0);
     std::cout << "Empty DB v1.0.0 size " << emptyDb_1_0_0.size() << "\n";
-    std::string emptyDb_0_4_0 = WriteFestVersion([] (auto &) {}, 0, 4, 0);
+    std::string emptyDb_0_4_0 = WriteFestVersion_0([] (auto &) {}, 0, 4, 0);
     std::cout << "Empty DB v0.4.0 size " << emptyDb_0_4_0.size() << "\n";
-    std::string emptyDb_0_3_0 = WriteFestVersion([] (auto &) {}, 0, 3, 0);
+    std::string emptyDb_0_3_0 = WriteFestVersion_0([] (auto &) {}, 0, 3, 0);
     std::cout << "Empty DB v0.3.0 size " << emptyDb_0_3_0.size() << "\n";
-    std::string emptyDb_0_2_0 = WriteFestVersion([] (auto &) {}, 0, 2, 0);
+    std::string emptyDb_0_2_0 = WriteFestVersion_0([] (auto &) {}, 0, 2, 0);
     std::cout << "Empty DB v0.2.0 size " << emptyDb_0_2_0.size() << "\n";
-    std::string emptyDb_0_1_0 = WriteFestVersion([] (auto &) {}, 0, 1, 0);
+    std::string emptyDb_0_1_0 = WriteFestVersion_0([] (auto &) {}, 0, 1, 0);
     std::cout << "Empty DB v0.1.0 size " << emptyDb_0_1_0.size() << "\n";
-    std::string emptyDb_0_0_0 = WriteFestVersion([] (auto &) {}, 0, 0, 0);
+    std::string emptyDb_0_0_0 = WriteFestVersion_0([] (auto &) {}, 0, 0, 0);
     std::cout << "Empty DB v0.0.0 size " << emptyDb_0_0_0.size() << "\n";
 
     auto festInput1 = GetFest1();
@@ -641,6 +709,10 @@ int main() {
         AssertTrue(serializer.Serialize(festInput1));
     });
     std::cout << "DB 1 size " << fest1Db.size() << "\n";
+    std::string fest1Db_1_5_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
+        AssertTrue(serializer.Serialize(festInput1));
+    }, 1, 5, 0);
+    std::cout << "DB 1 v1.5.0 size " << fest1Db_1_5_0.size() << "\n";
     std::string fest1Db_1_4_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
         AssertTrue(serializer.Serialize(festInput1));
     }, 1, 4, 0);
@@ -661,23 +733,23 @@ int main() {
         AssertTrue(serializer.Serialize(festInput1));
     }, 1, 0, 0);
     std::cout << "DB 1 v1.0.0 size " << fest1Db_1_0_0.size() << "\n";
-    std::string fest1Db_0_4_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
+    std::string fest1Db_0_4_0 = WriteFestVersion_0([&festInput1] (FestSerializer_0 &serializer) {
         AssertTrue(serializer.Serialize(festInput1));
     }, 0, 4, 0);
     std::cout << "DB 1 v0.4.0 size " << fest1Db_0_4_0.size() << "\n";
-    std::string fest1Db_0_3_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
+    std::string fest1Db_0_3_0 = WriteFestVersion_0([&festInput1] (FestSerializer_0 &serializer) {
         AssertTrue(serializer.Serialize(festInput1));
     }, 0, 3, 0);
     std::cout << "DB 1 v0.3.0 size " << fest1Db_0_3_0.size() << "\n";
-    std::string fest1Db_0_2_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
+    std::string fest1Db_0_2_0 = WriteFestVersion_0([&festInput1] (FestSerializer_0 &serializer) {
         AssertTrue(serializer.Serialize(festInput1));
     }, 0, 2, 0);
     std::cout << "DB 1 v0.2.0 size " << fest1Db_0_2_0.size() << "\n";
-    std::string fest1Db_0_1_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
+    std::string fest1Db_0_1_0 = WriteFestVersion_0([&festInput1] (FestSerializer_0 &serializer) {
         AssertTrue(serializer.Serialize(festInput1));
     }, 0, 1, 0);
     std::cout << "DB 1 v0.1.0 size " << fest1Db_0_1_0.size() << "\n";
-    std::string fest1Db_0_0_0 = WriteFestVersion([&festInput1] (FestSerializer &serializer) {
+    std::string fest1Db_0_0_0 = WriteFestVersion_0([&festInput1] (FestSerializer_0 &serializer) {
         AssertTrue(serializer.Serialize(festInput1));
     }, 0, 0, 0);
     std::cout << "DB 1 v0.0.0 size " << fest1Db_0_0_0.size() << "\n";
@@ -685,8 +757,16 @@ int main() {
     {
         FestDeserializer festDeserializer{emptyDb.data(), emptyDb.size()};
         {
-            AssertVersion(festDeserializer, 1, 4, 0);
+            AssertVersion(festDeserializer, 1, 5, 0);
             auto festVectors = GetFestVectors(festDeserializer);
+            AssertSize(festVectors, 0);
+        }
+    }
+    {
+        FestDeserializer festDeserializer_1_5_0{emptyDb_1_5_0.data(), emptyDb_1_5_0.size()};
+        {
+            AssertVersion(festDeserializer_1_5_0, 1, 5, 0);
+            auto festVectors = GetFestVectors(festDeserializer_1_5_0);
             AssertSize(festVectors, 0);
         }
     }
@@ -773,12 +853,24 @@ int main() {
 
     FestDeserializer festDeserializerDb1{fest1Db.data(), fest1Db.size()};
     {
-        AssertVersion(festDeserializerDb1, 1, 4, 0);
+        AssertVersion(festDeserializerDb1, 1, 5, 0);
         auto festVectors = GetFestVectors(festDeserializerDb1);
         AssertSize(festVectors, 1);
         auto fest1 = festVectors[0];
         AssertFest1NewTermsV1_3_0(festDeserializerDb1, fest1);
         AssertOppfRefusjonNew_V1_4_0(festDeserializerDb1, fest1);
+        AssertByttegruppe(festDeserializerDb1, fest1);
+    }
+    FestDeserializer festDeserializerDb1_1_5_0{fest1Db_1_5_0.data(), fest1Db_1_5_0.size()};
+    {
+        AssertVersion(festDeserializerDb1_1_5_0, 1, 5, 0);
+        auto festVectors = GetFestVectors(festDeserializerDb1_1_5_0);
+        AssertSize(festVectors, 1);
+        auto fest1 = festVectors[0];
+        AssertEquals(festVersion1, fest1.GetDato());
+        AssertFest1NewTermsV1_3_0(festDeserializerDb1_1_5_0, fest1);
+        AssertOppfRefusjonNew_V1_4_0(festDeserializerDb1_1_5_0, fest1);
+        AssertByttegruppe(festDeserializerDb1_1_5_0, fest1);
     }
     FestDeserializer festDeserializerDb1_1_4_0{fest1Db_1_4_0.data(), fest1Db_1_4_0.size()};
     {
@@ -789,6 +881,7 @@ int main() {
         AssertEquals(festVersion1, fest1.GetDato());
         AssertFest1NewTermsV1_3_0(festDeserializerDb1_1_4_0, fest1);
         AssertOppfRefusjonNew_V1_4_0(festDeserializerDb1_1_4_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_1_4_0, fest1);
     }
     FestDeserializer festDeserializerDb1_1_3_0{fest1Db_1_3_0.data(), fest1Db_1_3_0.size()};
     {
@@ -799,6 +892,7 @@ int main() {
         AssertEquals(festVersion1, fest1.GetDato());
         AssertFest1NewTermsV1_3_0(festDeserializerDb1_1_3_0, fest1);
         AssertOppfRefusjonNew(festDeserializerDb1_1_3_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_1_3_0, fest1);
     }
     FestDeserializer festDeserializerDb1_1_2_0{fest1Db_1_2_0.data(), fest1Db_1_2_0.size()};
     {
@@ -809,6 +903,7 @@ int main() {
         AssertEquals(festVersion1, fest1.GetDato());
         AssertFest1NewTerms(festDeserializerDb1_1_2_0, fest1);
         AssertOppfRefusjonNew(festDeserializerDb1_1_2_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_1_2_0, fest1);
     }
     FestDeserializer festDeserializerDb1_1_1_0{fest1Db_1_1_0.data(), fest1Db_1_1_0.size()};
     {
@@ -839,6 +934,7 @@ int main() {
         AssertEquals("Covid-19, RNA-basert vaksine", atc1element0term[1].GetTerm());
         AssertEquals("A11HA03", atc1element[1].GetKode());
         AssertOppfRefusjonOld(festDeserializerDb1_1_1_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_1_1_0, fest1);
     }
     FestDeserializer festDeserializerDb1_1_0_0{fest1Db_1_0_0.data(), fest1Db_1_0_0.size()};
     {
@@ -869,6 +965,7 @@ int main() {
         AssertEquals("Covid-19, RNA-basert vaksine", atc1element0term[1].GetTerm());
         AssertEquals("A11HA03", atc1element[1].GetKode());
         AssertOppfRefusjonOld(festDeserializerDb1_1_0_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_1_0_0, fest1);
     }
     FestDeserializer festDeserializerDb1_0_4_0{fest1Db_0_4_0.data(), fest1Db_0_4_0.size()};
     {
@@ -899,6 +996,7 @@ int main() {
         AssertEquals("Covid-19, RNA-basert vaksine", atc1element0term[1].GetTerm());
         AssertEquals("A11HA03", atc1element[1].GetKode());
         AssertOppfRefusjonOld(festDeserializerDb1_0_4_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_0_4_0, fest1);
     }
     FestDeserializer festDeserializerDb1_0_3_0{fest1Db_0_3_0.data(), fest1Db_0_3_0.size()};
     {
@@ -929,6 +1027,7 @@ int main() {
         AssertEquals("Covid-19, RNA-basert vaksine", atc1element0term[1].GetTerm());
         AssertEquals("A11HA03", atc1element[1].GetKode());
         AssertOppfRefusjonOld(festDeserializerDb1_0_3_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_0_3_0, fest1);
     }
     FestDeserializer festDeserializerDb1_0_2_0{fest1Db_0_2_0.data(), fest1Db_0_2_0.size()};
     {
@@ -958,6 +1057,7 @@ int main() {
         AssertEquals("Covid-19, RNA-basert vaksine", atc1element0term[0].GetTerm());
         AssertEquals("A11HA03", atc1element[1].GetKode());
         AssertOppfRefusjonOld(festDeserializerDb1_0_2_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_0_2_0, fest1);
     }
     FestDeserializer festDeserializerDb1_0_1_0{fest1Db_0_1_0.data(), fest1Db_0_1_0.size()};
     {
@@ -987,6 +1087,7 @@ int main() {
         AssertEquals("Covid-19, RNA-basert vaksine", atc1element0term[0].GetTerm());
         AssertEquals("A11HA03", atc1element[1].GetKode());
         AssertOppfRefusjonOld(festDeserializerDb1_0_1_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_0_1_0, fest1);
     }
     FestDeserializer festDeserializerDb1_0_0_0{fest1Db_0_0_0.data(), fest1Db_0_0_0.size()};
     {
@@ -1016,6 +1117,7 @@ int main() {
         AssertEquals("Covid-19, RNA-basert vaksine", atc1element0term[0].GetTerm());
         AssertEquals("A11HA03", atc1element[1].GetKode());
         AssertOppfRefusjonOld(festDeserializerDb1_0_0_0, fest1);
+        AssertByttegruppe_Before_1_5_0(festDeserializerDb1_0_0_0, fest1);
     }
 
     auto festInput2 = GetFest2();
@@ -1026,6 +1128,12 @@ int main() {
             AssertTrue(serializer.Serialize(festInput2));
         });
         std::cout << "DB 2 size " << fest2Db.size() << "\n";
+        std::string fest2Db_1_5_0 = WriteFestVersion(
+                [&festDeserializerDb1_1_5_0, &festInput2](FestSerializer &serializer) {
+                    festDeserializerDb1_1_5_0.Preload(serializer);
+                    AssertTrue(serializer.Serialize(festInput2));
+                }, 1, 5, 0);
+        std::cout << "DB 2 v1.5.0 size " << fest2Db_1_5_0.size() << "\n";
         std::string fest2Db_1_4_0 = WriteFestVersion(
                 [&festDeserializerDb1_1_4_0, &festInput2](FestSerializer &serializer) {
                     festDeserializerDb1_1_4_0.Preload(serializer);
@@ -1056,32 +1164,32 @@ int main() {
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 1, 0, 0);
         std::cout << "DB 2 v1.0.0 size " << fest2Db_1_0_0.size() << "\n";
-        std::string fest2Db_0_4_0 = WriteFestVersion(
-                [&festDeserializerDb1_0_4_0, &festInput2](FestSerializer &serializer) {
+        std::string fest2Db_0_4_0 = WriteFestVersion_0(
+                [&festDeserializerDb1_0_4_0, &festInput2](FestSerializer_0 &serializer) {
                     festDeserializerDb1_0_4_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 0, 4, 0);
         std::cout << "DB 2 v0.4.0 size " << fest2Db_0_4_0.size() << "\n";
-        std::string fest2Db_0_3_0 = WriteFestVersion(
-                [&festDeserializerDb1_0_3_0, &festInput2](FestSerializer &serializer) {
+        std::string fest2Db_0_3_0 = WriteFestVersion_0(
+                [&festDeserializerDb1_0_3_0, &festInput2](FestSerializer_0 &serializer) {
                     festDeserializerDb1_0_3_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 0, 3, 0);
         std::cout << "DB 2 v0.3.0 size " << fest2Db_0_3_0.size() << "\n";
-        std::string fest2Db_0_2_0 = WriteFestVersion(
-                [&festDeserializerDb1_0_2_0, &festInput2](FestSerializer &serializer) {
+        std::string fest2Db_0_2_0 = WriteFestVersion_0(
+                [&festDeserializerDb1_0_2_0, &festInput2](FestSerializer_0 &serializer) {
                     festDeserializerDb1_0_2_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 0, 2, 0);
         std::cout << "DB 2 v0.2.0 size " << fest2Db_0_2_0.size() << "\n";
-        std::string fest2Db_0_1_0 = WriteFestVersion(
-                [&festDeserializerDb1_0_1_0, &festInput2](FestSerializer &serializer) {
+        std::string fest2Db_0_1_0 = WriteFestVersion_0(
+                [&festDeserializerDb1_0_1_0, &festInput2](FestSerializer_0 &serializer) {
                     festDeserializerDb1_0_1_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 0, 1, 0);
         std::cout << "DB 2 v0.1.0 size " << fest2Db_0_1_0.size() << "\n";
-        std::string fest2Db_0_0_0 = WriteFestVersion(
-                [&festDeserializerDb1_0_0_0, &festInput2](FestSerializer &serializer) {
+        std::string fest2Db_0_0_0 = WriteFestVersion_0(
+                [&festDeserializerDb1_0_0_0, &festInput2](FestSerializer_0 &serializer) {
                     festDeserializerDb1_0_0_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 0, 0, 0);
@@ -1094,7 +1202,7 @@ int main() {
                 Fest fest1Cycle{};
                 Fest fest2Cycle{};
                 {
-                    AssertVersion(festDeserializerDb2, 1, 4, 0);
+                    AssertVersion(festDeserializerDb2, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb2);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1105,18 +1213,24 @@ int main() {
                     AssertFest2NewTerms(festDeserializerDb2, fest2);
                     AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2, fest1);
                     AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2, fest2);
+                    AssertByttegruppe(festDeserializerDb2, fest1);
+                    AssertByttegruppe(festDeserializerDb2, fest2);
 
                     fest1Cycle.From(festDeserializerDb2, fest1);
                     fest2Cycle.From(festDeserializerDb2, fest2);
                 }
-                cycledFestDb = WriteFest([&fest1Cycle, &fest2Cycle](FestSerializer &serializer) {
+                cycledFestDb = WriteFest([&fest1Cycle](FestSerializer &serializer) {
                     serializer.Serialize(fest1Cycle);
+                });
+                FestDeserializer cycling1{cycledFestDb.data(), cycledFestDb.size()};
+                cycledFestDb = WriteFest([&cycling1, &fest2Cycle]  (FestSerializer &serializer) {
+                    cycling1.Preload(serializer);
                     serializer.Serialize(fest2Cycle);
                 });
             }
-            FestDeserializer festDeserializerDb2{fest2Db.data(), fest2Db.size()};
+            FestDeserializer festDeserializerDb2{cycledFestDb.data(), cycledFestDb.size()};
             {
-                AssertVersion(festDeserializerDb2, 1, 4, 0);
+                AssertVersion(festDeserializerDb2, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb2);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -1127,6 +1241,26 @@ int main() {
                 AssertFest2NewTerms(festDeserializerDb2, fest2);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2, fest2);
+                AssertByttegruppe(festDeserializerDb2, fest1);
+                AssertByttegruppe(festDeserializerDb2, fest2);
+            }
+        }
+        {
+            FestDeserializer festDeserializerDb2_1_5_0{fest2Db_1_5_0.data(), fest2Db_1_5_0.size()};
+            {
+                AssertVersion(festDeserializerDb2_1_5_0, 1, 5, 0);
+                auto festVectors = GetFestVectors(festDeserializerDb2_1_5_0);
+                AssertSize(festVectors, 2);
+                auto fest1 = festVectors[0];
+                auto fest2 = festVectors[1];
+                AssertEqual(fest1.GetDato(), festVersion1);
+                AssertEqual(fest2.GetDato(), festVersion2);
+                AssertFest1NewTermsV1_3_0(festDeserializerDb2_1_5_0, fest1);
+                AssertFest2NewTerms(festDeserializerDb2_1_5_0, fest2);
+                AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2_1_5_0, fest1);
+                AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2_1_5_0, fest2);
+                AssertByttegruppe(festDeserializerDb2_1_5_0, fest1);
+                AssertByttegruppe(festDeserializerDb2_1_5_0, fest2);
             }
         }
         {
@@ -1143,9 +1277,9 @@ int main() {
                 AssertFest2NewTerms(festDeserializerDb2_1_4_0, fest2);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2_1_4_0, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb2_1_4_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_4_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_4_0, fest2);
             }
-        }
-        {
             FestDeserializer festDeserializerDb2_1_3_0{fest2Db_1_3_0.data(), fest2Db_1_3_0.size()};
             {
                 AssertVersion(festDeserializerDb2_1_3_0, 1, 3, 0);
@@ -1159,6 +1293,8 @@ int main() {
                 AssertFest2NewTerms(festDeserializerDb2_1_3_0, fest2);
                 AssertOppfRefusjonNew(festDeserializerDb2_1_3_0, fest1);
                 AssertOppfRefusjonNew(festDeserializerDb2_1_3_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_3_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_3_0, fest2);
             }
             FestDeserializer festDeserializerDb2_1_2_0{fest2Db_1_2_0.data(), fest2Db_1_2_0.size()};
             {
@@ -1173,6 +1309,8 @@ int main() {
                 AssertFest2NewTerms(festDeserializerDb2_1_2_0, fest2);
                 AssertOppfRefusjonNew(festDeserializerDb2_1_2_0, fest1);
                 AssertOppfRefusjonNew(festDeserializerDb2_1_2_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_2_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_2_0, fest2);
             }
             FestDeserializer festDeserializerDb2_1_1_0{fest2Db_1_1_0.data(), fest2Db_1_1_0.size()};
             {
@@ -1187,6 +1325,8 @@ int main() {
                 AssertFest2NewTerms(festDeserializerDb2_1_1_0, fest2);
                 AssertOppfRefusjonOld(festDeserializerDb2_1_1_0, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb2_1_1_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_1_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_1_0, fest2);
             }
             FestDeserializer festDeserializerDb2_1_0_0{fest2Db_1_0_0.data(), fest2Db_1_0_0.size()};
             {
@@ -1242,6 +1382,8 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb2_1_0_0, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb2_1_0_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_0_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_1_0_0, fest2);
             }
             FestDeserializer festDeserializerDb2_0_4_0{fest2Db_0_4_0.data(), fest2Db_0_4_0.size()};
             {
@@ -1297,6 +1439,8 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb2_0_4_0, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb2_0_4_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_4_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_4_0, fest2);
             }
             FestDeserializer festDeserializerDb2_0_3_0{fest2Db_0_3_0.data(), fest2Db_0_3_0.size()};
             {
@@ -1352,6 +1496,8 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb2_0_3_0, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb2_0_3_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_3_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_3_0, fest2);
             }
             FestDeserializer festDeserializerDb2_0_2_0{fest2Db_0_2_0.data(), fest2Db_0_2_0.size()};
             {
@@ -1405,6 +1551,8 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb2_0_2_0, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb2_0_2_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_2_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_2_0, fest2);
             }
             FestDeserializer festDeserializerDb2_0_1_0{fest2Db_0_1_0.data(), fest2Db_0_1_0.size()};
             {
@@ -1458,6 +1606,8 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb2_0_1_0, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb2_0_1_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_1_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_1_0, fest2);
             }
             FestDeserializer festDeserializerDb2_0_0_0{fest2Db_0_0_0.data(), fest2Db_0_0_0.size()};
             {
@@ -1511,24 +1661,26 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb2_0_0_0, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb2_0_0_0, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_0_0, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb2_0_0_0, fest2);
             }
-            std::string fest3Db_0_3_0_to_0_4 = WriteFestVersion(
-                    [&festDeserializerDb2_0_3_0](FestSerializer &serializer) {
+            std::string fest3Db_0_3_0_to_0_4 = WriteFestVersion_0(
+                    [&festDeserializerDb2_0_3_0](FestSerializer_0 &serializer) {
                         festDeserializerDb2_0_3_0.Preload(serializer);
                     }, 0, 4, 0);
             std::cout << "DB 3 upgraded from v0.3.0 to v0.4.0 size " << fest3Db_0_3_0_to_0_4.size() << "\n";
-            std::string fest3Db_0_2_0_to_0_4 = WriteFestVersion(
-                    [&festDeserializerDb2_0_2_0](FestSerializer &serializer) {
+            std::string fest3Db_0_2_0_to_0_4 = WriteFestVersion_0(
+                    [&festDeserializerDb2_0_2_0](FestSerializer_0 &serializer) {
                         festDeserializerDb2_0_2_0.Preload(serializer);
                     }, 0, 4, 0);
             std::cout << "DB 3 upgraded from v0.2.0 to v0.4.0 size " << fest3Db_0_2_0_to_0_4.size() << "\n";
-            std::string fest3Db_0_1_0_to_0_4 = WriteFestVersion(
-                    [&festDeserializerDb2_0_1_0](FestSerializer &serializer) {
+            std::string fest3Db_0_1_0_to_0_4 = WriteFestVersion_0(
+                    [&festDeserializerDb2_0_1_0](FestSerializer_0 &serializer) {
                         festDeserializerDb2_0_1_0.Preload(serializer);
                     }, 0, 4, 0);
             std::cout << "DB 3 upgraded from v0.1.0 to v0.4.0 size " << fest3Db_0_1_0_to_0_4.size() << "\n";
-            std::string fest3Db_0_0_0_to_0_4 = WriteFestVersion(
-                    [&festDeserializerDb2_0_0_0](FestSerializer &serializer) {
+            std::string fest3Db_0_0_0_to_0_4 = WriteFestVersion_0(
+                    [&festDeserializerDb2_0_0_0](FestSerializer_0 &serializer) {
                         festDeserializerDb2_0_0_0.Preload(serializer);
                     }, 0, 4, 0);
             std::cout << "DB 3 upgraded from v0.0.0 to v0.4.0 size " << fest3Db_0_0_0_to_0_4.size() << "\n";
@@ -1588,6 +1740,8 @@ int main() {
                     AssertEqual(atc2element[1].GetKode(), "C01DX16");
                     AssertOppfRefusjonOld(festDeserializerDb3_0_3_0_to_0_4, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_3_0_to_0_4, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_3_0_to_0_4, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_3_0_to_0_4, fest2);
                 }
             }
             {
@@ -1644,6 +1798,8 @@ int main() {
                     AssertEqual(atc2element[1].GetKode(), "C01DX16");
                     AssertOppfRefusjonOld(festDeserializerDb3_0_2_0_to_0_4, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_2_0_to_0_4, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_2_0_to_0_4, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_2_0_to_0_4, fest2);
                 }
             }
             {
@@ -1700,6 +1856,8 @@ int main() {
                     AssertEqual(atc2element[1].GetKode(), "C01DX16");
                     AssertOppfRefusjonOld(festDeserializerDb3_0_1_0_to_0_4, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_1_0_to_0_4, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_1_0_to_0_4, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_1_0_to_0_4, fest2);
                 }
             }
             {
@@ -1756,8 +1914,15 @@ int main() {
                     AssertEqual(atc2element[1].GetKode(), "C01DX16");
                     AssertOppfRefusjonOld(festDeserializerDb3_0_0_0_to_0_4, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_0_0_to_0_4, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_0_0_to_0_4, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_0_0_to_0_4, fest2);
                 }
             }
+            std::string fest3Db_1_4_0_to_latest = WriteFest(
+                    [&festDeserializerDb2_1_4_0](FestSerializer &serializer) {
+                        festDeserializerDb2_1_4_0.Preload(serializer);
+                    });
+            std::cout << "DB 3 upgraded from v1.4.0 size " << fest3Db_1_4_0_to_latest.size() << "\n";
             std::string fest3Db_1_3_0_to_latest = WriteFest(
                     [&festDeserializerDb2_1_3_0](FestSerializer &serializer) {
                         festDeserializerDb2_1_3_0.Preload(serializer);
@@ -1804,10 +1969,29 @@ int main() {
                     });
             std::cout << "DB 3 upgraded from v0.0.0 size " << fest3Db_0_0_0_to_latest.size() << "\n";
             {
+                FestDeserializer festDeserializerDb3_1_4_0_to_latest{fest3Db_1_4_0_to_latest.data(),
+                                                                     fest3Db_1_4_0_to_latest.size()};
+                {
+                    AssertVersion(festDeserializerDb3_1_4_0_to_latest, 1, 5, 0);
+                    auto festVectors = GetFestVectors(festDeserializerDb3_1_4_0_to_latest);
+                    AssertSize(festVectors, 2);
+                    auto fest1 = festVectors[0];
+                    auto fest2 = festVectors[1];
+                    AssertEqual(fest1.GetDato(), festVersion1);
+                    AssertEqual(fest2.GetDato(), festVersion2);
+                    AssertFest1NewTermsV1_3_0(festDeserializerDb3_1_4_0_to_latest, fest1);
+                    AssertFest2NewTerms(festDeserializerDb3_1_4_0_to_latest, fest2);
+                    AssertOppfRefusjonNew_V1_4_0(festDeserializerDb3_1_4_0_to_latest, fest1);
+                    AssertOppfRefusjonNew_V1_4_0(festDeserializerDb3_1_4_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_4_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_4_0_to_latest, fest2);
+                }
+            }
+            {
                 FestDeserializer festDeserializerDb3_1_3_0_to_latest{fest3Db_1_3_0_to_latest.data(),
                                                                      fest3Db_1_3_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_1_3_0_to_latest, 1, 4, 0);
+                    AssertVersion(festDeserializerDb3_1_3_0_to_latest, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_1_3_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1818,13 +2002,15 @@ int main() {
                     AssertFest2NewTerms(festDeserializerDb3_1_3_0_to_latest, fest2);
                     AssertOppfRefusjonNew(festDeserializerDb3_1_3_0_to_latest, fest1);
                     AssertOppfRefusjonNew(festDeserializerDb3_1_3_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_3_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_3_0_to_latest, fest2);
                 }
             }
             {
                 FestDeserializer festDeserializerDb3_1_2_0_to_latest{fest3Db_1_2_0_to_latest.data(),
                                                                      fest3Db_1_2_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_1_2_0_to_latest, 1, 4, 0);
+                    AssertVersion(festDeserializerDb3_1_2_0_to_latest, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_1_2_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1835,13 +2021,15 @@ int main() {
                     AssertFest2NewTerms(festDeserializerDb3_1_2_0_to_latest, fest2);
                     AssertOppfRefusjonNew(festDeserializerDb3_1_2_0_to_latest, fest1);
                     AssertOppfRefusjonNew(festDeserializerDb3_1_2_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_2_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_2_0_to_latest, fest2);
                 }
             }
             {
                 FestDeserializer festDeserializerDb3_1_1_0_to_latest{fest3Db_1_1_0_to_latest.data(),
                                                                      fest3Db_1_1_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_1_1_0_to_latest, 1, 4, 0);
+                    AssertVersion(festDeserializerDb3_1_1_0_to_latest, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_1_1_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1852,13 +2040,15 @@ int main() {
                     AssertFest2NewTerms(festDeserializerDb3_1_1_0_to_latest, fest2);
                     AssertOppfRefusjonOld(festDeserializerDb3_1_1_0_to_latest, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_1_1_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_1_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_1_0_to_latest, fest2);
                 }
             }
             {
                 FestDeserializer festDeserializerDb3_1_0_0_to_latest{fest3Db_1_0_0_to_latest.data(),
                                                                      fest3Db_1_0_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_1_0_0_to_latest, 1, 4, 0);
+                    AssertVersion(festDeserializerDb3_1_0_0_to_latest, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_1_0_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1869,13 +2059,15 @@ int main() {
                     AssertFest2NewTerms(festDeserializerDb3_1_0_0_to_latest, fest2);
                     AssertOppfRefusjonOld(festDeserializerDb3_1_0_0_to_latest, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_1_0_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_0_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_1_0_0_to_latest, fest2);
                 }
             }
             {
                 FestDeserializer festDeserializerDb3_0_4_0_to_latest{fest3Db_0_4_0_to_latest.data(),
                                                                      fest3Db_0_4_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_4_0_to_latest, 1, 4, 0);
+                    AssertVersion(festDeserializerDb3_0_4_0_to_latest, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_4_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1886,13 +2078,15 @@ int main() {
                     AssertFest2NewTerms(festDeserializerDb3_0_4_0_to_latest, fest2);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_4_0_to_latest, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_4_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_4_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_4_0_to_latest, fest2);
                 }
             }
             {
                 FestDeserializer festDeserializerDb3_0_3_0_to_latest{fest3Db_0_3_0_to_latest.data(),
                                                                      fest3Db_0_3_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_3_0_to_latest, 1, 4, 0);
+                    AssertVersion(festDeserializerDb3_0_3_0_to_latest, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_3_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -1944,13 +2138,15 @@ int main() {
                     AssertEqual(atc2element[1].GetKode(), "C01DX16");
                     AssertOppfRefusjonOld(festDeserializerDb3_0_3_0_to_latest, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_3_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_3_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_3_0_to_latest, fest2);
                 }
             }
             {
                 FestDeserializer festDeserializerDb3_0_2_0_to_latest{fest3Db_0_2_0_to_latest.data(),
                                                                      fest3Db_0_2_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_2_0_to_latest, 1, 4, 0);
+                    AssertVersion(festDeserializerDb3_0_2_0_to_latest, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_2_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -2000,13 +2196,15 @@ int main() {
                     AssertEqual(atc2element[1].GetKode(), "C01DX16");
                     AssertOppfRefusjonOld(festDeserializerDb3_0_2_0_to_latest, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_2_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_2_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_2_0_to_latest, fest2);
                 }
             }
             {
                 FestDeserializer festDeserializerDb3_0_1_0_to_latest{fest3Db_0_1_0_to_latest.data(),
                                                                      fest3Db_0_1_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_1_0_to_latest, 1, 4, 0);
+                    AssertVersion(festDeserializerDb3_0_1_0_to_latest, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_1_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -2056,13 +2254,15 @@ int main() {
                     AssertEqual(atc2element[1].GetKode(), "C01DX16");
                     AssertOppfRefusjonOld(festDeserializerDb3_0_1_0_to_latest, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_1_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_1_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_1_0_to_latest, fest2);
                 }
             }
             {
                 FestDeserializer festDeserializerDb3_0_0_0_to_latest{fest3Db_0_0_0_to_latest.data(),
                                                                      fest3Db_0_0_0_to_latest.size()};
                 {
-                    AssertVersion(festDeserializerDb3_0_0_0_to_latest, 1, 4, 0);
+                    AssertVersion(festDeserializerDb3_0_0_0_to_latest, 1, 5, 0);
                     auto festVectors = GetFestVectors(festDeserializerDb3_0_0_0_to_latest);
                     AssertSize(festVectors, 2);
                     auto fest1 = festVectors[0];
@@ -2112,31 +2312,33 @@ int main() {
                     AssertEqual(atc2element[1].GetKode(), "C01DX16");
                     AssertOppfRefusjonOld(festDeserializerDb3_0_0_0_to_latest, fest1);
                     AssertOppfRefusjonOld(festDeserializerDb3_0_0_0_to_latest, fest2);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_0_0_to_latest, fest1);
+                    AssertByttegruppe_Before_1_5_0(festDeserializerDb3_0_0_0_to_latest, fest2);
                 }
             }
         }
     }
     {
-        std::string fest4Db_0_3_0_to_0_4 = WriteFestVersion(
-                [&festDeserializerDb1_0_3_0, &festInput2](FestSerializer &serializer) {
+        std::string fest4Db_0_3_0_to_0_4 = WriteFestVersion_0(
+                [&festDeserializerDb1_0_3_0, &festInput2](FestSerializer_0 &serializer) {
                     festDeserializerDb1_0_3_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 0, 4, 0);
         std::cout << "DB 4 upgraded from v0.3.0 to v0.4.0 size " << fest4Db_0_3_0_to_0_4.size() << "\n";
-        std::string fest4Db_0_2_0_to_0_4 = WriteFestVersion(
-                [&festDeserializerDb1_0_2_0, &festInput2](FestSerializer &serializer) {
+        std::string fest4Db_0_2_0_to_0_4 = WriteFestVersion_0(
+                [&festDeserializerDb1_0_2_0, &festInput2](FestSerializer_0 &serializer) {
                     festDeserializerDb1_0_2_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 0, 4, 0);
         std::cout << "DB 4 upgraded from v0.2.0 to v0.4.0 size " << fest4Db_0_2_0_to_0_4.size() << "\n";
-        std::string fest4Db_0_1_0_to_0_4 = WriteFestVersion(
-                [&festDeserializerDb1_0_1_0, &festInput2](FestSerializer &serializer) {
+        std::string fest4Db_0_1_0_to_0_4 = WriteFestVersion_0(
+                [&festDeserializerDb1_0_1_0, &festInput2](FestSerializer_0 &serializer) {
                     festDeserializerDb1_0_1_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 0, 4, 0);
         std::cout << "DB 4 upgraded from v0.1.0 to v0.4.0 size " << fest4Db_0_1_0_to_0_4.size() << "\n";
-        std::string fest4Db_0_0_0_to_0_4 = WriteFestVersion(
-                [&festDeserializerDb1_0_0_0, &festInput2](FestSerializer &serializer) {
+        std::string fest4Db_0_0_0_to_0_4 = WriteFestVersion_0(
+                [&festDeserializerDb1_0_0_0, &festInput2](FestSerializer_0 &serializer) {
                     festDeserializerDb1_0_0_0.Preload(serializer);
                     AssertTrue(serializer.Serialize(festInput2));
                 }, 0, 4, 0);
@@ -2197,6 +2399,8 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb4_0_3_0_to_0_4, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb4_0_3_0_to_0_4, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_3_0_to_0_4, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_3_0_to_0_4, fest2);
             }
         }
         {
@@ -2254,6 +2458,8 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb4_0_2_0_to_0_4, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb4_0_2_0_to_0_4, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_2_0_to_0_4, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_2_0_to_0_4, fest2);
             }
         }
         {
@@ -2311,6 +2517,8 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb4_0_1_0_to_0_4, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb4_0_1_0_to_0_4, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_1_0_to_0_4, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_1_0_to_0_4, fest2);
             }
         }
         {
@@ -2368,8 +2576,16 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb4_0_0_0_to_0_4, fest1);
                 AssertOppfRefusjonOld(festDeserializerDb4_0_0_0_to_0_4, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_0_0_to_0_4, fest1);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_0_0_to_0_4, fest2);
             }
         }
+        std::string fest4Db_1_4_0_to_latest = WriteFest(
+                [&festDeserializerDb1_1_4_0, &festInput2](FestSerializer &serializer) {
+                    festDeserializerDb1_1_4_0.Preload(serializer);
+                    AssertTrue(serializer.Serialize(festInput2));
+                });
+        std::cout << "DB 4 upgraded from v1.4.0 size " << fest4Db_1_4_0_to_latest.size() << "\n";
         std::string fest4Db_1_3_0_to_latest = WriteFest(
                 [&festDeserializerDb1_1_3_0, &festInput2](FestSerializer &serializer) {
                     festDeserializerDb1_1_3_0.Preload(serializer);
@@ -2425,10 +2641,29 @@ int main() {
                 });
         std::cout << "DB 4 upgraded from v0.0.0 size " << fest4Db_0_0_0_to_latest.size() << "\n";
         {
+            FestDeserializer festDeserializerDb4_1_4_0_to_latest{fest4Db_1_4_0_to_latest.data(),
+                                                                 fest4Db_1_4_0_to_latest.size()};
+            {
+                AssertVersion(festDeserializerDb4_1_4_0_to_latest, 1, 5, 0);
+                auto festVectors = GetFestVectors(festDeserializerDb4_1_4_0_to_latest);
+                AssertSize(festVectors, 2);
+                auto fest1 = festVectors[0];
+                auto fest2 = festVectors[1];
+                AssertEqual(fest1.GetDato(), festVersion1);
+                AssertEqual(fest2.GetDato(), festVersion2);
+                AssertFest1NewTermsV1_3_0(festDeserializerDb4_1_4_0_to_latest, fest1);
+                AssertFest2NewTerms(festDeserializerDb4_1_4_0_to_latest, fest2);
+                AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_1_4_0_to_latest, fest1);
+                AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_1_4_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_1_4_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_1_4_0_to_latest, fest2);
+            }
+        }
+        {
             FestDeserializer festDeserializerDb4_1_3_0_to_latest{fest4Db_1_3_0_to_latest.data(),
                                                                  fest4Db_1_3_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_1_3_0_to_latest, 1, 4, 0);
+                AssertVersion(festDeserializerDb4_1_3_0_to_latest, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_1_3_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2439,13 +2674,15 @@ int main() {
                 AssertFest2NewTerms(festDeserializerDb4_1_3_0_to_latest, fest2);
                 AssertOppfRefusjonNew(festDeserializerDb4_1_3_0_to_latest, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_1_3_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_1_3_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_1_3_0_to_latest, fest2);
             }
         }
         {
             FestDeserializer festDeserializerDb4_1_2_0_to_latest{fest4Db_1_2_0_to_latest.data(),
                                                                  fest4Db_1_2_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_1_2_0_to_latest, 1, 4, 0);
+                AssertVersion(festDeserializerDb4_1_2_0_to_latest, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_1_2_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2456,13 +2693,15 @@ int main() {
                 AssertFest2NewTerms(festDeserializerDb4_1_2_0_to_latest, fest2);
                 AssertOppfRefusjonNew(festDeserializerDb4_1_2_0_to_latest, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_1_2_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_1_2_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_1_2_0_to_latest, fest2);
             }
         }
         {
             FestDeserializer festDeserializerDb4_1_1_0_to_latest{fest4Db_1_1_0_to_latest.data(),
                                                                  fest4Db_1_1_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_1_1_0_to_latest, 1, 4, 0);
+                AssertVersion(festDeserializerDb4_1_1_0_to_latest, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_1_1_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2473,13 +2712,15 @@ int main() {
                 AssertFest2NewTerms(festDeserializerDb4_1_1_0_to_latest, fest2);
                 AssertOppfRefusjonOld(festDeserializerDb4_1_1_0_to_latest, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_1_1_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_1_1_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_1_1_0_to_latest, fest2);
             }
         }
         {
             FestDeserializer festDeserializerDb4_1_0_0_to_latest{fest4Db_1_0_0_to_latest.data(),
                                                                  fest4Db_1_0_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_1_0_0_to_latest, 1, 4, 0);
+                AssertVersion(festDeserializerDb4_1_0_0_to_latest, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_1_0_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2490,13 +2731,15 @@ int main() {
                 AssertFest2NewTerms(festDeserializerDb4_1_0_0_to_latest, fest2);
                 AssertOppfRefusjonOld(festDeserializerDb4_1_0_0_to_latest, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_1_0_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_1_0_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_1_0_0_to_latest, fest2);
             }
         }
         {
             FestDeserializer festDeserializerDb4_0_4_0_to_latest{fest4Db_0_4_0_to_latest.data(),
                                                                  fest4Db_0_4_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_4_0_to_latest, 1, 4, 0);
+                AssertVersion(festDeserializerDb4_0_4_0_to_latest, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_4_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2548,13 +2791,15 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb4_0_4_0_to_latest, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_0_4_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_4_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_0_4_0_to_latest, fest2);
             }
         }
         {
             FestDeserializer festDeserializerDb4_0_3_0_to_latest{fest4Db_0_3_0_to_latest.data(),
                                                                  fest4Db_0_3_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_3_0_to_latest, 1, 4, 0);
+                AssertVersion(festDeserializerDb4_0_3_0_to_latest, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_3_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2606,13 +2851,15 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb4_0_3_0_to_latest, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_0_3_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_3_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_0_3_0_to_latest, fest2);
             }
         }
         {
             FestDeserializer festDeserializerDb4_0_2_0_to_latest{fest4Db_0_2_0_to_latest.data(),
                                                                  fest4Db_0_2_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_2_0_to_latest, 1, 4, 0);
+                AssertVersion(festDeserializerDb4_0_2_0_to_latest, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_2_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2663,13 +2910,15 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb4_0_2_0_to_latest, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_0_2_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_2_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_0_2_0_to_latest, fest2);
             }
         }
         {
             FestDeserializer festDeserializerDb4_0_1_0_to_latest{fest4Db_0_1_0_to_latest.data(),
                                                                  fest4Db_0_1_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_1_0_to_latest, 1, 4, 0);
+                AssertVersion(festDeserializerDb4_0_1_0_to_latest, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_1_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2720,13 +2969,15 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb4_0_1_0_to_latest, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_0_1_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_1_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_0_1_0_to_latest, fest2);
             }
         }
         {
             FestDeserializer festDeserializerDb4_0_0_0_to_latest{fest4Db_0_0_0_to_latest.data(),
                                                                  fest4Db_0_0_0_to_latest.size()};
             {
-                AssertVersion(festDeserializerDb4_0_0_0_to_latest, 1, 4, 0);
+                AssertVersion(festDeserializerDb4_0_0_0_to_latest, 1, 5, 0);
                 auto festVectors = GetFestVectors(festDeserializerDb4_0_0_0_to_latest);
                 AssertSize(festVectors, 2);
                 auto fest1 = festVectors[0];
@@ -2777,6 +3028,8 @@ int main() {
                 AssertEqual(atc2element[1].GetKode(), "C01DX16");
                 AssertOppfRefusjonOld(festDeserializerDb4_0_0_0_to_latest, fest1);
                 AssertOppfRefusjonNew_V1_4_0(festDeserializerDb4_0_0_0_to_latest, fest2);
+                AssertByttegruppe_Before_1_5_0(festDeserializerDb4_0_0_0_to_latest, fest1);
+                AssertByttegruppe(festDeserializerDb4_0_0_0_to_latest, fest2);
             }
         }
     }

@@ -8,10 +8,12 @@
 #include "Oppf.h"
 #include "Byttegruppe.h"
 
-class POppfByttegruppe;
+class POppfByttegruppe_0_0_0;
+class POppfByttegruppe_1_5_0;
 
 class OppfByttegruppe : public Oppf {
-    friend POppfByttegruppe;
+    friend POppfByttegruppe_0_0_0;
+    friend POppfByttegruppe_1_5_0;
 private:
     Byttegruppe byttegruppe;
 public:

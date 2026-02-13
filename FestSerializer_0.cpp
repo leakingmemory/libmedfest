@@ -2,22 +2,20 @@
 // Created by sigsegv on 1/9/23.
 //
 
-#include "FestSerializer.h"
+#include "FestSerializer_0.h"
 #include "Struct/Packed/PackException.h"
 #include <iostream>
 #include <fstream>
 
-FestData::FestData(const std::string &dato) : dato(dato) {}
-
-FestSerializer::FestSerializer(const std::shared_ptr<std::ostream> &stream)
+FestSerializer_0::FestSerializer_0(const std::shared_ptr<std::ostream> &stream)
 : output(stream), percentDone(0), minimumMajorVersion(0) {
 }
 
-FestSerializer::FestSerializer(const std::string &filename)
-: FestSerializer(std::make_shared<std::ofstream>(filename, std::ios::binary | std::ios::out | std::ios::trunc)) {
+FestSerializer_0::FestSerializer_0(const std::string &filename)
+: FestSerializer_0(std::make_shared<std::ofstream>(filename, std::ios::binary | std::ios::out | std::ios::trunc)) {
 }
 
-bool FestSerializer::is_open() const {
+bool FestSerializer_0::is_open() const {
     if (!output) {
         return false;
     }
@@ -28,7 +26,7 @@ bool FestSerializer::is_open() const {
     return true;
 }
 
-bool FestSerializer::Serialize(const Fest &fest) {
+bool FestSerializer_0::Serialize(const Fest &fest) {
     if (!is_open()) {
         std::cerr << "Error: Output file is not opened, or writeable\n";
         return false;
@@ -46,20 +44,20 @@ bool FestSerializer::Serialize(const Fest &fest) {
     return result;
 }
 
-bool FestSerializer::Write(uint64_t magic) {
+bool FestSerializer_0::Write(uint64_t magic) {
     if (!is_open()) {
         std::cerr << "Error: Output file is not opened, or writeable\n";
         throw PackException("File not writeable or open");
     }
     auto dbVersion = GetDbVersion(magic);
-    if (dbVersion.major < 1) {
-        throw PackException("Output version below 1.X.X is not supported, use FestSerializer_0");
-    }
     if (dbVersion.major > 1) {
         throw PackException("Output version above 1.X.X is not supported");
     }
     if (dbVersion.major == 1 && dbVersion.minor > 5) {
         throw PackException("Output version above 1.5.X is not supported");
+    }
+    if (dbVersion.major == 0 && dbVersion.minor > 4) {
+        throw PackException("Output version major 0 with minor > 4 (0.4.X) is not supported");
     }
     if (dbVersion.major < minimumMajorVersion) {
         throw PackException("Output version below minimum with the imported data");
@@ -194,14 +192,8 @@ bool FestSerializer::Write(uint64_t magic) {
     if (varselSlv_0_4_0.size() > std::numeric_limits<uint32_t>::max()) {
         throw PackException("Max oppf varsel slv size v0.4.0\n");
     }
-    if (byttegruppe_0_0_0.size() >= (1 << 16)) {
+    if (byttegruppe.size() >= (1 << 16)) {
         throw PackException("Max oppf byttegruppe size\n");
-    }
-    if (byttegruppe_1_5_0.size() >= (1 << 16)) {
-        throw PackException("Max oppf byttegruppe size\n");
-    }
-    if (byttegruppe_0_0_0.size() != byttegruppe_1_5_0.size()) {
-        throw PackException("Byttegruppe v0.0.0 and v1.5.0 not matching\n");
     }
     if (referanseList.size() >= (1 << 16)) {
         throw PackException("Max referanse list storage size\n");
@@ -256,7 +248,7 @@ bool FestSerializer::Write(uint64_t magic) {
         .numPakningsinfo = (uint16_t) pakningsinfoList.size(),
         .numPrisVare = (uint16_t) prisVareList.size(),
         .numUuidLists = (uint16_t) (dbVersion.major <= 1 ? festUuidList_0_0_0.size() : 0),
-        .numPakning = (uint16_t) 0,
+        .numPakning = (uint16_t) (dbVersion.major == 0 ? (legemiddelpakning_0_0_0.size() <= std::numeric_limits<uint16_t>::max() ? legemiddelpakning_0_0_0.size() : std::numeric_limits<uint16_t>::max()) : 0),
         .numRefusjonList = (uint16_t) refusjonList.size(),
         .numLegemiddelVirkestoff = (uint16_t) (dbVersion.major <= 1 ? legemiddelVirkestoff_0_0_0.size() : 0),
         .numStringList = (uint16_t) stringList.size(),
@@ -266,14 +258,14 @@ bool FestSerializer::Write(uint64_t magic) {
         .numLegemiddeldose = (uint16_t) (dbVersion.major <= 1 ? legemiddeldose_0_0_0.size() : 0),
         .numVirkestoffMedStyrke = (uint16_t) virkestoffMedStyrke.size(),
         .numVirkestoff = (uint16_t) (dbVersion.major <= 1 ? virkestoff_0_0_0.size() : 0),
-        .numElement = (uint16_t) 0,
-        .numKodeverk = (uint16_t) 0,
+        .numElement = (uint16_t) (dbVersion.major == 0 ? elementList_0_0_0.size() : 0),
+        .numKodeverk = (uint16_t) (dbVersion.major == 0 ? kodeverk_0_0_0.size() : 0),
         .numRefRefusjonsvilkar_0_0_0 = (uint16_t) refRefusjonsvilkarList_0_0_0.size(),
-        .numRefusjonskode_0_0_0 = (uint16_t) 0,
+        .numRefusjonskode_0_0_0 = (uint16_t) (dbVersion.major == 0 ? refusjonskodeList_0_0_0.size() : 0),
         .numRefusjon = (uint16_t) refusjon_0_0_0.size(),
         .numVilkar = (uint16_t) vilkar.size(),
         .numVarselSlv = (uint16_t) varselSlv_0_0_0.size(),
-        .numByttegruppe = (uint16_t) byttegruppe_1_5_0.size(),
+        .numByttegruppe = (uint16_t) byttegruppe.size(),
         .numReferanseList = (uint16_t) referanseList.size(),
         .numSubstansgruppeList = (uint16_t) substansgruppeList.size(),
         .numSubstansList = (uint16_t) substansList.size(),
@@ -283,12 +275,12 @@ bool FestSerializer::Write(uint64_t magic) {
         .numDoseringList = (uint16_t) doseringList.size(),
         .numLegemiddelforbrukList = (uint16_t) legemiddelforbrukList.size(),
         .numStrDosering = (uint16_t) strDosering.size(),
-        .numUint16List = (uint32_t) 0,
-        .numFests = (uint16_t) 0
+        .numUint16List = (uint32_t) (dbVersion.major == 0 ? uint16List_V_0_0_0.size() : 0),
+        .numFests = (uint16_t) (dbVersion.major == 0 ? fests_V_0_0_0.size() : 0)
     };
     size_t offset = sizeof(firstHeader);
     output->write((char *) (void *) &firstHeader, offset);
-    if (dbVersion.major == 1) {
+    if (dbVersion.major <= 1) {
         {
             auto off = offset % alignment;
             if (off != 0) {
@@ -304,6 +296,26 @@ bool FestSerializer::Write(uint64_t magic) {
             offset += size;
         }
     }
+    if (dbVersion.major == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        {
+            auto *ptr = legemiddelpakning_0_0_0.data();
+            auto size = (size_t) legemiddelpakning_0_0_0.size();
+            if (size > std::numeric_limits<uint16_t>::max()) {
+                size = std::numeric_limits<uint16_t>::max();
+            }
+            size = size * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
+    }
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -312,7 +324,7 @@ bool FestSerializer::Write(uint64_t magic) {
             offset += off;
         }
     }
-    if (dbVersion.major == 1) {
+    if (dbVersion.major <= 1) {
         {
             auto *ptr = legemiddelVirkestoff_0_0_0.data();
             auto size = legemiddelVirkestoff_0_0_0.size() * sizeof(*ptr);
@@ -362,7 +374,7 @@ bool FestSerializer::Write(uint64_t magic) {
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
-    if (dbVersion.major == 1) {
+    if (dbVersion.major <= 1) {
         {
             auto off = offset % alignment;
             if (off != 0) {
@@ -392,7 +404,7 @@ bool FestSerializer::Write(uint64_t magic) {
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
-    if (dbVersion.major == 1) {
+    if (dbVersion.major <= 1) {
         {
             auto off = offset % alignment;
             if (off != 0) {
@@ -404,6 +416,22 @@ bool FestSerializer::Write(uint64_t magic) {
         {
             auto *ptr = virkestoff_0_0_0.data();
             auto size = virkestoff_0_0_0.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
+    }
+    if (dbVersion.major == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        {
+            auto *ptr = kodeverk_0_0_0.data();
+            auto size = kodeverk_0_0_0.size() * sizeof(*ptr);
             output->write((char *) (void *) ptr, size);
             offset += size;
         }
@@ -436,7 +464,7 @@ bool FestSerializer::Write(uint64_t magic) {
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
-    if (dbVersion.major == 1) {
+    if (dbVersion.major <= 1) {
         {
             auto off = offset % alignment;
             if (off != 0) {
@@ -461,8 +489,8 @@ bool FestSerializer::Write(uint64_t magic) {
         }
     }
     {
-        auto *ptr = byttegruppe_0_0_0.data();
-        auto size = byttegruppe_0_0_0.size() * sizeof(*ptr);
+        auto *ptr = byttegruppe.data();
+        auto size = byttegruppe.size() * sizeof(*ptr);
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
@@ -530,7 +558,7 @@ bool FestSerializer::Write(uint64_t magic) {
             offset += off;
         }
     }
-    if (dbVersion.major == 1) {
+    if (dbVersion.major <= 1) {
         {
             auto list = festUuidList_0_0_0.GetStorageBlock();
             auto *ptr = list.data();
@@ -644,7 +672,24 @@ bool FestSerializer::Write(uint64_t magic) {
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
-    if (dbVersion.major == 1) {
+    if (dbVersion.major == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        {
+            auto list = elementList_0_0_0.GetStorageList();
+            auto *ptr = list.data();
+            auto size = list.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
+    }
+    if (dbVersion.major < 2) {
         {
             auto off = offset % alignment;
             if (off != 0) {
@@ -655,6 +700,23 @@ bool FestSerializer::Write(uint64_t magic) {
         }
         {
             auto list = refRefusjonsvilkarList_0_0_0.GetStorageList();
+            auto *ptr = list.data();
+            auto size = list.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
+    }
+    if (dbVersion.major == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        {
+            auto list = refusjonskodeList_0_0_0.GetStorageList();
             auto *ptr = list.data();
             auto size = list.size() * sizeof(*ptr);
             output->write((char *) (void *) ptr, size);
@@ -751,6 +813,37 @@ bool FestSerializer::Write(uint64_t magic) {
         output->write((char *) (void *) ptr, size);
         offset += size;
     }
+    if (dbVersion.major == 0) {
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        {
+            auto list = uint16List_V_0_0_0.GetStorageList();
+            auto *ptr = list.data();
+            auto size = list.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
+        {
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        {
+            auto *ptr = fests_V_0_0_0.data();
+            auto size = fests_V_0_0_0.size() * sizeof(*ptr);
+            output->write((char *) (void *) ptr, size);
+            offset += size;
+        }
+    }
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -771,102 +864,7 @@ bool FestSerializer::Write(uint64_t magic) {
         output->write(stringblock.c_str(), size);
         offset += size;
     }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
-        }
-    }
-    if (offset > std::numeric_limits<uint32_t>::max()) {
-        throw PackException("Size limits overshoot (v0.1.0 - offset of second header)");
-    }
-    FestTrailer trailer{.reserved = 0, .secondHeaderOffset = (uint32_t) offset, .magic = firstHeader.magic};
-    if (stringblock.size() > std::numeric_limits<uint32_t>::max()) {
-        throw PackException("Stringblock size overshoot (v0.1.0)");
-    }
-    if (refusjonskodeList_0_1_0.size() > std::numeric_limits<uint16_t>::max()) {
-        throw PackException("Refusjonskode list size overshoot (v0.1.0)");
-    }
-    if (refRefusjonsvilkarList_1_2_0.size() > std::numeric_limits<uint16_t>::max()) {
-        throw PackException("Refusjonskode list size overshoot (v1.2.0)");
-    }
-    if (dbVersion.major == 0 && dbVersion.minor > 2 && fests_V_0_2_0.size() != fests_V_0_3_0.size()) {
-        throw PackException("Size mismatch V 0.2.0 vs. 0.3.0");
-    }
-    FestSecondHeader secondHeader{
-        .magic = firstHeader.magic,
-        .stringblockSize = (uint32_t) stringblock.size(),
-        .secondHeaderSize = sizeof(FestSecondHeader),
-        .numRefusjonskode_0_1_0 = (uint16_t) refusjonskodeList_0_1_0.size(),
-        .numUint16NewList = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 1 ? uint16List.size() : 0),
-        .numFests = (uint16_t) (dbVersion.major == 0 ? (dbVersion.minor > 1 ? fests_V_0_2_0.size() : 0) : fests_V_0_3_0.size()),
-        .numKodeverk = (uint16_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? kodeverk_0_3_0.size() : 0),
-        .numElementList = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? elementList_0_3_0.size() : 0),
-        .numTermList = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? termList.size() : 0),
-        .numUint32List = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? uint32List.size() : 0),
-        .numPakning_0_3_0 = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? legemiddelpakning_0_0_0.size() : 0),
-        .numPakning_0_4_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddelpakning_0_4_0.size() : 0),
-        .numMerkevare = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddelMerkevare_0_4_0.size() : 0),
-        .numLegemiddelVirkestoff = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddelVirkestoff_0_4_0.size() : 0),
-        .numLegemiddeldose = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddeldose_0_4_0.size() : 0),
-        .numFestUuidList = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? festUuidList_0_4_0.size() : 0),
-        .numVirkestoff = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? virkestoff_0_4_0.size() : 0),
-        .numVarselSlv = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? varselSlv_0_4_0.size() : 0),
-        .numRefRefusjonsvilkar_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refRefusjonsvilkarList_1_2_0.size() : 0),
-        .numRefusjonskode_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refusjonskodeList_1_2_0.size() : 0),
-        .numPakning_1_3_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 2) ? legemiddelpakning_1_3_0.size() : 0),
-        .numRefusjon_1_4_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 3) ? refusjon_1_4_0.size() : 0),
-        .numRefusjonsgruppeList = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 3) ? refusjonsgruppeList.size() : 0)
-    };
-    output->write((char *) (void *) &secondHeader, sizeof(secondHeader));
-    offset += sizeof(secondHeader);
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
-        }
-    }
-    {
-        auto list = refusjonskodeList_0_1_0.GetStorageList();
-        auto *ptr = list.data();
-        auto size = list.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
-        }
-    }
-    {
-        auto list = uint16List.GetStorageList();
-        auto *ptr = list.data();
-        auto size = list.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
-        }
-    }
-    if (dbVersion.major == 0) {
-        {
-            auto *ptr = fests_V_0_2_0.data();
-            auto size = fests_V_0_2_0.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
+    if (dbVersion.major > 0 || dbVersion.minor > 0) {
         {
             auto off = offset % alignment;
             if (off != 0) {
@@ -875,55 +873,59 @@ bool FestSerializer::Write(uint64_t magic) {
                 offset += off;
             }
         }
-    }
-    {
-        auto list = elementList_0_3_0.GetStorageList();
-        auto *ptr = list.data();
-        auto size = list.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+        if (offset > std::numeric_limits<uint32_t>::max()) {
+            throw PackException("Size limits overshoot (v0.1.0 - offset of second header)");
         }
-    }
-    {
-        auto list = termList.GetStorageList();
-        auto *ptr = list.data();
-        auto size = list.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+        FestTrailer trailer{.reserved = 0, .secondHeaderOffset = (uint32_t) offset, .magic = firstHeader.magic};
+        if (stringblock.size() > std::numeric_limits<uint32_t>::max()) {
+            throw PackException("Stringblock size overshoot (v0.1.0)");
         }
-    }
-    {
-        auto &list = kodeverk_0_3_0;
-        auto *ptr = list.data();
-        auto size = list.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
+        if (refusjonskodeList_0_1_0.size() > std::numeric_limits<uint16_t>::max()) {
+            throw PackException("Refusjonskode list size overshoot (v0.1.0)");
         }
-    }
-    if (dbVersion.major <= 1) {
+        if (refRefusjonsvilkarList_1_2_0.size() > std::numeric_limits<uint16_t>::max()) {
+            throw PackException("Refusjonskode list size overshoot (v1.2.0)");
+        }
+        if (dbVersion.major == 0 && dbVersion.minor > 2 && fests_V_0_2_0.size() != fests_V_0_3_0.size()) {
+            throw PackException("Size mismatch V 0.2.0 vs. 0.3.0");
+        }
+        FestSecondHeader secondHeader{
+            .magic = firstHeader.magic,
+            .stringblockSize = (uint32_t) stringblock.size(),
+            .secondHeaderSize = sizeof(FestSecondHeader),
+            .numRefusjonskode_0_1_0 = (uint16_t) refusjonskodeList_0_1_0.size(),
+            .numUint16NewList = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 1 ? uint16List.size() : 0),
+            .numFests = (uint16_t) (dbVersion.major == 0 ? (dbVersion.minor > 1 ? fests_V_0_2_0.size() : 0) : fests_V_0_3_0.size()),
+            .numKodeverk = (uint16_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? kodeverk_0_3_0.size() : 0),
+            .numElementList = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? elementList_0_3_0.size() : 0),
+            .numTermList = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? termList.size() : 0),
+            .numUint32List = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? uint32List.size() : 0),
+            .numPakning_0_3_0 = (uint32_t) (dbVersion.major > 0 || dbVersion.minor > 2 ? legemiddelpakning_0_0_0.size() : 0),
+            .numPakning_0_4_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddelpakning_0_4_0.size() : 0),
+            .numMerkevare = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddelMerkevare_0_4_0.size() : 0),
+            .numLegemiddelVirkestoff = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddelVirkestoff_0_4_0.size() : 0),
+            .numLegemiddeldose = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? legemiddeldose_0_4_0.size() : 0),
+            .numFestUuidList = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? festUuidList_0_4_0.size() : 0),
+            .numVirkestoff = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? virkestoff_0_4_0.size() : 0),
+            .numVarselSlv = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3) ? varselSlv_0_4_0.size() : 0),
+            .numRefRefusjonsvilkar_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refRefusjonsvilkarList_1_2_0.size() : 0),
+            .numRefusjonskode_1_2_0 = (uint16_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1) ? refusjonskodeList_1_2_0.size() : 0),
+            .numPakning_1_3_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 2) ? legemiddelpakning_1_3_0.size() : 0),
+            .numRefusjon_1_4_0 = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 3) ? refusjon_1_4_0.size() : 0),
+            .numRefusjonsgruppeList = (uint32_t) (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 3) ? refusjonsgruppeList.size() : 0)
+        };
+        output->write((char *) (void *) &secondHeader, sizeof(secondHeader));
+        offset += sizeof(secondHeader);
         {
-            auto &list = legemiddelpakning_0_0_0;
+            auto off = offset % alignment;
+            if (off != 0) {
+                off = alignment - off;
+                output->write(&(alignmentBlock[0]), off);
+                offset += off;
+            }
+        }
+        {
+            auto list = refusjonskodeList_0_1_0.GetStorageList();
             auto *ptr = list.data();
             auto size = list.size() * sizeof(*ptr);
             output->write((char *) (void *) ptr, size);
@@ -937,266 +939,347 @@ bool FestSerializer::Write(uint64_t magic) {
                 offset += off;
             }
         }
+        if (dbVersion.major > 0 || dbVersion.minor > 1) {
+            {
+                auto list = uint16List.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            if (dbVersion.major == 0) {
+                {
+                    auto *ptr = fests_V_0_2_0.data();
+                    auto size = fests_V_0_2_0.size() * sizeof(*ptr);
+                    output->write((char *) (void *) ptr, size);
+                    offset += size;
+                }
+                {
+                    auto off = offset % alignment;
+                    if (off != 0) {
+                        off = alignment - off;
+                        output->write(&(alignmentBlock[0]), off);
+                        offset += off;
+                    }
+                }
+            }
+        }
+        if (dbVersion.major > 0 || dbVersion.minor > 2) {
+            {
+                auto list = elementList_0_3_0.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto list = termList.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = kodeverk_0_3_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            if (dbVersion.major <= 1) {
+                {
+                    auto &list = legemiddelpakning_0_0_0;
+                    auto *ptr = list.data();
+                    auto size = list.size() * sizeof(*ptr);
+                    output->write((char *) (void *) ptr, size);
+                    offset += size;
+                }
+                {
+                    auto off = offset % alignment;
+                    if (off != 0) {
+                        off = alignment - off;
+                        output->write(&(alignmentBlock[0]), off);
+                        offset += off;
+                    }
+                }
+            }
+            {
+                auto *ptr = fests_V_0_3_0.data();
+                auto size = fests_V_0_3_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto list = uint32List.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+        }
+        if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0) || (dbVersion.major == 0 && dbVersion.minor > 3)) {
+            {
+                auto list = festUuidList_0_4_0.GetStorageBlock();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddelMerkevare_0_4_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddelVirkestoff_0_4_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddelpakning_0_4_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddeldose_0_4_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto *ptr = virkestoff_0_4_0.data();
+                auto size = virkestoff_0_4_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto *ptr = varselSlv_0_4_0.data();
+                auto size = varselSlv_0_4_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto *ptr = fests_V_0_4_0.data();
+                auto size = fests_V_0_4_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+        }
+        if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1)) {
+            {
+                auto list = refRefusjonsvilkarList_1_2_0.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto list = refusjonskodeList_1_2_0.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+        }
+        if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 2)) {
+            {
+                auto *ptr = fests_V_1_3_0.data();
+                auto size = fests_V_1_3_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto &list = legemiddelpakning_1_3_0;
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+        }
+        if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 3)) {
+            {
+                auto *ptr = refusjon_1_4_0.data();
+                auto size = refusjon_1_4_0.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+            {
+                auto list = refusjonsgruppeList.GetStorageList();
+                auto *ptr = list.data();
+                auto size = list.size() * sizeof(*ptr);
+                output->write((char *) (void *) ptr, size);
+                offset += size;
+            }
+            {
+                auto off = offset % alignment;
+                if (off != 0) {
+                    off = alignment - off;
+                    output->write(&(alignmentBlock[0]), off);
+                    offset += off;
+                }
+            }
+        }
+        output->write((char *) (void *) &trailer, sizeof(trailer));
     }
-    {
-        auto *ptr = fests_V_0_3_0.data();
-        auto size = fests_V_0_3_0.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
-        }
-    }
-    {
-        auto list = uint32List.GetStorageList();
-        auto *ptr = list.data();
-        auto size = list.size() * sizeof(*ptr);
-        output->write((char *) (void *) ptr, size);
-        offset += size;
-    }
-    {
-        auto off = offset % alignment;
-        if (off != 0) {
-            off = alignment - off;
-            output->write(&(alignmentBlock[0]), off);
-            offset += off;
-        }
-    }
-    if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 0)) {
-        {
-            auto list = festUuidList_0_4_0.GetStorageBlock();
-            auto *ptr = list.data();
-            auto size = list.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto &list = legemiddelMerkevare_0_4_0;
-            auto *ptr = list.data();
-            auto size = list.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto &list = legemiddelVirkestoff_0_4_0;
-            auto *ptr = list.data();
-            auto size = list.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto &list = legemiddelpakning_0_4_0;
-            auto *ptr = list.data();
-            auto size = list.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto &list = legemiddeldose_0_4_0;
-            auto *ptr = list.data();
-            auto size = list.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto *ptr = virkestoff_0_4_0.data();
-            auto size = virkestoff_0_4_0.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto *ptr = varselSlv_0_4_0.data();
-            auto size = varselSlv_0_4_0.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto *ptr = fests_V_0_4_0.data();
-            auto size = fests_V_0_4_0.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-    }
-    if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 1)) {
-        {
-            auto list = refRefusjonsvilkarList_1_2_0.GetStorageList();
-            auto *ptr = list.data();
-            auto size = list.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto list = refusjonskodeList_1_2_0.GetStorageList();
-            auto *ptr = list.data();
-            auto size = list.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-    }
-    if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 2)) {
-        {
-            auto *ptr = fests_V_1_3_0.data();
-            auto size = fests_V_1_3_0.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto &list = legemiddelpakning_1_3_0;
-            auto *ptr = list.data();
-            auto size = list.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-    }
-    if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 3)) {
-        {
-            auto *ptr = refusjon_1_4_0.data();
-            auto size = refusjon_1_4_0.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-        {
-            auto list = refusjonsgruppeList.GetStorageList();
-            auto *ptr = list.data();
-            auto size = list.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-    }
-    if (dbVersion.major > 1 || (dbVersion.major == 1 && dbVersion.minor > 4)) {
-        {
-            auto *ptr = byttegruppe_1_5_0.data();
-            auto size = byttegruppe_1_5_0.size() * sizeof(*ptr);
-            output->write((char *) (void *) ptr, size);
-            offset += size;
-        }
-        {
-            auto off = offset % alignment;
-            if (off != 0) {
-                off = alignment - off;
-                output->write(&(alignmentBlock[0]), off);
-                offset += off;
-            }
-        }
-    }
-    output->write((char *) (void *) &trailer, sizeof(trailer));
     auto fs = std::dynamic_pointer_cast<std::ofstream>(output);
     if (fs) {
         fs->close();
@@ -1204,25 +1287,25 @@ bool FestSerializer::Write(uint64_t magic) {
     return true;
 }
 
-bool FestSerializer::Write() {
+bool FestSerializer_0::Write() {
     return Write(GetMagicNumbber());
 }
 
-bool FestSerializer::WriteVersion(uint8_t major, uint8_t minor, uint8_t patch) {
+bool FestSerializer_0::WriteVersion(uint8_t major, uint8_t minor, uint8_t patch) {
     return Write(GetMagicNumbber(major, minor, patch));
 }
 
-int FestSerializer::GetLowestSupportedMajorVersion() {
+int FestSerializer_0::GetLowestSupportedMajorVersion() {
     return 0;
 }
 
-int FestSerializer::GetHighestSupportedMajorVersion() {
+int FestSerializer_0::GetHighestSupportedMajorVersion() {
     return 1;
 }
 
-int FestSerializer::GetHighestSupportedMinorVersion(int major) {
+int FestSerializer_0::GetHighestSupportedMinorVersion(int major) {
     if (major == 1) {
-        return 5;
+        return 4;
     } else if (major == 0) {
         return 4;
     } else {
@@ -1230,7 +1313,7 @@ int FestSerializer::GetHighestSupportedMinorVersion(int major) {
     }
 }
 
-void FestSerializer::Add(const std::string &dato, const std::function<void(FestData &)> &func) {
+void FestSerializer_0::Add(const std::string &dato, const std::function<void(FestData &)> &func) {
     {
         auto iterator = festMap.find(dato);
         if (iterator != festMap.end()) {
@@ -1243,7 +1326,7 @@ void FestSerializer::Add(const std::string &dato, const std::function<void(FestD
     festMap.insert_or_assign(dato, festData);
 }
 
-void FestSerializer::Progress(int done, int total) {
+void FestSerializer_0::Progress(int done, int total) {
     int pcnt = (100 * done) / total;
     if (pcnt != percentDone) {
         percentDone = pcnt;
@@ -1251,7 +1334,7 @@ void FestSerializer::Progress(int done, int total) {
     }
 }
 
-void FestSerializer::ProgressFinished(bool success) {
+void FestSerializer_0::ProgressFinished(bool success) {
     if (success) {
         std::cout << "\rGenerating output: 100% done.\n";
     } else {
@@ -1259,7 +1342,7 @@ void FestSerializer::ProgressFinished(bool success) {
     }
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelMerkevare &merkevare) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfLegemiddelMerkevare &merkevare) {
     auto index_0_0_0 = Add(this->legemiddelMerkevare_0_0_0, {merkevare, stringblock, stringblockCache, festidblock, festUuidList_0_0_0, valueWithCodesetList, reseptgyldighetList});
     auto index_0_4_0 = Add(this->legemiddelMerkevare_0_4_0, {merkevare, stringblock, stringblockCache, festidblock, festUuidList_0_4_0, valueWithCodesetList, reseptgyldighetList});
     Add(fest, [index_0_0_0] (FestData &f) { f.legemiddelMerkevare_0_0_0.emplace_back(index_0_0_0); });
@@ -1267,7 +1350,7 @@ bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelMerkevar
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelpakning &pakning) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfLegemiddelpakning &pakning) {
     auto index_0_0_0 = Add(this->legemiddelpakning_0_0_0, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList_0_0_0, festidblock, stringblock, stringblockCache});
     auto index_0_4_0 = Add32(this->legemiddelpakning_0_4_0, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
     auto index_1_3_0 = Add32(this->legemiddelpakning_1_3_0, {pakning, pakningskomponentList, pakningsinfoList, prisVareList, stringList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache, refusjonList});
@@ -1277,7 +1360,7 @@ bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelpakning 
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelVirkestoff &virkestoff) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfLegemiddelVirkestoff &virkestoff) {
     auto index_0_0_0 = Add(this->legemiddelVirkestoff_0_0_0, {virkestoff, stringblock, stringblockCache, festidblock, stringList, festUuidList_0_0_0, valueWithCodesetList, refusjonList});
     auto index_0_4_0 = Add(this->legemiddelVirkestoff_0_4_0, {virkestoff, stringblock, stringblockCache, festidblock, stringList, festUuidList_0_4_0, valueWithCodesetList, refusjonList});
     Add(fest, [index_0_0_0] (FestData &f) { f.legemiddelVirkestoff_0_0_0.emplace_back(index_0_0_0); });
@@ -1285,25 +1368,25 @@ bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddelVirkesto
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfMedForbrMatr &medForbrMatr) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfMedForbrMatr &medForbrMatr) {
     auto index = Add(this->medForbrMatr, {medForbrMatr, prisVareList, stringList, festidblock, stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.medForbrMatr.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfNaringsmiddel &naringsmiddel) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfNaringsmiddel &naringsmiddel) {
     auto index = Add(this->naringsmiddel, {naringsmiddel, prisVareList, stringList, festidblock, stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.naringsmiddel.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfBrystprotese &brystprotese) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfBrystprotese &brystprotese) {
     auto index = Add(this->brystprotese, {brystprotese, prisVareList, stringList, festidblock, stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.brystprotese.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddeldose &legemiddeldose) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfLegemiddeldose &legemiddeldose) {
     auto index_0_0_0 = Add(this->legemiddeldose_0_0_0, {legemiddeldose, pakningskomponentInfoList, festUuidList_0_0_0, festidblock, stringblock, stringblockCache});
     auto index_0_4_0 = Add(this->legemiddeldose_0_4_0, {legemiddeldose, pakningskomponentInfoList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
     Add(fest, [index_0_0_0] (FestData &f) { f.legemiddeldose_0_0_0.emplace_back(index_0_0_0); });
@@ -1311,13 +1394,13 @@ bool FestSerializer::Visit(const std::string &fest, const OppfLegemiddeldose &le
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfVirkestoffMedStyrke &virkestoffMedStyrke) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfVirkestoffMedStyrke &virkestoffMedStyrke) {
     auto index = Add(this->virkestoffMedStyrke, {virkestoffMedStyrke, festidblock, stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.virkestoffMedStyrke.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfVirkestoff &virkestoff) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfVirkestoff &virkestoff) {
     auto index = Add(this->virkestoff_0_0_0, {virkestoff, festUuidList_0_0_0, festidblock, stringblock, stringblockCache});
     auto index_0_4_0 = Add(this->virkestoff_0_4_0, {virkestoff, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
     // TODO
@@ -1328,7 +1411,7 @@ bool FestSerializer::Visit(const std::string &fest, const OppfVirkestoff &virkes
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfKodeverk &kodeverk) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfKodeverk &kodeverk) {
     auto index = Add(this->kodeverk_0_0_0, {kodeverk, elementList_0_0_0, festidblock, stringblock, stringblockCache});
     auto index_0_3_0 = Add(this->kodeverk_0_3_0, {kodeverk, elementList_0_3_0, termList, festidblock, stringblock, stringblockCache});
     Add(fest, [index, index_0_3_0] (FestData &f) {
@@ -1338,7 +1421,7 @@ bool FestSerializer::Visit(const std::string &fest, const OppfKodeverk &kodeverk
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfRefusjon &refusjon) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfRefusjon &refusjon) {
     uint32_t index2;
     if (minimumMajorVersion > 0) {
         index2 = Add(this->refusjon_1_4_0, {refusjon, refusjonskodeList_0_1_0, refusjonskodeList_1_2_0, refRefusjonsvilkarList_0_0_0, refRefusjonsvilkarList_1_2_0, refusjonsgruppeList, stringList, festidblock, stringblock, stringblockCache});
@@ -1358,13 +1441,13 @@ bool FestSerializer::Visit(const std::string &fest, const OppfRefusjon &refusjon
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfVilkar &vilkar) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfVilkar &vilkar) {
     auto index = Add(this->vilkar, {vilkar, festidblock, stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.vilkar.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfVarselSlv &varselSlv) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfVarselSlv &varselSlv) {
     auto index = Add(this->varselSlv_0_0_0, {varselSlv, valueWithCodesetList, festUuidList_0_0_0, festidblock, stringblock, stringblockCache});
     auto index_0_4_0 = Add(this->varselSlv_0_4_0, {varselSlv, valueWithCodesetList, festUuidList_0_4_0, festidblock, stringblock, stringblockCache});
     // TODO
@@ -1375,29 +1458,25 @@ bool FestSerializer::Visit(const std::string &fest, const OppfVarselSlv &varselS
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfByttegruppe &byttegruppe) {
-    auto index = Add(this->byttegruppe_1_5_0, {byttegruppe, festidblock, stringblock, stringblockCache});
-    auto index_legacy = Add(this->byttegruppe_0_0_0, {byttegruppe, festidblock, stringblock, stringblockCache}, index);
-    if (index != index_legacy) {
-        throw PackException("Index diff pre vs new 1.5.0 and later");
-    }
+bool FestSerializer_0::Visit(const std::string &fest, const OppfByttegruppe &byttegruppe) {
+    auto index = Add(this->byttegruppe, {byttegruppe, festidblock, stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.byttegruppe.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfInteraksjon &interaksjon) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfInteraksjon &interaksjon) {
     auto index = Add(this->interaksjon, {interaksjon, referanseList, substansgruppeList, substansList, valueWithCodesetList, festidblock, stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.interaksjon.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfInteraksjonIkkeVurdert &interaksjonIkkeVurdert) {
     auto index = Add(this->interaksjonIkkeVurdert, {interaksjonIkkeVurdert, festidblock, stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.interaksjonIkkeVurdert.emplace_back(index); });
     return true;
 }
 
-bool FestSerializer::Visit(const std::string &fest, const OppfStrDosering &strDosering) {
+bool FestSerializer_0::Visit(const std::string &fest, const OppfStrDosering &strDosering) {
     auto index = Add(this->strDosering, {strDosering, legemiddelforbrukList, doseringList, doseFastTidspunktList, festidblock,
                                    stringblock, stringblockCache});
     Add(fest, [index] (FestData &f) { f.strDosering.emplace_back(index); });

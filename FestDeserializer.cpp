@@ -118,7 +118,7 @@ void FestDeserializer::Init() {
             throw PackException("Major version of file");
         }
         if ((version.major == 0 && version.minor > 4) ||
-            (version.major == 1 && version.minor > 4)) {
+            (version.major == 1 && version.minor > 5)) {
             std::cerr << "Warning: Version " << ((int) version.major) << "." << ((int) version.minor) << " contains unsupported data (ignored)\n";
             fullySupportedVersion = false;
         }
@@ -314,9 +314,9 @@ void FestDeserializer::Init() {
             }
         }
     }
-    byttegruppe = (POppfByttegruppe *) (void *) (((uint8_t *) mapping) + offset);
+    byttegruppe_0_0_0 = (POppfByttegruppe_0_0_0 *) (void *) (((uint8_t *) mapping) + offset);
     numByttegruppe = header->numByttegruppe;
-    offset += ((size_t) numByttegruppe) * sizeof(*byttegruppe);
+    offset += ((size_t) numByttegruppe) * sizeof(*byttegruppe_0_0_0);
     {
         auto off = offset % alignment;
         if (off != 0) {
@@ -867,8 +867,32 @@ void FestDeserializer::Init() {
                             offset += off;
                         }
                     }
+                    if (versionMajor > 1 || (versionMajor == 1 && versionMinor > 4)) {
+                        byttegruppe_1_5_0 = (const POppfByttegruppe_1_5_0 *) (void *) (((uint8_t *) mapping) + offset);
+                        offset += ((size_t) numByttegruppe) * sizeof(*byttegruppe_1_5_0);
+                        {
+                            auto off = offset % alignment;
+                            if (off != 0) {
+                                off = alignment - off;
+                                offset += off;
+                            }
+                        }
+                    } else {
+                        byttegruppe_1_5_0 = nullptr;
+                    }
+                } else {
+                    byttegruppe_1_5_0 = nullptr;
+                    refusjon_1_4_0 = nullptr;
+                    numRefusjon_1_4_0 = 0;
+                    refusjonsgruppeList = nullptr;
+                    numRefusjonsgruppeList = 0;
                 }
             } else {
+                byttegruppe_1_5_0 = nullptr;
+                refusjon_1_4_0 = nullptr;
+                numRefusjon_1_4_0 = 0;
+                refusjonsgruppeList = nullptr;
+                numRefusjonsgruppeList = 0;
                 refusjonskodeList_1_2_0 = nullptr;
                 numRefusjonskode_1_2_0 = 0;
             }
@@ -877,6 +901,11 @@ void FestDeserializer::Init() {
                 throw PackException("Size of data was not what was expected for this version");
             }
         } else {
+            byttegruppe_1_5_0 = nullptr;
+            refusjon_1_4_0 = nullptr;
+            numRefusjon_1_4_0 = 0;
+            refusjonsgruppeList = nullptr;
+            numRefusjonsgruppeList = 0;
             merkevare_0_4_0 = nullptr;
             numMerkevare_0_4_0 = 0;
             legemiddelVirkestoff_0_4_0 = nullptr;
@@ -890,6 +919,11 @@ void FestDeserializer::Init() {
             numFests_V_0_4_0 = 0;
         }
     } else {
+        byttegruppe_1_5_0 = nullptr;
+        refusjon_1_4_0 = nullptr;
+        numRefusjon_1_4_0 = 0;
+        refusjonsgruppeList = nullptr;
+        numRefusjonsgruppeList = 0;
         refusjonskodeList_0_1_0 = nullptr;
         numRefusjonskode_0_1_0 = 0;
         uint16List = nullptr;
@@ -1225,11 +1259,20 @@ std::vector<POppfKodeverk_0_3_0> FestDeserializer::GetOppfKodeverk_0_3_0() const
     return result;
 }
 
-std::vector<POppfByttegruppe> FestDeserializer::GetByttegruppe() const {
-    std::vector<POppfByttegruppe> result{};
+std::vector<POppfByttegruppe_0_0_0> FestDeserializer::GetByttegruppe_0_0_0() const {
+    std::vector<POppfByttegruppe_0_0_0> result{};
     result.reserve(numByttegruppe);
     for (std::remove_const<decltype(numByttegruppe)>::type i = 0; i < numByttegruppe; i++) {
-        result.emplace_back(this->byttegruppe[i]);
+        result.emplace_back(this->byttegruppe_0_0_0[i]);
+    }
+    return result;
+}
+
+std::vector<POppfByttegruppe_1_5_0> FestDeserializer::GetByttegruppe_1_5_0() const {
+    std::vector<POppfByttegruppe_1_5_0> result{};
+    result.reserve(numByttegruppe);
+    for (std::remove_const<decltype(numByttegruppe)>::type i = 0; i < numByttegruppe; i++) {
+        result.emplace_back(this->byttegruppe_1_5_0[i]);
     }
     return result;
 }
@@ -1811,9 +1854,29 @@ void FestDeserializer::ForEachVarselSlv(const std::function<void(const POppfVars
     }
 }
 
-void FestDeserializer::ForEachByttegruppe(const std::function<void(const POppfByttegruppe &)> &func) const {
+void FestDeserializer::ForEachByttegruppe_0_0_0(const std::function<void(const POppfByttegruppe_0_0_0 &)> &func) const {
     for (std::remove_const<decltype(numByttegruppe)>::type i = 0; i < numByttegruppe; i++) {
-        func(this->byttegruppe[i]);
+        func(this->byttegruppe_0_0_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachByttegruppe_1_5_0(const std::function<void(const POppfByttegruppe_1_5_0 &)> &func) const {
+    for (std::remove_const<decltype(numByttegruppe)>::type i = 0; i < numByttegruppe; i++) {
+        func(this->byttegruppe_1_5_0[i]);
+    }
+}
+
+void FestDeserializer::ForEachByttegruppe(const std::function<void(const POppfByttegruppe &)> &func) const {
+    if (GetVersionMajor() > 1 || (GetVersionMajor() == 1 && GetVersionMinor() > 4)) {
+        ForEachByttegruppe_1_5_0([&func] (const POppfByttegruppe_1_5_0 &poppf) {
+            POppfByttegruppe variant{poppf};
+            func(variant);
+        });
+    } else {
+        ForEachByttegruppe_0_0_0([&func] (const POppfByttegruppe_0_0_0 &poppf) {
+            POppfByttegruppe variant{poppf};
+            func(variant);
+        });
     }
 }
 
@@ -2111,8 +2174,26 @@ OppfVarselSlv FestDeserializer::Unpack(const POppfVarselSlv &poppf) const {
     }
 }
 
+OppfByttegruppe FestDeserializer::Unpack(const POppfByttegruppe_0_0_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PByttegruppe_0_0_0>(poppf))};
+}
+
+OppfByttegruppe FestDeserializer::Unpack(const POppfByttegruppe_1_5_0 &poppf) const {
+    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PByttegruppe_1_5_0>(poppf))};
+}
+
 OppfByttegruppe FestDeserializer::Unpack(const POppfByttegruppe &poppf) const {
-    return {Unpack(static_cast<const POppf>(poppf)), Unpack(static_cast<const PByttegruppe>(poppf))};
+    struct {
+        const FestDeserializer *festDeserializer;
+
+        Byttegruppe operator() (const PByttegruppe_0_0_0 &src) const {
+            return festDeserializer->Unpack(src);
+        }
+        Byttegruppe operator() (const PByttegruppe_1_5_0 &src) const {
+            return festDeserializer->Unpack(src);
+        }
+    } visitor{.festDeserializer = this};
+    return {Unpack(static_cast<const POppf &>(poppf)), std::visit(visitor, poppf)};
 }
 
 OppfInteraksjon FestDeserializer::Unpack(const POppfInteraksjon &poppf) const {
@@ -2650,14 +2731,33 @@ VarselSlv FestDeserializer::Unpack(const PVarselSlv &pVarselSlv) const {
     }
 }
 
-Byttegruppe FestDeserializer::Unpack(const PByttegruppe &pByttegruppe) const {
+Byttegruppe FestDeserializer::Unpack(const PByttegruppe_0_0_0 &pByttegruppe) const {
     return {
         Unpack(pByttegruppe.id).ToString(),
         Unpack(pByttegruppe.kode),
         Unpack(pByttegruppe.gyldigFraDato),
+        {},
         Unpack(pByttegruppe.beskrivelseByttbarhet),
         pByttegruppe.merknadTilByttbarhet
     };
+}
+
+Byttegruppe FestDeserializer::Unpack(const PByttegruppe_1_5_0 &pByttegruppe) const {
+    return {
+        Unpack(pByttegruppe.id).ToString(),
+        Unpack(pByttegruppe.kode),
+        Unpack(pByttegruppe.gyldigFraDato),
+        Unpack(pByttegruppe.gyldigTilDato),
+        Unpack(pByttegruppe.beskrivelseByttbarhet),
+        pByttegruppe.merknadTilByttbarhet
+    };
+}
+
+Byttegruppe FestDeserializer::Unpack(const PByttegruppe &pByttegruppe) const {
+    return std::visit(
+        [this] (const auto &src) { return Unpack(src); },
+        pByttegruppe
+    );
 }
 
 Interaksjon FestDeserializer::Unpack(const PInteraksjon &pInteraksjon) const {

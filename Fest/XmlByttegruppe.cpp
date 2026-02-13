@@ -33,7 +33,7 @@ bool XmlByttegruppe::Merge() {
                 return false;
         }
     }
-    parent->SetByttegruppe({GetId(), GetKodeValueWithDN(), GetGyldigFraDato(), beskrivelseByttbarhet, merknadTilByttbarhet});
+    parent->SetByttegruppe({GetId(), GetKodeValueWithDN(), GetGyldigFraDato(), GetGyldigTilDato(), beskrivelseByttbarhet, merknadTilByttbarhet});
     return true;
 }
 

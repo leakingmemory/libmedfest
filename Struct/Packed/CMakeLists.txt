@@ -1,4 +1,4 @@
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 add_library(packed OBJECT PackException.cpp PFestId.cpp PString.cpp FestUuid.cpp FestUuidList.cpp POppf.cpp
         PValueWithDistinguishedName.cpp PLegemiddelMerkevare.cpp PValueWithCodeset.cpp PPreparatomtaleavsnitt.cpp

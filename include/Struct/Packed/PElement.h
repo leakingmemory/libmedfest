@@ -10,12 +10,14 @@
 #include "GenericListStorage.h"
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Element;
 class TermList;
 
 class PElement_0_0_0 : public PTerm {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PString id;
     PString kode;
@@ -25,7 +27,8 @@ public:
 };
 
 class PElement_0_3_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PString id;
     PString kode;

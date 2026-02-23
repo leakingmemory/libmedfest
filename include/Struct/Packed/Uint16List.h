@@ -7,12 +7,16 @@
 
 #include "GenericListStorage.h"
 
-class FestDeserializer;
-class FestDeserializerPreloader;
+class FestDeserializer_0;
+class FestDeserializer_1;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 class Uint16List_V_0_0_0 : private GenericListStorage32<uint16_t> {
-    friend FestDeserializerPreloader;
-    friend FestDeserializer;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 public:
     typedef uint16_t ListItemType;
     GenericListItems32 StoreList(const std::vector<uint16_t> &);
@@ -21,7 +25,8 @@ public:
 };
 
 class Uint16List : private GenericListStorage64<uint16_t> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     typedef uint16_t ListItemType;
     GenericListItems64 StoreList(const std::vector<uint16_t> &);

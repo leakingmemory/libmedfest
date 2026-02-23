@@ -8,14 +8,16 @@
 #include "PValueWithCodeset.h"
 #include "GenericListStorage.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Kortdose;
 class LegemiddelforbrukList;
 class DoseringList;
 class DoseFastTidspunktList;
 
 class PKortdose {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithCodeset kortdose;
     PString beskrivelseTerm;

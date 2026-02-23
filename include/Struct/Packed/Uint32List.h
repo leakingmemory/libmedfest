@@ -8,10 +8,12 @@
 #include "GenericListStorage.h"
 
 class FestDeserializer;
-class FestDeserializerPreloader;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 class Uint32List : private GenericListStorage64<uint32_t> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     typedef uint32_t ListItemType;
     GenericListItems64 StoreList(const std::vector<uint32_t> &);

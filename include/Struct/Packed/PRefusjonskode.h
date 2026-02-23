@@ -9,7 +9,8 @@
 #include "GenericListStorage.h"
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Refusjonskode;
 class RefRefusjonsvilkarList_0_0_0;
 class RefRefusjonsvilkarList_1_2_0;
@@ -20,7 +21,8 @@ class PRefusjonskode_0_1_0;
 class PRefusjonskode_1_2_0;
 
 class PRefusjonskode_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PRefusjonskode_0_1_0;
     friend PRefusjonskode_1_2_0;
 private:
@@ -36,7 +38,8 @@ public:
 };
 
 class PRefusjonskode_0_1_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PRefusjonskode_0_0_0;
     friend PRefusjonskode_1_2_0;
 private:
@@ -53,7 +56,8 @@ public:
 };
 
 class PRefusjonskode_1_2_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PRefusjonskode_0_0_0;
 private:
     PValueWithCodeset refusjonskode;

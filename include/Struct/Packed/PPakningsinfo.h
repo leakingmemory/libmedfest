@@ -12,11 +12,13 @@
 #include "GenericListStorage.h"
 #include "PakningskomponentList.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Pakningsinfo;
 
 class PPakningsinfo {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PFestId merkevareId;
     PString pakningsstr;

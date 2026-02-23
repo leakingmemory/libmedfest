@@ -8,10 +8,12 @@
 #include "GenericListStorage.h"
 #include "PValueWithCodeset.h"
 
-class FestDeserializerPreloader;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 class ValueWithCodesetList : private GenericListStorage32<PValueWithCodeset> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     GenericListItems32 StoreList(const std::vector<PValueWithCodeset> &);
     [[nodiscard]] std::vector<PValueWithCodeset> GetStorageBlock() const;

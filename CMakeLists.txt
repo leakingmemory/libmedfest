@@ -29,14 +29,16 @@ add_subdirectory(Test)
 
 if (WIN32)
    add_library(medfesttestobj OBJECT FestZip.cpp libzip_zip.cpp libzip_file.cpp FestObjectStream.cpp XMLParser.cpp
-           FestSerializer_0.cpp FestSerializer.cpp FestDeserializer.cpp FestVectors.cpp
-           FestDeserializer_Preload.cpp include/Struct/Packed/packed.h)
+           FestSerializer_0.cpp FestSerializer.cpp FestDeserializer.cpp FestVectors.cpp FestDeserializer_0_Preload.cpp
+           FestDeserializer_0.cpp FestDeserializer_0_Preload.cpp FestDeserializer_1.cpp FestDeserializer_1_Preload.cpp
+           include/Struct/Packed/packed.h)
 endif()
 
 add_library(medfest SHARED FestZip.cpp libzip_zip.cpp libzip_file.cpp FestObjectStream.cpp XMLParser.cpp
-        FestSerializer_0.cpp FestSerializer.cpp FestDeserializer.cpp FestVectors.cpp FestDeserializer_Preload.cpp
+        FestSerializer_0.cpp FestSerializer.cpp FestDeserializer.cpp FestVectors.cpp FestDeserializer_0_Preload.cpp
+        FestDeserializer_0.cpp FestDeserializer_0_Preload.cpp FestDeserializer_1.cpp FestDeserializer_1_Preload.cpp
         include/Struct/Packed/packed.h)
-set_target_properties(medfest PROPERTIES SOVERSION 14 VERSION 14.0.0)
+set_target_properties(medfest PROPERTIES SOVERSION 15 VERSION 15.0.0)
 include_directories(medfest include)
 include_directories(medfest ${libzip_INCLUDE_DIRS} )
 if (WIN32)

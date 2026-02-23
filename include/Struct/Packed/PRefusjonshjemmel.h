@@ -13,7 +13,8 @@ class RefusjonsgruppeList;
 class PRefusjonshjemmel_1_4_0;
 
 class PRefusjonshjemmel_0_0_0 : public PRefusjonsgruppe {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PRefusjonshjemmel_1_4_0;
 private:
     PValueWithCodeset refusjonshjemmel;
@@ -26,7 +27,8 @@ public:
 };
 
 class PRefusjonshjemmel_1_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithCodeset refusjonshjemmel;
     GenericListItems64 refusjonsgruppe;

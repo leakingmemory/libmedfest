@@ -10,10 +10,12 @@
 #include <map>
 #include <limits>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 
 class PString {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 public:
     typedef uint32_t Type;
     static constexpr Type Max = std::numeric_limits<Type>::max();

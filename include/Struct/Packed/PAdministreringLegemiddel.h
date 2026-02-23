@@ -9,13 +9,15 @@
 #include "GenericListStorage.h"
 #include "../Decoded/MaybeBoolean.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class AdministreringLegemiddel;
 class ValueWithCodesetList;
 class ValueWithDistinguishedNameList;
 
 class PAdministreringLegemiddel {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithCodeset administrasjonsvei;
     PValueWithCodeset enhetDosering;

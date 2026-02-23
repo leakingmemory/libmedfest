@@ -9,14 +9,16 @@
 #include "GenericListStorage.h"
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Referanseelement;
 class FestUuidList_0_0_0;
 class FestUuidList_0_4_0;
 class PReferanseelement_0_4_0;
 
 class PReferanseelement_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PReferanseelement_0_4_0;
 private:
     PValueWithDistinguishedName klasse;
@@ -27,7 +29,8 @@ public:
 };
 
 class PReferanseelement_0_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithDistinguishedName klasse;
     GenericListItems64 refs;

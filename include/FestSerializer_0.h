@@ -55,8 +55,12 @@
 #include <map>
 #include <functional>
 
+class FestDeserializer_0;
+class FestDeserializer_1;
+
 class FestSerializer_0 : private FestVisitor {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     std::shared_ptr<std::ostream> output;
     std::string stringblock{};

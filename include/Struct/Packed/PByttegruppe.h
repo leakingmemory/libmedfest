@@ -9,12 +9,12 @@
 #include "PFestId.h"
 #include <variant>
 
-class FestDeserializer;
 class Byttegruppe;
 class PByttegruppe_1_5_0;
 
 class PByttegruppe_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PByttegruppe_1_5_0;
 private:
     PValueWithDistinguishedName kode;
@@ -29,7 +29,7 @@ public:
 };
 
 class PByttegruppe_1_5_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_1;
 private:
     PValueWithDistinguishedName kode;
     PString gyldigFraDato;

@@ -9,7 +9,8 @@
 #include "PFestId.h"
 #include "GenericListStorage.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Interaksjon;
 class ReferanseList;
 class SubstansgruppeList;
@@ -18,7 +19,8 @@ class ValueWithCodesetList;
 class FestUuid;
 
 class PInteraksjon {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithDistinguishedName relevans;
     PValueWithDistinguishedName kildegrunnlag;

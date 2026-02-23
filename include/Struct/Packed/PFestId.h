@@ -8,10 +8,12 @@
 #include "FestUuid.h"
 #include <vector>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 
 class PFestId {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     uint32_t id;
 public:

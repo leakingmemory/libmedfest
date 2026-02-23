@@ -34,6 +34,7 @@ class POppfByttegruppe;
 class POppfInteraksjon;
 class POppfInteraksjonIkkeVurdert;
 class POppfStrDosering;
+class FestDeserializer;
 
 class FestVectors {
 private:

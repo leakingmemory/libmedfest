@@ -8,13 +8,15 @@
 #include "GenericListStorage.h"
 #include "PString.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Legemiddelforbruk;
 class DoseringList;
 class DoseFastTidspunktList;
 
 class PLegemiddelforbruk {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     GenericListItems32 dosering;
     PString periode;

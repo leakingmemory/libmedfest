@@ -8,10 +8,12 @@
 #include "GenericListStorage.h"
 #include "PPakningskomponent.h"
 
-class FestDeserializerPreloader;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 class PakningskomponentList : private GenericListStorage32<PPakningskomponent> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     GenericListItems32 StoreList(const std::vector<PPakningskomponent> &);
     [[nodiscard]] std::vector<PPakningskomponent> GetStorageList() const;

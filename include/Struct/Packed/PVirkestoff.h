@@ -11,7 +11,8 @@
 #include <vector>
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Virkestoff;
 class FestUuidList_0_0_0;
 class FestUuidList_0_4_0;
@@ -19,7 +20,8 @@ class FestUuid;
 class PVirkestoff_0_4_0;
 
 class PVirkestoff_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PVirkestoff_0_4_0;
 private:
     GenericListItems32 refVirkestoff;
@@ -42,7 +44,8 @@ public:
 };
 
 class PVirkestoff_0_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     GenericListItems64 refVirkestoff;
     PFestId id;

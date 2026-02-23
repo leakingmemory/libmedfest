@@ -10,7 +10,8 @@
 #include "PRefusjon.h"
 #include "GenericListStorage.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Handelsvare;
 class PrisVareList;
 class MedForbrMatr;
@@ -18,7 +19,8 @@ class Naringsmiddel;
 class Brystprotese;
 
 class PHandelsvare {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PString nr;
     PString navn;

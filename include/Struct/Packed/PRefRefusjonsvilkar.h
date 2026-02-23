@@ -10,12 +10,14 @@
 #include <map>
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class RefRefusjonsvilkar;
 class PRefRefusjonsvilkar_1_2_0;
 
 class PRefRefusjonsvilkar_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PRefRefusjonsvilkar_1_2_0;
 private:
     PFestId id;
@@ -27,7 +29,8 @@ public:
 };
 
 class PRefRefusjonsvilkar_1_2_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PFestId id;
     PString fraDato;

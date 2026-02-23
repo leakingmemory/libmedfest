@@ -8,14 +8,16 @@
 #include "PAdministreringLegemiddel.h"
 #include "PLegemiddelCore.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Legemiddel;
 class FestUuidList_0_0_0;
 class FestUuidList_0_4_0;
 class PLegemiddel_0_4_0;
 
 class PLegemiddel_0_0_0 : public PLegemiddelCore_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PLegemiddel_0_4_0;
 private:
     PAdministreringLegemiddel administreringLegemiddel;
@@ -28,7 +30,8 @@ public:
 };
 
 class PLegemiddel_0_4_0 : public PLegemiddelCore_0_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PAdministreringLegemiddel administreringLegemiddel;
     GenericListItems64 sortertVirkestoffMedStyrke;

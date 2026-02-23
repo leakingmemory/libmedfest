@@ -9,14 +9,16 @@
 #include "PFestId.h"
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class LegemiddelVirkestoff;
 class RefusjonList;
 class StringList;
 class PLegemiddelVirkestoff_0_4_0;
 
 class PLegemiddelVirkestoff_0_0_0 : public PLegemiddel_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PLegemiddelVirkestoff_0_4_0;
 private:
     PValueWithCodeset forskrivningsenhetResept;
@@ -37,7 +39,8 @@ public:
 };
 
 class PLegemiddelVirkestoff_0_4_0 : public PLegemiddel_0_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithCodeset forskrivningsenhetResept;
     PFestId id;

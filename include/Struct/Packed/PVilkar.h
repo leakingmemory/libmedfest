@@ -10,12 +10,14 @@
 #include <vector>
 #include <map>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Vilkar;
 class FestUuid;
 
 class PVilkar : public PStrukturertVilkar {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithDistinguishedName gjelderFor;
     PValueWithCodeset gruppe;

@@ -10,7 +10,8 @@
 #include "GenericListStorage.h"
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class OppfKodeverk;
 class ElementList_0_0_0;
 class ElementList_0_3_0;
@@ -18,7 +19,8 @@ class TermList;
 class POppfKodeverk_0_3_0;
 
 class POppfKodeverk_0_0_0 : public POppf, public PInfo {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend POppfKodeverk_0_3_0;
 private:
     GenericListItems32 elements;
@@ -28,12 +30,14 @@ public:
 };
 
 class POppfKodeverk_0_3_0 : public POppf, public PInfo {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     GenericListItems64 elements;
 public:
     POppfKodeverk_0_3_0(const OppfKodeverk &, ElementList_0_3_0 &, TermList &, std::vector<FestUuid> &idblock, std::string &strblock, std::map<std::string,uint32_t> &cache);
-    POppfKodeverk_0_3_0(const POppfKodeverk_0_0_0 &, const FestDeserializer &, ElementList_0_3_0 &, TermList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    POppfKodeverk_0_3_0(const POppfKodeverk_0_0_0 &, const FestDeserializer_0 &, ElementList_0_3_0 &, TermList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
+    POppfKodeverk_0_3_0(const POppfKodeverk_0_0_0 &, const FestDeserializer_1 &, ElementList_0_3_0 &, TermList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const POppfKodeverk_0_3_0 &) const;
 };
 

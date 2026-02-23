@@ -10,12 +10,14 @@
 #include <vector>
 #include <map>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Info;
 class FestUuid;
 
 class PInfo {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PString betegnelse;
     PString kortnavn;

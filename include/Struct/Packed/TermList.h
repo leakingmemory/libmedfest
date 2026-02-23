@@ -8,10 +8,12 @@
 #include "GenericListStorage.h"
 #include "PTerm.h"
 
-class FestDeserializerPreloader;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 class TermList : private GenericListStorage64<PTerm> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     GenericListItems64 StoreList(const std::vector<PTerm> &elements);
     std::vector<PTerm> GetStorageList() const;

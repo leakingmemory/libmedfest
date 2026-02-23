@@ -8,12 +8,14 @@
 #include "PString.h"
 #include "GenericListStorage.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Refusjon;
 class StringList;
 
 class PRefusjon {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     GenericListItems32 refRefusjonsgruppe;
     PString gyldigFraDato;

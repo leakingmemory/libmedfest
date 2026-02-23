@@ -8,11 +8,13 @@
 #include "PValueUnit.h"
 #include "PValueWithDistinguishedName.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class DoseFastTidspunkt;
 
 class PDoseFastTidspunkt {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueUnit mengde;
     PValueUnit intervall;

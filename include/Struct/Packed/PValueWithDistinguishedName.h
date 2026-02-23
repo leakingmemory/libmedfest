@@ -8,11 +8,13 @@
 
 #include "PString.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class ValueWithDistinguishedName;
 
 class PValueWithDistinguishedName {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PString value;
     PString distinguishedName;

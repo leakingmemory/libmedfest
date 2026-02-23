@@ -9,14 +9,16 @@
 #include "GenericListStorage.h"
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class LegemiddelCore;
 class FestUuidList_0_0_0;
 class FestUuidList_0_4_0;
 class PLegemiddelCore_0_4_0;
 
 class PLegemiddelCore_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PLegemiddelCore_0_4_0;
 private:
     PValueWithCodeset atc;
@@ -40,7 +42,8 @@ public:
 };
 
 class PLegemiddelCore_0_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithCodeset atc;
     PString navnFormStyrke;

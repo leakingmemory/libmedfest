@@ -10,7 +10,8 @@
 #include "GenericListStorage.h"
 #include <map>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Refusjonsgruppe;
 class RefusjonskodeList_0_0_0;
 class RefusjonskodeList_0_1_0;
@@ -21,7 +22,8 @@ class FestUuid;
 class StringList;
 
 class PRefusjonsgruppe {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithCodeset gruppeNr;
     PString id;

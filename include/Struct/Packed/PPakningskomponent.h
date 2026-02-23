@@ -7,11 +7,13 @@
 
 #include "PPakningskomponentInfo.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Pakningskomponent;
 
 class PPakningskomponent : public PPakningskomponentInfo {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     uint16_t antall;
 public:

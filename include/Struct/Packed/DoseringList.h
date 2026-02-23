@@ -8,10 +8,12 @@
 #include "GenericListStorage.h"
 #include "PDosering.h"
 
-class FestDeserializerPreloader;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 class DoseringList : private GenericListStorage32<PDosering> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     typedef PDosering ListItemType;
     [[nodiscard]] GenericListItems32 StoreList(const std::vector<PDosering> &);

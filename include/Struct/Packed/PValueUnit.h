@@ -7,11 +7,13 @@
 
 #include "PString.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class ValueUnit;
 
 class PValueUnit {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     double value;
     PString unit;

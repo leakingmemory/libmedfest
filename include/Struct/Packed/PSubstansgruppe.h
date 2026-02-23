@@ -9,13 +9,15 @@
 #include "GenericListStorage.h"
 #include "PString.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Substansgruppe;
 class SubstansList;
 class FestUuid;
 
 class PSubstansgruppe {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     GenericListItems32 substans;
     PString navn;

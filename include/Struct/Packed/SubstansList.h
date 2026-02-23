@@ -8,10 +8,12 @@
 #include "GenericListStorage.h"
 #include "PSubstans.h"
 
-class FestDeserializerPreloader;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 class SubstansList : private GenericListStorage32<PSubstans> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     GenericListItems32 StoreList(const std::vector<PSubstans> &list);
     std::vector<PSubstans> GetStorageList() const;

@@ -13,7 +13,8 @@
 #include "PPakningByttegruppe.h"
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Legemiddelpakning;
 class PakningskomponentList;
 class PakningsinfoList;
@@ -25,7 +26,8 @@ class PLegemiddelpakning_0_4_0;
 class PLegemiddelpakning_1_3_0;
 
 class PLegemiddelpakning_0_0_0 : public PLegemiddelCore_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PLegemiddelpakning_0_4_0;
     friend PLegemiddelpakning_1_3_0;
 private:
@@ -61,7 +63,8 @@ public:
 };
 
 class PLegemiddelpakning_0_4_0 : public PLegemiddelCore_0_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PLegemiddelpakning_1_3_0;
 private:
     PValueWithDistinguishedName preparattype;
@@ -97,7 +100,8 @@ public:
 };
 
 class PLegemiddelpakning_1_3_0 : public PLegemiddelCore_0_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithDistinguishedName preparattype;
     PFestId id;

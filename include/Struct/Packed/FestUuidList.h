@@ -8,10 +8,12 @@
 #include "GenericListStorage.h"
 #include "PFestId.h"
 
-class FestDeserializerPreloader;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 class FestUuidList_0_0_0 : private GenericListStorage32<PFestId> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     typedef std::string ListItemType;
 private:
@@ -25,7 +27,8 @@ public:
 };
 
 class FestUuidList_0_4_0 : private GenericListStorage64<PFestId> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     typedef std::string ListItemType;
 private:

@@ -8,11 +8,13 @@
 #include "PValueWithDistinguishedName.h"
 #include <map>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Term;
 
 class PTerm {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithDistinguishedName sprak;
     PString term;

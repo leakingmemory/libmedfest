@@ -8,11 +8,13 @@
 #include "PString.h"
 #include <map>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Referanse;
 
 class PReferanse {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PString kilde;
     PString lenke;

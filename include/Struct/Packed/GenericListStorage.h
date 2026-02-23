@@ -68,10 +68,12 @@ static_assert(sizeof(GenericListItems64) == sizeof(GenericListItems64::int_type)
 static_assert(sizeof(GenericListItems64) == sizeof(uint64_t));
 static_assert(GenericListItems64::max_address == std::numeric_limits<uint32_t>::max());
 
-class FestDeserializerPreloader;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 template <GenericListStorageObject T, GenericListItemType ItemType> class GenericListStorage {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 private:
     std::vector<T> list;
 public:

@@ -7,11 +7,13 @@
 
 #include "PString.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Markedsforingsinfo;
 
 class PMarkedsforingsinfo {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PString markedsforingsdato;
     PString varenrUtgaende;

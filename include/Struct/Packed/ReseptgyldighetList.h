@@ -9,10 +9,12 @@
 #include "GenericListStorage.h"
 #include <vector>
 
-class FestDeserializerPreloader;
+class FestDeserializerPreloader_0;
+class FestDeserializerPreloader_1;
 
 class ReseptgyldighetList : private GenericListStorage32<PReseptgyldighet> {
-    friend FestDeserializerPreloader;
+    friend FestDeserializerPreloader_0;
+    friend FestDeserializerPreloader_1;
 public:
     GenericListItems32 StoreList(const std::vector<PReseptgyldighet> &);
     [[nodiscard]] std::vector<PReseptgyldighet> GetStorageList() const;

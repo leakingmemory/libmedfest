@@ -7,11 +7,13 @@
 
 #include "PValueWithDistinguishedName.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Reseptgyldighet;
 
 class PReseptgyldighet {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithDistinguishedName kjonn;
     PString varighet;

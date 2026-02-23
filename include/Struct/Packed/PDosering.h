@@ -9,12 +9,14 @@
 #include <map>
 #include <string>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class Dosering;
 class DoseFastTidspunktList;
 
 class PDosering : private GenericListItems32 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 public:
     PDosering(const Dosering &, DoseFastTidspunktList &, std::string &strblock, std::map<std::string,uint32_t> &cache);
     bool operator == (const PDosering &) const;

@@ -55,9 +55,12 @@
 #include <map>
 #include <functional>
 
+class FestDeserializer_0;
+class FestDeserializer_1;
 
 class FestSerializer : private FestVisitor {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     std::shared_ptr<std::ostream> output;
     std::string stringblock{};
@@ -72,12 +75,10 @@ private:
     PakningsinfoList pakningsinfoList{};
     PrisVareList prisVareList{};
     RefusjonList refusjonList{};
-    ElementList_0_0_0 elementList_0_0_0{};
     ElementList_0_3_0 elementList_0_3_0{};
     TermList termList{};
     RefRefusjonsvilkarList_0_0_0 refRefusjonsvilkarList_0_0_0{};
     RefRefusjonsvilkarList_1_2_0 refRefusjonsvilkarList_1_2_0{};
-    RefusjonskodeList_0_0_0 refusjonskodeList_0_0_0{};
     RefusjonskodeList_0_1_0 refusjonskodeList_0_1_0{};
     RefusjonskodeList_1_2_0 refusjonskodeList_1_2_0{};
     ReferanseList referanseList{};
@@ -86,7 +87,6 @@ private:
     DoseFastTidspunktList doseFastTidspunktList{};
     DoseringList doseringList{};
     LegemiddelforbrukList legemiddelforbrukList{};
-    Uint16List_V_0_0_0 uint16List_V_0_0_0{};
     Uint16List uint16List{};
     Uint32List uint32List{};
     StringList stringList{};
@@ -106,7 +106,6 @@ private:
     std::vector<POppfVirkestoffMedStyrke> virkestoffMedStyrke{};
     std::vector<POppfVirkestoff_0_0_0> virkestoff_0_0_0{};
     std::vector<POppfVirkestoff_0_4_0> virkestoff_0_4_0{};
-    std::vector<POppfKodeverk_0_0_0> kodeverk_0_0_0{};
     std::vector<POppfKodeverk_0_3_0> kodeverk_0_3_0{};
     std::vector<POppfRefusjon_0_0_0> refusjon_0_0_0{};
     std::vector<POppfRefusjon_1_4_0> refusjon_1_4_0{};
@@ -118,8 +117,6 @@ private:
     std::vector<POppfInteraksjon> interaksjon{};
     std::vector<POppfInteraksjonIkkeVurdert> interaksjonIkkeVurdert{};
     std::vector<POppfStrDosering> strDosering{};
-    std::vector<PFest_V_0_0_0> fests_V_0_0_0{};
-    std::vector<PFest_V_0_2_0> fests_V_0_2_0{};
     std::vector<PFest_V_0_3_0> fests_V_0_3_0{};
     std::vector<PFest_V_0_4_0> fests_V_0_4_0{};
     std::vector<PFest_V_1_3_0> fests_V_1_3_0{};

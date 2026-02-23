@@ -2,8 +2,8 @@
 // Created by sigsegv on 1/13/23.
 //
 
-#ifndef LEGEMFEST_FESTDESERIALIZER_H
-#define LEGEMFEST_FESTDESERIALIZER_H
+#ifndef LEGEMFEST_FESTDESERIALIZER_0_H
+#define LEGEMFEST_FESTDESERIALIZER_0_H
 
 #include <string>
 #include <functional>
@@ -48,22 +48,133 @@
 #include "Struct/Packed/POppfStrDosering.h"
 #include "Struct/Packed/PFest.h"
 #include "FestDbQuota.h"
-#include "FestDeserializer_0.h"
-#include "FestDeserializer_1.h"
 #include "FestDeserializerMapping.h"
 
 class FestSerializer;
 class FestSerializer_0;
 
-class FestDeserializer {
+class FestDeserializer_0 {
+    friend PFest_V_0_3_0;
+    friend PFest_V_0_4_0;
+    friend PFest_V_1_3_0;
 private:
-    std::shared_ptr<FestDeserializerMapping> mapping;
-    std::variant<std::shared_ptr<FestDeserializer_0>,std::shared_ptr<FestDeserializer_1>> deserializer;
+    std::shared_ptr<FestDeserializerMapping> raw;
+    int versionMajor;
+    int versionMinor;
+    int versionPatch;
+    const POppfLegemiddelMerkevare_0_0_0 *merkevare_0_0_0;
+    const POppfLegemiddelMerkevare_0_4_0 *merkevare_0_4_0;
+    const POppfLegemiddelpakning_0_0_0 *pakning_0_0_0;
+    const POppfLegemiddelpakning_0_4_0 *pakning_0_4_0;
+    const POppfLegemiddelVirkestoff_0_0_0 *legemiddelVirkestoff_0_0_0;
+    const POppfLegemiddelVirkestoff_0_4_0 *legemiddelVirkestoff_0_4_0;
+    const POppfMedForbrMatr *medForbrMatr;
+    const POppfNaringsmiddel *naringsmiddel;
+    const POppfBrystprotese *brystprotese;
+    const POppfLegemiddeldose_0_0_0 *legemiddeldose_0_0_0;
+    const POppfLegemiddeldose_0_4_0 *legemiddeldose_0_4_0;
+    const POppfVirkestoffMedStyrke *virkestoffMedStyrke;
+    const POppfVirkestoff_0_0_0 *virkestoff_0_0_0;
+    const POppfVirkestoff_0_4_0 *virkestoff_0_4_0;
+    const POppfKodeverk_0_0_0 *kodeverk_0_0_0;
+    const POppfKodeverk_0_3_0 *kodeverk_0_3_0;
+    const POppfRefusjon_0_0_0 *refusjon_0_0_0;
+    const POppfVilkar *vilkar;
+    const POppfVarselSlv_0_0_0 *varselSlv_0_0_0;
+    const POppfVarselSlv_0_4_0 *varselSlv_0_4_0;
+    const POppfByttegruppe_0_0_0 *byttegruppe_0_0_0;
+    const POppfInteraksjon *interaksjon;
+    const POppfInteraksjonIkkeVurdert *interaksjonIkkeVurdert;
+    const POppfStrDosering *strDosering;
+    const FestUuid *festUuid;
+    const PFestId *festUuidList_0_0_0;
+    const PFestId *festUuidList_0_4_0;
+    const PValueWithCodeset *valueWithCodesetList;
+    const PReseptgyldighet *reseptgyldighetList;
+    const PPakningskomponent *pakningskomponentList;
+    const PPakningskomponentInfo *pakningskomponentInfoList;
+    const PPakningsinfo *pakningsinfoList;
+    const PPrisVare *prisVareList;
+    const PRefusjon *refusjonList;
+    const PElement_0_0_0 *elementList_0_0_0;
+    const PElement_0_3_0 *elementList_0_3_0;
+    const PTerm *termList;
+    const PRefRefusjonsvilkar_0_0_0 *refRefusjonsvilkarList_0_0_0;
+    const PRefusjonskode_0_0_0 *refusjonskodeList_0_0_0;
+    const PRefusjonskode_0_1_0 *refusjonskodeList_0_1_0;
+    const PReferanse *referanseList;
+    const PSubstansgruppe *substansgruppeList;
+    const PDoseFastTidspunkt *doseFastTidspunktList;
+    const PDosering *doseringList;
+    const PLegemiddelforbruk *legemiddelforbrukList;
+    const PSubstans *substansList;
+    const uint16_t *uint16List_V_0_0_0;
+    const uint16_t *uint16List;
+    const uint32_t *uint32List;
+    const PFest_V_0_0_0 *fests_V_0_0_0;
+    const PFest_V_0_2_0 *fests_V_0_2_0;
+    const PFest_V_0_3_0 *fests_V_0_3_0;
+    const PFest_V_0_4_0 *fests_V_0_4_0;
+    const PString *stringList;
+    const char *stringblock;
+    size_t numMerkevare_0_0_0;
+    size_t numMerkevare_0_4_0;
+    size_t numPakning_0_0_0;
+    size_t numPakning_0_4_0;
+    size_t numLegemiddelVirkestoff_0_0_0;
+    size_t numLegemiddelVirkestoff_0_4_0;
+    size_t numMedForbrMatr;
+    size_t numNaringsmiddel;
+    size_t numBrystprotese;
+    size_t numLegemiddeldose_0_0_0;
+    size_t numLegemiddeldose_0_4_0;
+    size_t numVirkestoffMedStyrke;
+    size_t numVirkestoff_0_0_0;
+    size_t numVirkestoff_0_4_0;
+    size_t numKodeverk_0_0_0;
+    size_t numKodeverk_0_3_0;
+    size_t numRefusjon_0_0_0;
+    size_t numVilkar;
+    size_t numVarselSlv_0_0_0;
+    size_t numVarselSlv_0_4_0;
+    size_t numByttegruppe;
+    size_t numInteraksjon;
+    size_t numInteraksjonIkkeVurdert;
+    size_t numStrDosering;
+    size_t numFestUuid;
+    size_t numFestUuidList_0_0_0;
+    size_t numFestUuidList_0_4_0;
+    size_t numValueWithCodesetList;
+    size_t numReseptgyldighet;
+    size_t numPakningskomponent;
+    size_t numPakningskomponentInfo;
+    size_t numPakningsinfo;
+    size_t numPrisVare;
+    size_t numRefusjonList;
+    size_t numElement_0_0_0;
+    size_t numElement_0_3_0;
+    size_t numTerm;
+    size_t numRefRefusjonsvilkar_0_0_0;
+    size_t numRefusjonskode_0_0_0;
+    size_t numRefusjonskode_0_1_0;
+    size_t numReferanseList;
+    size_t numSubstansgruppeList;
+    size_t numSubstansList;
+    size_t numDoseFastTidspunktList;
+    size_t numDoseringList;
+    size_t numLegemiddelforbrukList;
+    size_t numUint16List_V_0_0_0;
+    size_t numUint16List;
+    size_t numUint32List;
+    size_t numFests_V_0_0_0;
+    size_t numFests_V_0_2_0;
+    size_t numFests_V_0_3_0;
+    size_t numFests_V_0_4_0;
+    size_t numStringList;
+    size_t stringblocksize;
 public:
-    FestDeserializer(const std::string &filename);
-    FestDeserializer(const void *data, size_t size);
-    void Init();
-    ~FestDeserializer();
+    FestDeserializer_0(const std::shared_ptr<FestDeserializerMapping> &raw);
+    ~FestDeserializer_0();
     [[nodiscard]] int GetVersionMajor() const;
     [[nodiscard]] int GetVersionMinor() const;
     [[nodiscard]] int GetVersionPatch() const;
@@ -72,7 +183,6 @@ public:
     [[nodiscard]] std::vector<POppfLegemiddelMerkevare> GetLegemiddelMerkevare() const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning_0_0_0> GetLegemiddelPakning_0_0_0() const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning_0_4_0> GetLegemiddelPakning_0_4_0() const;
-    [[nodiscard]] std::vector<POppfLegemiddelpakning_1_3_0> GetLegemiddelPakning_1_3_0() const;
     [[nodiscard]] std::vector<POppfLegemiddelpakning> GetLegemiddelPakning() const;
     [[nodiscard]] std::vector<POppfLegemiddelVirkestoff_0_0_0> GetLegemiddelVirkestoff_0_0_0() const;
     [[nodiscard]] std::vector<POppfLegemiddelVirkestoff_0_4_0> GetLegemiddelVirkestoff_0_4_0() const;
@@ -88,7 +198,6 @@ public:
     [[nodiscard]] std::vector<POppfVirkestoff_0_4_0> GetVirkestoff_0_4_0() const;
     [[nodiscard]] std::vector<POppfVirkestoff> GetVirkestoff() const;
     [[nodiscard]] std::vector<POppfRefusjon_0_0_0> GetOppfRefusjon_0_0_0() const;
-    [[nodiscard]] std::vector<POppfRefusjon_1_4_0> GetOppfRefusjon_1_4_0() const;
     [[nodiscard]] std::vector<POppfRefusjon> GetOppfRefusjon() const;
     [[nodiscard]] std::vector<POppfVilkar> GetOppfVilkar() const;
     [[nodiscard]] std::vector<POppfVarselSlv_0_4_0> GetVarselSlv_0_4_0() const;
@@ -97,7 +206,6 @@ public:
     [[nodiscard]] std::vector<POppfKodeverk_0_0_0> GetOppfKodeverk_0_0_0() const;
     [[nodiscard]] std::vector<POppfKodeverk_0_3_0> GetOppfKodeverk_0_3_0() const;
     [[nodiscard]] std::vector<POppfByttegruppe_0_0_0> GetByttegruppe_0_0_0() const;
-    [[nodiscard]] std::vector<POppfByttegruppe_1_5_0> GetByttegruppe_1_5_0() const;
     [[nodiscard]] std::vector<POppfInteraksjon> GetInteraksjon() const;
     [[nodiscard]] std::vector<POppfInteraksjonIkkeVurdert> GetInteraksjonIkkeVurdert() const;
     [[nodiscard]] std::vector<POppfStrDosering> GetStrDosering() const;
@@ -117,11 +225,9 @@ public:
     [[nodiscard]] std::vector<PElement_0_3_0> GetElement_0_3_0() const;
     [[nodiscard]] std::vector<PElement> GetElement() const;
     [[nodiscard]] std::vector<PRefRefusjonsvilkar_0_0_0> GetRefRefusjonsvilkar_0_0_0() const;
-    [[nodiscard]] std::vector<PRefRefusjonsvilkar_1_2_0> GetRefRefusjonsvilkar_1_2_0() const;
     [[nodiscard]] std::vector<PRefRefusjonsvilkar> GetRefRefusjonsvilkar() const;
     [[nodiscard]] std::vector<PRefusjonskode_0_0_0> GetRefusjonskode_0_0_0() const;
     [[nodiscard]] std::vector<PRefusjonskode_0_1_0> GetRefusjonskode_0_1_0() const;
-    [[nodiscard]] std::vector<PRefusjonskode_1_2_0> GetRefusjonskode_1_2_0() const;
     [[nodiscard]] std::vector<PRefusjonskode> GetRefusjonskode() const;
     [[nodiscard]] std::vector<PReferanse> GetReferanse() const;
     [[nodiscard]] std::vector<PSubstansgruppe> GetSubstansgruppe() const;
@@ -135,7 +241,6 @@ public:
     void ForEachMerkevare(const std::function<void (const POppfLegemiddelMerkevare &)> &) const;
     void ForEachPakning_0_0_0(const std::function<void (const POppfLegemiddelpakning_0_0_0 &)> &) const;
     void ForEachPakning_0_4_0(const std::function<void (const POppfLegemiddelpakning_0_4_0 &)> &) const;
-    void ForEachPakning_1_3_0(const std::function<void (const POppfLegemiddelpakning_1_3_0 &)> &) const;
     void ForEachPakning(const std::function<void (const POppfLegemiddelpakning &)> &) const;
     void ForEachLegemiddelVirkestoff_0_0_0(const std::function<void (const POppfLegemiddelVirkestoff_0_0_0 &)> &) const;
     void ForEachLegemiddelVirkestoff_0_4_0(const std::function<void (const POppfLegemiddelVirkestoff_0_4_0 &)> &) const;
@@ -154,14 +259,12 @@ public:
     void ForEachKodeverk_0_3_0(const std::function<void (const POppfKodeverk_0_3_0 &)> &) const;
     void ForEachKodeverk(const std::function<void (const POppfKodeverk &)> &) const;
     void ForEachRefusjon_0_0_0(const std::function<void (const POppfRefusjon_0_0_0 &)> &) const;
-    void ForEachRefusjon_1_4_0(const std::function<void (const POppfRefusjon_1_4_0 &)> &) const;
     void ForEachRefusjon(const std::function<void (const POppfRefusjon &)> &) const;
     void ForEachVilkar(const std::function<void (const POppfVilkar &)> &) const;
     void ForEachVarselSlv_0_0_0(const std::function<void (const POppfVarselSlv_0_0_0 &)> &) const;
     void ForEachVarselSlv_0_4_0(const std::function<void (const POppfVarselSlv_0_4_0 &)> &) const;
     void ForEachVarselSlv(const std::function<void (const POppfVarselSlv &)> &) const;
     void ForEachByttegruppe_0_0_0(const std::function<void (const POppfByttegruppe_0_0_0 &)> &) const;
-    void ForEachByttegruppe_1_5_0(const std::function<void (const POppfByttegruppe_1_5_0 &)> &) const;
     void ForEachByttegruppe(const std::function<void (const POppfByttegruppe &)> &) const;
     void ForEachInteraksjon(const std::function<void (const POppfInteraksjon &)> &) const;
     void ForEachInteraksjonIkkeVurdert(const std::function<void (const POppfInteraksjonIkkeVurdert &)> &) const;
@@ -170,13 +273,11 @@ public:
     void ForEachFests_V_0_2_0(const std::function<void (const PFest_V_0_2_0 &)> &) const;
     void ForEachFests_V_0_3_0(const std::function<void (const PFest_V_0_3_0 &)> &) const;
     void ForEachFests_V_0_4_0(const std::function<void (const PFest_V_0_4_0 &)> &) const;
-    void ForEachFests_V_1_3_0(const std::function<void (const PFest_V_1_3_0 &)> &) const;
     void ForEachFests(const std::function<void (const PFest &)> &) const;
     [[nodiscard]] FestVectors Unpack(const PFest_V_0_0_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest_V_0_2_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest_V_0_3_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest_V_0_4_0 &) const;
-    [[nodiscard]] FestVectors Unpack(const PFest_V_1_3_0 &) const;
     [[nodiscard]] FestVectors Unpack(const PFest &) const;
     [[nodiscard]] std::string Unpack(const PString &str) const;
     [[nodiscard]] Reseptgyldighet Unpack(const PReseptgyldighet &reseptgyldighet) const;
@@ -241,14 +342,12 @@ public:
     [[nodiscard]] Virkestoff Unpack(const PVirkestoff &pVirkestoff) const;
     [[nodiscard]] Info Unpack(const PInfo &pInfo) const;
     [[nodiscard]] Refusjonshjemmel Unpack(const PRefusjonshjemmel_0_0_0 &pRefusjonshjemmel) const;
-    [[nodiscard]] Refusjonshjemmel Unpack(const PRefusjonshjemmel_1_4_0 &pRefusjonshjemmel) const;
     [[nodiscard]] Refusjonshjemmel Unpack(const PRefusjonshjemmel &pRefusjonshjemmel) const;
     [[nodiscard]] Vilkar Unpack(const PVilkar &pVilkar) const;
     [[nodiscard]] VarselSlv Unpack(const PVarselSlv_0_0_0 &pVarselSlv) const;
     [[nodiscard]] VarselSlv Unpack(const PVarselSlv_0_4_0 &pVarselSlv) const;
     [[nodiscard]] VarselSlv Unpack(const PVarselSlv &pVarselSlv) const;
     [[nodiscard]] Byttegruppe Unpack(const PByttegruppe_0_0_0 &pByttegruppe) const;
-    [[nodiscard]] Byttegruppe Unpack(const PByttegruppe_1_5_0 &pByttegruppe) const;
     [[nodiscard]] Byttegruppe Unpack(const PByttegruppe &pByttegruppe) const;
     [[nodiscard]] Interaksjon Unpack(const PInteraksjon &pInteraksjon) const;
     [[nodiscard]] InteraksjonIkkeVurdert Unpack(const PInteraksjonIkkeVurdert &pInteraksjonIkkeVurdert) const;
@@ -280,7 +379,6 @@ public:
     [[nodiscard]] RefRefusjonsvilkar Unpack(const PRefRefusjonsvilkar &pref) const;
     [[nodiscard]] Refusjonskode Unpack(const PRefusjonskode_0_0_0 &pref) const;
     [[nodiscard]] Refusjonskode Unpack(const PRefusjonskode_0_1_0 &pref) const;
-    [[nodiscard]] Refusjonskode Unpack(const PRefusjonskode_1_2_0 &pref) const;
     [[nodiscard]] Refusjonskode Unpack(const PRefusjonskode &pref) const;
     [[nodiscard]] Refusjonsgruppe Unpack(const PRefusjonsgruppe &pRefusjonsgruppe) const;
     [[nodiscard]] StrukturertVilkar Unpack(const PStrukturertVilkar &pStrukturertVilkar) const;

@@ -12,7 +12,8 @@
 #include <map>
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class VarselSlv;
 class ValueWithCodesetList;
 class FestUuidList_0_4_0;
@@ -20,7 +21,8 @@ class FestUuidList_0_0_0;
 class PVarselSlv_0_4_0;
 
 class PVarselSlv_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PVarselSlv_0_4_0;
 private:
     PValueWithCodeset type;
@@ -36,7 +38,8 @@ public:
 };
 
 class PVarselSlv_0_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithCodeset type;
     PReferanseelement_0_4_0 referanseelement;

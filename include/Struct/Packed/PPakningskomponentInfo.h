@@ -8,11 +8,13 @@
 #include "PValueWithCodeset.h"
 #include "PValueUnit.h"
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class PakningskomponentInfo;
 
 class PPakningskomponentInfo {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithCodeset pakningstype;
     PValueUnit mengde;

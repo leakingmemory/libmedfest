@@ -12,7 +12,8 @@
 #include "PLegemiddel.h"
 #include <variant>
 
-class FestDeserializer;
+class FestDeserializer_0;
+class FestDeserializer_1;
 class LegemiddelMerkevare;
 class ReseptgyldighetList;
 class ValueWithCodesetList;
@@ -21,7 +22,8 @@ class FestUuidList_0_4_0;
 class PLegemiddelMerkevare_0_4_0;
 
 class PLegemiddelMerkevare_0_0_0 : public PLegemiddel_0_0_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
     friend PLegemiddelMerkevare_0_4_0;
 private:
     PValueWithCodeset vaksinestandard;
@@ -56,7 +58,8 @@ public:
 };
 
 class PLegemiddelMerkevare_0_4_0 : public PLegemiddel_0_4_0 {
-    friend FestDeserializer;
+    friend FestDeserializer_0;
+    friend FestDeserializer_1;
 private:
     PValueWithCodeset vaksinestandard;
     PValueWithDistinguishedName preparattype;
